@@ -1,0 +1,3 @@
+/* esm.sh - @babel/parser@7.26.5 */
+export * from "/@babel/parser@7.26.5/es2022/parser.bundle.mjs";
+export { default } from "/@babel/parser@7.26.5/es2022/parser.bundle.mjs";
