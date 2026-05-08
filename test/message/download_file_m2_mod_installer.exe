@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="main.css">
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="jquery-resizable.min.js"></script>
+        <script type="text/javascript" src="util.js"></script>
+        <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+        <title>Pepega Online</title>
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded',function () {
+                key_value = window.location.search.substr(1).split("=");
+                window.history.pushState("object or string", "Title", "/"+window.location.href.substring(window.location.href.lastIndexOf('/') + 1).split("?")[0]);
+                if (key_value.length > 2 || key_value.length < 2)
+                    window.location.pathname = "404";
+
+                if (key_value[0] != "file")
+                    window.location.pathname = "404";
+
+                start_download(key_value[1], true);
+            })
+        </script>
+    </head>
+    <body>
+        <div class="main-container">
+        </div>
+    </body>
+</html>
+

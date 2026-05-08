@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="main.css">
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="jquery-resizable.min.js"></script>
+        <script type="text/javascript" src="util.js"></script>
+        <!--script type="text/javascript" src="font-sizer.js"></script-->
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded',function () {
+                $('#file-form').submit(function (e) {
+                    e.preventDefault();
+                });
+
+                $("#upld-sel-btn").click(function () {
+                    $("#upld-file").click()
+                })
+
+                $(".f-rec > .f-mod").each(function (i, elem) {
+                    let timestamp = $(elem).text() 
+                    let date = new Date(timestamp * 1000);
+                    $(elem).text(date.toISOString().split('.')[0].replace('T', ' '))
+                    $(elem).attr("val", timestamp)
+                })
+
+                $(".f-rec > .f-size").each(function (i, elem) {
+                    let size = +$(elem).text();
+                    $(elem).text(humanFileSize(size))
+                    $(elem).attr("val", size)
+                })
+
+                $(".file-list th").each(function (i, elem) {
+                    set_table_col_sortable(elem)
+                })
+
+                $("#upld-file").on('input', function() {
+                    let name = "no file selected"
+                    let size = 0
+                    let file = this.files[0]
+
+                    if (file) {
+                        name = file.name
+                        size = file.size
+                    }
+
+                    window.file_to_upload = file
+                    let text = ""
+
+                    if (name)
+                        text += name
+                    if (size)
+                        text += "\n\nsize: " + humanFileSize(size)
+
+                    if (size > 100000000 /* 100 MB */) {
+                        text += "\nfile size is too large to upload!"
+                    }
+
+                    $("#upld-file + .readonly").text(text)
+                });
+
+                $("#upld-btn").click(function () {
+                    console.log(window.file_to_upload)
+                    var form_data = new FormData($("#file-form").get(0));
+                    console.log(form_data)
+
+                    $.ajax({
+                        url: '/upload-file.php',
+                        type: 'POST',
+                        data: form_data,
+                        async: false,
+                        success: function (data) {
+                            create_popup(
+                                false, "File uploaded", data,
+                                function () {
+                                    window.location.reload();
+                            });
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).fail(function (err) {
+                        create_popup(
+                            true, "Failed to upload file", "Error: " + err.responseText,
+                            function () {
+                                $(".popup-holder").remove()
+                        });
+                    })
+                })
+            })
+        </script>
+        <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+        <title>Pepega Online</title>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="top-bar">
+                <div style="margin: auto;">
+                    <a href="https://pepega.online">
+                        <img class="pepega-logo" src="assets/pepega.png"/>
+                    </a>
+                </div>
+                <div class="socials fun-page" style="flex-basis: 52%;">
+                    <div class="container" style="min-width: 38vw;">
+                        <div class="container-header">File directory</div>
+                        <div class="container-misc">
+                            Here you can download files and upload them if you know the current password.<br/><br/>
+                            The password is given to people I want to. You can ask me for one, but no promises.
+                        </div>
+                    </div>
+                    <div class="container" style="flex-basis: 41%;">
+                        <form action="upload-file.php" method="POST" id="file-form">
+                            <div class="form-input">
+                                <div>Password:</div>
+                                <input type="password" id="upld-passwd" name="passwd"/>
+                                <button class="pushable form-btn" id="upld-btn" style="margin: auto 0 auto auto;">
+                                    <span class="front">Upload</span>
+                                </button>
+                            </div>
+                            <div class="form-input" style="flex-grow: 1;">
+                                <button class="pushable form-btn" id="upld-sel-btn">
+                                    <span class="front">Select file</span>
+                                </button>
+                                <input type="file" style="display: none;" id="upld-file" name="file">
+                                <pre class="readonly">no file selected</pre>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="container site-fun">
+                <div class="table-container"><table class="file-list sortable-theme-bootstrap" data-sortable>
+                    <thead><tr class="f-header">
+                        <th class='f-name'srt-sym-plc="after">Name</th>
+                        <th class='f-size'>Size</th>
+                        <th class='f-mod'>Last modified</th>
+                    </tr></thead>
+<tr class='f-rec' onclick='start_download("pepega-online-mc-respack.zip")'>
+                <td class='f-name'>pepega-online-mc-respack.zip</td>
+                <td class='f-size'>65722918</td>
+                <td class='f-mod'>1738328259</td>
+            </tr><tr class='f-rec' onclick='start_download("goyslop.png")'>
+                <td class='f-name'>goyslop.png</td>
+                <td class='f-size'>1728601</td>
+                <td class='f-mod'>1737141777</td>
+            </tr><tr class='f-rec' onclick='start_download("kms_tools_30_12_2024.7z")'>
+                <td class='f-name'>kms_tools_30_12_2024.7z</td>
+                <td class='f-size'>18800038</td>
+                <td class='f-mod'>1746807909</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_tools_prebuilt.7z")'>
+                <td class='f-name'>m2_tools_prebuilt.7z</td>
+                <td class='f-size'>49197523</td>
+                <td class='f-mod'>1769801439</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_kmf.zip")'>
+                <td class='f-name'>m2_kmf.zip</td>
+                <td class='f-size'>17621628</td>
+                <td class='f-mod'>1774607664</td>
+            </tr><tr class='f-rec' onclick='start_download("Lo-Fi Electronic.tar.gz")'>
+                <td class='f-name'>Lo-Fi Electronic.tar.gz</td>
+                <td class='f-size'>485844776</td>
+                <td class='f-mod'>1757954206</td>
+            </tr><tr class='f-rec' onclick='start_download("Carpenter Brut.tar.gz")'>
+                <td class='f-name'>Carpenter Brut.tar.gz</td>
+                <td class='f-size'>7236349604</td>
+                <td class='f-mod'>1757954186</td>
+            </tr><tr class='f-rec' onclick='start_download("resim_2025-01-17_220219135.png")'>
+                <td class='f-name'>resim_2025-01-17_220219135.png</td>
+                <td class='f-size'>102596</td>
+                <td class='f-mod'>1737140545</td>
+            </tr><tr class='f-rec' onclick='start_download("kaka.txt")'>
+                <td class='f-name'>kaka.txt</td>
+                <td class='f-size'>4</td>
+                <td class='f-mod'>1737215498</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_kinda_source.7z")'>
+                <td class='f-name'>m2_kinda_source.7z</td>
+                <td class='f-size'>922839</td>
+                <td class='f-mod'>1768684381</td>
+            </tr><tr class='f-rec' onclick='start_download("Ratiborus KMS Tools 12.10.2017.zip")'>
+                <td class='f-name'>Ratiborus KMS Tools 12.10.2017.zip</td>
+                <td class='f-size'>33252968</td>
+                <td class='f-mod'>1737140154</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_debugger.zip")'>
+                <td class='f-name'>m2_debugger.zip</td>
+                <td class='f-size'>17393360</td>
+                <td class='f-mod'>1756380539</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_mod_installer.exe")'>
+                <td class='f-name'>m2_mod_installer.exe</td>
+                <td class='f-size'>18562560</td>
+                <td class='f-mod'>1774607663</td>
+            </tr><tr class='f-rec' onclick='start_download("m2_tier2_enc.luac")'>
+                <td class='f-name'>m2_tier2_enc.luac</td>
+                <td class='f-size'>196427</td>
+                <td class='f-mod'>1774607664</td>
+            </tr>                </table></div>
+            </div>
+        </div>
+    </body>
+</html>
+

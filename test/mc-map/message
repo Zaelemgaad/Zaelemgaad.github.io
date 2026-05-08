@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="main.css">
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="jquery-resizable.min.js"></script>
+        <script type="text/javascript" src="util.js"></script>
+        <!--script type="text/javascript" src="font-sizer.js"></script-->
+        <script type="text/javascript">
+            window.addEventListener('DOMContentLoaded',function () {
+                create_resize_slider(
+                    "#msg-text textarea",
+                    ".resizer-vertical",
+                    true, false,
+                    "20%", "60%"
+                )
+
+                $('#msg-form').submit(function (e) {
+                    let name = $("#msg-name" ).val();
+                    let text = $("#msg-text > textarea" ).val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "send-message.php",
+                        data: { "msg-name": name, "msg-text": text },
+                        success: function(msg) {
+                            create_popup(
+                                false, "Message sent", msg,
+                                function () {
+                                    window.location.replace("http://pepega.online");
+                            });
+                        }
+                    }).fail(function (err) {
+                        create_popup(
+                            true, "Failed to send message", "Error: " + err.responseText,
+                            function () {
+                                $(".popup-holder").remove()
+                        });
+                    })
+
+                    e.preventDefault();
+                });
+            })
+        </script>
+        <link rel="icon" type="image/x-icon" href="/assets/logo.png">
+        <title>Pepega Online</title>
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="top-bar">
+                <div style="margin: auto;">
+                    <a href="https://pepega.online">
+                        <img class="pepega-logo" src="assets/pepega.png"/>
+                    </a>
+                </div>
+                <div class="socials fun-page">
+                    <div class="container" style="min-width: 41%;">
+                        <div class="container-header">Leave me a message</div>
+                        <div class="container-misc">
+                            Please note that I cannot contact you back unless you provide some contact info.<br/>
+                            If you want to provide your contact info, then you can leave it either in the name field or in the text of the message.
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="container-header">You can find me here:</div>
+                        <div class="img-text-link">
+                            <a href="https://github.com/k-Knight">
+                                <img src="assets/github-logo.png"/>
+                                My GitHub
+                            </a>
+                        </div>
+                        <div class="img-text-link">
+                            <a href="https://discordapp.com/users/228184023992631296">
+                                <img src="assets/discord-logo.png"/>
+                                Me on Discord
+                            </a>
+                            <div style="margin-left: var(--my_unit); color: #bbb;">k_knight</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container site-fun">
+                <form action="send-message.php" method="POST" id="msg-form">
+                    <div class="form-input" style="margin-bottom: 1.5rem;">
+                        <div>Your Name:</div>
+                        <input type="text" name="msg-name" id="msg-name" placeholder="Anonymous"/>
+                        <button style = "display: block; flex-grow: 0; margin-top: 0;" class="pushable" id="send-msg">
+                            <span class="front">Send Message</span>
+                        </button>
+                    </div>
+                    <div id="msg-text">
+                        <textarea type="textarea" placeholder="..." name="msg-text"></textarea>
+                        <div data-clickable="true" class="resizer-vertical"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
