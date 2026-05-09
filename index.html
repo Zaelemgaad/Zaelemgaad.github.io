@@ -233,11 +233,11 @@
       </div>
       <div>
         <label for="promptFieldName">Prompt field name</label>
-        <input id="promptFieldName" value="jzlDescription">
+        <input id="promptFieldName" value="description">
       </div>
       <div>
         <label for="negativeFieldName">Negative field name</label>
-        <input id="negativeFieldName" value="jzlNegative">
+        <input id="negativeFieldName" value="negative">
       </div>
     </div>
 
@@ -304,6 +304,8 @@
     const bridgeLog = document.getElementById("bridgeLog");
     const finalPromptOutput = document.getElementById("finalPromptOutput");
     const finalNegativeOutput = document.getElementById("finalNegativeOutput");
+    const PROMPT_FIELD_CANDIDATES = ["description", "jzlDescription", "prompt1", "prompt"];
+    const NEGATIVE_FIELD_CANDIDATES = ["negative", "jzlNegative", "negativePrompt"];
 
     const client = new ZembedClient(generatorFrame);
 
@@ -324,6 +326,36 @@
       return JSON.parse(raw);
     }
 
+    function pickExistingFieldName(fields, candidates) {
+      const fieldNames = (fields || []).map(field => field.name);
+      return candidates.find(name => fieldNames.includes(name)) || "";
+    }
+
+    function syncPreferredFieldNames(snapshot) {
+      const fields = snapshot?.fields || [];
+      if (!fields.length) return;
+
+      const currentPromptName = promptFieldName.value.trim();
+      const currentNegativeName = negativeFieldName.value.trim();
+      const fieldNames = fields.map(field => field.name);
+
+      if (!fieldNames.includes(currentPromptName)) {
+        const detectedPrompt = pickExistingFieldName(fields, PROMPT_FIELD_CANDIDATES);
+        if (detectedPrompt) {
+          promptFieldName.value = detectedPrompt;
+          log(`Prompt field auto-detected as "${detectedPrompt}".`);
+        }
+      }
+
+      if (!fieldNames.includes(currentNegativeName)) {
+        const detectedNegative = pickExistingFieldName(fields, NEGATIVE_FIELD_CANDIDATES);
+        if (detectedNegative) {
+          negativeFieldName.value = detectedNegative;
+          log(`Negative field auto-detected as "${detectedNegative}".`);
+        }
+      }
+    }
+
     function buildInputMap() {
       const values = { ...readExtraInputs() };
       const promptName = promptFieldName.value.trim();
@@ -337,6 +369,7 @@
       const outputs = snapshot?.outputs || {};
       finalPromptOutput.textContent = outputs.prompt || "(empty)";
       finalNegativeOutput.textContent = outputs.negativePrompt || "(empty)";
+      syncPreferredFieldNames(snapshot);
     }
 
     client.addEventListener("ready", (event) => {
