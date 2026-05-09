@@ -1,5 +1,0 @@
-/* esm.sh - @babel/traverse@7.26.5 */
-import "/node/buffer.mjs";
-import "/node/process.mjs";
-export * from "/@babel/traverse@7.26.5/es2022/traverse.bundle.mjs";
-export { default } from "/@babel/traverse@7.26.5/es2022/traverse.bundle.mjs";

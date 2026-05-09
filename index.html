@@ -9,15 +9,22 @@
 
     :root {
       color-scheme: dark;
-      --bg: #050505;
-      --panel: #111318;
-      --panel-2: #181c23;
-      --border: rgba(255,255,255,0.12);
-      --text: #ddd;
-      --muted: #9ea7b8;
-      --accent: #8ab4ff;
-      --accent-2: #6ee7b7;
-      --danger: #fda4af;
+      --bg: #20202b;
+      --bg-alt: #231c37;
+      --panel: rgba(35, 28, 55, 0.84);
+      --panel-2: rgba(44, 44, 68, 0.88);
+      --panel-3: rgba(32, 32, 43, 0.94);
+      --border: rgba(119, 168, 255, 0.22);
+      --text: #e5e0ff;
+      --muted: #bfb6df;
+      --accent: #77a8ff;
+      --accent-2: #a335ee;
+      --accent-3: #e6cc80;
+      --danger: #fab1e5;
+      --success: #1eff00;
+      --selection-bg: #002a50;
+      --selection-fg: #e6cc80;
+      --shadow: rgba(0, 0, 0, 0.34);
     }
 
     * {
@@ -25,7 +32,10 @@
     }
 
     body {
-      background: var(--bg);
+      background:
+        radial-gradient(circle at top right, rgba(128, 0, 255, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(0, 112, 221, 0.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
       color: var(--text);
       font-family: 'Inter', sans-serif;
       max-width: 1120px;
@@ -34,12 +44,17 @@
       padding: 0 18px;
     }
 
+    ::selection {
+      background: var(--selection-bg);
+      color: var(--selection-fg);
+    }
+
     a {
       color: var(--accent);
     }
 
     h1, h2, h3 {
-      color: white;
+      color: #fafafa;
     }
 
     code,
@@ -51,11 +66,13 @@
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 20px;
+      padding: 20px;
       margin-top: 18px;
+      box-shadow: 0 22px 48px var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
     .controls-grid {
@@ -80,6 +97,7 @@
     }
 
     input,
+    select,
     textarea,
     button {
       width: 100%;
@@ -90,8 +108,21 @@
     }
 
     input,
+    select,
     textarea {
       padding: 10px 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    input::selection,
+    select::selection,
+    textarea::selection,
+    pre::selection,
+    code::selection,
+    .log-box::selection,
+    .output-box::selection {
+      background: var(--selection-bg);
+      color: var(--selection-fg);
     }
 
     textarea {
@@ -103,12 +134,12 @@
       padding: 11px 14px;
       cursor: pointer;
       transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
-      background: #1b2230;
+      background: linear-gradient(180deg, rgba(119, 168, 255, 0.18), rgba(35, 28, 55, 0.92));
     }
 
     button:hover {
-      border-color: rgba(138,180,255,0.55);
-      background: #20293a;
+      border-color: rgba(119, 168, 255, 0.52);
+      background: linear-gradient(180deg, rgba(119, 168, 255, 0.28), rgba(44, 44, 68, 0.96));
     }
 
     button:active {
@@ -131,20 +162,20 @@
       gap: 8px;
       border-radius: 999px;
       padding: 6px 12px;
-      background: #151a22;
+      background: rgba(44, 44, 68, 0.92);
       border: 1px solid var(--border);
       color: var(--muted);
       font-size: 0.9rem;
     }
 
     .status-pill.ready {
-      color: var(--accent-2);
-      border-color: rgba(110,231,183,0.35);
+      color: var(--success);
+      border-color: rgba(30,255,0,0.28);
     }
 
     .status-pill.error {
       color: var(--danger);
-      border-color: rgba(253,164,175,0.35);
+      border-color: rgba(250,177,229,0.3);
     }
 
     .meta {
@@ -166,7 +197,7 @@
       min-height: 160px;
       padding: 14px;
       border-radius: 12px;
-      background: #090c11;
+      background: var(--panel-3);
       border: 1px solid var(--border);
       overflow: auto;
     }
@@ -176,7 +207,7 @@
       height: 980px;
       border: 1px solid var(--border);
       border-radius: 16px;
-      background: #111;
+      background: var(--panel-3);
       margin-top: 16px;
     }
 
@@ -187,10 +218,43 @@
       overflow: auto;
       padding: 12px;
       border-radius: 12px;
-      background: #090c11;
+      background: var(--panel-3);
       border: 1px solid var(--border);
       white-space: pre-wrap;
       word-break: break-word;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .gallery-card {
+      background: var(--panel-3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .gallery-card img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      background: #0c0c0c;
+    }
+
+    .gallery-meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .mode-note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
     }
 
     @media (max-width: 900px) {
@@ -222,9 +286,10 @@
 
   <div class="card">
     <h2>Generator Bridge Test</h2>
-    <p class="meta">This page assumes the generator inside the iframe has the <code>zembed</code> bridge installed. The parent page talks to it through <code>postMessage</code>.</p>
+    <p class="meta">This page assumes the generator has the <code>zembed</code> bridge installed. The parent page talks to it through <code>postMessage</code>.</p>
 
     <div class="status-pill" id="bridgeStatus">Bridge not connected yet</div>
+    <p class="mode-note" id="modeNote">Popup mode is recommended here because Firefox blocks Perchance's image-generation iframe when it is nested inside another site.</p>
 
     <div class="controls-grid" style="margin-top:14px;">
       <div>
@@ -238,6 +303,19 @@
       <div>
         <label for="negativeFieldName">Negative field name</label>
         <input id="negativeFieldName" value="negative">
+      </div>
+    </div>
+
+    <div class="controls-grid-wide">
+      <div>
+        <label for="connectionMode">Connection mode</label>
+        <select id="connectionMode">
+          <option value="popup" selected>Popup window (recommended)</option>
+          <option value="iframe">Embedded iframe (limited)</option>
+        </select>
+      </div>
+      <div class="meta">
+        Popup mode opens the generator on Perchance where image rendering is allowed, then sends prompts and finished image data back to this page.
       </div>
     </div>
 
@@ -288,7 +366,15 @@
     <label style="margin-top:14px;">Bridge log</label>
     <div class="log-box mono" id="bridgeLog">Waiting for the iframe...</div>
 
-    <iframe id="generatorFrame" src="https://null.perchance.org/jzlimagen"></iframe>
+    <label style="margin-top:14px;">Generated images</label>
+    <div class="image-gallery" id="imageGallery">
+      <div class="meta">No generated images yet.</div>
+    </div>
+
+    <div id="generatorViewportWrap">
+      <label style="margin-top:14px;">Embedded generator viewport</label>
+      <iframe id="generatorFrame" src="about:blank"></iframe>
+    </div>
   </div>
 
   <script src="/generators/zembed-client.js"></script>
@@ -297,13 +383,17 @@
     const generatorUrl = document.getElementById("generatorUrl");
     const promptFieldName = document.getElementById("promptFieldName");
     const negativeFieldName = document.getElementById("negativeFieldName");
+    const connectionMode = document.getElementById("connectionMode");
     const promptInput = document.getElementById("promptInput");
     const negativeInput = document.getElementById("negativeInput");
     const extraInputs = document.getElementById("extraInputs");
     const bridgeStatus = document.getElementById("bridgeStatus");
+    const modeNote = document.getElementById("modeNote");
     const bridgeLog = document.getElementById("bridgeLog");
     const finalPromptOutput = document.getElementById("finalPromptOutput");
     const finalNegativeOutput = document.getElementById("finalNegativeOutput");
+    const imageGallery = document.getElementById("imageGallery");
+    const generatorViewportWrap = document.getElementById("generatorViewportWrap");
     const PROMPT_FIELD_CANDIDATES = ["description", "jzlDescription", "prompt1", "prompt"];
     const NEGATIVE_FIELD_CANDIDATES = ["negative", "jzlNegative", "negativePrompt"];
 
@@ -365,10 +455,53 @@
       return values;
     }
 
+    function renderMedia(media = []) {
+      imageGallery.innerHTML = "";
+      if (!media.length) {
+        imageGallery.innerHTML = '<div class="meta">No generated images captured yet.</div>';
+        return;
+      }
+
+      media.forEach((item, index) => {
+        if (!item?.src) return;
+        const card = document.createElement("div");
+        card.className = "gallery-card";
+
+        const img = document.createElement("img");
+        img.src = item.src;
+        img.alt = item.alt || `Generated image ${index + 1}`;
+        card.appendChild(img);
+
+        const meta = document.createElement("div");
+        meta.className = "gallery-meta";
+        const parts = [];
+        parts.push(item.kind === "text-to-image-plugin" ? `Image ${index + 1} from Perchance output` : `Image ${index + 1}`);
+        if (item.seed) parts.push(`seed ${item.seed}`);
+        if (item.width && item.height) parts.push(`${item.width}x${item.height}`);
+        meta.textContent = parts.join(" • ");
+        card.appendChild(meta);
+
+        imageGallery.appendChild(card);
+      });
+
+      if (!imageGallery.children.length) {
+        imageGallery.innerHTML = '<div class="meta">No generated images captured yet.</div>';
+      }
+    }
+
+    function updateConnectionModeUI() {
+      const popupMode = connectionMode.value === "popup";
+      generatorViewportWrap.hidden = popupMode;
+      modeNote.textContent = popupMode
+        ? "Popup mode is recommended here because Firefox blocks Perchance's image-generation iframe when it is nested inside another site."
+        : "Embedded iframe mode is still available for inspection, but image-generation.perchance.org may be blocked by Firefox when nested on another site.";
+    }
+
     function updateOutputs(snapshot) {
       const outputs = snapshot?.outputs || {};
       finalPromptOutput.textContent = outputs.prompt || "(empty)";
       finalNegativeOutput.textContent = outputs.negativePrompt || "(empty)";
+      renderMedia(outputs.media || []);
       syncPreferredFieldNames(snapshot);
     }
 
@@ -415,12 +548,22 @@
       return client.waitForReady();
     }
 
+    async function connectGenerator() {
+      const src = generatorUrl.value.trim();
+      if (connectionMode.value === "popup") {
+        client.openPopup(src);
+        log(`Opening popup: ${src}`);
+      } else {
+        client.load(src);
+        log(`Loading iframe: ${src}`);
+      }
+      await ensureReady();
+    }
+
     document.getElementById("loadFrameBtn").addEventListener("click", async () => {
       try {
-        setStatus("Loading iframe…");
-        client.load(generatorUrl.value.trim());
-        log(`Loading iframe: ${generatorUrl.value.trim()}`);
-        await ensureReady();
+        setStatus(connectionMode.value === "popup" ? "Opening popup…" : "Loading iframe…");
+        await connectGenerator();
       } catch (error) {
         setStatus("Bridge failed to connect", "error");
         log("Load / reconnect failed.", error.message);
@@ -495,6 +638,9 @@
       setStatus("Iframe loaded, waiting for bridge…");
       log("Iframe loaded.");
     });
+
+    connectionMode.addEventListener("change", updateConnectionModeUI);
+    updateConnectionModeUI();
   </script>
 </body>
 </html>

@@ -1,2 +1,0 @@
-/* esm.sh - parse5@7.1.2 */
-export * from "/parse5@7.1.2/es2022/parse5.bundle.mjs";

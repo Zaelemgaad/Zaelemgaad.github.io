@@ -2,10 +2,14 @@ class ZembedClient extends EventTarget {
   constructor(iframe, options = {}) {
     super();
     this.iframe = iframe;
+    this.popupWindow = null;
+    this.mode = "iframe";
     this.options = {
       targetOrigin: "*",
       requestTimeoutMs: 20000,
       readyTimeoutMs: 20000,
+      popupWindowName: "zembedGenerator",
+      popupFeatures: "popup=yes,width=1560,height=1180,resizable=yes,scrollbars=yes",
       ...options,
     };
     this.pending = new Map();
@@ -25,12 +29,49 @@ class ZembedClient extends EventTarget {
     this.pending.clear();
   }
 
+  getTargetWindow() {
+    if (this.mode === "popup") {
+      if (this.popupWindow && !this.popupWindow.closed) return this.popupWindow;
+      return null;
+    }
+    return this.iframe?.contentWindow || null;
+  }
+
   load(src) {
+    this.mode = "iframe";
     this.ready = false;
     this.capabilities = null;
     this.lastSnapshot = null;
     this.dispatchEvent(new CustomEvent("status", { detail: { ready: false, src } }));
+    if (!this.iframe) {
+      throw new Error("No iframe target is available for iframe mode.");
+    }
     this.iframe.src = src;
+  }
+
+  openPopup(src, popupOptions = {}) {
+    this.mode = "popup";
+    this.ready = false;
+    this.capabilities = null;
+    this.lastSnapshot = null;
+    this.dispatchEvent(new CustomEvent("status", { detail: { ready: false, src, mode: "popup" } }));
+    const popupWindow = window.open(
+      src,
+      popupOptions.windowName || this.options.popupWindowName,
+      popupOptions.features || this.options.popupFeatures,
+    );
+    if (!popupWindow) {
+      throw new Error("Popup was blocked. Allow popups for this site and try again.");
+    }
+    this.popupWindow = popupWindow;
+    return popupWindow;
+  }
+
+  closePopup() {
+    if (this.popupWindow && !this.popupWindow.closed) {
+      this.popupWindow.close();
+    }
+    this.popupWindow = null;
   }
 
   async waitForReady(timeoutMs = this.options.readyTimeoutMs) {
@@ -55,13 +96,17 @@ class ZembedClient extends EventTarget {
   async send(action, data = {}, opts = {}) {
     const requestId = `zembed-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     const timeoutMs = opts.timeoutMs || this.options.requestTimeoutMs;
+    const targetWindow = this.getTargetWindow();
+    if (!targetWindow) {
+      throw new Error(`No ${this.mode === "popup" ? "popup" : "iframe"} target is connected yet.`);
+    }
     return new Promise((resolve, reject) => {
       const timeoutId = setTimeout(() => {
         this.pending.delete(requestId);
         reject(new Error(`Timed out waiting for zembed response to "${action}".`));
       }, timeoutMs);
       this.pending.set(requestId, { resolve, reject, timeoutId, action });
-      this.iframe.contentWindow?.postMessage(
+      targetWindow.postMessage(
         {
           type: "zembed",
           action,
@@ -99,7 +144,8 @@ class ZembedClient extends EventTarget {
   }
 
   _handleMessage(event) {
-    if (event.source !== this.iframe.contentWindow) return;
+    const targetWindow = this.getTargetWindow();
+    if (!targetWindow || event.source !== targetWindow) return;
     const data = event.data;
     if (!data || data.source !== "perchance-zembed") return;
 
