@@ -7,34 +7,202 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Fira+Code:wght@400;700&display=swap');
 
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #111318;
+      --panel-2: #181c23;
+      --border: rgba(255,255,255,0.12);
+      --text: #ddd;
+      --muted: #9ea7b8;
+      --accent: #8ab4ff;
+      --accent-2: #6ee7b7;
+      --danger: #fda4af;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: #050505;
-      color: #ddd;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
-      max-width: 760px;
-      margin: 60px auto;
+      max-width: 1120px;
+      margin: 48px auto 72px;
       line-height: 1.6;
+      padding: 0 18px;
     }
 
     a {
-      color: #8ab4ff;
+      color: var(--accent);
     }
 
-    h1 {
+    h1, h2, h3 {
       color: white;
     }
 
     code,
     pre,
-    .mono {
+    .mono,
+    textarea,
+    input {
       font-family: 'Fira Code', monospace;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1.1fr 0.8fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .controls-grid-wide {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+
+    input,
+    textarea {
+      padding: 10px 12px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 11px 14px;
+      cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+      background: #1b2230;
+    }
+
+    button:hover {
+      border-color: rgba(138,180,255,0.55);
+      background: #20293a;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .button-row + .button-row {
+      margin-top: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 12px;
+      background: #151a22;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .status-pill.ready {
+      color: var(--accent-2);
+      border-color: rgba(110,231,183,0.35);
+    }
+
+    .status-pill.error {
+      color: var(--danger);
+      border-color: rgba(253,164,175,0.35);
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .outputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    pre.output-box {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 160px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #090c11;
+      border: 1px solid var(--border);
+      overflow: auto;
     }
 
     iframe {
       width: 100%;
-      height: 600px;
-      border: none;
+      height: 980px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
       background: #111;
+      margin-top: 16px;
+    }
+
+    .log-box {
+      margin-top: 14px;
+      min-height: 120px;
+      max-height: 260px;
+      overflow: auto;
+      padding: 12px;
+      border-radius: 12px;
+      background: #090c11;
+      border: 1px solid var(--border);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 900px) {
+      .controls-grid,
+      .controls-grid-wide,
+      .outputs {
+        grid-template-columns: 1fr;
+      }
+
+      iframe {
+        height: 760px;
+      }
     }
   </style>
 </head>
@@ -51,7 +219,249 @@
   <p><a href="/download/">Downloads</a></p>
   <p><a href="/message/">Message</a></p>
   <p><a href="/generators/">Generators</a></p>
-  <h2>Jzl-Kawai Generator</h2>
-  <iframe src="https://null.perchance.org/jzl-kawai"></iframe>
+
+  <div class="card">
+    <h2>Generator Bridge Test</h2>
+    <p class="meta">This page assumes the generator inside the iframe has the <code>zembed</code> bridge installed. The parent page talks to it through <code>postMessage</code>.</p>
+
+    <div class="status-pill" id="bridgeStatus">Bridge not connected yet</div>
+
+    <div class="controls-grid" style="margin-top:14px;">
+      <div>
+        <label for="generatorUrl">Generator URL</label>
+        <input id="generatorUrl" value="https://null.perchance.org/jzl-kawai">
+      </div>
+      <div>
+        <label for="promptFieldName">Prompt field name</label>
+        <input id="promptFieldName" value="jzlDescription">
+      </div>
+      <div>
+        <label for="negativeFieldName">Negative field name</label>
+        <input id="negativeFieldName" value="jzlNegative">
+      </div>
+    </div>
+
+    <div class="controls-grid-wide">
+      <div>
+        <label for="promptInput">Prompt 1</label>
+        <textarea id="promptInput" placeholder="Type the prompt you want pushed into the generator..."></textarea>
+      </div>
+      <div>
+        <label for="negativeInput">Negative prompt</label>
+        <textarea id="negativeInput" placeholder="Optional negative prompt..."></textarea>
+      </div>
+    </div>
+
+    <div class="controls-grid-wide">
+      <div>
+        <label for="extraInputs">Extra inputs as JSON</label>
+        <textarea id="extraInputs" placeholder='{"artStyle":"ref:optionKeyName:Cinematic"}'></textarea>
+      </div>
+      <div>
+        <label>Actions</label>
+        <div class="button-row">
+          <button id="loadFrameBtn">Load / Reconnect</button>
+          <button id="pingBtn">Ping bridge</button>
+        </div>
+        <div class="button-row">
+          <button id="applyInputsBtn">Apply inputs</button>
+          <button id="generateBtn">Generate and wait</button>
+        </div>
+        <div class="button-row">
+          <button id="snapshotBtn">Refresh snapshot</button>
+          <button id="fieldsBtn">List fields</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="outputs">
+      <div>
+        <label>Final prompt</label>
+        <pre class="output-box" id="finalPromptOutput">Waiting for snapshot...</pre>
+      </div>
+      <div>
+        <label>Final negative</label>
+        <pre class="output-box" id="finalNegativeOutput">Waiting for snapshot...</pre>
+      </div>
+    </div>
+
+    <label style="margin-top:14px;">Bridge log</label>
+    <div class="log-box mono" id="bridgeLog">Waiting for the iframe...</div>
+
+    <iframe id="generatorFrame" src="https://null.perchance.org/jzl-kawai"></iframe>
+  </div>
+
+  <script src="/generators/zembed-client.js"></script>
+  <script>
+    const generatorFrame = document.getElementById("generatorFrame");
+    const generatorUrl = document.getElementById("generatorUrl");
+    const promptFieldName = document.getElementById("promptFieldName");
+    const negativeFieldName = document.getElementById("negativeFieldName");
+    const promptInput = document.getElementById("promptInput");
+    const negativeInput = document.getElementById("negativeInput");
+    const extraInputs = document.getElementById("extraInputs");
+    const bridgeStatus = document.getElementById("bridgeStatus");
+    const bridgeLog = document.getElementById("bridgeLog");
+    const finalPromptOutput = document.getElementById("finalPromptOutput");
+    const finalNegativeOutput = document.getElementById("finalNegativeOutput");
+
+    const client = new ZembedClient(generatorFrame);
+
+    function log(message, detail) {
+      const timestamp = new Date().toLocaleTimeString();
+      const suffix = detail === undefined ? "" : `\n${typeof detail === "string" ? detail : JSON.stringify(detail, null, 2)}`;
+      bridgeLog.textContent = `[${timestamp}] ${message}${suffix}\n\n${bridgeLog.textContent}`.trim();
+    }
+
+    function setStatus(text, kind = "") {
+      bridgeStatus.textContent = text;
+      bridgeStatus.className = `status-pill${kind ? ` ${kind}` : ""}`;
+    }
+
+    function readExtraInputs() {
+      const raw = extraInputs.value.trim();
+      if (!raw) return {};
+      return JSON.parse(raw);
+    }
+
+    function buildInputMap() {
+      const values = { ...readExtraInputs() };
+      const promptName = promptFieldName.value.trim();
+      const negativeName = negativeFieldName.value.trim();
+      if (promptName) values[promptName] = promptInput.value;
+      if (negativeName) values[negativeName] = negativeInput.value;
+      return values;
+    }
+
+    function updateOutputs(snapshot) {
+      const outputs = snapshot?.outputs || {};
+      finalPromptOutput.textContent = outputs.prompt || "(empty)";
+      finalNegativeOutput.textContent = outputs.negativePrompt || "(empty)";
+    }
+
+    client.addEventListener("ready", (event) => {
+      setStatus("Bridge ready", "ready");
+      log("Bridge reported ready.", event.detail);
+      if (event.detail?.snapshot) {
+        updateOutputs(event.detail.snapshot);
+      }
+    });
+
+    client.addEventListener("snapshot", (event) => {
+      updateOutputs(event.detail);
+      log("Snapshot event received.");
+    });
+
+    client.addEventListener("generate-started", () => {
+      setStatus("Generator is running…", "ready");
+      log("Generation started.");
+    });
+
+    client.addEventListener("generate-finished", (event) => {
+      setStatus("Generation finished", "ready");
+      updateOutputs(event.detail);
+      log("Generation finished.", event.detail);
+    });
+
+    client.addEventListener("event", (event) => {
+      const { name } = event.detail || {};
+      if (!["snapshot", "generate-started", "generate-finished", "ready"].includes(name)) {
+        log(`Bridge event: ${name}`, event.detail?.payload);
+      }
+    });
+
+    async function refreshSnapshot() {
+      const snapshot = await client.getSnapshot();
+      updateOutputs(snapshot);
+      log("Snapshot refreshed.", snapshot);
+      return snapshot;
+    }
+
+    async function ensureReady() {
+      setStatus("Waiting for bridge…");
+      return client.waitForReady();
+    }
+
+    document.getElementById("loadFrameBtn").addEventListener("click", async () => {
+      try {
+        setStatus("Loading iframe…");
+        client.load(generatorUrl.value.trim());
+        log(`Loading iframe: ${generatorUrl.value.trim()}`);
+        await ensureReady();
+      } catch (error) {
+        setStatus("Bridge failed to connect", "error");
+        log("Load / reconnect failed.", error.message);
+      }
+    });
+
+    document.getElementById("pingBtn").addEventListener("click", async () => {
+      try {
+        const result = await client.ping();
+        setStatus("Bridge reachable", "ready");
+        log("Ping OK.", result);
+      } catch (error) {
+        setStatus("Ping failed", "error");
+        log("Ping failed.", error.message);
+      }
+    });
+
+    document.getElementById("applyInputsBtn").addEventListener("click", async () => {
+      try {
+        await ensureReady();
+        const values = buildInputMap();
+        const result = await client.setInputs(values);
+        setStatus("Inputs applied", "ready");
+        log("Inputs applied.", result);
+        if (result?.snapshot) updateOutputs(result.snapshot);
+      } catch (error) {
+        setStatus("Failed to apply inputs", "error");
+        log("Apply inputs failed.", error.message);
+      }
+    });
+
+    document.getElementById("generateBtn").addEventListener("click", async () => {
+      try {
+        await ensureReady();
+        const values = buildInputMap();
+        setStatus("Applying inputs and generating…", "ready");
+        const result = await client.applyInputsAndGenerate(values);
+        setStatus(result?.timedOut ? "Generation timed out" : "Generation finished", result?.timedOut ? "error" : "ready");
+        updateOutputs(result?.snapshot);
+        log("Generate and wait completed.", result);
+      } catch (error) {
+        setStatus("Generate failed", "error");
+        log("Generate failed.", error.message);
+      }
+    });
+
+    document.getElementById("snapshotBtn").addEventListener("click", async () => {
+      try {
+        await ensureReady();
+        setStatus("Refreshing snapshot…", "ready");
+        await refreshSnapshot();
+        setStatus("Snapshot refreshed", "ready");
+      } catch (error) {
+        setStatus("Snapshot failed", "error");
+        log("Snapshot failed.", error.message);
+      }
+    });
+
+    document.getElementById("fieldsBtn").addEventListener("click", async () => {
+      try {
+        await ensureReady();
+        const result = await client.getFields();
+        setStatus("Field list fetched", "ready");
+        log("Field list fetched.", result);
+      } catch (error) {
+        setStatus("Field list failed", "error");
+        log("Field list failed.", error.message);
+      }
+    });
+
+    generatorFrame.addEventListener("load", () => {
+      setStatus("Iframe loaded, waiting for bridge…");
+      log("Iframe loaded.");
+    });
+  </script>
 </body>
 </html>
