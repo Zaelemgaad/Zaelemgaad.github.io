@@ -1,11 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Astral Tempest</title>
-
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Fira+Code:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Fira+Code:wght@400;700&display=swap');
 
     :root {
       color-scheme: dark;
@@ -13,15 +13,12 @@
       --bg-alt: #231c37;
       --panel: rgba(35, 28, 55, 0.84);
       --panel-2: rgba(44, 44, 68, 0.88);
-      --panel-3: rgba(32, 32, 43, 0.94);
-      --border: rgba(119, 168, 255, 0.22);
+      --border: rgba(119, 168, 255, 0.24);
       --text: #e5e0ff;
       --muted: #bfb6df;
       --accent: #77a8ff;
       --accent-2: #a335ee;
       --accent-3: #e6cc80;
-      --danger: #fab1e5;
-      --success: #1eff00;
       --selection-bg: #002a50;
       --selection-fg: #e6cc80;
       --shadow: rgba(0, 0, 0, 0.34);
@@ -32,16 +29,14 @@
     }
 
     body {
+      margin: 0;
+      min-height: 100vh;
       background:
         radial-gradient(circle at top right, rgba(128, 0, 255, 0.16), transparent 28%),
         radial-gradient(circle at top left, rgba(0, 112, 221, 0.12), transparent 24%),
         linear-gradient(180deg, var(--bg-alt), var(--bg));
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      max-width: 1120px;
-      margin: 48px auto 72px;
-      line-height: 1.6;
-      padding: 0 18px;
+      font-family: "Inter", sans-serif;
     }
 
     ::selection {
@@ -51,781 +46,114 @@
 
     a {
       color: var(--accent);
+      text-decoration: none;
     }
 
-    h1, h2, h3 {
+    a:hover {
       color: #fafafa;
     }
 
-    code,
-    pre,
-    .mono,
-    textarea,
-    input {
-      font-family: 'Fira Code', monospace;
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 56px 18px 84px;
+    }
+
+    .hero {
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+      font: 700 0.9rem/1 "Fira Code", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(2.5rem, 6vw, 4.25rem);
+      line-height: 0.95;
+      color: #fafafa;
+    }
+
+    .lead {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 26px;
     }
 
     .card {
-      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      display: block;
+      padding: 22px;
+      border-radius: 22px;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 20px;
-      margin-top: 18px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
       box-shadow: 0 22px 48px var(--shadow);
       backdrop-filter: blur(10px);
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
     }
 
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1.1fr 0.8fr;
-      gap: 14px;
-      align-items: start;
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(119, 168, 255, 0.42);
+      background: linear-gradient(180deg, rgba(35, 28, 55, 0.92), rgba(44, 44, 68, 0.98));
     }
 
-    .controls-grid-wide {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
+    .card-title {
+      margin: 0 0 8px;
+      color: #fafafa;
+      font-size: 1.22rem;
+      font-weight: 800;
     }
 
-    label {
-      display: block;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    input,
-    select,
-    textarea,
-    button {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--panel-2);
-      color: var(--text);
-    }
-
-    input,
-    select,
-    textarea {
-      padding: 10px 12px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
-    }
-
-    input::selection,
-    select::selection,
-    textarea::selection,
-    pre::selection,
-    code::selection,
-    .log-box::selection,
-    .output-box::selection {
-      background: var(--selection-bg);
-      color: var(--selection-fg);
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    button {
-      padding: 11px 14px;
-      cursor: pointer;
-      transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
-      background: linear-gradient(180deg, rgba(119, 168, 255, 0.18), rgba(35, 28, 55, 0.92));
-    }
-
-    button:hover {
-      border-color: rgba(119, 168, 255, 0.52);
-      background: linear-gradient(180deg, rgba(119, 168, 255, 0.28), rgba(44, 44, 68, 0.96));
-    }
-
-    button:active {
-      transform: translateY(1px);
-    }
-
-    .button-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .button-row + .button-row {
-      margin-top: 10px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 6px 12px;
-      background: rgba(44, 44, 68, 0.92);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .status-pill.ready {
-      color: var(--success);
-      border-color: rgba(30,255,0,0.28);
-    }
-
-    .status-pill.error {
-      color: var(--danger);
-      border-color: rgba(250,177,229,0.3);
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .outputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    pre.output-box {
+    .card-copy {
       margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      min-height: 160px;
-      padding: 14px;
-      border-radius: 12px;
-      background: var(--panel-3);
-      border: 1px solid var(--border);
-      overflow: auto;
-    }
-
-    iframe {
-      width: 100%;
-      height: 980px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--panel-3);
-      margin-top: 16px;
-    }
-
-    .log-box {
-      margin-top: 14px;
-      min-height: 120px;
-      max-height: 260px;
-      overflow: auto;
-      padding: 12px;
-      border-radius: 12px;
-      background: var(--panel-3);
-      border: 1px solid var(--border);
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .image-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .gallery-card {
-      background: var(--panel-3);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px;
-    }
-
-    .gallery-card img {
-      width: 100%;
-      display: block;
-      border-radius: 10px;
-      background: #0c0c0c;
-    }
-
-    .gallery-meta {
-      margin-top: 8px;
       color: var(--muted);
-      font-size: 0.86rem;
+      line-height: 1.55;
     }
 
-    .mode-note {
-      margin-top: 10px;
+    .footer-note {
+      margin-top: 30px;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.95rem;
     }
 
-    @media (max-width: 900px) {
-      .controls-grid,
-      .controls-grid-wide,
-      .outputs {
-        grid-template-columns: 1fr;
-      }
-
-      iframe {
-        height: 760px;
+    @media (max-width: 720px) {
+      .shell {
+        padding-top: 42px;
       }
     }
   </style>
 </head>
-
 <body>
-  <h1>Astral Tempest</h1>
-  <p>Minimal site for projects, files, mods, tools, and experiments.</p>
-
-  <h2>Links</h2>
-  <p><a href="https://github.com/Zaelemgaad">GitHub</a></p>
-
-  <h2>Sections</h2>
-  <p><a href="/files/">Files</a></p>
-  <p><a href="/download/">Downloads</a></p>
-  <p><a href="/message/">Message</a></p>
-  <p><a href="/generators/">Generators</a></p>
-
-  <div class="card">
-    <h2>Generator Bridge Test</h2>
-    <p class="meta">This page assumes the generator has the <code>zembed</code> bridge installed. The parent page talks to it through <code>postMessage</code>.</p>
-
-    <div class="status-pill" id="bridgeStatus">Bridge not connected yet</div>
-    <p class="mode-note" id="modeNote">Popup mode is recommended here because Firefox blocks Perchance's image-generation iframe when it is nested inside another site.</p>
-
-    <div class="controls-grid" style="margin-top:14px;">
-      <div>
-        <label for="generatorUrl">Generator URL</label>
-        <input id="generatorUrl" value="https://null.perchance.org/jzlimagen">
-      </div>
-      <div>
-        <label for="promptFieldName">Prompt field name</label>
-        <input id="promptFieldName" value="description">
-      </div>
-      <div>
-        <label for="negativeFieldName">Negative field name</label>
-        <input id="negativeFieldName" value="negative">
-      </div>
-    </div>
-
-    <div class="controls-grid-wide">
-      <div>
-        <label for="connectionMode">Connection mode</label>
-        <select id="connectionMode">
-          <option value="popup" selected>Popup window (recommended)</option>
-          <option value="iframe">Embedded iframe (limited)</option>
-        </select>
-      </div>
-      <div class="meta">
-        Popup mode opens the generator on Perchance where image rendering is allowed, then sends prompts and finished image data back to this page.
-      </div>
-    </div>
-
-    <div class="controls-grid-wide">
-      <div>
-        <label for="promptInput">Prompt 1</label>
-        <textarea id="promptInput" placeholder="Type the prompt you want pushed into the generator..."></textarea>
-      </div>
-      <div>
-        <label for="negativeInput">Negative prompt</label>
-        <textarea id="negativeInput" placeholder="Optional negative prompt..."></textarea>
-      </div>
-    </div>
-
-    <div class="controls-grid-wide">
-      <div>
-        <label for="extraInputs">Extra inputs as JSON</label>
-        <textarea id="extraInputs" placeholder='{"artStyle":"ref:optionKeyName:Cinematic"}'></textarea>
-      </div>
-      <div>
-        <label>Actions</label>
-        <div class="button-row">
-          <button id="loadFrameBtn">Load / Reconnect</button>
-          <button id="pingBtn">Ping bridge</button>
-        </div>
-        <div class="button-row">
-          <button id="applyInputsBtn">Apply inputs</button>
-          <button id="generateBtn">Generate and wait</button>
-        </div>
-        <div class="button-row">
-          <button id="snapshotBtn">Refresh snapshot</button>
-          <button id="fieldsBtn">List fields</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="outputs">
-      <div>
-        <label>Final prompt</label>
-        <pre class="output-box" id="finalPromptOutput">Waiting for snapshot...</pre>
-      </div>
-      <div>
-        <label>Final negative</label>
-        <pre class="output-box" id="finalNegativeOutput">Waiting for snapshot...</pre>
-      </div>
-    </div>
-
-    <label style="margin-top:14px;">Bridge log</label>
-    <div class="log-box mono" id="bridgeLog">Waiting for the iframe...</div>
-
-    <label style="margin-top:14px;">Generated images</label>
-    <div class="image-gallery" id="imageGallery">
-      <div class="meta">No generated images yet.</div>
-    </div>
-
-    <div id="generatorViewportWrap">
-      <label style="margin-top:14px;">Embedded generator viewport</label>
-      <iframe id="generatorFrame" src="about:blank"></iframe>
-    </div>
-  </div>
-
-  <script src="/generators/zembed-client.js?v=20260508b"></script>
-  <script>
-    if (!window.ZembedClient || typeof window.ZembedClient.prototype.openPopup !== "function") {
-      class ZembedClient extends EventTarget {
-        constructor(iframe, options = {}) {
-          super();
-          this.iframe = iframe;
-          this.popupWindow = null;
-          this.mode = "iframe";
-          this.options = {
-            targetOrigin: "*",
-            requestTimeoutMs: 20000,
-            readyTimeoutMs: 20000,
-            popupWindowName: "zembedGenerator",
-            popupFeatures: "popup=yes,width=1560,height=1180,resizable=yes,scrollbars=yes",
-            ...options,
-          };
-          this.pending = new Map();
-          this.ready = false;
-          this.capabilities = null;
-          this.lastSnapshot = null;
-          this._boundMessage = this._handleMessage.bind(this);
-          window.addEventListener("message", this._boundMessage);
-        }
-
-        destroy() {
-          window.removeEventListener("message", this._boundMessage);
-          for (const { reject, timeoutId } of this.pending.values()) {
-            clearTimeout(timeoutId);
-            reject(new Error("Zembed client destroyed."));
-          }
-          this.pending.clear();
-        }
-
-        getTargetWindow() {
-          if (this.mode === "popup") {
-            if (this.popupWindow && !this.popupWindow.closed) return this.popupWindow;
-            return null;
-          }
-          return this.iframe?.contentWindow || null;
-        }
-
-        load(src) {
-          this.mode = "iframe";
-          this.ready = false;
-          this.capabilities = null;
-          this.lastSnapshot = null;
-          this.dispatchEvent(new CustomEvent("status", { detail: { ready: false, src } }));
-          if (!this.iframe) {
-            throw new Error("No iframe target is available for iframe mode.");
-          }
-          this.iframe.src = src;
-        }
-
-        openPopup(src, popupOptions = {}) {
-          this.mode = "popup";
-          this.ready = false;
-          this.capabilities = null;
-          this.lastSnapshot = null;
-          this.dispatchEvent(new CustomEvent("status", { detail: { ready: false, src, mode: "popup" } }));
-          const popupWindow = window.open(
-            src,
-            popupOptions.windowName || this.options.popupWindowName,
-            popupOptions.features || this.options.popupFeatures,
-          );
-          if (!popupWindow) {
-            throw new Error("Popup was blocked. Allow popups for this site and try again.");
-          }
-          this.popupWindow = popupWindow;
-          return popupWindow;
-        }
-
-        closePopup() {
-          if (this.popupWindow && !this.popupWindow.closed) {
-            this.popupWindow.close();
-          }
-          this.popupWindow = null;
-        }
-
-        async waitForReady(timeoutMs = this.options.readyTimeoutMs) {
-          if (this.ready) return this.capabilities;
-          return new Promise((resolve, reject) => {
-            const timeoutId = setTimeout(() => {
-              cleanup();
-              reject(new Error("Timed out waiting for zembed ready event."));
-            }, timeoutMs);
-            const cleanup = () => {
-              clearTimeout(timeoutId);
-              this.removeEventListener("ready", onReady);
-            };
-            const onReady = (event) => {
-              cleanup();
-              resolve(event.detail?.capabilities || this.capabilities);
-            };
-            this.addEventListener("ready", onReady, { once: true });
-          });
-        }
-
-        async send(action, data = {}, opts = {}) {
-          const requestId = `zembed-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-          const timeoutMs = opts.timeoutMs || this.options.requestTimeoutMs;
-          const targetWindow = this.getTargetWindow();
-          if (!targetWindow) {
-            throw new Error(`No ${this.mode === "popup" ? "popup" : "iframe"} target is connected yet.`);
-          }
-          return new Promise((resolve, reject) => {
-            const timeoutId = setTimeout(() => {
-              this.pending.delete(requestId);
-              reject(new Error(`Timed out waiting for zembed response to "${action}".`));
-            }, timeoutMs);
-            this.pending.set(requestId, { resolve, reject, timeoutId, action });
-            targetWindow.postMessage(
-              {
-                type: "zembed",
-                action,
-                requestId,
-                data,
-              },
-              opts.targetOrigin || this.options.targetOrigin,
-            );
-          });
-        }
-
-        ping() {
-          return this.send("ping");
-        }
-
-        getSnapshot() {
-          return this.send("getSnapshot");
-        }
-
-        getFields() {
-          return this.send("getFields");
-        }
-
-        setInputs(values) {
-          return this.send("setInputs", { values });
-        }
-
-        generateAndWait(timeoutMs = 180000) {
-          return this.send("generateAndWait", { timeoutMs }, { timeoutMs: timeoutMs + 5000 });
-        }
-
-        async applyInputsAndGenerate(values, timeoutMs = 180000) {
-          await this.setInputs(values);
-          return this.generateAndWait(timeoutMs);
-        }
-
-        _handleMessage(event) {
-          const targetWindow = this.getTargetWindow();
-          if (!targetWindow || event.source !== targetWindow) return;
-          const data = event.data;
-          if (!data || data.source !== "perchance-zembed") return;
-
-          if (data.type === "zembed-response") {
-            const pending = this.pending.get(data.requestId);
-            if (!pending) return;
-            clearTimeout(pending.timeoutId);
-            this.pending.delete(data.requestId);
-            if (data.ok) {
-              pending.resolve(data.result);
-            } else {
-              pending.reject(new Error(data.error || `zembed "${pending.action}" failed.`));
-            }
-            return;
-          }
-
-          if (data.type === "zembed-event") {
-            const detail = data.payload || {};
-            if (data.event === "ready") {
-              this.ready = true;
-              this.capabilities = detail.capabilities || null;
-              this.lastSnapshot = detail.snapshot || null;
-            } else if (data.event === "snapshot" || data.event === "generate-finished") {
-              this.lastSnapshot = detail;
-            }
-
-            this.dispatchEvent(new CustomEvent(data.event, { detail }));
-            this.dispatchEvent(new CustomEvent("event", { detail: { name: data.event, payload: detail } }));
-          }
-        }
-      }
-
-      window.ZembedClient = ZembedClient;
-    }
-  </script>
-  <script>
-    const generatorFrame = document.getElementById("generatorFrame");
-    const generatorUrl = document.getElementById("generatorUrl");
-    const promptFieldName = document.getElementById("promptFieldName");
-    const negativeFieldName = document.getElementById("negativeFieldName");
-    const connectionMode = document.getElementById("connectionMode");
-    const promptInput = document.getElementById("promptInput");
-    const negativeInput = document.getElementById("negativeInput");
-    const extraInputs = document.getElementById("extraInputs");
-    const bridgeStatus = document.getElementById("bridgeStatus");
-    const modeNote = document.getElementById("modeNote");
-    const bridgeLog = document.getElementById("bridgeLog");
-    const finalPromptOutput = document.getElementById("finalPromptOutput");
-    const finalNegativeOutput = document.getElementById("finalNegativeOutput");
-    const imageGallery = document.getElementById("imageGallery");
-    const generatorViewportWrap = document.getElementById("generatorViewportWrap");
-    const PROMPT_FIELD_CANDIDATES = ["description", "jzlDescription", "prompt1", "prompt"];
-    const NEGATIVE_FIELD_CANDIDATES = ["negative", "jzlNegative", "negativePrompt"];
-
-    const client = new ZembedClient(generatorFrame);
-
-    function log(message, detail) {
-      const timestamp = new Date().toLocaleTimeString();
-      const suffix = detail === undefined ? "" : `\n${typeof detail === "string" ? detail : JSON.stringify(detail, null, 2)}`;
-      bridgeLog.textContent = `[${timestamp}] ${message}${suffix}\n\n${bridgeLog.textContent}`.trim();
-    }
-
-    function setStatus(text, kind = "") {
-      bridgeStatus.textContent = text;
-      bridgeStatus.className = `status-pill${kind ? ` ${kind}` : ""}`;
-    }
-
-    function readExtraInputs() {
-      const raw = extraInputs.value.trim();
-      if (!raw) return {};
-      return JSON.parse(raw);
-    }
-
-    function pickExistingFieldName(fields, candidates) {
-      const fieldNames = (fields || []).map(field => field.name);
-      return candidates.find(name => fieldNames.includes(name)) || "";
-    }
-
-    function syncPreferredFieldNames(snapshot) {
-      const fields = snapshot?.fields || [];
-      if (!fields.length) return;
-
-      const currentPromptName = promptFieldName.value.trim();
-      const currentNegativeName = negativeFieldName.value.trim();
-      const fieldNames = fields.map(field => field.name);
-
-      if (!fieldNames.includes(currentPromptName)) {
-        const detectedPrompt = pickExistingFieldName(fields, PROMPT_FIELD_CANDIDATES);
-        if (detectedPrompt) {
-          promptFieldName.value = detectedPrompt;
-          log(`Prompt field auto-detected as "${detectedPrompt}".`);
-        }
-      }
-
-      if (!fieldNames.includes(currentNegativeName)) {
-        const detectedNegative = pickExistingFieldName(fields, NEGATIVE_FIELD_CANDIDATES);
-        if (detectedNegative) {
-          negativeFieldName.value = detectedNegative;
-          log(`Negative field auto-detected as "${detectedNegative}".`);
-        }
-      }
-    }
-
-    function buildInputMap() {
-      const values = { ...readExtraInputs() };
-      const promptName = promptFieldName.value.trim();
-      const negativeName = negativeFieldName.value.trim();
-      if (promptName) values[promptName] = promptInput.value;
-      if (negativeName) values[negativeName] = negativeInput.value;
-      return values;
-    }
-
-    function renderMedia(media = []) {
-      imageGallery.innerHTML = "";
-      if (!media.length) {
-        imageGallery.innerHTML = '<div class="meta">No generated images captured yet.</div>';
-        return;
-      }
-
-      media.forEach((item, index) => {
-        if (!item?.src) return;
-        const card = document.createElement("div");
-        card.className = "gallery-card";
-
-        const img = document.createElement("img");
-        img.src = item.src;
-        img.alt = item.alt || `Generated image ${index + 1}`;
-        card.appendChild(img);
-
-        const meta = document.createElement("div");
-        meta.className = "gallery-meta";
-        const parts = [];
-        parts.push(item.kind === "text-to-image-plugin" ? `Image ${index + 1} from Perchance output` : `Image ${index + 1}`);
-        if (item.seed) parts.push(`seed ${item.seed}`);
-        if (item.width && item.height) parts.push(`${item.width}x${item.height}`);
-        meta.textContent = parts.join(" • ");
-        card.appendChild(meta);
-
-        imageGallery.appendChild(card);
-      });
-
-      if (!imageGallery.children.length) {
-        imageGallery.innerHTML = '<div class="meta">No generated images captured yet.</div>';
-      }
-    }
-
-    function updateConnectionModeUI() {
-      const popupMode = connectionMode.value === "popup";
-      generatorViewportWrap.hidden = popupMode;
-      modeNote.textContent = popupMode
-        ? "Popup mode is recommended here because Firefox blocks Perchance's image-generation iframe when it is nested inside another site."
-        : "Embedded iframe mode is still available for inspection, but image-generation.perchance.org may be blocked by Firefox when nested on another site.";
-    }
-
-    function updateOutputs(snapshot) {
-      const outputs = snapshot?.outputs || {};
-      finalPromptOutput.textContent = outputs.prompt || "(empty)";
-      finalNegativeOutput.textContent = outputs.negativePrompt || "(empty)";
-      renderMedia(outputs.media || []);
-      syncPreferredFieldNames(snapshot);
-    }
-
-    client.addEventListener("ready", (event) => {
-      setStatus("Bridge ready", "ready");
-      log("Bridge reported ready.", event.detail);
-      if (event.detail?.snapshot) {
-        updateOutputs(event.detail.snapshot);
-      }
-    });
-
-    client.addEventListener("snapshot", (event) => {
-      updateOutputs(event.detail);
-      log("Snapshot event received.");
-    });
-
-    client.addEventListener("generate-started", () => {
-      setStatus("Generator is running…", "ready");
-      log("Generation started.");
-    });
-
-    client.addEventListener("generate-finished", (event) => {
-      setStatus("Generation finished", "ready");
-      updateOutputs(event.detail);
-      log("Generation finished.", event.detail);
-    });
-
-    client.addEventListener("event", (event) => {
-      const { name } = event.detail || {};
-      if (!["snapshot", "generate-started", "generate-finished", "ready"].includes(name)) {
-        log(`Bridge event: ${name}`, event.detail?.payload);
-      }
-    });
-
-    async function refreshSnapshot() {
-      const snapshot = await client.getSnapshot();
-      updateOutputs(snapshot);
-      log("Snapshot refreshed.", snapshot);
-      return snapshot;
-    }
-
-    async function ensureReady() {
-      setStatus("Waiting for bridge…");
-      return client.waitForReady();
-    }
-
-    async function connectGenerator() {
-      const src = generatorUrl.value.trim();
-      if (connectionMode.value === "popup") {
-        client.openPopup(src);
-        log(`Opening popup: ${src}`);
-      } else {
-        client.load(src);
-        log(`Loading iframe: ${src}`);
-      }
-      await ensureReady();
-    }
-
-    document.getElementById("loadFrameBtn").addEventListener("click", async () => {
-      try {
-        setStatus(connectionMode.value === "popup" ? "Opening popup…" : "Loading iframe…");
-        await connectGenerator();
-      } catch (error) {
-        setStatus("Bridge failed to connect", "error");
-        log("Load / reconnect failed.", error.message);
-      }
-    });
-
-    document.getElementById("pingBtn").addEventListener("click", async () => {
-      try {
-        const result = await client.ping();
-        setStatus("Bridge reachable", "ready");
-        log("Ping OK.", result);
-      } catch (error) {
-        setStatus("Ping failed", "error");
-        log("Ping failed.", error.message);
-      }
-    });
-
-    document.getElementById("applyInputsBtn").addEventListener("click", async () => {
-      try {
-        await ensureReady();
-        const values = buildInputMap();
-        const result = await client.setInputs(values);
-        setStatus("Inputs applied", "ready");
-        log("Inputs applied.", result);
-        if (result?.snapshot) updateOutputs(result.snapshot);
-      } catch (error) {
-        setStatus("Failed to apply inputs", "error");
-        log("Apply inputs failed.", error.message);
-      }
-    });
-
-    document.getElementById("generateBtn").addEventListener("click", async () => {
-      try {
-        await ensureReady();
-        const values = buildInputMap();
-        setStatus("Applying inputs and generating…", "ready");
-        const result = await client.applyInputsAndGenerate(values);
-        setStatus(result?.timedOut ? "Generation timed out" : "Generation finished", result?.timedOut ? "error" : "ready");
-        updateOutputs(result?.snapshot);
-        log("Generate and wait completed.", result);
-      } catch (error) {
-        setStatus("Generate failed", "error");
-        log("Generate failed.", error.message);
-      }
-    });
-
-    document.getElementById("snapshotBtn").addEventListener("click", async () => {
-      try {
-        await ensureReady();
-        setStatus("Refreshing snapshot…", "ready");
-        await refreshSnapshot();
-        setStatus("Snapshot refreshed", "ready");
-      } catch (error) {
-        setStatus("Snapshot failed", "error");
-        log("Snapshot failed.", error.message);
-      }
-    });
-
-    document.getElementById("fieldsBtn").addEventListener("click", async () => {
-      try {
-        await ensureReady();
-        const result = await client.getFields();
-        setStatus("Field list fetched", "ready");
-        log("Field list fetched.", result);
-      } catch (error) {
-        setStatus("Field list failed", "error");
-        log("Field list failed.", error.message);
-      }
-    });
-
-    generatorFrame.addEventListener("load", () => {
-      setStatus("Iframe loaded, waiting for bridge…");
-      log("Iframe loaded.");
-    });
-
-    connectionMode.addEventListener("change", updateConnectionModeUI);
-    updateConnectionModeUI();
-  </script>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Astral Tempest</div>
+      <h1>Project Hub</h1>
+      <p class="lead">A lightweight landing page for my Perchance work and related project links. The embed experiment has been retired from the live site, so this page stays focused and simple.</p>
+    </section>
+
+    <section class="grid">
+      <a class="card" href="/generators/">
+        <h2 class="card-title">Generators</h2>
+        <p class="card-copy">Browse direct Perchance links for my main generators, imports, and miscellaneous projects.</p>
+      </a>
+
+      <a class="card" href="https://github.com/Zaelemgaad" target="_blank" rel="noopener noreferrer">
+        <h2 class="card-title">GitHub</h2>
+        <p class="card-copy">Open my GitHub profile in a new tab.</p>
+      </a>
+    </section>
+
+    <p class="footer-note">More site sections can come back later as they get rebuilt cleanly.</p>
+  </main>
 </body>
 </html>
