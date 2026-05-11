@@ -490,6 +490,8 @@
       lastTick: performance.now()
     };
 
+    const storeUi = {};
+
     function pushLog(text) {
       state.log.unshift(text);
       state.log = state.log.slice(0, 6);
@@ -570,18 +572,21 @@
       save();
     }
 
-    function renderStore() {
-      storeNode.innerHTML = "";
-
+    function buildStore() {
       upgradeDefs.forEach((def) => {
-        const cost = upgradeCost(def.id);
-        const owned = state.upgrades[def.id];
         const card = document.createElement("section");
         card.className = "store-item";
         card.innerHTML =
           "<h2>" + def.name + "</h2>" +
-          "<p>" + def.text + "</p>" +
-          "<div class=\"store-meta\"><span>Owned: " + owned + "</span><span>Cost: " + formatNumber(cost) + "</span></div>";
+          "<p>" + def.text + "</p>";
+
+        const meta = document.createElement("div");
+        meta.className = "store-meta";
+
+        const ownedLabel = document.createElement("span");
+        const costLabel = document.createElement("span");
+        meta.appendChild(ownedLabel);
+        meta.appendChild(costLabel);
 
         const row = document.createElement("div");
         row.className = "buy-row";
@@ -602,13 +607,33 @@
         button.type = "button";
         button.className = "button";
         button.textContent = "Buy";
-        button.disabled = state.sparks < cost;
         button.addEventListener("click", () => buyUpgrade(def.id));
 
         row.appendChild(tag);
         row.appendChild(button);
+        card.appendChild(meta);
         card.appendChild(row);
         storeNode.appendChild(card);
+
+        storeUi[def.id] = {
+          ownedLabel,
+          costLabel,
+          button
+        };
+      });
+    }
+
+    function renderStore() {
+      upgradeDefs.forEach((def) => {
+        const cost = upgradeCost(def.id);
+        const owned = state.upgrades[def.id];
+        const ui = storeUi[def.id];
+        if (!ui) {
+          return;
+        }
+        ui.ownedLabel.textContent = "Owned: " + owned;
+        ui.costLabel.textContent = "Cost: " + formatNumber(cost);
+        ui.button.disabled = state.sparks < cost;
       });
     }
 
@@ -685,6 +710,7 @@
     setInterval(save, 5000);
 
     load();
+    buildStore();
     render();
     requestAnimationFrame((now) => {
       state.lastTick = now;

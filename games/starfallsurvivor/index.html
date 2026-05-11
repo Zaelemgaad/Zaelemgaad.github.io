@@ -1,0 +1,1651 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Starfall Survivor</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #181724;
+      --bg-alt: #241b38;
+      --panel: rgba(35, 28, 55, 0.84);
+      --panel-2: rgba(44, 44, 68, 0.92);
+      --panel-3: rgba(20, 18, 32, 0.76);
+      --border: rgba(119, 168, 255, 0.24);
+      --border-strong: rgba(119, 168, 255, 0.42);
+      --text: #ece7ff;
+      --muted: #beb5de;
+      --accent: #77a8ff;
+      --accent-2: #a335ee;
+      --accent-3: #f7d47f;
+      --danger: #ff7a96;
+      --success: #7ef3ce;
+      --shadow: rgba(0, 0, 0, 0.34);
+      --shadow-strong: rgba(0, 0, 0, 0.54);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(128, 0, 255, 0.22), transparent 24%),
+        radial-gradient(circle at top left, rgba(0, 112, 221, 0.18), transparent 20%),
+        radial-gradient(circle at bottom center, rgba(247, 212, 127, 0.08), transparent 20%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    ::selection {
+      background: #002a50;
+      color: var(--accent-3);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-3);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1600px, calc(100vw - 24px));
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 40px 18px 72px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--accent-3);
+      font: 700 0.92rem/1 "Fira Code", monospace;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+      font: 700 0.9rem/1 "Fira Code", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.5rem, 6vw, 4.4rem);
+      line-height: 0.95;
+    }
+
+    .lead {
+      max-width: 880px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .game-card,
+    .sidebar-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 26px 54px var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .game-card {
+      overflow: hidden;
+    }
+
+    .game-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px;
+      border-bottom: 1px solid rgba(119, 168, 255, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+        rgba(24, 22, 35, 0.46);
+    }
+
+    .toolbar-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hud-pill {
+      min-width: 92px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(119, 168, 255, 0.18);
+      background: rgba(17, 16, 30, 0.5);
+    }
+
+    .hud-pill span {
+      display: block;
+      color: var(--muted);
+      font: 700 0.74rem/1.1 "Fira Code", monospace;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hud-pill strong {
+      display: block;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button {
+      border: 1px solid rgba(119, 168, 255, 0.22);
+      border-radius: 999px;
+      background: rgba(17, 16, 30, 0.7);
+      color: var(--text);
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(35, 28, 55, 0.92);
+      outline: none;
+    }
+
+    .button.primary {
+      color: #141222;
+      background: linear-gradient(135deg, var(--accent-3), #ffe5a3);
+      border-color: rgba(247, 212, 127, 0.38);
+      box-shadow: 0 10px 28px rgba(247, 212, 127, 0.24);
+    }
+
+    .button.primary:hover,
+    .button.primary:focus-visible {
+      background: linear-gradient(135deg, #ffe29a, #fff0c0);
+    }
+
+    .button.alt {
+      background: linear-gradient(135deg, rgba(119, 168, 255, 0.16), rgba(163, 53, 238, 0.2));
+    }
+
+    .button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .control-select {
+      width: 100%;
+      border: 1px solid rgba(119, 168, 255, 0.22);
+      border-radius: 14px;
+      background: rgba(17, 16, 30, 0.72);
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+
+    .control-select:focus-visible {
+      outline: none;
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 2px rgba(119, 168, 255, 0.16);
+    }
+
+    .debug-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .canvas-shell {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      background:
+        radial-gradient(circle at top, rgba(119, 168, 255, 0.08), transparent 30%),
+        rgba(9, 10, 20, 0.72);
+    }
+
+    canvas {
+      display: block;
+      width: min(100%, 1240px);
+      height: min(72vh, 860px);
+      min-height: 420px;
+      border-radius: 24px;
+      border: 1px solid rgba(119, 168, 255, 0.18);
+      background:
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.035), transparent 58%),
+        linear-gradient(180deg, rgba(10, 11, 22, 0.98), rgba(5, 7, 14, 0.98));
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.02),
+        0 30px 64px rgba(0, 0, 0, 0.34);
+      touch-action: none;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(8, 10, 18, 0.58);
+      backdrop-filter: blur(10px);
+      transition: opacity 160ms ease, visibility 160ms ease;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .overlay-card {
+      width: min(520px, 100%);
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(119, 168, 255, 0.18);
+      background: linear-gradient(180deg, rgba(19, 20, 33, 0.95), rgba(31, 24, 45, 0.94));
+      box-shadow: 0 24px 60px var(--shadow-strong);
+      text-align: center;
+    }
+
+    .overlay-kicker {
+      margin: 0 0 10px;
+      color: var(--accent-3);
+      font: 700 0.82rem/1 "Fira Code", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .overlay-card h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.9rem, 5vw, 2.6rem);
+    }
+
+    .overlay-copy {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 18px;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+    }
+
+    .sidebar-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+    }
+
+    .sidebar-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .sidebar-card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .touch-note {
+      margin-top: 12px;
+      color: var(--accent-3);
+    }
+
+    .stat-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(119, 168, 255, 0.1);
+    }
+
+    .stat-row:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .stat-row span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .stat-row strong {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100vw, calc(100vw - 12px));
+        padding-inline: 12px;
+      }
+
+      canvas {
+        min-height: 340px;
+      }
+
+      .overlay {
+        inset: 10px;
+        padding: 12px;
+      }
+
+      .overlay-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/games/">← Back to Games</a>
+
+    <section class="hero">
+      <div class="eyebrow">Astral Tempest</div>
+      <h1>Starfall Survivor</h1>
+      <p class="lead">A survival-shooter and bullet-heaven hybrid where your weapon fires on its own, wave boons stack fast, and staying alive long enough to snowball the build is the whole point.</p>
+    </section>
+
+    <section class="layout">
+      <div class="game-card">
+        <div class="game-toolbar">
+          <div class="toolbar-cluster">
+            <div class="hud-pill">
+              <span>Hull</span>
+              <strong id="healthValue">5 / 5</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Score</span>
+              <strong id="scoreValue">0</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Wave</span>
+              <strong id="waveValue">1</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Dash</span>
+              <strong id="dashValue">Ready</strong>
+            </div>
+          </div>
+
+          <div class="toolbar-actions">
+            <button class="button primary" id="startButton" type="button">Start Run</button>
+            <button class="button" id="pauseButton" type="button">Pause</button>
+            <button class="button alt" id="dashButton" type="button">Dash Burst</button>
+          </div>
+        </div>
+
+        <div class="canvas-shell">
+          <canvas id="gameCanvas" width="960" height="600" aria-label="Starfall Survivor game canvas"></canvas>
+
+          <div class="overlay" id="overlay">
+            <div class="overlay-card">
+              <p class="overlay-kicker">Astral Tempest</p>
+              <h2 id="overlayTitle">Run Protocol</h2>
+              <p class="overlay-copy" id="overlayText">Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. On touch screens, hold and drag anywhere on the arena to steer. Your weapon auto-fires at nearby threats, and <strong>Space</strong> or the dash button cuts through danger when the burst is charged.</p>
+              <button class="button primary" id="overlayButton" type="button">Start The Storm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <section class="sidebar-card">
+          <h2>Mission</h2>
+          <p>Survive as long as you can. Break enemies for score, pull in pulse shards, and turn each new wave boon into a stronger build before the arena closes in around you.</p>
+          <p class="touch-note">Touch note: press and drag in the arena to move, then tap <strong>Dash Burst</strong> when the screen gets crowded.</p>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Run Intel</h2>
+          <div class="stat-grid">
+            <div class="stat-row">
+              <span>Best Score</span>
+              <strong id="bestScoreValue">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Run Time</span>
+              <strong id="timeValue">00:00</strong>
+            </div>
+            <div class="stat-row">
+              <span>Shards Recovered</span>
+              <strong id="shardValue">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Current Boon</span>
+              <strong id="boonValue">Base Loadout</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Controls</h2>
+          <ul>
+            <li><strong>Move:</strong> <code>WASD</code> or <code>Arrow Keys</code></li>
+            <li><strong>Pause:</strong> <code>P</code> or the pause button</li>
+            <li><strong>Dash:</strong> <code>Space</code> or the dash button</li>
+            <li><strong>Touch:</strong> hold and drag anywhere inside the arena</li>
+          </ul>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Overview</h2>
+          <p>Starfall Survivor blends survival-shooter pressure with the build-first feel of a bullet-heaven run, so each attempt is about movement, timing, and how smartly you stack the next boon.</p>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Testing Tools</h2>
+          <div class="control-row">
+            <select class="control-select" id="debugAction">
+              <option value="advance-1">Advance 1 wave</option>
+              <option value="advance-5">Advance 5 waves</option>
+              <option value="jump-25">Jump to wave 25</option>
+              <option value="grant-random">Grant random upgrade</option>
+              <option value="spawn-boss">Spawn boss now</option>
+            </select>
+            <button class="button alt" id="debugRunButton" type="button">Run</button>
+          </div>
+          <p class="debug-note" id="debugStatus">Testing actions start a run automatically if needed.</p>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const overlay = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayText = document.getElementById("overlayText");
+    const overlayButton = document.getElementById("overlayButton");
+    const startButton = document.getElementById("startButton");
+    const pauseButton = document.getElementById("pauseButton");
+    const dashButton = document.getElementById("dashButton");
+    const debugAction = document.getElementById("debugAction");
+    const debugRunButton = document.getElementById("debugRunButton");
+    const debugStatus = document.getElementById("debugStatus");
+
+    const hud = {
+      health: document.getElementById("healthValue"),
+      score: document.getElementById("scoreValue"),
+      wave: document.getElementById("waveValue"),
+      dash: document.getElementById("dashValue"),
+      best: document.getElementById("bestScoreValue"),
+      time: document.getElementById("timeValue"),
+      shards: document.getElementById("shardValue"),
+      boon: document.getElementById("boonValue")
+    };
+
+    const storageKey = "astral-tempest-starfall-survivor-best-score";
+    const baseArenaWidth = 960;
+    const baseArenaHeight = 600;
+    const pointer = { active: false, x: 0, y: 0 };
+    const keys = new Set();
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+    function readBestScore() {
+      try {
+        return Number(window.localStorage.getItem(storageKey) || 0);
+      } catch (error) {
+        return 0;
+      }
+    }
+
+    function writeBestScore(value) {
+      try {
+        window.localStorage.setItem(storageKey, String(value));
+      } catch (error) {
+        return;
+      }
+    }
+
+    const state = {
+      running: false,
+      paused: false,
+      lastTick: 0,
+      arenaWidth: baseArenaWidth,
+      arenaHeight: baseArenaHeight,
+      bestScore: readBestScore(),
+      score: 0,
+      wave: 1,
+      waveClock: 0,
+      waveDuration: 18,
+      spawnClock: 0,
+      shardsCollected: 0,
+      runTime: 0,
+      messageText: "",
+      boonLabel: "Base Loadout",
+      lastRandomBoon: null,
+      bossSpawnedForWave: false,
+      player: null,
+      enemies: [],
+      bullets: [],
+      particles: [],
+      shards: [],
+      touchId: null,
+      boonFlags: {
+        rapidFire: false,
+        stabilizer: false,
+        triBurst: false,
+        slipstream: false,
+        prismShield: false
+      }
+    };
+
+    function formatTime(totalSeconds) {
+      const whole = Math.max(0, Math.floor(totalSeconds));
+      const minutes = Math.floor(whole / 60);
+      const seconds = whole % 60;
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function colorWithAlpha(hex, alpha) {
+      const normalized = hex.replace("#", "");
+      const value = normalized.length === 3
+        ? normalized.split("").map((part) => part + part).join("")
+        : normalized;
+      const red = parseInt(value.slice(0, 2), 16);
+      const green = parseInt(value.slice(2, 4), 16);
+      const blue = parseInt(value.slice(4, 6), 16);
+      return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+    }
+
+    function updateHud() {
+      hud.health.textContent = `${state.player.hp} / ${state.player.maxHp}`;
+      hud.score.textContent = state.score.toLocaleString();
+      hud.wave.textContent = String(state.wave);
+      hud.dash.textContent = state.player.dashCooldownRemaining <= 0 ? "Ready" : `${state.player.dashCooldownRemaining.toFixed(1)}s`;
+      hud.best.textContent = state.bestScore.toLocaleString();
+      hud.time.textContent = formatTime(state.runTime);
+      hud.shards.textContent = String(state.shardsCollected);
+      hud.boon.textContent = state.boonLabel;
+      pauseButton.textContent = state.paused ? "Resume" : "Pause";
+    }
+
+    function setDebugStatus(message) {
+      debugStatus.textContent = message;
+    }
+
+    function getThreatWave() {
+      return state.wave + 4;
+    }
+
+    function createPlayer() {
+      return {
+        x: state.arenaWidth * 0.5,
+        y: state.arenaHeight * 0.5,
+        radius: 14,
+        angle: -Math.PI / 2,
+        speed: 250,
+        baseSpeed: 250,
+        hp: 5,
+        maxHp: 5,
+        damageInvulnerability: 1.1,
+        fireCooldown: 0.3,
+        fireTimer: 0.12,
+        projectileCount: 1,
+        bulletDamage: 12,
+        magnetRadius: 90,
+        dashSpeedMultiplier: 3.6,
+        dashDuration: 0.18,
+        dashTimer: 0,
+        dashCooldown: 4.2,
+        dashCooldownRemaining: 0,
+        damageTimer: 0
+      };
+    }
+
+    function clearRunEntities() {
+      state.enemies = [];
+      state.bullets = [];
+      state.particles = [];
+      state.shards = [];
+    }
+
+    function resetRun() {
+      state.running = false;
+      state.paused = false;
+      state.lastTick = 0;
+      state.score = 0;
+      state.wave = 1;
+      state.waveClock = 0;
+      state.waveDuration = 18;
+      state.spawnClock = 0;
+      state.shardsCollected = 0;
+      state.runTime = 0;
+      state.messageText = "Wave 1: Thread the opening rift.";
+      state.boonLabel = "Base Loadout";
+      state.lastRandomBoon = null;
+      state.bossSpawnedForWave = false;
+      state.player = createPlayer();
+      state.boonFlags = {
+        rapidFire: false,
+        stabilizer: false,
+        triBurst: false,
+        slipstream: false,
+        prismShield: false
+      };
+      clearRunEntities();
+      overlay.classList.remove("hidden");
+      overlayTitle.textContent = "Run Protocol";
+      overlayText.innerHTML = "Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. On touch screens, hold and drag anywhere on the arena to steer. Your weapon auto-fires at nearby threats, and <strong>Space</strong> or the dash button cuts through danger when the burst is charged.";
+      overlayButton.textContent = "Start The Storm";
+      startButton.textContent = "Start Run";
+      setDebugStatus("Testing actions start a run automatically if needed.");
+      updateHud();
+      draw();
+    }
+
+    function startRun() {
+      if (!state.player) {
+        resetRun();
+      }
+      state.running = true;
+      state.paused = false;
+      state.lastTick = 0;
+      overlay.classList.add("hidden");
+      startButton.textContent = "Restart Run";
+      requestAnimationFrame(loop);
+    }
+
+    function togglePause() {
+      if (!state.running) {
+        return;
+      }
+      state.paused = !state.paused;
+      if (!state.paused) {
+        state.lastTick = 0;
+        requestAnimationFrame(loop);
+      }
+      updateHud();
+    }
+
+    function resizeArena() {
+      const rect = canvas.getBoundingClientRect();
+      state.arenaWidth = Math.max(720, Math.round(rect.width));
+      state.arenaHeight = Math.max(360, Math.round(rect.height));
+      canvas.width = Math.round(state.arenaWidth * DPR);
+      canvas.height = Math.round(state.arenaHeight * DPR);
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      if (state.player) {
+        state.player.x = Math.min(Math.max(state.player.x, state.player.radius), state.arenaWidth - state.player.radius);
+        state.player.y = Math.min(Math.max(state.player.y, state.player.radius), state.arenaHeight - state.player.radius);
+      }
+      draw();
+    }
+
+    function getVolleyName(count) {
+      const names = {
+        1: "Single Shot",
+        2: "Dual Shot",
+        3: "Tri Shot",
+        4: "Quad Shot",
+        5: "Penta Shot",
+        6: "Hexa Shot",
+        7: "Hepta Shot",
+        8: "Octa Shot",
+        9: "Nona Shot",
+        10: "Deca Shot"
+      };
+      return names[count] || `${count}-Shot`;
+    }
+
+    function spawnParticle(x, y, color, size = 3, lifetime = 0.32) {
+      state.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 160,
+        vy: (Math.random() - 0.5) * 160,
+        size,
+        color,
+        lifetime,
+        maxLifetime: lifetime
+      });
+    }
+
+    function emitBurst(x, y, color, count = 12, size = 3) {
+      for (let index = 0; index < count; index += 1) {
+        spawnParticle(x, y, color, size, 0.25 + Math.random() * 0.2);
+      }
+    }
+
+    function nearestEnemy() {
+      let best = null;
+      let bestDistance = Infinity;
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - state.player.x;
+        const dy = enemy.y - state.player.y;
+        const distance = dx * dx + dy * dy;
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = enemy;
+        }
+      }
+      return best;
+    }
+
+    function fireVolley() {
+      const target = nearestEnemy();
+      const targetAngle = target
+        ? Math.atan2(target.y - state.player.y, target.x - state.player.x)
+        : state.player.angle;
+      state.player.angle = targetAngle;
+      const count = state.player.projectileCount;
+      const spread = count === 1 ? 0 : Math.min(1.2, 0.12 + count * 0.06);
+      const bulletColor = state.boonFlags.prismShield ? "#f7d47f" : "#77a8ff";
+
+      for (let index = 0; index < count; index += 1) {
+        const offset = count === 1 ? 0 : ((index / (count - 1)) - 0.5) * spread;
+        const angle = targetAngle + offset;
+        state.bullets.push({
+          x: state.player.x + Math.cos(angle) * 20,
+          y: state.player.y + Math.sin(angle) * 20,
+          vx: Math.cos(angle) * 420,
+          vy: Math.sin(angle) * 420,
+          radius: 4,
+          damage: state.player.bulletDamage,
+          lifetime: 1.2
+        });
+      }
+    }
+
+    function gainBoon(label, apply) {
+      apply();
+      state.boonLabel = label;
+      state.messageText = label;
+      updateHud();
+    }
+
+    function applyEmergencyRepairBoon(wave) {
+      gainBoon(`Wave ${wave}: score surge and emergency repair.`, () => {
+        state.score += 1500 + wave * 80;
+        state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+      });
+    }
+
+    function applyRandomWaveBoon(wave) {
+      const pool = [
+        {
+          key: "repair",
+          label: `Wave ${wave}: repair surge, score boost, and wider shard pull.`,
+          apply() {
+            state.score += 1200 + wave * 70;
+            state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+            state.player.magnetRadius += 16;
+          }
+        },
+        {
+          key: "rapid",
+          label: `Wave ${wave}: fire cadence sharpens.`,
+          apply() {
+            state.player.fireCooldown = Math.max(0.03, state.player.fireCooldown - 0.025);
+          }
+        },
+        {
+          key: "speed",
+          label: `Wave ${wave}: movement speed climbs.`,
+          apply() {
+            state.player.baseSpeed += 18;
+          }
+        },
+        {
+          key: "dash",
+          label: `Wave ${wave}: dash recharge, speed, and reach improve.`,
+          apply() {
+            state.player.dashCooldown = Math.max(0.42, state.player.dashCooldown - 0.28);
+            state.player.dashSpeedMultiplier += 0.3;
+            state.player.dashDuration += 0.02;
+          }
+        },
+        {
+          key: "hull",
+          label: `Wave ${wave}: hull plating thickens and stabilizes.`,
+          apply() {
+            state.player.maxHp += 1;
+            state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
+          }
+        },
+        {
+          key: "damage",
+          label: `Wave ${wave}: rounds hit harder.`,
+          apply() {
+            state.player.bulletDamage += 3;
+          }
+        },
+        {
+          key: "volley",
+          label: `Wave ${wave}: ${getVolleyName(Math.min(10, state.player.projectileCount + 1))} unlocked.`,
+          apply() {
+            state.player.projectileCount = Math.min(10, state.player.projectileCount + 1);
+          }
+        }
+      ];
+
+      const options = pool.length > 1
+        ? pool.filter((boon) => boon.key !== state.lastRandomBoon)
+        : pool;
+      const boon = options[Math.floor(Math.random() * options.length)];
+      state.lastRandomBoon = boon.key;
+      gainBoon(boon.label, boon.apply);
+    }
+
+    function applyWaveBoon(wave) {
+      if (wave === 2 && !state.boonFlags.rapidFire) {
+        state.boonFlags.rapidFire = true;
+        gainBoon("Wave 2: rate of fire improves.", () => {
+          state.player.fireCooldown = Math.max(0.03, state.player.fireCooldown - 0.06);
+        });
+        return;
+      }
+
+      if (wave === 3 && !state.boonFlags.stabilizer) {
+        state.boonFlags.stabilizer = true;
+        gainBoon("Wave 3: hull expands and hit i-frames stabilize.", () => {
+          state.player.maxHp += 1;
+          state.player.hp += 1;
+          state.player.damageInvulnerability += 0.2;
+        });
+        return;
+      }
+
+      if (wave === 4 && !state.boonFlags.triBurst) {
+        state.boonFlags.triBurst = true;
+        gainBoon("Wave 4: tri-shot pattern comes online.", () => {
+          state.player.projectileCount = Math.max(3, state.player.projectileCount);
+        });
+        return;
+      }
+
+      if (wave === 5 && !state.boonFlags.slipstream) {
+        state.boonFlags.slipstream = true;
+        gainBoon("Wave 5: slipstream thrusters kick in.", () => {
+          state.player.baseSpeed += 30;
+        });
+        return;
+      }
+
+      if (wave === 6 && !state.boonFlags.prismShield) {
+        state.boonFlags.prismShield = true;
+        gainBoon("Wave 6: shard pull and dash burst both improve.", () => {
+          state.player.magnetRadius += 28;
+          state.player.dashCooldown = Math.max(0.42, state.player.dashCooldown - 0.45);
+          state.player.dashSpeedMultiplier += 0.35;
+          state.player.dashDuration += 0.03;
+        });
+        return;
+      }
+
+      if (wave === 7) {
+        applyEmergencyRepairBoon(wave);
+        return;
+      }
+
+      applyRandomWaveBoon(wave);
+    }
+
+    function makeEnemy(type) {
+      const threatWave = getThreatWave();
+      if (type === "boss") {
+        return {
+          type,
+          x: state.arenaWidth * 0.5,
+          y: -90,
+          radius: 42,
+          speed: 64 + threatWave * 1.4,
+          hp: 125 + threatWave * 12,
+          maxHp: 125 + threatWave * 12,
+          damage: 2,
+          score: 1500,
+          color: "#a63d45",
+          core: "#5b1117",
+          booster: "#7a1b24"
+        };
+      }
+
+      if (type === "hunter") {
+        return {
+          type,
+          x: 0,
+          y: 0,
+          radius: 26,
+          speed: 100 + threatWave * 6.5,
+          hp: 6 + Math.floor(threatWave * 0.7),
+          maxHp: 6 + Math.floor(threatWave * 0.7),
+          damage: 1,
+          score: 80,
+          color: "#ff404c",
+          core: "#b06dff",
+          booster: "#b24028"
+        };
+      }
+
+      if (type === "comet") {
+        return {
+          type,
+          x: 0,
+          y: 0,
+          radius: 18,
+          speed: 136 + threatWave * 9,
+          hp: 3 + Math.floor(threatWave * 0.45),
+          maxHp: 3 + Math.floor(threatWave * 0.45),
+          damage: 1,
+          score: 40,
+          color: "#ff404c",
+          core: "#ff9a3c",
+          booster: "#ff7a2b"
+        };
+      }
+
+      return {
+        type: "wisp",
+        x: 0,
+        y: 0,
+        radius: 14,
+        speed: 104 + threatWave * 6.4,
+        hp: 2 + Math.floor(threatWave * 0.22),
+        maxHp: 2 + Math.floor(threatWave * 0.22),
+        damage: 1,
+        score: 18,
+        color: "#ff404c",
+        core: "#f0d45d",
+        booster: "#ffb13a"
+      };
+    }
+
+    function positionEnemyOnEdge(enemy) {
+      const side = Math.floor(Math.random() * 4);
+      if (side === 0) {
+        enemy.x = -40;
+        enemy.y = Math.random() * state.arenaHeight;
+      } else if (side === 1) {
+        enemy.x = state.arenaWidth + 40;
+        enemy.y = Math.random() * state.arenaHeight;
+      } else if (side === 2) {
+        enemy.x = Math.random() * state.arenaWidth;
+        enemy.y = -40;
+      } else {
+        enemy.x = Math.random() * state.arenaWidth;
+        enemy.y = state.arenaHeight + 40;
+      }
+    }
+
+    function hasBossEnemy() {
+      return state.enemies.some((enemy) => enemy.type === "boss");
+    }
+
+    function spawnEnemy(typeOverride = null) {
+      const threatWave = getThreatWave();
+      let type = typeOverride;
+      if (!type) {
+        const roll = Math.random();
+        if (threatWave >= 16) {
+          type = roll < 0.22 ? "hunter" : roll < 0.56 ? "comet" : "wisp";
+        } else if (threatWave >= 10) {
+          type = roll < 0.18 ? "hunter" : roll < 0.5 ? "comet" : "wisp";
+        } else {
+          type = roll < 0.14 ? "hunter" : roll < 0.42 ? "comet" : "wisp";
+        }
+      }
+
+      const enemy = makeEnemy(type);
+      if (type === "boss") {
+        enemy.x = state.arenaWidth * 0.5;
+        enemy.y = -90;
+      } else {
+        positionEnemyOnEdge(enemy);
+      }
+      state.enemies.push(enemy);
+    }
+
+    function setOverlay(title, text, buttonLabel) {
+      overlayTitle.textContent = title;
+      overlayText.innerHTML = text;
+      overlayButton.textContent = buttonLabel;
+      overlay.classList.remove("hidden");
+    }
+
+    function finishRun() {
+      state.running = false;
+      const isNewBest = state.score > state.bestScore;
+      if (isNewBest) {
+        state.bestScore = state.score;
+        writeBestScore(state.bestScore);
+      }
+      setOverlay(
+        "Run Complete",
+        `You held through <strong>wave ${state.wave}</strong> and scored <strong>${state.score.toLocaleString()}</strong>. ${isNewBest ? "That is the new site high score." : `Current best is <strong>${state.bestScore.toLocaleString()}</strong>.`}`,
+        "Run It Back"
+      );
+      updateHud();
+    }
+
+    function damagePlayer(amount) {
+      if (state.player.damageTimer > 0 || state.player.dashTimer > 0) {
+        return;
+      }
+      state.player.hp -= amount;
+      state.player.damageTimer = state.player.damageInvulnerability;
+      if (state.player.hp <= 0) {
+        state.player.hp = 0;
+        finishRun();
+      }
+    }
+
+    function triggerDash() {
+      if (!state.running || state.paused || state.player.dashCooldownRemaining > 0 || state.player.dashTimer > 0) {
+        return;
+      }
+      state.player.dashTimer = state.player.dashDuration;
+      state.player.dashCooldownRemaining = state.player.dashCooldown;
+      emitBurst(state.player.x, state.player.y, "#f7d47f", 16, 4);
+    }
+
+    function movePlayer(dt) {
+      let moveX = 0;
+      let moveY = 0;
+      if (keys.has("ArrowRight") || keys.has("d")) {
+        moveX += 1;
+      }
+      if (keys.has("ArrowLeft") || keys.has("a")) {
+        moveX -= 1;
+      }
+      if (keys.has("ArrowDown") || keys.has("s")) {
+        moveY += 1;
+      }
+      if (keys.has("ArrowUp") || keys.has("w")) {
+        moveY -= 1;
+      }
+
+      if (pointer.active) {
+        moveX = pointer.x - state.player.x;
+        moveY = pointer.y - state.player.y;
+      }
+
+      const length = Math.hypot(moveX, moveY);
+      if (length > 0) {
+        const normalizedX = moveX / length;
+        const normalizedY = moveY / length;
+        const speed = state.player.baseSpeed * (state.player.dashTimer > 0 ? state.player.dashSpeedMultiplier : 1);
+        state.player.x += normalizedX * speed * dt;
+        state.player.y += normalizedY * speed * dt;
+        state.player.angle = Math.atan2(normalizedY, normalizedX);
+      }
+
+      state.player.x = Math.min(Math.max(state.player.x, state.player.radius), state.arenaWidth - state.player.radius);
+      state.player.y = Math.min(Math.max(state.player.y, state.player.radius), state.arenaHeight - state.player.radius);
+    }
+
+    function updatePlayer(dt) {
+      movePlayer(dt);
+      state.player.damageTimer = Math.max(0, state.player.damageTimer - dt);
+      state.player.dashCooldownRemaining = Math.max(0, state.player.dashCooldownRemaining - dt);
+      state.player.dashTimer = Math.max(0, state.player.dashTimer - dt);
+      state.player.fireTimer -= dt;
+      state.player.speed = state.player.baseSpeed;
+      if (state.player.fireTimer <= 0) {
+        state.player.fireTimer = state.player.fireCooldown;
+        fireVolley();
+      }
+    }
+
+    function updateBullets(dt) {
+      for (let index = state.bullets.length - 1; index >= 0; index -= 1) {
+        const bullet = state.bullets[index];
+        bullet.x += bullet.vx * dt;
+        bullet.y += bullet.vy * dt;
+        bullet.lifetime -= dt;
+        if (
+          bullet.lifetime <= 0 ||
+          bullet.x < -40 ||
+          bullet.x > state.arenaWidth + 40 ||
+          bullet.y < -40 ||
+          bullet.y > state.arenaHeight + 40
+        ) {
+          state.bullets.splice(index, 1);
+        }
+      }
+    }
+
+    function spawnShard(x, y) {
+      state.shards.push({
+        x,
+        y,
+        radius: 6,
+        value: 1
+      });
+    }
+
+    function updateEnemies(dt) {
+      for (let enemyIndex = state.enemies.length - 1; enemyIndex >= 0; enemyIndex -= 1) {
+        const enemy = state.enemies[enemyIndex];
+        const dx = state.player.x - enemy.x;
+        const dy = state.player.y - enemy.y;
+        const distance = Math.hypot(dx, dy) || 1;
+
+        enemy.x += (dx / distance) * enemy.speed * dt;
+        enemy.y += (dy / distance) * enemy.speed * dt;
+
+        if (distance < enemy.radius + state.player.radius + 4) {
+          damagePlayer(enemy.damage);
+        }
+
+        for (let bulletIndex = state.bullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
+          const bullet = state.bullets[bulletIndex];
+          if (Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) <= bullet.radius + enemy.radius) {
+            enemy.hp -= bullet.damage;
+            state.bullets.splice(bulletIndex, 1);
+            spawnParticle(enemy.x, enemy.y, colorWithAlpha(enemy.core, 0.82), 3, 0.16);
+            break;
+          }
+        }
+
+        if (enemy.hp <= 0) {
+          state.score += enemy.score;
+          spawnShard(enemy.x, enemy.y);
+          emitBurst(enemy.x, enemy.y, enemy.core, enemy.type === "boss" ? 18 : 10, enemy.type === "boss" ? 5 : 3);
+          state.enemies.splice(enemyIndex, 1);
+        }
+      }
+    }
+
+    function updateShards(dt) {
+      for (let index = state.shards.length - 1; index >= 0; index -= 1) {
+        const shard = state.shards[index];
+        const dx = state.player.x - shard.x;
+        const dy = state.player.y - shard.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance < state.player.magnetRadius) {
+          const pull = 120 + (state.player.magnetRadius - distance) * 4;
+          shard.x += (dx / distance) * pull * dt;
+          shard.y += (dy / distance) * pull * dt;
+        }
+        if (distance < state.player.radius + shard.radius + 4) {
+          state.shardsCollected += shard.value;
+          state.score += 25;
+          state.shards.splice(index, 1);
+        }
+      }
+    }
+
+    function updateParticles(dt) {
+      for (let index = state.particles.length - 1; index >= 0; index -= 1) {
+        const particle = state.particles[index];
+        particle.x += particle.vx * dt;
+        particle.y += particle.vy * dt;
+        particle.lifetime -= dt;
+        if (particle.lifetime <= 0) {
+          state.particles.splice(index, 1);
+        }
+      }
+    }
+
+    function advanceWave(count = 1) {
+      for (let step = 0; step < count; step += 1) {
+        state.wave += 1;
+        state.waveClock = 0;
+        state.bossSpawnedForWave = false;
+        applyWaveBoon(state.wave);
+      }
+      updateHud();
+    }
+
+    function updateWaves(dt) {
+      state.waveClock += dt;
+      const threatWave = getThreatWave();
+      const baseSpawnRate = Math.max(0.35, 1.05 - threatWave * 0.07);
+      state.spawnClock -= dt;
+
+      if (state.spawnClock <= 0) {
+        spawnEnemy();
+        if (threatWave >= 5 && !hasBossEnemy() && Math.random() > 0.72) {
+          spawnEnemy("comet");
+        }
+        state.spawnClock = baseSpawnRate;
+      }
+
+      if (state.wave >= 25 && !state.bossSpawnedForWave && !hasBossEnemy()) {
+        spawnEnemy("boss");
+        state.bossSpawnedForWave = true;
+      }
+
+      if (state.waveClock >= state.waveDuration) {
+        advanceWave(1);
+      }
+    }
+
+    function runDebugAction() {
+      if (!state.player) {
+        resetRun();
+      }
+      if (!state.running) {
+        startRun();
+        setDebugStatus("Run started for debug testing.");
+      }
+
+      const action = debugAction.value;
+      if (action === "advance-1") {
+        advanceWave(1);
+        setDebugStatus("Advanced 1 wave.");
+      } else if (action === "advance-5") {
+        advanceWave(5);
+        setDebugStatus("Advanced 5 waves.");
+      } else if (action === "jump-25") {
+        const delta = Math.max(0, 25 - state.wave);
+        if (delta > 0) {
+          advanceWave(delta);
+        }
+        setDebugStatus("Jumped to wave 25.");
+      } else if (action === "grant-random") {
+        applyRandomWaveBoon(Math.max(8, state.wave));
+        setDebugStatus(`Granted debug boon at wave ${Math.max(8, state.wave)}.`);
+      } else if (action === "spawn-boss") {
+        if (!hasBossEnemy()) {
+          spawnEnemy("boss");
+        }
+        setDebugStatus("Boss spawned.");
+      }
+      updateHud();
+    }
+
+    function drawBackground() {
+      ctx.clearRect(0, 0, state.arenaWidth, state.arenaHeight);
+      const gradient = ctx.createRadialGradient(
+        state.arenaWidth * 0.5,
+        state.arenaHeight * 0.15,
+        10,
+        state.arenaWidth * 0.5,
+        state.arenaHeight * 0.5,
+        state.arenaWidth * 0.8
+      );
+      gradient.addColorStop(0, "rgba(119, 168, 255, 0.08)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, state.arenaWidth, state.arenaHeight);
+
+      ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+      for (let star = 0; star < 90; star += 1) {
+        const x = (star * 97) % state.arenaWidth;
+        const y = (star * 67 + state.runTime * 10) % state.arenaHeight;
+        ctx.fillRect(x, y, 1.5, 1.5);
+      }
+    }
+
+    function drawShards() {
+      for (const shard of state.shards) {
+        ctx.fillStyle = "#7ef3ce";
+        ctx.beginPath();
+        ctx.moveTo(shard.x, shard.y - shard.radius);
+        ctx.lineTo(shard.x + shard.radius * 0.7, shard.y);
+        ctx.lineTo(shard.x, shard.y + shard.radius);
+        ctx.lineTo(shard.x - shard.radius * 0.7, shard.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = state.boonFlags.prismShield ? "#f7d47f" : "#77a8ff";
+      for (const bullet of state.bullets) {
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawParticles() {
+      for (const particle of state.particles) {
+        ctx.globalAlpha = Math.max(0, particle.lifetime / particle.maxLifetime);
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function drawPlayer() {
+      const speedState = state.player.dashTimer > 0 ? 1 : keys.size > 0 || pointer.active ? 0.65 : 0.3;
+      const plumeLength = 10 + speedState * 18;
+
+      ctx.save();
+      ctx.translate(state.player.x, state.player.y);
+      ctx.rotate(state.player.angle);
+
+      ctx.fillStyle = "rgba(255, 142, 76, 0.88)";
+      ctx.beginPath();
+      ctx.moveTo(-12, -5);
+      ctx.lineTo(-12 - plumeLength, 0);
+      ctx.lineTo(-12, 5);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = state.player.damageTimer > 0 ? "#ffd2d8" : "#edf2ff";
+      ctx.beginPath();
+      ctx.moveTo(18, 0);
+      ctx.lineTo(-10, -11);
+      ctx.lineTo(-3, 0);
+      ctx.lineTo(-10, 11);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#77a8ff";
+      ctx.beginPath();
+      ctx.arc(1, 0, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawEnemies() {
+      for (const enemy of state.enemies) {
+        const angle = Math.atan2(state.player.y - enemy.y, state.player.x - enemy.x);
+        ctx.save();
+        ctx.translate(enemy.x, enemy.y);
+        ctx.rotate(angle);
+
+        ctx.fillStyle = colorWithAlpha(enemy.core, 0.2);
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius + 9, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (enemy.type === "wisp") {
+          ctx.fillStyle = enemy.booster;
+          ctx.beginPath();
+          ctx.moveTo(-10, -4);
+          ctx.lineTo(-20, 0);
+          ctx.lineTo(-10, 4);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = enemy.color;
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.fillStyle = enemy.core;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (enemy.type === "comet") {
+          ctx.fillStyle = enemy.booster;
+          ctx.beginPath();
+          ctx.moveTo(-14, -6);
+          ctx.lineTo(-28, 0);
+          ctx.lineTo(-14, 6);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = enemy.color;
+          ctx.lineWidth = 3;
+          ctx.fillStyle = "#171113";
+          ctx.beginPath();
+          ctx.moveTo(enemy.radius, 0);
+          ctx.lineTo(-enemy.radius * 0.8, -enemy.radius * 0.75);
+          ctx.lineTo(-enemy.radius * 0.35, 0);
+          ctx.lineTo(-enemy.radius * 0.8, enemy.radius * 0.75);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = enemy.core;
+          ctx.beginPath();
+          ctx.arc(3, 0, enemy.radius * 0.36, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (enemy.type === "hunter") {
+          ctx.fillStyle = enemy.booster;
+          ctx.beginPath();
+          ctx.moveTo(-18, -8);
+          ctx.lineTo(-34, 0);
+          ctx.lineTo(-18, 8);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = enemy.color;
+          ctx.lineWidth = 3;
+          ctx.fillStyle = "#0e0b12";
+          ctx.beginPath();
+          ctx.moveTo(enemy.radius, 0);
+          ctx.lineTo(6, -enemy.radius * 0.95);
+          ctx.lineTo(-enemy.radius * 0.95, -8);
+          ctx.lineTo(-enemy.radius * 0.75, 0);
+          ctx.lineTo(-enemy.radius * 0.95, 8);
+          ctx.lineTo(6, enemy.radius * 0.95);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = enemy.core;
+          ctx.beginPath();
+          ctx.arc(3, 0, enemy.radius * 0.38, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = enemy.booster;
+          ctx.beginPath();
+          ctx.moveTo(-26, -10);
+          ctx.lineTo(-44, 0);
+          ctx.lineTo(-26, 10);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = enemy.color;
+          ctx.lineWidth = 4;
+          ctx.fillStyle = "#130d10";
+          ctx.beginPath();
+          ctx.moveTo(enemy.radius, 0);
+          ctx.lineTo(enemy.radius * 0.4, -enemy.radius * 0.84);
+          ctx.lineTo(-enemy.radius * 0.68, -enemy.radius * 0.84);
+          ctx.lineTo(-enemy.radius, 0);
+          ctx.lineTo(-enemy.radius * 0.68, enemy.radius * 0.84);
+          ctx.lineTo(enemy.radius * 0.4, enemy.radius * 0.84);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = enemy.core;
+          ctx.beginPath();
+          ctx.arc(4, 0, enemy.radius * 0.34, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    function draw() {
+      if (!state.player) {
+        return;
+      }
+      drawBackground();
+      drawShards();
+      drawBullets();
+      drawParticles();
+      drawEnemies();
+      drawPlayer();
+    }
+
+    function loop(timestamp) {
+      if (!state.running || state.paused) {
+        draw();
+        updateHud();
+        return;
+      }
+
+      if (!state.lastTick) {
+        state.lastTick = timestamp;
+      }
+
+      const dt = Math.min(0.033, (timestamp - state.lastTick) / 1000);
+      state.lastTick = timestamp;
+      state.runTime += dt;
+
+      updatePlayer(dt);
+      updateBullets(dt);
+      updateEnemies(dt);
+      updateShards(dt);
+      updateParticles(dt);
+      updateWaves(dt);
+      updateHud();
+      draw();
+
+      if (state.running && !state.paused) {
+        requestAnimationFrame(loop);
+      }
+    }
+
+    function pointerFromEvent(event) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) * (state.arenaWidth / rect.width),
+        y: (event.clientY - rect.top) * (state.arenaHeight / rect.height)
+      };
+    }
+
+    canvas.addEventListener("pointerdown", (event) => {
+      const point = pointerFromEvent(event);
+      pointer.active = true;
+      pointer.x = point.x;
+      pointer.y = point.y;
+      state.touchId = event.pointerId;
+      canvas.setPointerCapture(event.pointerId);
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!pointer.active || state.touchId !== event.pointerId) {
+        return;
+      }
+      const point = pointerFromEvent(event);
+      pointer.x = point.x;
+      pointer.y = point.y;
+    });
+
+    function releasePointer(event) {
+      if (state.touchId !== event.pointerId) {
+        return;
+      }
+      pointer.active = false;
+      state.touchId = null;
+      if (canvas.hasPointerCapture(event.pointerId)) {
+        canvas.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    canvas.addEventListener("pointerup", releasePointer);
+    canvas.addEventListener("pointercancel", releasePointer);
+
+    window.addEventListener("keydown", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d"].includes(key)) {
+        keys.add(key);
+        event.preventDefault();
+      }
+      if (key === " " || key === "Spacebar") {
+        triggerDash();
+        event.preventDefault();
+      }
+      if (key === "p") {
+        togglePause();
+      }
+    });
+
+    window.addEventListener("keyup", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      keys.delete(key);
+    });
+
+    startButton.addEventListener("click", () => {
+      if (state.running) {
+        resetRun();
+      } else {
+        startRun();
+      }
+    });
+
+    overlayButton.addEventListener("click", () => {
+      if (state.running) {
+        resetRun();
+      } else {
+        startRun();
+      }
+    });
+
+    pauseButton.addEventListener("click", togglePause);
+    dashButton.addEventListener("click", triggerDash);
+    debugRunButton.addEventListener("click", runDebugAction);
+    window.addEventListener("resize", resizeArena);
+
+    resetRun();
+    resizeArena();
+  </script>
+</body>
+</html>
