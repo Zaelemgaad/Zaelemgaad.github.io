@@ -1,0 +1,1565 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Rift Runner</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #181724;
+      --bg-alt: #241b38;
+      --panel: rgba(35, 28, 55, 0.84);
+      --panel-2: rgba(44, 44, 68, 0.92);
+      --panel-3: rgba(20, 18, 32, 0.76);
+      --border: rgba(119, 168, 255, 0.24);
+      --border-strong: rgba(119, 168, 255, 0.42);
+      --text: #ece7ff;
+      --muted: #beb5de;
+      --accent: #77a8ff;
+      --accent-2: #a335ee;
+      --accent-3: #f7d47f;
+      --danger: #ff7a96;
+      --success: #7ef3ce;
+      --shadow: rgba(0, 0, 0, 0.34);
+      --shadow-strong: rgba(0, 0, 0, 0.54);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(128, 0, 255, 0.22), transparent 24%),
+        radial-gradient(circle at top left, rgba(0, 112, 221, 0.18), transparent 20%),
+        radial-gradient(circle at bottom center, rgba(247, 212, 127, 0.08), transparent 20%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    ::selection {
+      background: #002a50;
+      color: var(--accent-3);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-3);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 18px 72px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+      color: var(--accent-3);
+      font: 700 0.92rem/1 "Fira Code", monospace;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+      font: 700 0.9rem/1 "Fira Code", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.5rem, 6vw, 4.4rem);
+      line-height: 0.95;
+    }
+
+    .lead {
+      max-width: 880px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.95fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .game-card,
+    .sidebar-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 26px 54px var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .game-card {
+      overflow: hidden;
+    }
+
+    .game-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px;
+      border-bottom: 1px solid rgba(119, 168, 255, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent),
+        rgba(24, 22, 35, 0.46);
+    }
+
+    .toolbar-cluster {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hud-pill {
+      min-width: 92px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(119, 168, 255, 0.18);
+      background: rgba(17, 16, 30, 0.5);
+    }
+
+    .hud-pill span {
+      display: block;
+      color: var(--muted);
+      font: 700 0.74rem/1.1 "Fira Code", monospace;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hud-pill strong {
+      display: block;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .button {
+      border: 1px solid rgba(119, 168, 255, 0.22);
+      border-radius: 999px;
+      background: rgba(17, 16, 30, 0.7);
+      color: var(--text);
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(35, 28, 55, 0.92);
+      outline: none;
+    }
+
+    .button.primary {
+      color: #141222;
+      background: linear-gradient(135deg, var(--accent-3), #ffe5a3);
+      border-color: rgba(247, 212, 127, 0.38);
+      box-shadow: 0 10px 28px rgba(247, 212, 127, 0.24);
+    }
+
+    .button.primary:hover,
+    .button.primary:focus-visible {
+      background: linear-gradient(135deg, #ffe29a, #fff0c0);
+    }
+
+    .button.alt {
+      background: linear-gradient(135deg, rgba(119, 168, 255, 0.16), rgba(163, 53, 238, 0.2));
+    }
+
+    .button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .canvas-shell {
+      position: relative;
+      padding: 16px;
+      background:
+        radial-gradient(circle at top, rgba(119, 168, 255, 0.08), transparent 30%),
+        rgba(9, 10, 20, 0.72);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 22px;
+      border: 1px solid rgba(119, 168, 255, 0.14);
+      background:
+        radial-gradient(circle at top, rgba(119, 168, 255, 0.12), transparent 36%),
+        linear-gradient(180deg, rgba(14, 15, 26, 0.98), rgba(8, 8, 16, 1));
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 22px 44px rgba(0, 0, 0, 0.42);
+      touch-action: none;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 16px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      border-radius: 22px;
+      background: rgba(9, 10, 20, 0.58);
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 180ms ease;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .overlay-card {
+      max-width: 460px;
+      text-align: center;
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px solid rgba(119, 168, 255, 0.2);
+      background: linear-gradient(180deg, rgba(28, 26, 44, 0.96), rgba(16, 15, 27, 0.96));
+      box-shadow: 0 28px 60px var(--shadow-strong);
+    }
+
+    .overlay-card p {
+      margin: 0;
+    }
+
+    .overlay-kicker {
+      color: var(--accent-3);
+      font: 700 0.84rem/1 "Fira Code", monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .overlay-card h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      line-height: 1;
+    }
+
+    .overlay-copy {
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 18px;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+    }
+
+    .sidebar-card h2 {
+      margin: 0 0 12px;
+      color: var(--accent-3);
+      font: 700 0.94rem/1 "Fira Code", monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-card p,
+    .sidebar-card li {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .sidebar-card ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .stat-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(119, 168, 255, 0.14);
+      background: rgba(15, 14, 25, 0.54);
+    }
+
+    .stat-row span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .stat-row strong {
+      color: var(--text);
+      text-align: right;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .footer-note code {
+      color: var(--accent-3);
+      font-family: "Fira Code", monospace;
+    }
+
+    .touch-note {
+      display: none;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        padding: 28px 14px 48px;
+      }
+
+      .game-toolbar,
+      .canvas-shell,
+      .sidebar-card {
+        padding: 14px;
+      }
+
+      .overlay {
+        inset: 14px;
+        padding: 14px;
+      }
+
+      .overlay-card {
+        padding: 22px;
+      }
+
+      .touch-note {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/">← Back Home</a>
+
+    <section class="hero">
+      <div class="eyebrow">Astral Tempest</div>
+      <h1>Rift Runner</h1>
+      <p class="lead">A fast browser-first survival game built to live directly on your site. Drift through a collapsing star rift, collect pulse shards, and outlast increasingly nasty waves of void matter. It is a self-contained prototype, so we can keep evolving it from here without needing a framework or asset pipeline first.</p>
+    </section>
+
+    <section class="layout">
+      <div class="game-card">
+        <div class="game-toolbar">
+          <div class="toolbar-cluster">
+            <div class="hud-pill">
+              <span>Hull</span>
+              <strong id="healthValue">5 / 5</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Score</span>
+              <strong id="scoreValue">0</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Wave</span>
+              <strong id="waveValue">1</strong>
+            </div>
+            <div class="hud-pill">
+              <span>Dash</span>
+              <strong id="dashValue">Ready</strong>
+            </div>
+          </div>
+
+          <div class="toolbar-actions">
+            <button class="button primary" id="startButton" type="button">Start Run</button>
+            <button class="button" id="pauseButton" type="button">Pause</button>
+            <button class="button alt" id="dashButton" type="button">Dash Burst</button>
+          </div>
+        </div>
+
+        <div class="canvas-shell">
+          <canvas id="gameCanvas" width="960" height="600" aria-label="Rift Runner game canvas"></canvas>
+
+          <div class="overlay" id="overlay">
+            <div class="overlay-card">
+              <p class="overlay-kicker">Astral Tempest</p>
+              <h2 id="overlayTitle">Launch Sequence</h2>
+              <p class="overlay-copy" id="overlayText">Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. On touch screens, hold and drag anywhere on the arena to steer. Your ship auto-fires at nearby targets, and <strong>Space</strong> or the dash button cuts through danger when the burst is charged.</p>
+              <button class="button primary" id="overlayButton" type="button">Enter The Rift</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <section class="sidebar-card">
+          <h2>Mission</h2>
+          <p>Survive as long as you can. Destroy enemies to earn score, pull in pulse shards to power your run, and ride each new wave bonus to keep the arena from overwhelming you.</p>
+          <p class="touch-note">Touch note: press and drag in the arena to move, then tap <strong>Dash Burst</strong> when the screen gets crowded.</p>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Run Intel</h2>
+          <div class="stat-grid">
+            <div class="stat-row">
+              <span>Best Score</span>
+              <strong id="bestScoreValue">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Run Time</span>
+              <strong id="timeValue">00:00</strong>
+            </div>
+            <div class="stat-row">
+              <span>Shards Recovered</span>
+              <strong id="shardValue">0</strong>
+            </div>
+            <div class="stat-row">
+              <span>Current Boon</span>
+              <strong id="boonValue">Base Loadout</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Controls</h2>
+          <ul>
+            <li><strong>Move:</strong> <code>WASD</code> or <code>Arrow Keys</code></li>
+            <li><strong>Pause:</strong> <code>P</code> or the pause button</li>
+            <li><strong>Dash:</strong> <code>Space</code> or the dash button</li>
+            <li><strong>Touch:</strong> hold and drag anywhere inside the arena</li>
+          </ul>
+        </section>
+
+        <section class="sidebar-card">
+          <h2>Build Notes</h2>
+          <p>This version is intentionally plain HTML, CSS, and JavaScript so it can deploy anywhere static hosting works. Next passes could add enemy varieties, bosses, sound, unlocks, or a full lore wrapper without changing how you host the site.</p>
+        </section>
+      </aside>
+    </section>
+
+    <p class="footer-note">Files live where you wanted them: the playable game is now entirely in <code>/game/index.html</code>.</p>
+  </main>
+
+  <noscript>
+    <p style="padding: 0 18px 32px; color: #ece7ff;">This game needs JavaScript enabled to run.</p>
+  </noscript>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const overlay = document.getElementById("overlay");
+      const overlayTitle = document.getElementById("overlayTitle");
+      const overlayText = document.getElementById("overlayText");
+      const overlayButton = document.getElementById("overlayButton");
+      const startButton = document.getElementById("startButton");
+      const pauseButton = document.getElementById("pauseButton");
+      const dashButton = document.getElementById("dashButton");
+
+      const hud = {
+        health: document.getElementById("healthValue"),
+        score: document.getElementById("scoreValue"),
+        wave: document.getElementById("waveValue"),
+        dash: document.getElementById("dashValue"),
+        best: document.getElementById("bestScoreValue"),
+        time: document.getElementById("timeValue"),
+        shards: document.getElementById("shardValue"),
+        boon: document.getElementById("boonValue")
+      };
+
+      const arena = { width: canvas.width, height: canvas.height };
+      const storageKey = "astral-tempest-rift-runner-best-score";
+
+      const pointer = {
+        active: false,
+        x: arena.width * 0.5,
+        y: arena.height * 0.5
+      };
+
+      const keys = Object.create(null);
+
+      function readBestScore() {
+        try {
+          return Number(window.localStorage.getItem(storageKey) || 0);
+        } catch (error) {
+          return 0;
+        }
+      }
+
+      function writeBestScore(value) {
+        try {
+          window.localStorage.setItem(storageKey, String(value));
+        } catch (error) {
+          return;
+        }
+      }
+
+      const state = {
+        running: false,
+        paused: false,
+        ended: false,
+        lastTimestamp: 0,
+        elapsed: 0,
+        wave: 1,
+        waveTimer: 0,
+        waveDuration: 18,
+        score: 0,
+        shards: 0,
+        bestScore: readBestScore(),
+        spawnTimer: 0,
+        messageTimer: 0,
+        messageText: "",
+        screenShake: 0,
+        boonLabel: "Base Loadout",
+        stars: [],
+        particles: [],
+        ripples: [],
+        bullets: [],
+        enemies: [],
+        drops: [],
+        player: null,
+        boonFlags: {
+          rapidFire: false,
+          stabilizer: false,
+          triBurst: false,
+          slipstream: false,
+          prismShield: false
+        }
+      };
+
+      function createStars() {
+        state.stars = Array.from({ length: 90 }, () => ({
+          x: Math.random() * arena.width,
+          y: Math.random() * arena.height,
+          size: Math.random() * 2.2 + 0.4,
+          alpha: Math.random() * 0.6 + 0.2,
+          speed: Math.random() * 12 + 4
+        }));
+      }
+
+      function createPlayer() {
+        return {
+          x: arena.width * 0.5,
+          y: arena.height * 0.62,
+          radius: 14,
+          speed: 255,
+          baseSpeed: 255,
+          maxHealth: 5,
+          health: 5,
+          fireCooldown: 0,
+          fireRate: 0.3,
+          dashCooldown: 0,
+          dashRecharge: 4.2,
+          dashTimer: 0,
+          invulnerable: 0,
+          magnetRadius: 84,
+          triBurst: false,
+          glow: 0
+        };
+      }
+
+      function resetState() {
+        state.running = true;
+        state.paused = false;
+        state.ended = false;
+        state.lastTimestamp = 0;
+        state.elapsed = 0;
+        state.wave = 1;
+        state.waveTimer = 0;
+        state.score = 0;
+        state.shards = 0;
+        state.spawnTimer = 0;
+        state.messageTimer = 2.4;
+        state.messageText = "Wave 1: Thread the opening rift.";
+        state.screenShake = 0;
+        state.boonLabel = "Base Loadout";
+        state.particles = [];
+        state.ripples = [];
+        state.bullets = [];
+        state.enemies = [];
+        state.drops = [];
+        state.player = createPlayer();
+        state.boonFlags = {
+          rapidFire: false,
+          stabilizer: false,
+          triBurst: false,
+          slipstream: false,
+          prismShield: false
+        };
+        pointer.active = false;
+        pointer.x = state.player.x;
+        pointer.y = state.player.y;
+        overlay.classList.add("hidden");
+        overlayButton.textContent = "Restart Run";
+        startButton.textContent = "Restart Run";
+        pauseButton.textContent = "Pause";
+        dashButton.disabled = false;
+        updateHud();
+      }
+
+      function formatTime(seconds) {
+        const total = Math.max(0, Math.floor(seconds));
+        const minutes = String(Math.floor(total / 60)).padStart(2, "0");
+        const secs = String(total % 60).padStart(2, "0");
+        return `${minutes}:${secs}`;
+      }
+
+      function showOverlay(title, text, buttonText) {
+        overlayTitle.textContent = title;
+        overlayText.innerHTML = text;
+        overlayButton.textContent = buttonText;
+        overlay.classList.remove("hidden");
+      }
+
+      function updateHud() {
+        const player = state.player || createPlayer();
+        hud.health.textContent = `${Math.max(0, Math.ceil(player.health))} / ${player.maxHealth}`;
+        hud.score.textContent = state.score.toLocaleString();
+        hud.wave.textContent = String(state.wave);
+        hud.time.textContent = formatTime(state.elapsed);
+        hud.shards.textContent = String(state.shards);
+        hud.best.textContent = state.bestScore.toLocaleString();
+        hud.boon.textContent = state.boonLabel;
+
+        if (player.dashCooldown <= 0) {
+          hud.dash.textContent = "Ready";
+        } else {
+          hud.dash.textContent = `${player.dashCooldown.toFixed(1)}s`;
+        }
+
+        pauseButton.textContent = state.paused ? "Resume" : "Pause";
+        dashButton.disabled = !state.running || state.paused || player.dashCooldown > 0;
+      }
+
+      function addParticles(x, y, count, color, speed = 150) {
+        for (let index = 0; index < count; index += 1) {
+          const angle = Math.random() * Math.PI * 2;
+          const magnitude = Math.random() * speed + 20;
+          state.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * magnitude,
+            vy: Math.sin(angle) * magnitude,
+            life: Math.random() * 0.55 + 0.25,
+            maxLife: Math.random() * 0.55 + 0.25,
+            size: Math.random() * 4 + 1.5,
+            color
+          });
+        }
+      }
+
+      function addRipple(x, y, color, maxRadius = 90) {
+        state.ripples.push({
+          x,
+          y,
+          life: 0.45,
+          maxLife: 0.45,
+          radius: 8,
+          maxRadius,
+          color
+        });
+      }
+
+      function spawnDrop(x, y, amount) {
+        for (let index = 0; index < amount; index += 1) {
+          state.drops.push({
+            x: x + (Math.random() - 0.5) * 18,
+            y: y + (Math.random() - 0.5) * 18,
+            radius: 5,
+            life: 8,
+            value: 1
+          });
+        }
+      }
+
+      function makeEnemy(type) {
+        const side = Math.floor(Math.random() * 4);
+        const padding = 48;
+        let x = 0;
+        let y = 0;
+
+        if (side === 0) {
+          x = -padding;
+          y = Math.random() * arena.height;
+        } else if (side === 1) {
+          x = arena.width + padding;
+          y = Math.random() * arena.height;
+        } else if (side === 2) {
+          x = Math.random() * arena.width;
+          y = -padding;
+        } else {
+          x = Math.random() * arena.width;
+          y = arena.height + padding;
+        }
+
+        if (type === "hunter") {
+          return {
+            type,
+            x,
+            y,
+            radius: 22,
+            speed: 86 + state.wave * 7,
+            hp: 3 + Math.floor(state.wave / 3),
+            maxHp: 3 + Math.floor(state.wave / 3),
+            damage: 1,
+            score: 55,
+            color: "#a335ee",
+            wobble: Math.random() * Math.PI * 2
+          };
+        }
+
+        if (type === "comet") {
+          return {
+            type,
+            x,
+            y,
+            radius: 16,
+            speed: 128 + state.wave * 10,
+            hp: 2 + Math.floor(state.wave / 4),
+            maxHp: 2 + Math.floor(state.wave / 4),
+            damage: 1,
+            score: 40,
+            color: "#f7d47f",
+            wobble: Math.random() * Math.PI * 2
+          };
+        }
+
+        return {
+          type: "wisp",
+          x,
+          y,
+          radius: 14,
+          speed: 96 + state.wave * 6,
+          hp: 1 + Math.floor(state.wave / 4),
+          maxHp: 1 + Math.floor(state.wave / 4),
+          damage: 1,
+          score: 24,
+          color: "#77a8ff",
+          wobble: Math.random() * Math.PI * 2
+        };
+      }
+
+      function spawnEnemy() {
+        const roll = Math.random();
+        let type = "wisp";
+
+        if (state.wave >= 4 && roll > 0.72) {
+          type = "comet";
+        } else if (state.wave >= 2 && roll > 0.84) {
+          type = "hunter";
+        } else if (state.wave >= 6 && roll > 0.88) {
+          type = Math.random() > 0.5 ? "hunter" : "comet";
+        }
+
+        state.enemies.push(makeEnemy(type));
+      }
+
+      function closestEnemy() {
+        let target = null;
+        let bestDistance = Infinity;
+        const player = state.player;
+
+        for (const enemy of state.enemies) {
+          const dx = enemy.x - player.x;
+          const dy = enemy.y - player.y;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < bestDistance) {
+            bestDistance = distSq;
+            target = enemy;
+          }
+        }
+
+        return target;
+      }
+
+      function fireBullet(angle, speed, damage, color) {
+        state.bullets.push({
+          x: state.player.x,
+          y: state.player.y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          radius: 4,
+          damage,
+          life: 1.15,
+          color
+        });
+      }
+
+      function handleFiring(dt) {
+        const player = state.player;
+        player.fireCooldown -= dt;
+
+        if (player.fireCooldown > 0) {
+          return;
+        }
+
+        const target = closestEnemy();
+
+        if (!target) {
+          return;
+        }
+
+        const dx = target.x - player.x;
+        const dy = target.y - player.y;
+        const angle = Math.atan2(dy, dx);
+        const bulletColor = state.boonFlags.prismShield ? "#f7d47f" : "#77a8ff";
+
+        fireBullet(angle, 560, 1, bulletColor);
+
+        if (player.triBurst) {
+          fireBullet(angle - 0.18, 530, 1, "#a335ee");
+          fireBullet(angle + 0.18, 530, 1, "#a335ee");
+        }
+
+        addParticles(player.x + Math.cos(angle) * 18, player.y + Math.sin(angle) * 18, 3, bulletColor, 60);
+        player.fireCooldown = player.fireRate;
+      }
+
+      function gainBoon(label, apply) {
+        state.boonLabel = label;
+        state.messageText = label;
+        state.messageTimer = 2.3;
+        apply();
+        updateHud();
+      }
+
+      function applyWaveBoon(wave) {
+        const player = state.player;
+
+        if (wave === 2 && !state.boonFlags.rapidFire) {
+          state.boonFlags.rapidFire = true;
+          gainBoon("Rapid Bloom: faster fire cadence.", () => {
+            player.fireRate = 0.24;
+          });
+          return;
+        }
+
+        if (wave === 3 && !state.boonFlags.stabilizer) {
+          state.boonFlags.stabilizer = true;
+          gainBoon("Hull Stabilizer: +1 max hull and full repair.", () => {
+            player.maxHealth += 1;
+            player.health = player.maxHealth;
+          });
+          return;
+        }
+
+        if (wave === 4 && !state.boonFlags.triBurst) {
+          state.boonFlags.triBurst = true;
+          gainBoon("Tri-Burst Lattice: shots split into a three-lane volley.", () => {
+            player.triBurst = true;
+          });
+          return;
+        }
+
+        if (wave === 5 && !state.boonFlags.slipstream) {
+          state.boonFlags.slipstream = true;
+          gainBoon("Slipstream Jets: boosted movement speed.", () => {
+            player.baseSpeed += 40;
+          });
+          return;
+        }
+
+        if (wave === 6 && !state.boonFlags.prismShield) {
+          state.boonFlags.prismShield = true;
+          gainBoon("Prism Shielding: wider shard magnet and shorter dash recharge.", () => {
+            player.magnetRadius += 34;
+            player.dashRecharge = 3.4;
+          });
+          return;
+        }
+
+        gainBoon(`Wave ${wave}: score surge and emergency repair.`, () => {
+          player.health = Math.min(player.maxHealth, player.health + 1);
+          state.score += 120;
+        });
+      }
+
+      function damagePlayer(amount) {
+        const player = state.player;
+
+        if (player.invulnerable > 0 || player.dashTimer > 0) {
+          return;
+        }
+
+        player.health -= amount;
+        player.invulnerable = 1.1;
+        state.screenShake = Math.max(state.screenShake, 14);
+        addParticles(player.x, player.y, 18, "#ff7a96", 180);
+        addRipple(player.x, player.y, "rgba(255, 122, 150, 0.75)", 120);
+
+        if (player.health <= 0) {
+          endRun();
+        }
+      }
+
+      function destroyEnemy(enemy, bonus = 0) {
+        state.score += enemy.score + bonus;
+        addParticles(enemy.x, enemy.y, enemy.type === "hunter" ? 18 : 12, enemy.color, 170);
+        addRipple(enemy.x, enemy.y, enemy.color === "#f7d47f" ? "rgba(247, 212, 127, 0.6)" : "rgba(119, 168, 255, 0.55)", enemy.type === "hunter" ? 110 : 82);
+        spawnDrop(enemy.x, enemy.y, enemy.type === "hunter" ? 3 : enemy.type === "comet" ? 2 : 1);
+      }
+
+      function endRun() {
+        state.running = false;
+        state.ended = true;
+        dashButton.disabled = true;
+        const isNewBest = state.score > state.bestScore;
+
+        if (isNewBest) {
+          state.bestScore = state.score;
+          writeBestScore(state.bestScore);
+        }
+
+        updateHud();
+        showOverlay(
+          "Run Lost",
+          `You held through <strong>wave ${state.wave}</strong> and scored <strong>${state.score.toLocaleString()}</strong>. ${isNewBest ? "That is the new site high score." : `Current best is <strong>${state.bestScore.toLocaleString()}</strong>.`}`,
+          "Launch Another Run"
+        );
+      }
+
+      function dashBurst() {
+        const player = state.player;
+
+        if (!state.running || state.paused || player.dashCooldown > 0) {
+          return;
+        }
+
+        player.dashTimer = 0.28;
+        player.invulnerable = 0.45;
+        player.dashCooldown = player.dashRecharge;
+        state.screenShake = Math.max(state.screenShake, 8);
+        addParticles(player.x, player.y, 22, "#f7d47f", 220);
+        addRipple(player.x, player.y, "rgba(247, 212, 127, 0.75)", 144);
+        updateHud();
+      }
+
+      function updatePlayer(dt) {
+        const player = state.player;
+        const left = keys.KeyA || keys.ArrowLeft;
+        const right = keys.KeyD || keys.ArrowRight;
+        const up = keys.KeyW || keys.ArrowUp;
+        const down = keys.KeyS || keys.ArrowDown;
+        let moveX = 0;
+        let moveY = 0;
+
+        if (left) {
+          moveX -= 1;
+        }
+        if (right) {
+          moveX += 1;
+        }
+        if (up) {
+          moveY -= 1;
+        }
+        if (down) {
+          moveY += 1;
+        }
+
+        if (moveX === 0 && moveY === 0 && pointer.active) {
+          moveX = pointer.x - player.x;
+          moveY = pointer.y - player.y;
+        }
+
+        const magnitude = Math.hypot(moveX, moveY);
+        const speedMultiplier = player.dashTimer > 0 ? 2.9 : 1;
+        const speed = player.baseSpeed * speedMultiplier;
+
+        if (magnitude > 0) {
+          moveX /= magnitude;
+          moveY /= magnitude;
+          player.x += moveX * speed * dt;
+          player.y += moveY * speed * dt;
+        }
+
+        player.x = Math.max(player.radius + 8, Math.min(arena.width - player.radius - 8, player.x));
+        player.y = Math.max(player.radius + 8, Math.min(arena.height - player.radius - 8, player.y));
+        player.dashCooldown = Math.max(0, player.dashCooldown - dt);
+        player.dashTimer = Math.max(0, player.dashTimer - dt);
+        player.invulnerable = Math.max(0, player.invulnerable - dt);
+        player.glow += dt * 5;
+      }
+
+      function updateBullets(dt) {
+        for (let bulletIndex = state.bullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
+          const bullet = state.bullets[bulletIndex];
+          bullet.x += bullet.vx * dt;
+          bullet.y += bullet.vy * dt;
+          bullet.life -= dt;
+
+          if (
+            bullet.life <= 0 ||
+            bullet.x < -30 ||
+            bullet.x > arena.width + 30 ||
+            bullet.y < -30 ||
+            bullet.y > arena.height + 30
+          ) {
+            state.bullets.splice(bulletIndex, 1);
+            continue;
+          }
+
+          for (let enemyIndex = state.enemies.length - 1; enemyIndex >= 0; enemyIndex -= 1) {
+            const enemy = state.enemies[enemyIndex];
+            const dx = enemy.x - bullet.x;
+            const dy = enemy.y - bullet.y;
+            const hitDistance = enemy.radius + bullet.radius;
+
+            if (dx * dx + dy * dy <= hitDistance * hitDistance) {
+              enemy.hp -= bullet.damage;
+              addParticles(bullet.x, bullet.y, 4, bullet.color, 80);
+              state.bullets.splice(bulletIndex, 1);
+
+              if (enemy.hp <= 0) {
+                destroyEnemy(enemy);
+                state.enemies.splice(enemyIndex, 1);
+              }
+
+              break;
+            }
+          }
+        }
+      }
+
+      function updateEnemies(dt) {
+        const player = state.player;
+
+        for (let index = state.enemies.length - 1; index >= 0; index -= 1) {
+          const enemy = state.enemies[index];
+          const dx = player.x - enemy.x;
+          const dy = player.y - enemy.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          const nx = dx / distance;
+          const ny = dy / distance;
+          const wobbleForce = enemy.type === "wisp" ? 22 : enemy.type === "hunter" ? 16 : 10;
+          enemy.wobble += dt * (enemy.type === "comet" ? 8 : 5);
+
+          enemy.x += (nx * enemy.speed + Math.cos(enemy.wobble) * wobbleForce) * dt;
+          enemy.y += (ny * enemy.speed + Math.sin(enemy.wobble) * wobbleForce) * dt;
+
+          if (player.dashTimer > 0) {
+            const dashHit = enemy.radius + player.radius + 8;
+            if ((enemy.x - player.x) ** 2 + (enemy.y - player.y) ** 2 <= dashHit * dashHit) {
+              destroyEnemy(enemy, 10);
+              state.enemies.splice(index, 1);
+              continue;
+            }
+          }
+
+          const collisionDistance = enemy.radius + player.radius;
+          if ((enemy.x - player.x) ** 2 + (enemy.y - player.y) ** 2 <= collisionDistance * collisionDistance) {
+            damagePlayer(enemy.damage);
+            state.enemies.splice(index, 1);
+          }
+        }
+      }
+
+      function updateDrops(dt) {
+        const player = state.player;
+
+        for (let index = state.drops.length - 1; index >= 0; index -= 1) {
+          const drop = state.drops[index];
+          const dx = player.x - drop.x;
+          const dy = player.y - drop.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          drop.life -= dt;
+
+          if (distance < player.magnetRadius) {
+            const pull = 120 + (player.magnetRadius - distance) * 3.8;
+            drop.x += (dx / distance) * pull * dt;
+            drop.y += (dy / distance) * pull * dt;
+          }
+
+          if (distance < player.radius + drop.radius + 4) {
+            state.shards += drop.value;
+            state.score += 8;
+            addParticles(drop.x, drop.y, 6, "#7ef3ce", 70);
+            state.drops.splice(index, 1);
+            continue;
+          }
+
+          if (drop.life <= 0) {
+            state.drops.splice(index, 1);
+          }
+        }
+      }
+
+      function updateParticles(dt) {
+        for (let index = state.particles.length - 1; index >= 0; index -= 1) {
+          const particle = state.particles[index];
+          particle.life -= dt;
+          particle.x += particle.vx * dt;
+          particle.y += particle.vy * dt;
+          particle.vx *= 0.97;
+          particle.vy *= 0.97;
+
+          if (particle.life <= 0) {
+            state.particles.splice(index, 1);
+          }
+        }
+
+        for (let index = state.ripples.length - 1; index >= 0; index -= 1) {
+          const ripple = state.ripples[index];
+          ripple.life -= dt;
+          const progress = 1 - ripple.life / ripple.maxLife;
+          ripple.radius = 8 + ripple.maxRadius * progress;
+
+          if (ripple.life <= 0) {
+            state.ripples.splice(index, 1);
+          }
+        }
+      }
+
+      function updateWaves(dt) {
+        state.waveTimer += dt;
+        state.spawnTimer -= dt;
+
+        const baseSpawnRate = Math.max(0.35, 1.05 - state.wave * 0.07);
+
+        if (state.spawnTimer <= 0) {
+          spawnEnemy();
+
+          if (state.wave >= 4 && Math.random() > 0.72) {
+            spawnEnemy();
+          }
+
+          state.spawnTimer = baseSpawnRate;
+        }
+
+        if (state.waveTimer >= state.waveDuration) {
+          state.wave += 1;
+          state.waveTimer = 0;
+          state.score += 75;
+          addRipple(arena.width * 0.5, arena.height * 0.5, "rgba(119, 168, 255, 0.35)", 340);
+          addParticles(arena.width * 0.5, arena.height * 0.5, 36, "#77a8ff", 120);
+          applyWaveBoon(state.wave);
+        }
+      }
+
+      function updateMessage(dt) {
+        state.messageTimer = Math.max(0, state.messageTimer - dt);
+      }
+
+      function step(dt) {
+        if (!state.running || state.paused) {
+          return;
+        }
+
+        state.elapsed += dt;
+        updatePlayer(dt);
+        handleFiring(dt);
+        updateBullets(dt);
+        updateEnemies(dt);
+        updateDrops(dt);
+        updateParticles(dt);
+        updateWaves(dt);
+        updateMessage(dt);
+        state.screenShake = Math.max(0, state.screenShake - dt * 24);
+        updateHud();
+      }
+
+      function drawBackground(dt) {
+        ctx.clearRect(0, 0, arena.width, arena.height);
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, arena.height);
+        gradient.addColorStop(0, "#111220");
+        gradient.addColorStop(1, "#080810");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, arena.width, arena.height);
+
+        for (const star of state.stars) {
+          star.y += star.speed * dt;
+
+          if (star.y > arena.height + 6) {
+            star.y = -6;
+            star.x = Math.random() * arena.width;
+          }
+
+          ctx.fillStyle = `rgba(236, 231, 255, ${star.alpha})`;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        const riftPulse = 0.5 + Math.sin(state.elapsed * 0.8) * 0.5;
+        const ringGradient = ctx.createRadialGradient(
+          arena.width * 0.5,
+          arena.height * 0.3,
+          50,
+          arena.width * 0.5,
+          arena.height * 0.3,
+          260
+        );
+        ringGradient.addColorStop(0, `rgba(119, 168, 255, ${0.18 + riftPulse * 0.05})`);
+        ringGradient.addColorStop(0.4, "rgba(163, 53, 238, 0.07)");
+        ringGradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = ringGradient;
+        ctx.fillRect(0, 0, arena.width, arena.height);
+
+        ctx.strokeStyle = "rgba(119, 168, 255, 0.09)";
+        ctx.lineWidth = 1;
+        for (let line = 0; line < 7; line += 1) {
+          const y = 60 + line * 84 + Math.sin(state.elapsed * 0.8 + line) * 6;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(arena.width, y);
+          ctx.stroke();
+        }
+      }
+
+      function drawRipples() {
+        for (const ripple of state.ripples) {
+          const alpha = ripple.life / ripple.maxLife;
+          ctx.strokeStyle = ripple.color.replace("0.75", alpha.toFixed(3)).replace("0.6", alpha.toFixed(3)).replace("0.55", alpha.toFixed(3)).replace("0.35", alpha.toFixed(3));
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      }
+
+      function drawDrops() {
+        for (const drop of state.drops) {
+          ctx.save();
+          ctx.translate(drop.x, drop.y);
+          ctx.fillStyle = "#7ef3ce";
+          ctx.beginPath();
+          ctx.moveTo(0, -6);
+          ctx.lineTo(5, 0);
+          ctx.lineTo(0, 6);
+          ctx.lineTo(-5, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      function drawBullets() {
+        for (const bullet of state.bullets) {
+          ctx.fillStyle = bullet.color;
+          ctx.shadowColor = bullet.color;
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+      }
+
+      function drawEnemies() {
+        for (const enemy of state.enemies) {
+          ctx.save();
+          ctx.translate(enemy.x, enemy.y);
+          ctx.rotate(enemy.wobble * 0.25);
+
+          if (enemy.type === "hunter") {
+            ctx.fillStyle = "rgba(163, 53, 238, 0.18)";
+            ctx.beginPath();
+            ctx.arc(0, 0, enemy.radius + 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = enemy.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(-enemy.radius, -enemy.radius * 0.35);
+            ctx.lineTo(0, -enemy.radius * 1.2);
+            ctx.lineTo(enemy.radius, -enemy.radius * 0.35);
+            ctx.lineTo(enemy.radius * 0.6, enemy.radius);
+            ctx.lineTo(-enemy.radius * 0.6, enemy.radius);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.fillStyle = "rgba(163, 53, 238, 0.38)";
+            ctx.fill();
+          } else if (enemy.type === "comet") {
+            ctx.fillStyle = "rgba(247, 212, 127, 0.18)";
+            ctx.beginPath();
+            ctx.arc(0, 0, enemy.radius + 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = enemy.color;
+            ctx.beginPath();
+            ctx.moveTo(enemy.radius, 0);
+            ctx.lineTo(-enemy.radius * 0.5, enemy.radius * 0.75);
+            ctx.lineTo(-enemy.radius * 1.15, 0);
+            ctx.lineTo(-enemy.radius * 0.5, -enemy.radius * 0.75);
+            ctx.closePath();
+            ctx.fill();
+          } else {
+            ctx.strokeStyle = enemy.color;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(-enemy.radius - 4, 0);
+            ctx.lineTo(enemy.radius + 4, 0);
+            ctx.moveTo(0, -enemy.radius - 4);
+            ctx.lineTo(0, enemy.radius + 4);
+            ctx.stroke();
+          }
+
+          ctx.restore();
+        }
+      }
+
+      function drawPlayer() {
+        if (!state.player) {
+          return;
+        }
+
+        const player = state.player;
+        const flicker = 0.6 + Math.sin(player.glow) * 0.4;
+
+        ctx.save();
+        ctx.translate(player.x, player.y);
+        ctx.rotate(Math.sin(state.elapsed * 2.4) * 0.06);
+
+        if (player.dashTimer > 0) {
+          ctx.fillStyle = "rgba(247, 212, 127, 0.16)";
+          ctx.beginPath();
+          ctx.arc(0, 0, player.radius + 18, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.strokeStyle = `rgba(119, 168, 255, ${0.68 + flicker * 0.2})`;
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(18, 0);
+        ctx.lineTo(-12, 11);
+        ctx.lineTo(-6, 0);
+        ctx.lineTo(-12, -11);
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.fillStyle = player.dashTimer > 0 ? "#f7d47f" : "#77a8ff";
+        ctx.shadowColor = player.dashTimer > 0 ? "#f7d47f" : "#77a8ff";
+        ctx.shadowBlur = player.dashTimer > 0 ? 22 : 16;
+        ctx.beginPath();
+        ctx.arc(-1, 0, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        if (player.invulnerable > 0) {
+          ctx.strokeStyle = "rgba(255, 122, 150, 0.6)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(0, 0, player.radius + 8 + Math.sin(state.elapsed * 14) * 2, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      function drawParticles() {
+        for (const particle of state.particles) {
+          const alpha = Math.max(0, particle.life / particle.maxLife);
+          const hex = particle.color;
+          const r = parseInt(hex.slice(1, 3), 16);
+          const g = parseInt(hex.slice(3, 5), 16);
+          const b = parseInt(hex.slice(5, 7), 16);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function drawUiLayer() {
+        ctx.save();
+
+        if (state.messageTimer > 0 && state.messageText) {
+          const alpha = Math.min(1, state.messageTimer / 0.4);
+          ctx.globalAlpha = Math.min(1, alpha);
+          ctx.fillStyle = "rgba(8, 8, 16, 0.58)";
+          ctx.fillRect(arena.width * 0.5 - 210, 26, 420, 44);
+          ctx.fillStyle = "#f7d47f";
+          ctx.font = "700 16px Fira Code";
+          ctx.textAlign = "center";
+          ctx.fillText(state.messageText, arena.width * 0.5, 54);
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.textAlign = "left";
+        ctx.font = "700 14px Fira Code";
+        ctx.fillStyle = "rgba(236, 231, 255, 0.65)";
+        ctx.fillText("Auto-fire engages nearest hostile", 20, arena.height - 20);
+        ctx.restore();
+      }
+
+      function render(dt) {
+        ctx.save();
+
+        if (state.screenShake > 0) {
+          const shake = state.screenShake;
+          ctx.translate((Math.random() - 0.5) * shake, (Math.random() - 0.5) * shake);
+        }
+
+        drawBackground(dt);
+        drawRipples();
+        drawDrops();
+        drawBullets();
+        drawEnemies();
+        drawPlayer();
+        drawParticles();
+        drawUiLayer();
+        ctx.restore();
+      }
+
+      function frame(timestamp) {
+        const previous = state.lastTimestamp || timestamp;
+        const dt = Math.min(0.032, (timestamp - previous) / 1000);
+        state.lastTimestamp = timestamp;
+        step(dt);
+        render(dt);
+        window.requestAnimationFrame(frame);
+      }
+
+      function startRun() {
+        resetState();
+      }
+
+      function togglePause() {
+        if (!state.running || state.ended) {
+          return;
+        }
+
+        state.paused = !state.paused;
+
+        if (state.paused) {
+          showOverlay("Paused", "The rift is frozen. Resume when you are ready to dive back in.", "Resume Run");
+        } else {
+          overlay.classList.add("hidden");
+        }
+
+        updateHud();
+      }
+
+      function resizePointer(event) {
+        const rect = canvas.getBoundingClientRect();
+        pointer.x = ((event.clientX - rect.left) / rect.width) * arena.width;
+        pointer.y = ((event.clientY - rect.top) / rect.height) * arena.height;
+      }
+
+      function handlePointerDown(event) {
+        pointer.active = true;
+        resizePointer(event);
+      }
+
+      function handlePointerMove(event) {
+        if (!pointer.active && event.pointerType !== "mouse") {
+          return;
+        }
+
+        resizePointer(event);
+      }
+
+      function handlePointerUp() {
+        pointer.active = false;
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.code === "Space") {
+          event.preventDefault();
+          dashBurst();
+        } else if (event.code === "KeyP") {
+          event.preventDefault();
+          togglePause();
+        }
+
+        keys[event.code] = true;
+      });
+
+      document.addEventListener("keyup", (event) => {
+        keys[event.code] = false;
+      });
+
+      canvas.addEventListener("pointerdown", handlePointerDown);
+      canvas.addEventListener("pointermove", handlePointerMove);
+      canvas.addEventListener("pointerup", handlePointerUp);
+      canvas.addEventListener("pointerleave", handlePointerUp);
+      canvas.addEventListener("pointercancel", handlePointerUp);
+
+      overlayButton.addEventListener("click", () => {
+        if (state.paused && state.running) {
+          state.paused = false;
+          overlay.classList.add("hidden");
+          updateHud();
+          return;
+        }
+
+        startRun();
+      });
+
+      startButton.addEventListener("click", startRun);
+      pauseButton.addEventListener("click", togglePause);
+      dashButton.addEventListener("click", dashBurst);
+
+      createStars();
+      updateHud();
+      showOverlay(
+        "Launch Sequence",
+        "Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. On touch, hold and drag anywhere in the arena to steer. Your ship auto-fires, and <strong>Space</strong> or <strong>Dash Burst</strong> lets you carve through dense enemy packs.",
+        "Enter The Rift"
+      );
+      window.requestAnimationFrame(frame);
+    })();
+  </script>
+</body>
+</html>

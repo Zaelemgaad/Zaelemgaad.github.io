@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="en">
+<script>
+
+var cjpath = "/cj-2/";
+var playerName = "Zaelemgaad";
+var wonButtons = 0;
+
+function saveScore(score, stage, win)
+{
+var httpRequest = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+httpRequest.onreadystatechange = function()
+{
+    if (httpRequest.readyState == 4 && httpRequest.status == 200)
+    {
+		if (httpRequest.responseText.substr(0,3) == 'OK,')
+			wonButtons += parseInt(httpRequest.responseText.substr(3));
+    }
+};
+httpRequest.open('POST', '/cosmic-journey-ajax', true);
+var params = "action=savescore&score="+score+"&level="+stage+"&win="+win;
+httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+httpRequest.send(params);
+return true;
+}
+var hiScore = [ 'Happy', 14323, 'stonestage', 'Happy', 13810, 'stonestage', 'Happy', 12287, 'stonestage', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 11697, 'stonestage', 'Sean', 11609, 'stonestage', 'Happy', 11569, 'stonestage', 'Happy', 11329, 'stonestage', 'ECD Etrick', 9944, 'stonestage', 'Bean', 9826, 'stonestage', 'Happy', 9434, 'stonestage', 'TheCoolSpaceCatWarrior', 18119, 'saucerstage', 'CDjPLayer', 17289, 'saucerstage', 'CDjPLayer', 16962, 'saucerstage', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 16149, 'saucerstage', 'Happy', 15607, 'saucerstage', 'TheCoolSpaceCatWarrior', 15326, 'saucerstage', 'CDjPLayer', 14264, 'saucerstage', 'Happy', 13427, 'saucerstage', 'CDjPLayer', 13266, 'saucerstage', 'Happy', 12641, 'saucerstage', 'Honzales', 7971, 'wormhole', 'bro', 6787, 'wormhole', 'CDjPLayer', 6663, 'wormhole', 'Happy', 6375, 'wormhole', 'CDjPLayer', 5851, 'wormhole', 'bro', 5673, 'wormhole', 'bro', 5636, 'wormhole', 'bro', 5546, 'wormhole', 'TheCoolSpaceCatWarrior', 5468, 'wormhole', '67 god', 5449, 'wormhole', 'TheCoolSpaceCatWarrior', 7055, 'pirates', 'TheCoolSpaceCatWarrior', 7040, 'pirates', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 7014, 'pirates', 'TheCoolSpaceCatWarrior', 6953, 'pirates', 'bro', 6589, 'pirates', 'CaptainGoose08', 6507, 'pirates', 'TheCoolSpaceCatWarrior', 6425, 'pirates', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 6117, 'pirates', 'TheCoolSpaceCatWarrior', 6069, 'pirates', 'TheCoolSpaceCatWarrior', 6060, 'pirates', 'zohrab.com', 6980, 'invaders', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 6811, 'invaders', '*Insert a creative name here*', 6788, 'invaders', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 6709, 'invaders', 'TheCoolSpaceCatWarrior', 6705, 'invaders', '67 god', 6676, 'invaders', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 6434, 'invaders', 'Mr. X', 6404, 'invaders', 'ZELDAFANATIC', 5816, 'invaders', '*Insert a creative name here*', 5758, 'invaders', 'TheCoolSpaceCatWarrior', 8961, 'escort', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 6243, 'escort', 'TheCoolSpaceCatWarrior', 3905, 'escort', '*Insert a creative name here*', 3786, 'escort', 'Honzales', 3224, 'escort', 'Vlasta', 3073, 'escort', 'zohrab.com', 2969, 'escort', 'Happy', 2619, 'escort', 'TheCoolSpaceCatWarrior', 2615, 'escort', '꧁​Ꮯʋꝛ̢ ⳽σ̴ꝛ̢⬩Ꮯⱺ︠͡ ɭȴٟᥱᥴ​ ︠Ꞇῗٟσ̴ᥰٟῗٟﬆ꧂', 2380, 'escort', 'Happy', 15099, 'ironman', 'darling ;3', 11054, 'ironman', 'darling ;3', 9685, 'ironman', 'TheCoolSpaceCatWarrior', 9418, 'ironman', '*Insert a creative name here*', 7339, 'ironman', '*Insert a creative name here*', 6428, 'ironman', 'Zaelemgaad', 5727, 'ironman', 'TheCoolSpaceCatWarrior', 5675, 'ironman', 'Mr. X', 5540, 'ironman', 'Mr. X', 4986, 'ironman',  ];
+
+</script>
+<script src="/cj-2/global.js"></script>
+<script src="/cj-2/imagemanager.js"></script>
+<script src="/cj-2/debris.js"></script>
+<script src="/cj-2/shots.js"></script>
+<script src="/cj-2/e-asteroids.js"></script>
+<script src="/cj-2/e-asteroidbase.js"></script>
+<script src="/cj-2/e-ameba.js"></script>
+<script src="/cj-2/e-ufo.js"></script>
+<script src="/cj-2/e-fighter.js"></script>
+<script src="/cj-2/e-miner.js"></script>
+<script src="/cj-2/e-mines.js"></script>
+<script src="/cj-2/e-wings.js"></script>
+<script src="/cj-2/e-transport.js"></script>
+<script src="/cj-2/e-zero.js"></script>
+<script src="/cj-2/e-ironclad.js"></script>
+<script src="/cj-2/e-manowar.js"></script>
+<script src="/cj-2/ace.js"></script>
+<script src="/cj-2/bgobj.js"></script>
+<script src="/cj-2/bonus.js"></script>
+<script src="/cj-2/menu.js"></script>
+<script src="/cj-2/audio.js"></script>
+<script src="/cj-2/cj.js"></script>
+<script src="/cj-2/enemies.js"></script>
+<script src="/cj-2/stonestage.js"></script>
+<script src="/cj-2/saucerstage.js"></script>
+<script src="/cj-2/wormhole.js"></script>
+<script src="/cj-2/pirates.js"></script>
+<script src="/cj-2/invaders.js"></script>
+<script src="/cj-2/escort.js"></script>
+<script src="/cj-2/ironman.js"></script>
+<script>
+</script>
+<style>
+canvas.game
+{
+	border:0 none;
+	outline:none;
+	background:#000;
+}
+</style>
+</head>
+<body style="padding:0; margin:0; text-align:center;">
+
+<canvas id="canvas" width="800" height="700" tabindex="1" class="game">
+We are sorry, but your web browser is not capable of running this game. To play Cosmic Journey, please visit this page with the latest Firefox, Opera, or Google Chrome browser.
+</canvas>
+
+</body>
+</html>
