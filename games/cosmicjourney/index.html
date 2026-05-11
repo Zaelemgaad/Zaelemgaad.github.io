@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Language" content="en">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astral Tempest | Cosmic Journey</title>
+<script>
+
+var cjpath = "./cj-2/";
+var playerName = "Zaelemgaad";
+var wonButtons = 0;
+
+function saveScore(score, stage, win)
+{
+var httpRequest = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+httpRequest.onreadystatechange = function()
+{
+    if (httpRequest.readyState == 4 && httpRequest.status == 200)
+    {
+		if (httpRequest.responseText.substr(0,3) == 'OK,')
+			wonButtons += parseInt(httpRequest.responseText.substr(3));
+    }
+};
+httpRequest.open('POST', '/cosmic-journey-ajax', true);
+var params = "action=savescore&score="+score+"&level="+stage+"&win="+win;
+httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+httpRequest.send(params);
+return true;
+}
+var hiScore = [];
+
+</script>
+<script src="./cj-2/global.js"></script>
+<script src="./cj-2/imagemanager.js"></script>
+<script src="./cj-2/debris.js"></script>
+<script src="./cj-2/shots.js"></script>
+<script src="./cj-2/e-asteroids.js"></script>
+<script src="./cj-2/e-asteroidbase.js"></script>
+<script src="./cj-2/e-ameba.js"></script>
+<script src="./cj-2/e-ufo.js"></script>
+<script src="./cj-2/e-fighter.js"></script>
+<script src="./cj-2/e-miner.js"></script>
+<script src="./cj-2/e-mines.js"></script>
+<script src="./cj-2/e-wings.js"></script>
+<script src="./cj-2/e-transport.js"></script>
+<script src="./cj-2/e-zero.js"></script>
+<script src="./cj-2/e-ironclad.js"></script>
+<script src="./cj-2/e-manowar.js"></script>
+<script src="./cj-2/ace.js"></script>
+<script src="./cj-2/bgobj.js"></script>
+<script src="./cj-2/bonus.js"></script>
+<script src="./cj-2/menu.js"></script>
+<script src="./cj-2/audio.js"></script>
+<script src="./cj-2/cj.js"></script>
+<script src="./cj-2/enemies.js"></script>
+<script src="./cj-2/stonestage.js"></script>
+<script src="./cj-2/saucerstage.js"></script>
+<script src="./cj-2/wormhole.js"></script>
+<script src="./cj-2/pirates.js"></script>
+<script src="./cj-2/invaders.js"></script>
+<script src="./cj-2/escort.js"></script>
+<script src="./cj-2/ironman.js"></script>
+<script>
+</script>
+<style>
+body
+{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top right, rgba(128, 0, 255, 0.16), transparent 28%),
+    radial-gradient(circle at top left, rgba(0, 112, 221, 0.12), transparent 24%),
+    linear-gradient(180deg, #231c37, #20202b);
+  color:#e5e0ff;
+  font-family:Inter, sans-serif;
+}
+
+.shell
+{
+  max-width:1160px;
+  margin:0 auto;
+  padding:32px 16px 48px;
+}
+
+.back-link
+{
+  display:inline-block;
+  margin-bottom:18px;
+  color:#e6cc80;
+  text-decoration:none;
+  font:700 0.92rem/1 "Fira Code", monospace;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+}
+
+.back-link:hover
+{
+  color:#77a8ff;
+}
+
+.hero
+{
+  margin-bottom:18px;
+}
+
+.eyebrow
+{
+  color:#e6cc80;
+  font:700 0.9rem/1 "Fira Code", monospace;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+
+h1
+{
+  margin:10px 0 8px;
+  font-size:clamp(2.3rem, 5vw, 4rem);
+  line-height:0.98;
+}
+
+.lead
+{
+  max-width:760px;
+  margin:0;
+  color:#bfb6df;
+  line-height:1.6;
+}
+
+.game-frame
+{
+  display:flex;
+  justify-content:center;
+}
+
+canvas.game
+{
+	border:0 none;
+	outline:none;
+	background:#000;
+  display:block;
+  width:min(100%, 800px);
+  height:auto;
+  box-shadow:0 22px 48px rgba(0, 0, 0, 0.38);
+  border-radius:12px;
+}
+
+@media (max-width: 720px)
+{
+  .shell
+  {
+    padding:24px 12px 32px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="shell">
+<a class="back-link" href="/games/">← Back to Games</a>
+<section class="hero">
+<div class="eyebrow">Astral Tempest</div>
+<h1>Cosmic Journey</h1>
+<p class="lead">A classic arcade space shooter with multiple stage routes, old-school enemy patterns, and a straightforward score-attack feel.</p>
+</section>
+<div class="game-frame">
+<canvas id="canvas" width="800" height="700" tabindex="1" class="game">
+We are sorry, but your web browser is not capable of running this game. To play Cosmic Journey, please visit this page with the latest Firefox, Opera, or Google Chrome browser.
+</canvas>
+</div>
+</main>
+</body>
+</html>

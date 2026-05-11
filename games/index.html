@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Astral Tempest</title>
+  <title>Astral Tempest | Games</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Fira+Code:wght@400;700&display=swap');
 
@@ -17,7 +17,6 @@
       --text: #e5e0ff;
       --muted: #bfb6df;
       --accent: #77a8ff;
-      --accent-2: #a335ee;
       --accent-3: #e6cc80;
       --selection-bg: #002a50;
       --selection-fg: #e6cc80;
@@ -54,40 +53,39 @@
     }
 
     .shell {
-      max-width: 1120px;
+      max-width: 1160px;
       margin: 0 auto;
       padding: 56px 18px 84px;
     }
 
-    .hero {
-      margin-bottom: 22px;
-    }
-
-    .eyebrow {
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
       color: var(--accent-3);
-      font: 700 0.9rem/1 "Fira Code", monospace;
-      letter-spacing: 0.08em;
+      font: 700 0.92rem/1 "Fira Code", monospace;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     h1 {
-      margin: 10px 0 8px;
-      font-size: clamp(2.5rem, 6vw, 4.25rem);
-      line-height: 0.95;
+      margin: 0 0 10px;
+      font-size: clamp(2.3rem, 5.2vw, 4rem);
+      line-height: 0.98;
       color: var(--text);
     }
 
     .lead {
       max-width: 760px;
       color: var(--muted);
-      font-size: 1.04rem;
+      font-size: 1.03rem;
+      line-height: 1.65;
+      margin-bottom: 28px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
-      margin-top: 26px;
     }
 
     .card {
@@ -119,56 +117,25 @@
       color: var(--muted);
       line-height: 1.55;
     }
-
-    .footer-note {
-      margin-top: 30px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 720px) {
-      .shell {
-        padding-top: 42px;
-      }
-    }
   </style>
 </head>
 <body>
   <main class="shell">
-    <section class="hero">
-      <div class="eyebrow">Astral Tempest</div>
-      <h1>Site Hub</h1>
-      <p class="lead">A central home for browser games, generator tools, curated links, and other projects collected under Astral Tempest.</p>
-    </section>
+    <a class="back-link" href="/">← Back Home</a>
+    <h1>Games</h1>
+    <p class="lead">A small browser-game shelf for arcade experiments, action prototypes, and older projects worth keeping playable.</p>
 
     <section class="grid">
-      <a class="card" href="/generators/">
-        <h2 class="card-title">Generators</h2>
-        <p class="card-copy">Browse a collection of Perchance generators, supporting tools, and related creative experiments.</p>
+      <a class="card" href="/games/riftrunner/">
+        <h2 class="card-title">Rift Runner</h2>
+        <p class="card-copy">A fast survival shooter set inside a collapsing star rift, built around escalating enemy waves, upgrade choices, and score chasing.</p>
       </a>
 
-      <a class="card" href="/useful-links/">
-        <h2 class="card-title">Useful Links</h2>
-        <p class="card-copy">Explore a small set of bookmarked sites worth keeping close at hand.</p>
-      </a>
-
-      <a class="card" href="https://github.com/Zaelemgaad" target="_blank" rel="noopener noreferrer">
-        <h2 class="card-title">GitHub</h2>
-        <p class="card-copy">Open my GitHub profile in a new tab.</p>
-      </a>
-
-      <a class="card" href="https://steamcommunity.com/id/Zaelemgaad/" target="_blank" rel="noopener noreferrer">
-        <h2 class="card-title">Steam</h2>
-        <p class="card-copy">Open my Steam profile in a new tab.</p>
-      </a>
-
-      <a class="card" href="/games/">
-        <h2 class="card-title">Games</h2>
-        <p class="card-copy">Jump into playable browser games, arcade prototypes, and interactive experiments.</p>
+      <a class="card" href="/games/cosmicjourney/">
+        <h2 class="card-title">Cosmic Journey</h2>
+        <p class="card-copy">A classic arcade-style space shooter with multiple stages, varied enemy sets, and an older-school action feel.</p>
       </a>
     </section>
-
-    <p class="footer-note">More projects, tools, and experiments will be added over time.</p>
   </main>
 </body>
 </html>
