@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Sunforge Idle</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #120f0b;
+      --bg-alt: #241a12;
+      --panel: rgba(45, 31, 18, 0.9);
+      --panel-2: rgba(62, 43, 27, 0.96);
+      --border: rgba(255, 194, 96, 0.24);
+      --border-strong: rgba(255, 194, 96, 0.44);
+      --text: #fff2df;
+      --muted: #dcc4a3;
+      --accent: #ffc260;
+      --accent-2: #ff8f3f;
+      --accent-3: #fff0a4;
+      --shadow: rgba(0, 0, 0, 0.4);
+      --good: #a7ffb5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(255, 143, 63, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(255, 240, 164, 0.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-3);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1360px, calc(100vw - 24px));
+      margin: 0 auto;
+      padding: 40px 18px 70px;
+    }
+
+    .back-link,
+    .eyebrow,
+    .stat-label,
+    .store-tag {
+      font-family: "Space Mono", monospace;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--accent-3);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+      font-size: 0.86rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+      line-height: 0.96;
+    }
+
+    .lead {
+      max-width: 840px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 22px 48px var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 18px;
+      border-bottom: 1px solid rgba(255, 194, 96, 0.12);
+      background: rgba(14, 10, 6, 0.44);
+    }
+
+    .forge-shell {
+      display: grid;
+      gap: 18px;
+      padding: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 194, 96, 0.16);
+      background: rgba(12, 9, 6, 0.48);
+    }
+
+    .stat-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .stat strong {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .core-shell {
+      display: grid;
+      place-items: center;
+      min-height: 320px;
+      padding: 24px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle, rgba(255, 194, 96, 0.26), transparent 28%),
+        linear-gradient(180deg, rgba(19, 14, 10, 0.92), rgba(9, 7, 5, 0.96));
+      border: 1px solid rgba(255, 194, 96, 0.12);
+    }
+
+    .core-button {
+      position: relative;
+      width: min(300px, 62vw);
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, #fff5c5, transparent 18%),
+        radial-gradient(circle at center, #ffdd82 0 18%, #ffb858 26%, #ff8f3f 50%, #442411 78%, #1f140d 100%);
+      box-shadow:
+        0 0 0 10px rgba(255, 194, 96, 0.08),
+        0 0 45px rgba(255, 143, 63, 0.35),
+        inset 0 -24px 50px rgba(0, 0, 0, 0.26);
+      color: #2b170d;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    .core-button:hover,
+    .core-button:focus-visible {
+      transform: scale(1.02);
+      box-shadow:
+        0 0 0 10px rgba(255, 194, 96, 0.12),
+        0 0 55px rgba(255, 143, 63, 0.45),
+        inset 0 -24px 50px rgba(0, 0, 0, 0.24);
+      outline: none;
+    }
+
+    .core-button:active {
+      transform: scale(0.98);
+    }
+
+    .core-copy {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 28px;
+      font-weight: 800;
+      color: #2d190b;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .core-copy span {
+      display: block;
+      font-size: 0.92rem;
+    }
+
+    .core-copy strong {
+      display: block;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1;
+      margin-top: 8px;
+    }
+
+    .store {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .store-item,
+    .sidebar-card {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 194, 96, 0.14);
+      background: rgba(12, 9, 6, 0.45);
+    }
+
+    .store-item h2,
+    .sidebar-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+
+    .store-item p,
+    .sidebar-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .store-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .buy-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .button {
+      border: 1px solid rgba(255, 194, 96, 0.22);
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: rgba(22, 15, 9, 0.76);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(40, 28, 17, 0.94);
+      outline: none;
+    }
+
+    .button[disabled] {
+      opacity: 0.48;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .progress {
+      margin-top: 14px;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent-3));
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 16px;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .log-entry {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(22, 15, 9, 0.4);
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1060px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100vw, calc(100vw - 12px));
+        padding-inline: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/games/">← Back to Games</a>
+
+    <section class="hero">
+      <span class="eyebrow">Clicker / Idle Prototype</span>
+      <h1>Sunforge Idle</h1>
+      <p class="lead">A first incremental baseline built around feeding an unstable core, layering generators on top of manual clicks, and eventually overclocking the whole factory for long-run scaling.</p>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head">
+          <span class="eyebrow">Ignition Loop</span>
+        </div>
+
+        <div class="forge-shell">
+          <section class="stats">
+            <div class="stat">
+              <span class="stat-label">Sparks</span>
+              <strong id="sparksStat">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Per Second</span>
+              <strong id="rateStat">0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Click Power</span>
+              <strong id="clickStat">1</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Overclocks</span>
+              <strong id="coreStat">0</strong>
+            </div>
+          </section>
+
+          <section class="core-shell">
+            <button class="core-button" id="coreButton" type="button">
+              <div class="core-copy">
+                <div>
+                  <span>Stoke the forge</span>
+                  <strong id="tapGainLabel">+1 spark</strong>
+                </div>
+              </div>
+            </button>
+          </section>
+
+          <section class="sidebar-card">
+            <h2>Overclock</h2>
+            <p>When the forge starts feeling slow, collapse the current setup into a permanent core bonus and climb again from a stronger base.</p>
+            <div class="progress">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="store-meta">
+              <span id="overclockHint">Reach 500 total sparks to unlock your first overclock.</span>
+              <span id="bonusStat">x1.00 bonus</span>
+            </div>
+            <div class="buy-row">
+              <span class="store-tag">Reset for +1 core</span>
+              <button class="button" id="overclockButton" type="button">Overclock</button>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <aside class="sidebar">
+        <section class="panel">
+          <div class="panel-head">
+            <span class="eyebrow">Factory Upgrades</span>
+          </div>
+          <div class="store" id="store"></div>
+        </section>
+
+        <section class="panel">
+          <div class="store">
+            <div class="sidebar-card">
+              <h2>Foundry Log</h2>
+              <p>A simple first-pass economy you can tune later with more milestones, automation layers, and longer reset loops.</p>
+              <div class="log" id="log"></div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "astral-tempest-sunforge-idle-v1";
+
+    const sparksStat = document.getElementById("sparksStat");
+    const rateStat = document.getElementById("rateStat");
+    const clickStat = document.getElementById("clickStat");
+    const coreStat = document.getElementById("coreStat");
+    const tapGainLabel = document.getElementById("tapGainLabel");
+    const bonusStat = document.getElementById("bonusStat");
+    const overclockHint = document.getElementById("overclockHint");
+    const progressBar = document.getElementById("progressBar");
+    const storeNode = document.getElementById("store");
+    const logNode = document.getElementById("log");
+    const coreButton = document.getElementById("coreButton");
+    const overclockButton = document.getElementById("overclockButton");
+
+    const upgradeDefs = [
+      {
+        id: "tapRig",
+        name: "Tap Rig",
+        text: "Increase the sparks gained from each manual pulse.",
+        baseCost: 15,
+        growth: 1.55
+      },
+      {
+        id: "drone",
+        name: "Relay Drone",
+        text: "Deploy an autonomous collector that trickles sparks every second.",
+        baseCost: 30,
+        growth: 1.62
+      },
+      {
+        id: "refinery",
+        name: "Heat Refinery",
+        text: "Multiply all production through cleaner, hotter conversion.",
+        baseCost: 95,
+        growth: 1.88
+      },
+      {
+        id: "archive",
+        name: "Archive Lattice",
+        text: "Raise both click and idle output with smarter routing.",
+        baseCost: 140,
+        growth: 1.95
+      }
+    ];
+
+    const state = {
+      sparks: 0,
+      total: 0,
+      cores: 0,
+      upgrades: {
+        tapRig: 0,
+        drone: 0,
+        refinery: 0,
+        archive: 0
+      },
+      log: ["The forge is cold. Tap the core to begin."],
+      lastTick: performance.now()
+    };
+
+    function pushLog(text) {
+      state.log.unshift(text);
+      state.log = state.log.slice(0, 6);
+    }
+
+    function upgradeCost(id) {
+      const def = upgradeDefs.find((entry) => entry.id === id);
+      const owned = state.upgrades[id];
+      return Math.floor(def.baseCost * Math.pow(def.growth, owned));
+    }
+
+    function globalBonus() {
+      return 1 + state.cores * 0.25;
+    }
+
+    function archiveBonus() {
+      return 1 + state.upgrades.archive * 0.1;
+    }
+
+    function clickPower() {
+      return Math.max(1, Math.floor((1 + state.upgrades.tapRig) * archiveBonus() * globalBonus()));
+    }
+
+    function perSecond() {
+      const flat = state.upgrades.drone * 0.7;
+      const refinery = 1 + state.upgrades.refinery * 0.15;
+      return flat * refinery * archiveBonus() * globalBonus();
+    }
+
+    function formatNumber(value) {
+      if (value >= 1000000) {
+        return (value / 1000000).toFixed(2) + "m";
+      }
+      if (value >= 1000) {
+        return (value / 1000).toFixed(2) + "k";
+      }
+      return value.toFixed(value >= 100 ? 0 : 1).replace(".0", "");
+    }
+
+    function addSparks(amount) {
+      state.sparks += amount;
+      state.total += amount;
+    }
+
+    function buyUpgrade(id) {
+      const cost = upgradeCost(id);
+      if (state.sparks < cost) {
+        return;
+      }
+
+      state.sparks -= cost;
+      state.upgrades[id] += 1;
+      const def = upgradeDefs.find((entry) => entry.id === id);
+      pushLog(def.name + " installed.");
+      render();
+      save();
+    }
+
+    function canOverclock() {
+      return state.total >= 500 && state.sparks >= 250;
+    }
+
+    function overclock() {
+      if (!canOverclock()) {
+        return;
+      }
+
+      state.cores += 1;
+      state.sparks = 0;
+      state.upgrades = {
+        tapRig: 0,
+        drone: 0,
+        refinery: 0,
+        archive: 0
+      };
+      pushLog("The forge collapses inward and comes back stronger.");
+      render();
+      save();
+    }
+
+    function renderStore() {
+      storeNode.innerHTML = "";
+
+      upgradeDefs.forEach((def) => {
+        const cost = upgradeCost(def.id);
+        const owned = state.upgrades[def.id];
+        const card = document.createElement("section");
+        card.className = "store-item";
+        card.innerHTML =
+          "<h2>" + def.name + "</h2>" +
+          "<p>" + def.text + "</p>" +
+          "<div class=\"store-meta\"><span>Owned: " + owned + "</span><span>Cost: " + formatNumber(cost) + "</span></div>";
+
+        const row = document.createElement("div");
+        row.className = "buy-row";
+
+        const tag = document.createElement("span");
+        tag.className = "store-tag";
+        if (def.id === "tapRig") {
+          tag.textContent = "Manual gain";
+        } else if (def.id === "drone") {
+          tag.textContent = "Idle income";
+        } else if (def.id === "refinery") {
+          tag.textContent = "Global multiplier";
+        } else {
+          tag.textContent = "Routing bonus";
+        }
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "button";
+        button.textContent = "Buy";
+        button.disabled = state.sparks < cost;
+        button.addEventListener("click", () => buyUpgrade(def.id));
+
+        row.appendChild(tag);
+        row.appendChild(button);
+        card.appendChild(row);
+        storeNode.appendChild(card);
+      });
+    }
+
+    function renderLog() {
+      logNode.innerHTML = "";
+      state.log.forEach((entry) => {
+        const node = document.createElement("div");
+        node.className = "log-entry";
+        node.textContent = entry;
+        logNode.appendChild(node);
+      });
+    }
+
+    function render() {
+      const gain = clickPower();
+      const idle = perSecond();
+      const bonus = globalBonus();
+      const progress = Math.min(1, state.total / 500);
+
+      sparksStat.textContent = formatNumber(state.sparks);
+      rateStat.textContent = formatNumber(idle);
+      clickStat.textContent = formatNumber(gain);
+      coreStat.textContent = String(state.cores);
+      tapGainLabel.textContent = "+" + formatNumber(gain) + " sparks";
+      bonusStat.textContent = "x" + bonus.toFixed(2) + " bonus";
+      progressBar.style.width = (progress * 100).toFixed(1) + "%";
+      overclockButton.disabled = !canOverclock();
+      overclockHint.textContent = canOverclock()
+        ? "Reset now for a permanent +25% global bonus."
+        : "Reach 500 total sparks and bank 250 current sparks to overclock.";
+
+      renderStore();
+      renderLog();
+    }
+
+    function tick(now) {
+      const dt = Math.min(0.25, (now - state.lastTick) / 1000);
+      state.lastTick = now;
+      addSparks(perSecond() * dt);
+      render();
+      requestAnimationFrame(tick);
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return;
+        }
+        const data = JSON.parse(raw);
+        state.sparks = data.sparks || 0;
+        state.total = data.total || 0;
+        state.cores = data.cores || 0;
+        state.upgrades = { ...state.upgrades, ...(data.upgrades || {}) };
+        state.log = Array.isArray(data.log) && data.log.length ? data.log : state.log;
+      } catch (error) {
+        state.log = ["Save data could not be loaded. Starting fresh."];
+      }
+    }
+
+    coreButton.addEventListener("click", () => {
+      const gain = clickPower();
+      addSparks(gain);
+      render();
+    });
+
+    overclockButton.addEventListener("click", overclock);
+
+    window.addEventListener("beforeunload", save);
+    setInterval(save, 5000);
+
+    load();
+    render();
+    requestAnimationFrame((now) => {
+      state.lastTick = now;
+      tick(now);
+    });
+  </script>
+</body>
+</html>

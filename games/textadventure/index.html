@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Lantern Road</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #110f17;
+      --bg-alt: #1f1a29;
+      --panel: rgba(34, 27, 48, 0.9);
+      --panel-2: rgba(45, 36, 61, 0.96);
+      --border: rgba(163, 145, 255, 0.22);
+      --border-strong: rgba(163, 145, 255, 0.42);
+      --text: #f2edff;
+      --muted: #c8c0e3;
+      --accent: #b9a6ff;
+      --accent-2: #ffcf88;
+      --good: #aaffc6;
+      --danger: #ff9ea8;
+      --shadow: rgba(0, 0, 0, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(163, 145, 255, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(255, 207, 136, 0.08), transparent 24%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-2);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1400px, calc(100vw - 24px));
+      margin: 0 auto;
+      padding: 40px 18px 70px;
+    }
+
+    .back-link,
+    .eyebrow,
+    .stat-label {
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--accent-2);
+      font-size: 0.86rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+      line-height: 0.96;
+    }
+
+    .lead {
+      max-width: 860px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 22px 48px var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 18px;
+      border-bottom: 1px solid rgba(163, 145, 255, 0.12);
+      background: rgba(10, 9, 14, 0.44);
+    }
+
+    .button {
+      border: 1px solid rgba(163, 145, 255, 0.22);
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: rgba(19, 15, 27, 0.76);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(38, 29, 52, 0.95);
+      outline: none;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), #e2d8ff);
+      color: #24173b;
+    }
+
+    .story {
+      display: grid;
+      gap: 18px;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(163, 145, 255, 0.08), transparent 34%),
+        rgba(8, 7, 12, 0.78);
+    }
+
+    .scene {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid rgba(163, 145, 255, 0.14);
+      background: rgba(16, 13, 22, 0.52);
+    }
+
+    .scene h2 {
+      margin: 0 0 10px;
+      font-size: 1.4rem;
+    }
+
+    .scene p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+      white-space: pre-line;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+    }
+
+    .choice {
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(163, 145, 255, 0.18);
+      background: rgba(17, 14, 23, 0.62);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .choice:hover,
+    .choice:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(37, 28, 51, 0.95);
+      outline: none;
+    }
+
+    .choice strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .choice span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+    }
+
+    .sidebar-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(163, 145, 255, 0.1);
+    }
+
+    .stat-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.72rem;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+      max-height: 340px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .entry {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(17, 14, 23, 0.45);
+    }
+
+    .entry strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent-2);
+      font-size: 0.92rem;
+    }
+
+    .entry p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.55;
+      white-space: pre-line;
+    }
+
+    @media (max-width: 1060px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100vw, calc(100vw - 12px));
+        padding-inline: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/games/">← Back to Games</a>
+
+    <section class="hero">
+      <span class="eyebrow">Text Adventure Prototype</span>
+      <h1>Lantern Road</h1>
+      <p class="lead">A narrative-first RPG baseline with branching choices, stat checks, small resource decisions, and multiple endings. It is a good starting point for a larger story-led adventure if you want one later.</p>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">Current Scene</span>
+            <h2 id="sceneTag">Trailhead</h2>
+          </div>
+          <button class="button primary" id="restartButton" type="button">Restart Story</button>
+        </div>
+
+        <div class="story">
+          <section class="scene">
+            <h2 id="sceneTitle">Trailhead</h2>
+            <p id="sceneText"></p>
+          </section>
+
+          <section class="choices" id="choices"></section>
+        </div>
+      </article>
+
+      <aside class="sidebar">
+        <section class="panel sidebar-card">
+          <h2>Traveler State</h2>
+          <p>Your choices push the tone of the run as much as the stat checks do. A little grit and a little wit both go a long way here.</p>
+          <div class="stats">
+            <div class="stat-row">
+              <span class="stat-label">Health</span>
+              <strong id="healthStat">10</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Grit</span>
+              <strong id="gritStat">2</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Wit</span>
+              <strong id="witStat">2</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Supplies</span>
+              <strong id="supplyStat">2</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Relics</span>
+              <strong id="relicStat">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel sidebar-card">
+          <h2>Chronicle</h2>
+          <div class="log" id="log"></div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const sceneTag = document.getElementById("sceneTag");
+    const sceneTitle = document.getElementById("sceneTitle");
+    const sceneText = document.getElementById("sceneText");
+    const choicesNode = document.getElementById("choices");
+    const healthStat = document.getElementById("healthStat");
+    const gritStat = document.getElementById("gritStat");
+    const witStat = document.getElementById("witStat");
+    const supplyStat = document.getElementById("supplyStat");
+    const relicStat = document.getElementById("relicStat");
+    const logNode = document.getElementById("log");
+    const restartButton = document.getElementById("restartButton");
+
+    const state = {
+      scene: "trailhead",
+      health: 10,
+      grit: 2,
+      wit: 2,
+      supplies: 2,
+      relics: 0,
+      ended: false,
+      flags: {
+        searchedCoach: false,
+        shrineBlessing: false,
+        ferrymanHint: false
+      },
+      log: []
+    };
+
+    function pushLog(title, text) {
+      state.log.unshift({ title, text });
+      state.log = state.log.slice(0, 8);
+    }
+
+    function clampStats() {
+      state.health = Math.max(0, Math.min(12, state.health));
+      state.supplies = Math.max(0, state.supplies);
+      state.relics = Math.max(0, state.relics);
+    }
+
+    function roll(stat, target) {
+      const value = state[stat] + (1 + Math.floor(Math.random() * 6));
+      return { success: value >= target, value };
+    }
+
+    function endStory(id, title, text) {
+      state.scene = id;
+      state.ended = true;
+      pushLog(title, text);
+      render();
+    }
+
+    const scenes = {
+      trailhead: {
+        title: "Trailhead",
+        text: "The lantern road cuts through dead grass and old stone, disappearing toward the sealed observatory above the valley. A broken coach sits half off the road, a ferryman warms his hands beside a blue fire, and two different climbs lead toward the ridge.",
+        choices() {
+          const list = [
+            {
+              title: "Take the hanging bridge",
+              text: "Head for the fast route and trust your footing.",
+              action() {
+                state.scene = "bridge";
+                pushLog("Trailhead", "You choose the bridge path and the wind answers immediately.");
+              }
+            },
+            {
+              title: "Climb toward the weather shrine",
+              text: "Take the slower ascent through old prayer stones.",
+              action() {
+                state.scene = "shrine";
+                pushLog("Trailhead", "You turn toward the shrine steps and leave the road behind.");
+              }
+            },
+            {
+              title: "Speak to the ferryman",
+              text: "Trade a moment for a warning from someone who has seen the ridge at night.",
+              action() {
+                state.flags.ferrymanHint = true;
+                state.wit += 1;
+                pushLog("Blue Fire", "The ferryman warns that the gate listens for patterns before force. Your wit sharpens.");
+                state.scene = "trailhead";
+              }
+            }
+          ];
+
+          if (!state.flags.searchedCoach) {
+            list.push({
+              title: "Search the wrecked coach",
+              text: "See what the old wreck still holds before you commit to a route.",
+              action() {
+                state.flags.searchedCoach = true;
+                const check = roll("wit", 7);
+                if (check.success) {
+                  state.supplies += 1;
+                  state.relics += 1;
+                  pushLog("Coach", "A careful search turns up an oil flask and a star-etched token.");
+                } else {
+                  state.health -= 1;
+                  pushLog("Coach", "Splintered metal cuts your hand before you find anything useful.");
+                }
+                clampStats();
+                state.scene = "trailhead";
+              }
+            });
+          }
+
+          return list;
+        }
+      },
+      bridge: {
+        title: "Hanging Bridge",
+        text: "The bridge sways over a black ravine. Half the lanterns are out, the boards moan with each step, and something below keeps pace with you through the dark.",
+        choices() {
+          return [
+            {
+              title: "Cross on nerve alone",
+              text: "Trust your balance and keep moving.",
+              action() {
+                const check = roll("grit", 8);
+                if (check.success) {
+                  pushLog("Bridge", "You never look down. The far side arrives all at once.");
+                  state.scene = "gate";
+                } else {
+                  state.health -= 2;
+                  clampStats();
+                  pushLog("Bridge", "A board gives way and you slam hard against the cable before hauling yourself down to the ravine.");
+                  state.scene = state.health > 0 ? "ravine" : "ending_fall";
+                  if (state.health <= 0) {
+                    endStory("ending_fall", "The Ravine", "The dark below the bridge takes the last of your strength.");
+                  }
+                }
+              }
+            },
+            {
+              title: "Burn a supply for better light",
+              text: "Use what you have now to make the crossing safer.",
+              condition() {
+                return state.supplies > 0;
+              },
+              action() {
+                state.supplies -= 1;
+                clampStats();
+                pushLog("Bridge", "Fresh flame steadies your footing and carries you straight to the upper gate.");
+                state.scene = "gate";
+              }
+            },
+            {
+              title: "Go back and try another route",
+              text: "Leave the bridge for the shrine path instead.",
+              action() {
+                state.scene = "shrine";
+                pushLog("Bridge", "You back away from the cables and take the longer stairs.");
+              }
+            }
+          ];
+        }
+      },
+      shrine: {
+        title: "Weather Shrine",
+        text: "A cracked shrine leans into the hillside, full of hanging bells and wet moss. Someone has left ash in the bowl recently. The mountain feels quieter here, as if listening.",
+        choices() {
+          const list = [
+            {
+              title: "Study the wall script",
+              text: "Read the old symbols and search for anything the gate might answer to.",
+              action() {
+                state.wit += 1;
+                pushLog("Shrine", "You puzzle out half a prayer and a full pattern lock. Wit rises.");
+                state.scene = "gate";
+              }
+            },
+            {
+              title: "Take the goat path down into the ravine",
+              text: "Leave the shrine and approach the observatory from below.",
+              action() {
+                state.scene = "ravine";
+                pushLog("Shrine", "You slip off the shrine stairs and follow the narrow goat path downward.");
+              }
+            }
+          ];
+
+          if (!state.flags.shrineBlessing && state.supplies > 0) {
+            list.unshift({
+              title: "Burn a supply in the offering bowl",
+              text: "Trade one ration for steadier nerves and warmer blood.",
+              action() {
+                state.flags.shrineBlessing = true;
+                state.supplies -= 1;
+                state.grit += 1;
+                clampStats();
+                pushLog("Shrine", "The bells answer softly and something in you hardens. Grit rises.");
+                state.scene = "gate";
+              }
+            });
+          }
+
+          return list;
+        }
+      },
+      ravine: {
+        title: "Ravine Floor",
+        text: "The ravine smells of cold water and iron. A scavenger hound prowls the stones between you and the final climb, head low and eyes reflecting your lantern flame.",
+        choices() {
+          return [
+            {
+              title: "Stand and fight",
+              text: "Meet the beast before it chooses the ground for you.",
+              action() {
+                const check = roll("grit", 8);
+                if (check.success) {
+                  state.relics += 1;
+                  state.health -= 1;
+                  clampStats();
+                  pushLog("Ravine", "You win the fight, battered but carrying a relic from the hound's collar.");
+                  state.scene = "gate";
+                } else {
+                  state.health -= 3;
+                  clampStats();
+                  if (state.health <= 0) {
+                    endStory("ending_hound", "Ravine", "The hound drags you down before the gate ever comes into view.");
+                    return;
+                  }
+                  pushLog("Ravine", "The fight goes badly, but you force the hound away long enough to keep moving.");
+                  state.scene = "gate";
+                }
+              }
+            },
+            {
+              title: "Slip past in the dark",
+              text: "Trust timing and shadow more than force.",
+              action() {
+                const check = roll("wit", 7);
+                if (check.success) {
+                  pushLog("Ravine", "You move with the water noise and leave the hound staring at empty stone.");
+                } else {
+                  state.health -= 1;
+                  clampStats();
+                  pushLog("Ravine", "You make it through, but not before teeth catch your sleeve and skin.");
+                }
+                state.scene = "gate";
+              }
+            },
+            {
+              title: "Throw a ration and run",
+              text: "Spend a supply to turn hunger into distance.",
+              condition() {
+                return state.supplies > 0;
+              },
+              action() {
+                state.supplies -= 1;
+                clampStats();
+                pushLog("Ravine", "The hound tears into the ration while you take the climb two steps at a time.");
+                state.scene = "gate";
+              }
+            }
+          ];
+        }
+      },
+      gate: {
+        title: "Observatory Gate",
+        text: "The bronze gate is shaped like a half-opened flower. Its center dial shows five moving stars, and the metal is warm with the low pulse coming from within.",
+        choices() {
+          return [
+            {
+              title: "Force the petals apart",
+              text: "Use raw grit and hope the old hinges are weaker than you.",
+              action() {
+                const check = roll("grit", 9);
+                if (check.success) {
+                  pushLog("Gate", "The petals scream, then yield.");
+                  state.scene = "observatory";
+                } else {
+                  state.health -= 2;
+                  clampStats();
+                  if (state.health <= 0) {
+                    endStory("ending_gate", "Gate", "The gate throws you back against the stone hard enough to end the climb.");
+                    return;
+                  }
+                  pushLog("Gate", "The metal rejects you and steals your breath, but the mechanism loosens.");
+                  state.scene = "observatory";
+                }
+              }
+            },
+            {
+              title: "Solve the rotating star dial",
+              text: "Answer the lock the way it was meant to be answered.",
+              action() {
+                const target = state.flags.ferrymanHint ? 7 : 8;
+                const check = roll("wit", target);
+                if (check.success) {
+                  pushLog("Gate", "The pattern settles under your hands and the lock opens cleanly.");
+                  state.scene = "observatory";
+                } else {
+                  state.health -= 1;
+                  clampStats();
+                  pushLog("Gate", "A pulse arcs through the dial and numbs your arm, but you still learn the last sequence.");
+                  state.scene = state.health > 0 ? "observatory" : "ending_gate";
+                  if (state.health <= 0) {
+                    endStory("ending_gate", "Gate", "The last pulse takes you to the ground before the door can finish opening.");
+                  }
+                }
+              }
+            },
+            {
+              title: "Set a relic into the center socket",
+              text: "Spend what you found on the road to skip the argument entirely.",
+              condition() {
+                return state.relics > 0;
+              },
+              action() {
+                state.relics -= 1;
+                clampStats();
+                pushLog("Gate", "The relic fits like it belonged here all along. The petals unfold.");
+                state.scene = "observatory";
+              }
+            }
+          ];
+        }
+      },
+      observatory: {
+        title: "Star Observatory",
+        text: "Inside, the lens chamber still glows. The rift map hangs in the air like living glass, and the whole room hums with one last choice: shut it down, bind it to yourself, or stay and learn everything you can from it.",
+        choices() {
+          const list = [
+            {
+              title: "Seal the lens and carry the map home",
+              text: "Choose survival, knowledge, and a future beyond one dramatic night.",
+              action() {
+                endStory("ending_seal", "Dawn", "You seal the chamber, copy the map, and leave with proof that the road was worth taking.");
+              }
+            },
+            {
+              title: "Take the live ember into your own hands",
+              text: "Walk away with dangerous power instead of a quiet answer.",
+              action() {
+                endStory("ending_power", "Ember", "The ember brands your palm and answers you like a second heartbeat. The valley will remember what leaves with you.");
+              }
+            }
+          ];
+
+          if (state.wit >= 4) {
+            list.push({
+              title: "Remain and chart the whole archive",
+              text: "Stay long enough to understand the machine instead of merely surviving it.",
+              action() {
+                endStory("ending_archive", "Archive", "You stay until sunrise among the turning lenses, and when you leave, the observatory finally has a keeper again.");
+              }
+            });
+          }
+
+          return list;
+        }
+      }
+    };
+
+    function visibleChoices() {
+      const scene = scenes[state.scene];
+      if (!scene || state.ended) {
+        return [];
+      }
+      return scene.choices().filter((choice) => !choice.condition || choice.condition());
+    }
+
+    function renderLog() {
+      logNode.innerHTML = "";
+      state.log.forEach((entry) => {
+        const node = document.createElement("div");
+        node.className = "entry";
+        node.innerHTML = "<strong>" + entry.title + "</strong><p>" + entry.text + "</p>";
+        logNode.appendChild(node);
+      });
+    }
+
+    function renderChoices() {
+      choicesNode.innerHTML = "";
+
+      if (state.ended) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice";
+        button.innerHTML = "<strong>Begin Again</strong><span>Restart the road and see how a different set of choices feels.</span>";
+        button.addEventListener("click", resetStory);
+        choicesNode.appendChild(button);
+        return;
+      }
+
+      visibleChoices().forEach((choice) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choice";
+        button.innerHTML = "<strong>" + choice.title + "</strong><span>" + choice.text + "</span>";
+        button.addEventListener("click", () => {
+          choice.action();
+          clampStats();
+          render();
+        });
+        choicesNode.appendChild(button);
+      });
+    }
+
+    function render() {
+      const scene = scenes[state.scene];
+      const currentTitle = state.ended ? state.log[0].title : scene.title;
+      const currentText = state.ended ? state.log[0].text : scene.text;
+
+      sceneTag.textContent = currentTitle;
+      sceneTitle.textContent = currentTitle;
+      sceneText.textContent = currentText;
+      healthStat.textContent = String(state.health);
+      gritStat.textContent = String(state.grit);
+      witStat.textContent = String(state.wit);
+      supplyStat.textContent = String(state.supplies);
+      relicStat.textContent = String(state.relics);
+      renderChoices();
+      renderLog();
+    }
+
+    function resetStory() {
+      state.scene = "trailhead";
+      state.health = 10;
+      state.grit = 2;
+      state.wit = 2;
+      state.supplies = 2;
+      state.relics = 0;
+      state.ended = false;
+      state.flags = {
+        searchedCoach: false,
+        shrineBlessing: false,
+        ferrymanHint: false
+      };
+      state.log = [];
+      pushLog("Trailhead", scenes.trailhead.text);
+      render();
+    }
+
+    restartButton.addEventListener("click", resetStory);
+
+    resetStory();
+  </script>
+</body>
+</html>

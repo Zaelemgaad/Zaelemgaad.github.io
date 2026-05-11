@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Shardhand</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #140d11;
+      --bg-alt: #24131b;
+      --panel: rgba(46, 24, 33, 0.9);
+      --panel-2: rgba(60, 31, 42, 0.96);
+      --border: rgba(255, 160, 140, 0.22);
+      --border-strong: rgba(255, 160, 140, 0.42);
+      --text: #fff0ef;
+      --muted: #e0bec0;
+      --accent: #ffb16f;
+      --accent-2: #ff8b8b;
+      --accent-3: #ffdba7;
+      --good: #a8ffbe;
+      --shadow: rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top right, rgba(255, 139, 139, 0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(255, 219, 167, 0.1), transparent 24%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-3);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1440px, calc(100vw - 24px));
+      margin: 0 auto;
+      padding: 40px 18px 70px;
+    }
+
+    .back-link,
+    .eyebrow,
+    .stat-label,
+    .card-cost {
+      font-family: "Space Mono", monospace;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--accent-3);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+      font-size: 0.86rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+      line-height: 0.96;
+    }
+
+    .lead {
+      max-width: 840px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 22px 48px var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 18px;
+      border-bottom: 1px solid rgba(255, 160, 140, 0.12);
+      background: rgba(13, 8, 10, 0.44);
+    }
+
+    .battlefield {
+      display: grid;
+      gap: 18px;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(255, 177, 111, 0.07), transparent 34%),
+        rgba(10, 7, 8, 0.78);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .combatant {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 160, 140, 0.16);
+      background: rgba(16, 10, 12, 0.5);
+    }
+
+    .combatant h2 {
+      margin: 0 0 10px;
+      font-size: 1.18rem;
+    }
+
+    .intent {
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 139, 139, 0.14);
+      color: var(--accent-3);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 160, 140, 0.08);
+    }
+
+    .stat-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border: 1px solid rgba(255, 160, 140, 0.22);
+      border-radius: 999px;
+      padding: 12px 16px;
+      background: rgba(20, 12, 15, 0.78);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(39, 22, 29, 0.96);
+      outline: none;
+    }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--accent), #ffdba7);
+      color: #29160e;
+    }
+
+    .button[disabled] {
+      opacity: 0.48;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .hand {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 180px;
+      padding: 18px 16px 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 160, 140, 0.18);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+        rgba(17, 11, 14, 0.72);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+      background: rgba(40, 23, 30, 0.94);
+      outline: none;
+    }
+
+    .card[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .card-cost {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 177, 111, 0.18);
+      color: var(--accent-3);
+      font-size: 0.82rem;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.02rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .sidebar {
+      display: grid;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      padding: 20px;
+    }
+
+    .sidebar-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+    }
+
+    .sidebar-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .log {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .log-entry {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(20, 12, 15, 0.44);
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.5;
+    }
+
+    .reward {
+      display: none;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 160, 140, 0.12);
+    }
+
+    .reward.visible {
+      display: grid;
+    }
+
+    @media (max-width: 1060px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        width: min(100vw, calc(100vw - 12px));
+        padding-inline: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/games/">← Back to Games</a>
+
+    <section class="hero">
+      <span class="eyebrow">Deckbuilder Prototype</span>
+      <h1>Shardhand</h1>
+      <p class="lead">A compact combat-first deckbuilder baseline with energy, draw/discard flow, enemy intents, and card rewards between fights. It is intentionally small, but the loop is real enough to start expanding into runs, relics, and map choices.</p>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <span class="eyebrow">Combat Floor</span>
+            <h2 id="encounterTitle">Encounter 1</h2>
+          </div>
+          <div class="actions">
+            <button class="button primary" id="endTurnButton" type="button">End Turn</button>
+            <button class="button" id="restartButton" type="button">Restart Run</button>
+          </div>
+        </div>
+
+        <div class="battlefield">
+          <section class="status-grid">
+            <div class="combatant">
+              <h2>Runner</h2>
+              <div class="stats">
+                <div class="stat-row">
+                  <span>Health</span>
+                  <strong id="playerHealth">40 / 40</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Block</span>
+                  <strong id="playerBlock">0</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Energy</span>
+                  <strong id="playerEnergy">3</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="combatant">
+              <h2 id="enemyName">Dreg Warden</h2>
+              <span class="intent" id="enemyIntent">Intent: Attack for 6</span>
+              <div class="stats">
+                <div class="stat-row">
+                  <span>Health</span>
+                  <strong id="enemyHealth">28 / 28</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Block</span>
+                  <strong id="enemyBlock">0</strong>
+                </div>
+                <div class="stat-row">
+                  <span>Threat</span>
+                  <strong id="enemyThreat">Steady</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <span class="eyebrow">Hand</span>
+            <div class="hand" id="hand"></div>
+          </section>
+
+          <section class="reward" id="rewardSection">
+            <div>
+              <span class="eyebrow">Card Reward</span>
+              <h2>Choose a new card</h2>
+              <p class="lead">Add one piece to the deck, then move to the next fight.</p>
+            </div>
+            <div class="hand" id="rewardOptions"></div>
+          </section>
+        </div>
+      </article>
+
+      <aside class="sidebar">
+        <section class="panel sidebar-card">
+          <h2>Run Status</h2>
+          <p>Play cards while you have energy, block incoming hits, and pick rewards that actually fit the deck you are growing.</p>
+          <div class="stats">
+            <div class="stat-row">
+              <span class="stat-label">Draw Pile</span>
+              <strong id="drawPileStat">0</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Discard Pile</span>
+              <strong id="discardPileStat">0</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Deck Size</span>
+              <strong id="deckSizeStat">0</strong>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Wins</span>
+              <strong id="winsStat">0</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel sidebar-card">
+          <h2>Battle Log</h2>
+          <div class="log" id="log"></div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const encounterTitle = document.getElementById("encounterTitle");
+    const playerHealth = document.getElementById("playerHealth");
+    const playerBlock = document.getElementById("playerBlock");
+    const playerEnergy = document.getElementById("playerEnergy");
+    const enemyName = document.getElementById("enemyName");
+    const enemyIntent = document.getElementById("enemyIntent");
+    const enemyHealth = document.getElementById("enemyHealth");
+    const enemyBlock = document.getElementById("enemyBlock");
+    const enemyThreat = document.getElementById("enemyThreat");
+    const handNode = document.getElementById("hand");
+    const rewardSection = document.getElementById("rewardSection");
+    const rewardOptions = document.getElementById("rewardOptions");
+    const drawPileStat = document.getElementById("drawPileStat");
+    const discardPileStat = document.getElementById("discardPileStat");
+    const deckSizeStat = document.getElementById("deckSizeStat");
+    const winsStat = document.getElementById("winsStat");
+    const logNode = document.getElementById("log");
+    const endTurnButton = document.getElementById("endTurnButton");
+    const restartButton = document.getElementById("restartButton");
+
+    const cards = {
+      strike: {
+        name: "Strike",
+        cost: 1,
+        text: "Deal 6 damage.",
+        play() {
+          dealDamage(6 + state.player.bonusDamage);
+        }
+      },
+      guard: {
+        name: "Guard",
+        cost: 1,
+        text: "Gain 6 block.",
+        play() {
+          state.player.block += 6;
+        }
+      },
+      focus: {
+        name: "Focus Pulse",
+        cost: 0,
+        text: "Gain 1 energy. Draw 1 card.",
+        play() {
+          state.player.energy += 1;
+          drawCards(1);
+        }
+      },
+      heavy: {
+        name: "Heavy Cut",
+        cost: 2,
+        text: "Deal 12 damage.",
+        play() {
+          dealDamage(12 + state.player.bonusDamage);
+        }
+      },
+      mend: {
+        name: "Mend",
+        cost: 1,
+        text: "Heal 3 and gain 3 block.",
+        play() {
+          state.player.hp = Math.min(state.player.maxHp, state.player.hp + 3);
+          state.player.block += 3;
+        }
+      },
+      flare: {
+        name: "Flare Step",
+        cost: 1,
+        text: "Deal 4 damage. Next attack this turn gains +3.",
+        play() {
+          dealDamage(4 + state.player.bonusDamage);
+          state.player.bonusDamage += 3;
+        }
+      }
+    };
+
+    const rewardPool = ["strike", "guard", "focus", "heavy", "mend", "flare"];
+    const enemyTemplates = [
+      {
+        name: "Dreg Warden",
+        hp: 28,
+        intents: [
+          { type: "attack", value: 6, label: "Attack for 6" },
+          { type: "attack", value: 7, label: "Press for 7" },
+          { type: "fortify", value: 5, label: "Gain 5 block" }
+        ]
+      },
+      {
+        name: "Glass Jackal",
+        hp: 24,
+        intents: [
+          { type: "attack", value: 5, label: "Quick attack for 5" },
+          { type: "attack", value: 9, label: "Leap for 9" },
+          { type: "buff", value: 2, label: "Rage: +2 next attack" }
+        ]
+      },
+      {
+        name: "Ash Bishop",
+        hp: 34,
+        intents: [
+          { type: "attack", value: 8, label: "Smite for 8" },
+          { type: "fortify", value: 7, label: "Gain 7 block" },
+          { type: "buff", value: 3, label: "Charge: +3 next attack" }
+        ]
+      }
+    ];
+
+    const state = {
+      running: true,
+      encounter: 1,
+      wins: 0,
+      player: null,
+      enemy: null,
+      rewardChoices: [],
+      awaitingReward: false,
+      log: []
+    };
+
+    function shuffle(list) {
+      const clone = [...list];
+      for (let index = clone.length - 1; index > 0; index -= 1) {
+        const swap = Math.floor(Math.random() * (index + 1));
+        [clone[index], clone[swap]] = [clone[swap], clone[index]];
+      }
+      return clone;
+    }
+
+    function pushLog(text) {
+      state.log.unshift(text);
+      state.log = state.log.slice(0, 7);
+    }
+
+    function drawCards(amount) {
+      for (let index = 0; index < amount; index += 1) {
+        if (!state.player.drawPile.length) {
+          if (!state.player.discard.length) {
+            return;
+          }
+          state.player.drawPile = shuffle(state.player.discard);
+          state.player.discard = [];
+        }
+
+        const next = state.player.drawPile.shift();
+        state.player.hand.push(next);
+      }
+    }
+
+    function createEnemy() {
+      const template = enemyTemplates[(state.encounter - 1) % enemyTemplates.length];
+      const hpScale = 1 + (state.encounter - 1) * 0.15;
+      const enemy = {
+        name: template.name,
+        maxHp: Math.round(template.hp * hpScale),
+        hp: Math.round(template.hp * hpScale),
+        block: 0,
+        threat: "Steady",
+        intents: template.intents,
+        intent: null,
+        rage: 0
+      };
+      enemy.intent = template.intents[Math.floor(Math.random() * template.intents.length)];
+      return enemy;
+    }
+
+    function startEncounter() {
+      state.enemy = createEnemy();
+      state.player.block = 0;
+      state.player.energy = 3;
+      state.player.bonusDamage = 0;
+      state.player.hand = [];
+      state.player.drawPile = shuffle(state.player.deck);
+      state.player.discard = [];
+      drawCards(5);
+      encounterTitle.textContent = "Encounter " + state.encounter;
+      pushLog("A " + state.enemy.name + " steps into the lane.");
+      render();
+    }
+
+    function startRun() {
+      state.running = true;
+      state.encounter = 1;
+      state.wins = 0;
+      state.awaitingReward = false;
+      state.rewardChoices = [];
+      state.log = ["A new run begins."];
+      state.player = {
+        maxHp: 40,
+        hp: 40,
+        block: 0,
+        energy: 3,
+        bonusDamage: 0,
+        deck: ["strike", "strike", "strike", "strike", "guard", "guard", "guard", "focus", "heavy", "mend"],
+        drawPile: [],
+        discard: [],
+        hand: []
+      };
+      rewardSection.classList.remove("visible");
+      startEncounter();
+    }
+
+    function dealDamage(amount) {
+      const actual = Math.max(0, amount - state.enemy.block);
+      const absorbed = Math.min(state.enemy.block, amount);
+      state.enemy.block = Math.max(0, state.enemy.block - amount);
+      state.enemy.hp -= actual;
+      pushLog("You deal " + actual + " damage" + (absorbed > 0 ? " after chewing through block." : "."));
+    }
+
+    function takeDamage(amount) {
+      const actual = Math.max(0, amount - state.player.block);
+      state.player.block = Math.max(0, state.player.block - amount);
+      state.player.hp -= actual;
+      pushLog("You take " + actual + " damage.");
+      if (state.player.hp <= 0) {
+        state.player.hp = 0;
+        state.running = false;
+        pushLog("The run ends here. Restart when you want another draft.");
+      }
+    }
+
+    function queueReward() {
+      state.awaitingReward = true;
+      rewardSection.classList.add("visible");
+      state.rewardChoices = shuffle(rewardPool).slice(0, 3);
+      rewardOptions.innerHTML = "";
+
+      state.rewardChoices.forEach((cardId) => {
+        const def = cards[cardId];
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "card";
+        button.innerHTML =
+          "<span class=\"card-cost\">" + def.cost + "</span>" +
+          "<h3>" + def.name + "</h3>" +
+          "<p>" + def.text + "</p>";
+        button.addEventListener("click", () => {
+          state.player.deck.push(cardId);
+          state.awaitingReward = false;
+          rewardSection.classList.remove("visible");
+          state.encounter += 1;
+          state.wins += 1;
+          pushLog(def.name + " joins the deck.");
+          if (state.wins >= 5) {
+            state.running = false;
+            pushLog("You clear the fifth duel. Baseline run complete.");
+            render();
+            return;
+          }
+          startEncounter();
+        });
+        rewardOptions.appendChild(button);
+      });
+    }
+
+    function checkVictory() {
+      if (state.enemy.hp <= 0) {
+        state.enemy.hp = 0;
+        pushLog(state.enemy.name + " breaks apart.");
+        queueReward();
+        return true;
+      }
+      return false;
+    }
+
+    function playCard(index) {
+      if (!state.running || state.awaitingReward) {
+        return;
+      }
+
+      const cardId = state.player.hand[index];
+      const card = cards[cardId];
+      if (!card || state.player.energy < card.cost) {
+        return;
+      }
+
+      state.player.energy -= card.cost;
+      state.player.hand.splice(index, 1);
+      state.player.discard.push(cardId);
+      card.play();
+
+      if (!checkVictory()) {
+        render();
+      } else {
+        render();
+      }
+    }
+
+    function nextEnemyIntent() {
+      state.enemy.intent = state.enemy.intents[Math.floor(Math.random() * state.enemy.intents.length)];
+      state.enemy.threat = state.enemy.intent.type === "attack" ? "Aggressive" : state.enemy.intent.type === "fortify" ? "Guarding" : "Charging";
+    }
+
+    function enemyTurn() {
+      if (!state.running || state.awaitingReward) {
+        return;
+      }
+
+      const intent = state.enemy.intent;
+
+      if (intent.type === "attack") {
+        const damage = intent.value + state.enemy.rage;
+        state.enemy.rage = 0;
+        takeDamage(damage);
+      } else if (intent.type === "fortify") {
+        state.enemy.block += intent.value;
+        pushLog(state.enemy.name + " braces for " + intent.value + " block.");
+      } else if (intent.type === "buff") {
+        state.enemy.rage += intent.value;
+        pushLog(state.enemy.name + " stores +" + intent.value + " power.");
+      }
+
+      state.player.block = 0;
+      state.player.energy = 3;
+      state.player.bonusDamage = 0;
+
+      state.player.discard.push(...state.player.hand);
+      state.player.hand = [];
+      drawCards(5);
+      nextEnemyIntent();
+      render();
+    }
+
+    function renderHand() {
+      handNode.innerHTML = "";
+      state.player.hand.forEach((cardId, index) => {
+        const def = cards[cardId];
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "card";
+        button.disabled = !state.running || state.awaitingReward || state.player.energy < def.cost;
+        button.innerHTML =
+          "<span class=\"card-cost\">" + def.cost + "</span>" +
+          "<h3>" + def.name + "</h3>" +
+          "<p>" + def.text + "</p>";
+        button.addEventListener("click", () => playCard(index));
+        handNode.appendChild(button);
+      });
+    }
+
+    function renderLog() {
+      logNode.innerHTML = "";
+      state.log.forEach((entry) => {
+        const item = document.createElement("div");
+        item.className = "log-entry";
+        item.textContent = entry;
+        logNode.appendChild(item);
+      });
+    }
+
+    function render() {
+      playerHealth.textContent = state.player.hp + " / " + state.player.maxHp;
+      playerBlock.textContent = String(state.player.block);
+      playerEnergy.textContent = String(state.player.energy);
+      enemyName.textContent = state.enemy.name;
+      enemyIntent.textContent = "Intent: " + state.enemy.intent.label + (state.enemy.rage ? " (+" + state.enemy.rage + " stored)" : "");
+      enemyHealth.textContent = state.enemy.hp + " / " + state.enemy.maxHp;
+      enemyBlock.textContent = String(state.enemy.block);
+      enemyThreat.textContent = state.enemy.threat;
+      drawPileStat.textContent = String(state.player.drawPile.length);
+      discardPileStat.textContent = String(state.player.discard.length);
+      deckSizeStat.textContent = String(state.player.deck.length);
+      winsStat.textContent = String(state.wins);
+      endTurnButton.disabled = !state.running || state.awaitingReward;
+      restartButton.textContent = "Restart Run";
+
+      renderHand();
+      renderLog();
+    }
+
+    endTurnButton.addEventListener("click", enemyTurn);
+    restartButton.addEventListener("click", startRun);
+
+    startRun();
+  </script>
+</body>
+</html>
