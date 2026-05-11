@@ -693,25 +693,21 @@
     const mouseAim = { x: BASE_ARENA_WIDTH * 0.65, y: BASE_ARENA_HEIGHT * 0.4, active: false };
 
     const weaponDefs = {
-      pulse_shot: {
-        name: "Pulse Shot",
+      single_shot: {
+        name: "Single Shot",
         maxRank: 10,
         rarity: "weapon",
         offer: true,
         describe(rank) {
           return rank
-            ? `Starter single shot. Rank ${rank} pushes damage, speed, and shot size higher.`
-            : "Starter single shot focused straight at the cursor.";
+            ? `Focused single fire. Rank ${rank} pushes damage, speed, and shot size higher.`
+            : "A clean forward single shot aimed straight at the cursor.";
         },
         cooldown(rank) {
           return Math.max(0.17, 0.39 - rank * 0.013);
         },
         fire(instance, mods) {
-          const copies = 1 + mods.projectileBonus;
-          const spread = copies === 1 ? 0 : 0.22;
-          for (let copy = 0; copy < copies; copy += 1) {
-            const offset = copies === 1 ? 0 : ((copy / (copies - 1)) - 0.5) * spread;
-            const angle = state.player.aimAngle + offset;
+          forEachDirectionalCast(mods, (angle) => {
             spawnBullet({
               kind: "normal",
               x: state.player.x + Math.cos(angle) * 14,
@@ -723,7 +719,7 @@
               lifetime: 1.12,
               color: "#77a8ff"
             });
-          }
+          });
         }
       },
       twin_shot: {
@@ -740,11 +736,7 @@
           return Math.max(0.25, 0.58 - rank * 0.016);
         },
         fire(instance, mods) {
-          const copies = 1 + mods.projectileBonus;
-          const fan = copies === 1 ? 0 : 0.18;
-          for (let copy = 0; copy < copies; copy += 1) {
-            const spreadOffset = copies === 1 ? 0 : ((copy / (copies - 1)) - 0.5) * fan;
-            const baseAngle = state.player.aimAngle + spreadOffset;
+          forEachDirectionalCast(mods, (baseAngle) => {
             const sideOffsets = [-6, 6];
             sideOffsets.forEach((lateral) => {
               const sideX = state.player.x + Math.cos(baseAngle + Math.PI / 2) * lateral;
@@ -761,7 +753,7 @@
                 color: "#f7d47f"
               });
             });
-          }
+          });
         }
       },
       sidecar_turrets: {
@@ -778,22 +770,24 @@
           return Math.max(0.3, 0.68 - rank * 0.018);
         },
         fire(instance, mods) {
-          const angleOffsets = [-0.22, 0.22];
-          angleOffsets.forEach((offset, index) => {
-            const baseAngle = state.player.aimAngle + offset;
-            const lateral = index === 0 ? -8 : 8;
-            const sideX = state.player.x + Math.cos(state.player.aimAngle + Math.PI / 2) * lateral;
-            const sideY = state.player.y + Math.sin(state.player.aimAngle + Math.PI / 2) * lateral;
-            spawnBullet({
-              kind: "normal",
-              x: sideX + Math.cos(baseAngle) * 10,
-              y: sideY + Math.sin(baseAngle) * 10,
-              vx: Math.cos(baseAngle) * (390 + instance.rank * 5),
-              vy: Math.sin(baseAngle) * (390 + instance.rank * 5),
-              radius: (2.3 + instance.rank * 0.06) * mods.projectileSize,
-              damage: (4.6 + instance.rank * 1.45) * mods.damage,
-              lifetime: 1.02,
-              color: "#ffe7a8"
+          forEachDirectionalCast(mods, (castAngle) => {
+            const angleOffsets = [-0.22, 0.22];
+            angleOffsets.forEach((offset, index) => {
+              const baseAngle = castAngle + offset;
+              const lateral = index === 0 ? -8 : 8;
+              const sideX = state.player.x + Math.cos(castAngle + Math.PI / 2) * lateral;
+              const sideY = state.player.y + Math.sin(castAngle + Math.PI / 2) * lateral;
+              spawnBullet({
+                kind: "normal",
+                x: sideX + Math.cos(baseAngle) * 10,
+                y: sideY + Math.sin(baseAngle) * 10,
+                vx: Math.cos(baseAngle) * (390 + instance.rank * 5),
+                vy: Math.sin(baseAngle) * (390 + instance.rank * 5),
+                radius: (2.3 + instance.rank * 0.06) * mods.projectileSize,
+                damage: (4.6 + instance.rank * 1.45) * mods.damage,
+                lifetime: 1.02,
+                color: "#ffe7a8"
+              });
             });
           });
         }
@@ -825,9 +819,11 @@
         },
         fire(instance, mods) {
           const range = (58 + instance.rank * 2.2) * mods.projectileSize;
-          const width = 1.14 + instance.rank * 0.018;
+          const width = (1.14 + instance.rank * 0.018) * mods.projectileSize;
           const damage = (16 + instance.rank * 3.2) * mods.damage;
-          spawnSwing(range, width, damage, colorWithAlpha("#ffd27f", 0.68));
+          forEachDirectionalCast(mods, (angle) => {
+            spawnSwing(range, width, damage, colorWithAlpha("#ffd27f", 0.68), angle);
+          });
         }
       },
       poison_field: {
@@ -856,21 +852,22 @@
           return Math.max(0.52, 1.28 - rank * 0.05);
         },
         fire(instance, mods) {
-          const angle = state.player.aimAngle;
-          spawnBullet({
-            kind: "ricochet",
-            x: state.player.x + Math.cos(angle) * 15,
-            y: state.player.y + Math.sin(angle) * 15,
-            vx: Math.cos(angle) * (255 + instance.rank * 4),
-            vy: Math.sin(angle) * (255 + instance.rank * 4),
-            radius: (4.1 + instance.rank * 0.08) * mods.projectileSize,
-            damage: (16 + instance.rank * 4.2) * mods.damage,
-            lifetime: 3.0,
-            color: "#ffcb78",
-            bouncesRemaining: 1 + Math.floor((instance.rank - 1) / 3),
-            trailTimer: 0.05,
-            trailRadius: (8 + instance.rank * 0.45) * mods.projectileSize,
-            trailDamage: (8 + instance.rank * 1.3) * mods.damage
+          forEachDirectionalCast(mods, (angle) => {
+            spawnBullet({
+              kind: "ricochet",
+              x: state.player.x + Math.cos(angle) * 15,
+              y: state.player.y + Math.sin(angle) * 15,
+              vx: Math.cos(angle) * (255 + instance.rank * 4),
+              vy: Math.sin(angle) * (255 + instance.rank * 4),
+              radius: (4.1 + instance.rank * 0.08) * mods.projectileSize,
+              damage: (16 + instance.rank * 4.2) * mods.damage,
+              lifetime: 3.0,
+              color: "#ffcb78",
+              bouncesRemaining: 1 + Math.floor((instance.rank - 1) / 3),
+              trailTimer: 0.05,
+              trailRadius: (8 + instance.rank * 0.45) * mods.projectileSize,
+              trailDamage: (8 + instance.rank * 1.3) * mods.damage
+            });
           });
         }
       },
@@ -886,15 +883,10 @@
           return Math.max(0.15, 0.34 - rank * 0.01);
         },
         fire(instance, mods) {
-          const copies = 1 + mods.projectileBonus;
-          const spread = copies === 1 ? 0 : 0.18;
           const fanAngles = [-0.22, -0.11, 0, 0.11, 0.22];
           const fanOffsets = [-10, -5, 0, 5, 10];
 
-          for (let copy = 0; copy < copies; copy += 1) {
-            const spreadOffset = copies === 1 ? 0 : ((copy / (copies - 1)) - 0.5) * spread;
-            const centerAngle = state.player.aimAngle + spreadOffset;
-
+          forEachDirectionalCast(mods, (centerAngle) => {
             fanAngles.forEach((angleOffset, index) => {
               const angle = centerAngle + angleOffset;
               const lateral = fanOffsets[index];
@@ -912,7 +904,7 @@
                 color: index === 2 ? "#77a8ff" : "#ffe39e"
               });
             });
-          }
+          });
         }
       },
       miasma_orbit: {
@@ -965,12 +957,12 @@
         }
       },
       projectile_count: {
-        name: "Multi-Thread",
-        maxRank: 10,
+        name: "Mirror Array",
+        maxRank: 1,
         describe(rank) {
           return rank
-            ? `Projectile weapons gain more pattern copies as the ranks stack.`
-            : "Increase global projectile count for projectile weapons.";
+            ? "Directional weapons now echo once in reverse, firing a mirrored copy behind you."
+            : "Single-rank passive. Directional weapons fire one mirrored copy behind you.";
         }
       },
       health: {
@@ -1024,9 +1016,9 @@
       {
         result: "starburst_array",
         name: "Starburst Array",
-        components: ["pulse_shot", "twin_shot"],
+        components: ["single_shot", "twin_shot"],
         describe() {
-          return "Fuse Pulse Shot and Twin Shot into a single combined barrage, freeing one weapon slot.";
+          return "Fuse Single Shot and Twin Shot into a single combined barrage, freeing one weapon slot.";
         }
       },
       {
@@ -1059,7 +1051,7 @@
       xpToNext: 8,
       pendingLevels: 0,
       repairCharge: 0,
-      repairPerHull: 10,
+      repairPerHull: 24,
       chestCooldown: 999,
       chestUnlocked: false,
       player: null,
@@ -1125,6 +1117,13 @@
       debugStatus.textContent = message;
     }
 
+    function forEachDirectionalCast(mods, callback) {
+      callback(state.player.aimAngle, false);
+      if (mods.mirroredShots) {
+        callback(state.player.aimAngle + Math.PI, true);
+      }
+    }
+
     function getThreatWave() {
       return state.wave + 4;
     }
@@ -1156,16 +1155,14 @@
         baseSpeed: 236,
         hp: 5,
         maxHp: 5,
-        damageInvulnerability: 1.0,
+        damageInvulnerability: 0.72,
         dashSpeedMultiplier: 3.55,
         dashDuration: 0.18,
         dashTimer: 0,
         dashCooldown: 4.1,
         dashCooldownRemaining: 0,
         damageTimer: 0,
-        weapons: [
-          { key: "pulse_shot", rank: 1, timer: 0.14 }
-        ],
+        weapons: [],
         passives: []
       };
     }
@@ -1175,7 +1172,7 @@
         damage: 1 + passiveRank("damage") * 0.12,
         attackSpeed: 1 + passiveRank("attack_speed") * 0.1,
         projectileSize: 1 + passiveRank("projectile_size") * 0.08,
-        projectileBonus: Math.min(3, Math.floor((passiveRank("projectile_count") + 2) / 3)),
+        mirroredShots: passiveRank("projectile_count") > 0,
         xpGain: 1 + passiveRank("xp_gain") * 0.12,
         moveSpeed: 1 + passiveRank("move_speed") * 0.06,
         magnet: passiveRank("magnet") * 16,
@@ -1233,7 +1230,7 @@
         return `<li>${def.name} R${passive.rank}</li>`;
       });
 
-      weaponList.innerHTML = weapons.length ? weapons.join("") : "<li>No weapons equipped.</li>";
+      weaponList.innerHTML = weapons.length ? weapons.join("") : "<li>No starting weapon selected yet.</li>";
       passiveList.innerHTML = passives.length ? passives.join("") : "<li>No passives equipped.</li>";
     }
 
@@ -1274,6 +1271,46 @@
       draftPanel.classList.remove("hidden");
     }
 
+    function buildStarterDraftOptions() {
+      const guaranteedKeys = ["single_shot", "twin_shot"];
+      const bonusKeys = shuffle(
+        Object.entries(weaponDefs)
+          .filter(([key, def]) => def.offer && !guaranteedKeys.includes(key))
+          .map(([key]) => key)
+      ).slice(0, 2);
+
+      return [...guaranteedKeys, ...bonusKeys].map((key) => {
+        const def = weaponDefs[key];
+        return {
+          id: `starter-${key}`,
+          typeLabel: "starter weapon",
+          title: def.name,
+          text: def.describe(0),
+          apply() {
+            addWeapon(key, 1);
+            closeDraft();
+            startRun();
+            setDebugStatus(`Started with ${def.name}.`);
+          }
+        };
+      });
+    }
+
+    function openStarterDraft() {
+      if (!state.player || state.running || state.draftMode || state.player.weapons.length > 0) {
+        return;
+      }
+
+      overlay.classList.add("hidden");
+      showDraft(
+        "Starter Pick",
+        "Choose A Starting Weapon",
+        "Pick the weapon that opens this run. You can discover the rest later, but this first choice sets your early build path.",
+        buildStarterDraftOptions(),
+        "starter"
+      );
+    }
+
     function resetRun() {
       state.running = false;
       state.paused = false;
@@ -1291,7 +1328,7 @@
       state.xpToNext = 8;
       state.pendingLevels = 0;
       state.repairCharge = 0;
-      state.repairPerHull = 10;
+      state.repairPerHull = 24;
       state.chestCooldown = 999;
       state.chestUnlocked = false;
       state.player = createPlayer();
@@ -1299,10 +1336,10 @@
       clearRunEntities();
       closeDraft();
       overlay.classList.remove("hidden");
-      overlayTitle.textContent = "Focused Fire";
-      overlayText.innerHTML = "Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. The ship follows your cursor, and every weapon fires toward that aim instead of auto-locking enemies. Tokens drive every level-up item choice, and chests unlock fusion opportunities once the run goes long enough.";
-      overlayButton.textContent = "Start The Storm";
-      startButton.textContent = "Start Run";
+      overlayTitle.textContent = "Choose Your Starter";
+      overlayText.innerHTML = "Move with <strong>WASD</strong> or <strong>Arrow Keys</strong>. Your ship aims at the cursor, tokens power every level-up, and the opening weapon choice shapes how the whole run starts.";
+      overlayButton.textContent = "Choose Weapon";
+      startButton.textContent = "Pick Starter";
       setDebugStatus("Testing actions start a run automatically if needed.");
       renderLoadout();
       updateHud();
@@ -1313,12 +1350,35 @@
       if (!state.player) {
         resetRun();
       }
+      if (!state.player.weapons.length) {
+        openStarterDraft();
+        return;
+      }
       state.running = true;
       state.paused = false;
       state.lastTick = 0;
       overlay.classList.add("hidden");
       startButton.textContent = "Restart Run";
       requestAnimationFrame(loop);
+    }
+
+    function handleStartRequest() {
+      if (!state.player) {
+        resetRun();
+      }
+
+      if (state.running) {
+        resetRun();
+        openStarterDraft();
+        return;
+      }
+
+      const hasProgress = state.runTime > 0 || state.score > 0 || state.wave > 1 || state.tokensCollected > 0 || state.player.hp <= 0;
+      if (hasProgress || state.player.weapons.length || state.player.passives.length) {
+        resetRun();
+      }
+
+      openStarterDraft();
     }
 
     function togglePause() {
@@ -1407,11 +1467,11 @@
       });
     }
 
-    function spawnSwing(range, width, damage, color) {
+    function spawnSwing(range, width, damage, color, angle = state.player.aimAngle) {
       state.swings.push({
         x: state.player.x,
         y: state.player.y,
-        angle: state.player.aimAngle,
+        angle,
         range,
         width,
         lifetime: 0.13,
@@ -1426,8 +1486,8 @@
         if (distance > range + enemy.radius) {
           continue;
         }
-        const angle = Math.atan2(dy, dx);
-        const delta = Math.atan2(Math.sin(angle - state.player.aimAngle), Math.cos(angle - state.player.aimAngle));
+        const enemyAngle = Math.atan2(dy, dx);
+        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
         if (Math.abs(delta) <= width * 0.5) {
           enemy.hp -= damage;
         }
@@ -1741,8 +1801,8 @@
         }
 
         if (poison) {
-          const radius = (poison.fusion ? 44 : 34) + poison.rank * (poison.fusion ? 1.7 : 1.5) * mods.projectileSize;
-          const damage = ((poison.fusion ? 14 : 10) + poison.rank * (poison.fusion ? 2.4 : 1.9)) * mods.damage;
+          const radius = ((poison.fusion ? 44 : 34) + poison.rank * (poison.fusion ? 1.7 : 1.5)) * mods.projectileSize;
+          const damage = ((poison.fusion ? 14 : 10) + poison.rank * (poison.fusion ? 2.4 : 1.9)) * mods.damage * mods.attackSpeed;
           if (distance <= radius + enemy.radius) {
             enemy.hp -= damage * dt;
           }
@@ -1889,7 +1949,7 @@
         state.player.hp = Math.min(state.player.maxHp, state.player.hp + rank);
       }
       if (key === "magnet") {
-        state.repairPerHull = Math.max(5, state.repairPerHull - rank);
+        state.repairPerHull = Math.max(12, state.repairPerHull - rank * 2);
       }
       if (key === "move_speed") {
         state.player.baseSpeed += 6 * rank;
@@ -1922,7 +1982,7 @@
         state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1);
       }
       if (key === "magnet") {
-        state.repairPerHull = Math.max(5, state.repairPerHull - 1);
+        state.repairPerHull = Math.max(12, state.repairPerHull - 2);
       }
       if (key === "move_speed") {
         state.player.baseSpeed += 6;
@@ -2246,6 +2306,9 @@
         resetRun();
       }
       if (!state.running) {
+        if (!state.player.weapons.length) {
+          addWeapon("single_shot", 1);
+        }
         startRun();
         setDebugStatus("Run started for debug testing.");
       }
@@ -2727,21 +2790,9 @@
       keys.delete(key);
     });
 
-    startButton.addEventListener("click", () => {
-      if (state.running) {
-        resetRun();
-      } else {
-        startRun();
-      }
-    });
+    startButton.addEventListener("click", handleStartRequest);
 
-    overlayButton.addEventListener("click", () => {
-      if (state.running) {
-        resetRun();
-      } else {
-        startRun();
-      }
-    });
+    overlayButton.addEventListener("click", handleStartRequest);
 
     pauseButton.addEventListener("click", togglePause);
     dashButton.addEventListener("click", triggerDash);
