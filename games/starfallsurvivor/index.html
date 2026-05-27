@@ -448,6 +448,11 @@
       display: none;
     }
 
+    .canvas-shell.draft-open .mobile-stick,
+    .canvas-shell.draft-open .mobile-quick-button {
+      display: none;
+    }
+
     .mobile-exit-fullscreen {
       display: none;
       top: max(12px, env(safe-area-inset-top));
@@ -467,6 +472,7 @@
       background: rgba(8, 10, 18, 0.58);
       transition: opacity 160ms ease, visibility 160ms ease;
       z-index: 4;
+      overflow: hidden;
     }
 
     .canvas-shell:fullscreen .mobile-control-layer {
@@ -483,12 +489,20 @@
     .overlay-card,
     .draft-card {
       width: min(780px, 100%);
+      max-height: 100%;
       padding: 28px;
       border-radius: 24px;
       border: 1px solid rgba(119, 168, 255, 0.18);
       background: linear-gradient(180deg, rgba(19, 20, 33, 0.95), rgba(31, 24, 45, 0.94));
       box-shadow: 0 24px 60px var(--shadow-strong);
       text-align: center;
+    }
+
+    .draft-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .overlay-kicker {
@@ -517,10 +531,16 @@
       gap: 12px;
       margin-top: 18px;
       text-align: left;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-right: 4px;
     }
 
     .draft-actions {
       display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
       justify-content: flex-end;
       margin-top: 14px;
     }
@@ -869,22 +889,75 @@
 
       .overlay,
       .draft-panel {
-        inset: 10px;
-        padding: 12px;
+        inset: 6px;
+        padding: 6px;
+        align-items: stretch;
       }
 
       .overlay-card,
       .draft-card {
-        padding: 22px;
+        width: 100%;
+        max-height: 100%;
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .draft-card {
+        text-align: left;
+      }
+
+      .overlay-kicker {
+        margin-bottom: 6px;
+        font-size: 0.62rem;
+      }
+
+      .overlay-card h2,
+      .draft-card h2 {
+        margin-bottom: 6px;
+        font-size: clamp(1.15rem, 6vw, 1.45rem);
+      }
+
+      .overlay-copy {
+        margin-bottom: 8px;
+        font-size: 0.78rem;
+        line-height: 1.35;
       }
 
       .draft-grid {
         grid-template-columns: 1fr;
+        gap: 7px;
+        margin-top: 8px;
       }
 
       .draft-option {
-        padding: 12px;
-        border-radius: 14px;
+        padding: 9px;
+        border-radius: 10px;
+      }
+
+      .draft-type {
+        margin-bottom: 5px;
+        font-size: 0.58rem;
+      }
+
+      .draft-option strong {
+        margin-bottom: 4px;
+        font-size: 0.84rem;
+      }
+
+      .draft-option span {
+        font-size: 0.74rem;
+        line-height: 1.32;
+      }
+
+      .draft-actions {
+        justify-content: stretch;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .draft-actions .button {
+        flex: 1 1 0;
+        min-width: 0;
       }
 
       .sidebar-card {
@@ -928,6 +1001,45 @@
     }
 
     @media (max-width: 430px) {
+      .overlay,
+      .draft-panel {
+        inset: 4px;
+        padding: 4px;
+      }
+
+      .draft-card {
+        padding: 9px;
+      }
+
+      .draft-card h2 {
+        font-size: 1.08rem;
+      }
+
+      .overlay-copy {
+        font-size: 0.72rem;
+      }
+
+      .draft-grid {
+        gap: 5px;
+      }
+
+      .draft-option {
+        padding: 7px;
+      }
+
+      .draft-option span {
+        font-size: 0.7rem;
+      }
+
+      .draft-actions {
+        gap: 5px;
+      }
+
+      .draft-actions .button {
+        padding-inline: 6px;
+        font-size: 0.68rem;
+      }
+
       .mobile-stick {
         width: 96px;
         height: 96px;
@@ -2535,14 +2647,24 @@
       }
     }
 
+    function isDraftBlockingGameplay() {
+      return state.draftMode === "level" || state.draftMode === "fusion";
+    }
+
+    function syncBackgroundMusic() {
+      setBackgroundMusicPlaying(state.running && !state.paused && !isDraftBlockingGameplay());
+    }
+
     function closeDraft() {
-      const wasBlocking = state.draftMode === "fusion";
+      const wasBlocking = isDraftBlockingGameplay();
       state.draftMode = null;
       state.draftOptions = [];
       draftPanel.classList.add("hidden");
+      canvasShell.classList.remove("draft-open");
       if (wasBlocking) {
         state.lastTick = 0;
       }
+      syncBackgroundMusic();
     }
 
     function showDraft(kicker, title, text, options, mode) {
@@ -2569,6 +2691,8 @@
       rerollButton.hidden = mode !== "level";
       hideDraftButton.hidden = mode !== "level";
       draftPanel.classList.remove("hidden");
+      canvasShell.classList.add("draft-open");
+      syncBackgroundMusic();
     }
 
     function buildStarterDraftOptions() {
@@ -2669,7 +2793,7 @@
       state.lastTick = 0;
       overlay.classList.add("hidden");
       startButton.textContent = "Restart Run";
-      setBackgroundMusicPlaying(true);
+      syncBackgroundMusic();
       requestAnimationFrame(loop);
     }
 
@@ -2703,7 +2827,7 @@
       if (!state.paused) {
         state.lastTick = 0;
       }
-      setBackgroundMusicPlaying(!state.paused);
+      syncBackgroundMusic();
       updateHud();
     }
 
@@ -3087,7 +3211,7 @@
 
     function triggerDash() {
       const mods = getStatMods();
-      if (!state.running || state.paused || state.draftMode === "starter" || state.draftMode === "fusion" || (!mods.dashNoCooldown && state.player.dashCooldownRemaining > 0) || state.player.dashTimer > 0) {
+      if (!state.running || state.paused || state.draftMode === "starter" || isDraftBlockingGameplay() || (!mods.dashNoCooldown && state.player.dashCooldownRemaining > 0) || state.player.dashTimer > 0) {
         return;
       }
       state.player.dashTimer = state.player.dashDuration;
@@ -4838,7 +4962,7 @@
       const dt = Math.min(0.033, (timestamp - state.lastTick) / 1000);
       state.lastTick = timestamp;
 
-      if (!state.paused && state.draftMode !== "fusion") {
+      if (!state.paused && !isDraftBlockingGameplay()) {
         state.runTime += dt;
         updatePlayer(dt);
         updateBullets(dt);
