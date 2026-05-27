@@ -296,6 +296,12 @@
       grid-column: span 3;
     }
 
+    .utility-actions {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
     @media (max-width: 1060px) {
       .layout {
         grid-template-columns: 1fr;
@@ -377,6 +383,10 @@
             <span></span>
             <button class="button wide" data-move="0,0" type="button">Pass Turn</button>
           </div>
+
+          <div class="utility-actions">
+            <button class="button primary" id="tonicButton" type="button">Buy Field Tonic</button>
+          </div>
         </section>
 
         <section class="panel sidebar-card">
@@ -397,8 +407,14 @@
     const logNode = document.getElementById("log");
     const waitButton = document.getElementById("waitButton");
     const restartButton = document.getElementById("restartButton");
+    const tonicButton = document.getElementById("tonicButton");
 
     const SIZE = 12;
+    const enemyTypes = [
+      { name: "Crawler", glyph: "g", hp: 6, attack: 1, gold: 4 },
+      { name: "Needle Shade", glyph: "s", hp: 4, attack: 2, gold: 5 },
+      { name: "Moss Brute", glyph: "B", hp: 11, attack: 2, gold: 8 }
+    ];
 
     const state = {
       running: true,
@@ -415,6 +431,10 @@
       stairs: { x: 10, y: 10 },
       log: []
     };
+
+    function tonicCost() {
+      return 10 + state.floor * 2;
+    }
 
     function pushLog(text) {
       state.log.unshift(text);
@@ -478,10 +498,14 @@
       for (let index = 0; index < 4 + state.floor; index += 1) {
         const enemy = randomOpenCell(reserved);
         reserved.push(enemy);
+        const type = enemyTypes[Math.min(enemyTypes.length - 1, Math.floor(Math.random() * (state.floor >= 3 ? 3 : 2)))];
         state.enemies.push({
           ...enemy,
-          hp: 6 + state.floor * 2,
-          attack: 1 + Math.floor(state.floor / 2)
+          name: type.name,
+          glyph: type.glyph,
+          hp: type.hp + state.floor * 2,
+          attack: type.attack + Math.floor(state.floor / 2),
+          gold: type.gold + state.floor
         });
       }
 
@@ -509,9 +533,9 @@
       enemy.hp -= damage;
       pushLog("You strike for " + damage + ".");
       if (enemy.hp <= 0) {
-        state.gold += 4 + state.floor;
+        state.gold += enemy.gold;
         state.enemies = state.enemies.filter((entry) => entry !== enemy);
-        pushLog("The crawler collapses. You gather a little coin.");
+        pushLog(enemy.name + " collapses. You gather " + enemy.gold + " gold.");
       }
     }
 
@@ -535,6 +559,18 @@
         pushLog("You pocket a relic and feel stronger.");
       }
       removeItem(item);
+    }
+
+    function buyTonic() {
+      const cost = tonicCost();
+      if (!state.running || state.gold < cost || state.hp >= state.maxHp) {
+        return;
+      }
+      state.gold -= cost;
+      const healing = 6 + Math.floor(state.relics / 2);
+      state.hp = Math.min(state.maxHp, state.hp + healing);
+      pushLog("You spend " + cost + " gold on a field tonic and recover " + healing + " health.");
+      render();
     }
 
     function descend() {
@@ -664,7 +700,7 @@
           const enemy = enemyAt(x, y);
           if (enemy) {
             tile.className = "tile enemy";
-            tile.textContent = "g";
+            tile.textContent = enemy.glyph;
           }
 
           if (x === state.player.x && y === state.player.y) {
@@ -683,6 +719,10 @@
         item.textContent = entry;
         logNode.appendChild(item);
       });
+
+      const cost = tonicCost();
+      tonicButton.textContent = "Buy Field Tonic - " + cost + "g";
+      tonicButton.disabled = !state.running || state.gold < cost || state.hp >= state.maxHp;
     }
 
     function resetGame() {
@@ -710,6 +750,7 @@
     });
 
     restartButton.addEventListener("click", resetGame);
+    tonicButton.addEventListener("click", buyTonic);
 
     window.addEventListener("keydown", (event) => {
       if (["ArrowUp", "w", "W"].includes(event.key)) {

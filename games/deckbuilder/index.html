@@ -326,6 +326,12 @@
       display: grid;
     }
 
+    .reward-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     @media (max-width: 1060px) {
       .layout {
         grid-template-columns: 1fr;
@@ -421,6 +427,9 @@
               <p class="lead">Add one piece to the deck, then move to the next fight.</p>
             </div>
             <div class="hand" id="rewardOptions"></div>
+            <div class="reward-actions">
+              <button class="button" id="skipRewardButton" type="button">Skip Card, Recover 4</button>
+            </div>
           </section>
         </div>
       </article>
@@ -470,6 +479,7 @@
     const handNode = document.getElementById("hand");
     const rewardSection = document.getElementById("rewardSection");
     const rewardOptions = document.getElementById("rewardOptions");
+    const skipRewardButton = document.getElementById("skipRewardButton");
     const drawPileStat = document.getElementById("drawPileStat");
     const discardPileStat = document.getElementById("discardPileStat");
     const deckSizeStat = document.getElementById("deckSizeStat");
@@ -693,21 +703,34 @@
           "<p>" + def.text + "</p>";
         button.addEventListener("click", () => {
           state.player.deck.push(cardId);
-          state.awaitingReward = false;
-          rewardSection.classList.remove("visible");
-          state.encounter += 1;
-          state.wins += 1;
           pushLog(def.name + " joins the deck.");
-          if (state.wins >= 5) {
-            state.running = false;
-            pushLog("You clear the fifth duel. Baseline run complete.");
-            render();
-            return;
-          }
-          startEncounter();
+          advanceAfterReward();
         });
         rewardOptions.appendChild(button);
       });
+    }
+
+    function advanceAfterReward() {
+      state.awaitingReward = false;
+      rewardSection.classList.remove("visible");
+      state.encounter += 1;
+      state.wins += 1;
+      if (state.wins >= 5) {
+        state.running = false;
+        pushLog("You clear the fifth duel. Baseline run complete.");
+        render();
+        return;
+      }
+      startEncounter();
+    }
+
+    function skipReward() {
+      if (!state.awaitingReward) {
+        return;
+      }
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + 4);
+      pushLog("You skip the card and recover 4 health.");
+      advanceAfterReward();
     }
 
     function checkVictory() {
@@ -827,6 +850,7 @@
 
     endTurnButton.addEventListener("click", enemyTurn);
     restartButton.addEventListener("click", startRun);
+    skipRewardButton.addEventListener("click", skipReward);
 
     startRun();
   </script>

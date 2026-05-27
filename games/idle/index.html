@@ -121,6 +121,14 @@
       background: rgba(14, 10, 6, 0.44);
     }
 
+    .split-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
     .forge-shell {
       display: grid;
       gap: 18px;
@@ -129,7 +137,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 12px;
     }
 
@@ -155,6 +163,7 @@
     .core-shell {
       display: grid;
       place-items: center;
+      gap: 18px;
       min-height: 320px;
       padding: 24px;
       border-radius: 24px;
@@ -220,6 +229,39 @@
       margin-top: 8px;
     }
 
+    .heat-panel {
+      width: min(520px, 100%);
+      display: grid;
+      gap: 8px;
+    }
+
+    .heat-row,
+    .order-row,
+    .milestone-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .heat-meter {
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 194, 96, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .heat-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #ff8f3f, #fff0a4);
+      box-shadow: 0 0 18px rgba(255, 194, 96, 0.32);
+      transition: width 120ms ease;
+    }
+
     .store {
       display: grid;
       gap: 12px;
@@ -256,6 +298,21 @@
       font-size: 0.92rem;
     }
 
+    .store-effect {
+      margin-top: 10px;
+      color: var(--accent-3);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .store-item.locked {
+      opacity: 0.64;
+    }
+
+    .store-item.locked .button {
+      display: none;
+    }
+
     .buy-row {
       display: flex;
       justify-content: space-between;
@@ -289,6 +346,23 @@
       transform: none;
     }
 
+    .qty-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .qty-button {
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+    }
+
+    .qty-button.active {
+      color: #2b170d;
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+    }
+
     .progress {
       margin-top: 14px;
       height: 12px;
@@ -306,6 +380,40 @@
     .sidebar {
       display: grid;
       gap: 16px;
+    }
+
+    .order-card,
+    .milestone-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .order-card {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(22, 15, 9, 0.42);
+      border: 1px solid rgba(255, 194, 96, 0.12);
+    }
+
+    .order-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .order-card p {
+      margin: 0;
+    }
+
+    .milestone-row {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(22, 15, 9, 0.4);
+    }
+
+    .milestone-row.unlocked {
+      color: var(--good);
+      border: 1px solid rgba(167, 255, 181, 0.18);
     }
 
     .log {
@@ -348,9 +456,9 @@
     <a class="back-link" href="/games/">← Back to Games</a>
 
     <section class="hero">
-      <span class="eyebrow">Clicker / Idle Prototype</span>
+      <span class="eyebrow">Clicker / Idle Foundry</span>
       <h1>Sunforge Idle</h1>
-      <p class="lead">A first incremental baseline built around feeding an unstable core, layering generators on top of manual clicks, and eventually overclocking the whole factory for long-run scaling.</p>
+      <p class="lead">Stoke a living solar forge, ride the heat curve, complete foundry orders, and overclock into stronger production loops.</p>
     </section>
 
     <section class="layout">
@@ -377,6 +485,14 @@
               <span class="stat-label">Overclocks</span>
               <strong id="coreStat">0</strong>
             </div>
+            <div class="stat">
+              <span class="stat-label">Heat</span>
+              <strong id="heatStat">0%</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Orders</span>
+              <strong id="orderStat">0</strong>
+            </div>
           </section>
 
           <section class="core-shell">
@@ -388,11 +504,24 @@
                 </div>
               </div>
             </button>
+            <div class="heat-panel">
+              <div class="heat-row">
+                <span>Heat multiplier</span>
+                <strong id="heatBonusStat">x1.00</strong>
+              </div>
+              <div class="heat-meter" aria-label="Forge heat">
+                <div class="heat-fill" id="heatFill"></div>
+              </div>
+              <div class="heat-row">
+                <span id="heatHint">Clicking builds heat. Heat fades if the forge is ignored.</span>
+                <strong id="heatCapStat">Cap 100</strong>
+              </div>
+            </div>
           </section>
 
           <section class="sidebar-card">
             <h2>Overclock</h2>
-            <p>When the forge starts feeling slow, collapse the current setup into a permanent core bonus and climb again from a stronger base.</p>
+            <p>Collapse the run into ember cores. Bigger runs award more cores at once, and every core permanently strengthens future loops.</p>
             <div class="progress">
               <div class="progress-bar" id="progressBar"></div>
             </div>
@@ -401,17 +530,28 @@
               <span id="bonusStat">x1.00 bonus</span>
             </div>
             <div class="buy-row">
-              <span class="store-tag">Reset for +1 core</span>
+              <span class="store-tag" id="overclockReward">Reset for +0 cores</span>
               <button class="button" id="overclockButton" type="button">Overclock</button>
             </div>
+          </section>
+
+          <section class="sidebar-card">
+            <h2>Forge Orders</h2>
+            <p>Orders give the run a short-term target and pay out sparks or permanent renown when claimed.</p>
+            <div class="order-card" id="orderCard"></div>
           </section>
         </div>
       </article>
 
       <aside class="sidebar">
         <section class="panel">
-          <div class="panel-head">
+          <div class="panel-head split-head">
             <span class="eyebrow">Factory Upgrades</span>
+            <div class="qty-controls" role="group" aria-label="Purchase quantity">
+              <button class="button qty-button active" type="button" data-buy-qty="1">x1</button>
+              <button class="button qty-button" type="button" data-buy-qty="10">x10</button>
+              <button class="button qty-button" type="button" data-buy-qty="max">Max</button>
+            </div>
           </div>
           <div class="store" id="store"></div>
         </section>
@@ -419,8 +559,13 @@
         <section class="panel">
           <div class="store">
             <div class="sidebar-card">
+              <h2>Milestones</h2>
+              <p>Permanent run bonuses unlocked by reaching specific foundry states.</p>
+              <div class="milestone-list" id="milestoneList"></div>
+            </div>
+            <div class="sidebar-card">
               <h2>Foundry Log</h2>
-              <p>A simple first-pass economy you can tune later with more milestones, automation layers, and longer reset loops.</p>
+              <p>Recent unlocks, claims, and offline progress.</p>
               <div class="log" id="log"></div>
             </div>
           </div>
@@ -430,145 +575,501 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "astral-tempest-sunforge-idle-v1";
+    const STORAGE_KEY = "astral-tempest-sunforge-idle-v2";
+    const LEGACY_STORAGE_KEY = "astral-tempest-sunforge-idle-v1";
 
     const sparksStat = document.getElementById("sparksStat");
     const rateStat = document.getElementById("rateStat");
     const clickStat = document.getElementById("clickStat");
     const coreStat = document.getElementById("coreStat");
+    const heatStat = document.getElementById("heatStat");
+    const orderStat = document.getElementById("orderStat");
     const tapGainLabel = document.getElementById("tapGainLabel");
     const bonusStat = document.getElementById("bonusStat");
+    const heatBonusStat = document.getElementById("heatBonusStat");
+    const heatCapStat = document.getElementById("heatCapStat");
+    const heatFill = document.getElementById("heatFill");
     const overclockHint = document.getElementById("overclockHint");
+    const overclockReward = document.getElementById("overclockReward");
     const progressBar = document.getElementById("progressBar");
     const storeNode = document.getElementById("store");
+    const orderCard = document.getElementById("orderCard");
+    const milestoneList = document.getElementById("milestoneList");
     const logNode = document.getElementById("log");
     const coreButton = document.getElementById("coreButton");
     const overclockButton = document.getElementById("overclockButton");
+    const qtyButtons = Array.from(document.querySelectorAll("[data-buy-qty]"));
 
     const upgradeDefs = [
       {
         id: "tapRig",
         name: "Tap Rig",
-        text: "Increase the sparks gained from each manual pulse.",
+        text: "Adds heavier striking arms to every manual pulse.",
+        tag: "Manual gain",
         baseCost: 15,
-        growth: 1.55
+        growth: 1.52,
+        unlock() {
+          return true;
+        },
+        lockedText: "Unlocked at start."
       },
       {
         id: "drone",
         name: "Relay Drone",
-        text: "Deploy an autonomous collector that trickles sparks every second.",
+        text: "Autonomous collectors pull sparks from the forge throat.",
+        tag: "Idle income",
         baseCost: 30,
-        growth: 1.62
+        growth: 1.58,
+        unlock() {
+          return true;
+        },
+        lockedText: "Unlocked at start."
+      },
+      {
+        id: "bellows",
+        name: "Bellows Array",
+        text: "Keeps heat alive longer and adds a little idle pressure.",
+        tag: "Heat engine",
+        baseCost: 120,
+        growth: 1.7,
+        unlock() {
+          return state.lifetime >= 180 || state.upgrades.tapRig >= 3;
+        },
+        lockedText: "Unlock after 180 lifetime sparks or 3 Tap Rigs."
       },
       {
         id: "refinery",
         name: "Heat Refinery",
-        text: "Multiply all production through cleaner, hotter conversion.",
-        baseCost: 95,
-        growth: 1.88
+        text: "Multiplies all production through cleaner conversion.",
+        tag: "Global multiplier",
+        baseCost: 420,
+        growth: 1.82,
+        unlock() {
+          return state.lifetime >= 750 || state.upgrades.drone >= 4;
+        },
+        lockedText: "Unlock after 750 lifetime sparks or 4 Relay Drones."
       },
       {
         id: "archive",
         name: "Archive Lattice",
-        text: "Raise both click and idle output with smarter routing.",
-        baseCost: 140,
-        growth: 1.95
+        text: "Stores better routing patterns for click and idle output.",
+        tag: "Routing bonus",
+        baseCost: 1600,
+        growth: 1.92,
+        unlock() {
+          return state.ordersCompleted >= 2 || state.lifetime >= 2500;
+        },
+        lockedText: "Unlock after 2 orders or 2.5k lifetime sparks."
+      },
+      {
+        id: "solarCrucible",
+        name: "Solar Crucible",
+        text: "Turns ember cores into a heavy late-run production engine.",
+        tag: "Core scaling",
+        baseCost: 12000,
+        growth: 2.12,
+        unlock() {
+          return state.cores >= 1 || state.lifetime >= 15000;
+        },
+        lockedText: "Unlock after your first core or 15k lifetime sparks."
+      }
+    ];
+
+    const milestoneDefs = [
+      {
+        id: "firstFlame",
+        name: "First Flame",
+        text: "+15% all production",
+        unlocked() {
+          return state.lifetime >= 100;
+        }
+      },
+      {
+        id: "hotHands",
+        name: "Hot Hands",
+        text: "+30% click output",
+        unlocked() {
+          return state.upgrades.tapRig >= 8;
+        }
+      },
+      {
+        id: "droneSwarm",
+        name: "Drone Swarm",
+        text: "+35% idle output",
+        unlocked() {
+          return state.upgrades.drone >= 5;
+        }
+      },
+      {
+        id: "stableBellows",
+        name: "Stable Bellows",
+        text: "Heat decays 25% slower",
+        unlocked() {
+          return state.upgrades.bellows >= 4;
+        }
+      },
+      {
+        id: "refineryChain",
+        name: "Refinery Chain",
+        text: "+20% global output",
+        unlocked() {
+          return state.upgrades.refinery >= 5;
+        }
+      },
+      {
+        id: "coreMemory",
+        name: "Core Memory",
+        text: "Each core adds extra heat capacity",
+        unlocked() {
+          return state.cores >= 1;
+        }
+      },
+      {
+        id: "contractHeat",
+        name: "Contract Heat",
+        text: "+10% output from foundry renown",
+        unlocked() {
+          return state.ordersCompleted >= 3;
+        }
       }
     ];
 
     const state = {
       sparks: 0,
-      total: 0,
+      runTotal: 0,
+      lifetime: 0,
       cores: 0,
+      renown: 0,
+      heat: 0,
+      ordersCompleted: 0,
+      buyQty: "1",
       upgrades: {
         tapRig: 0,
         drone: 0,
+        bellows: 0,
         refinery: 0,
-        archive: 0
+        archive: 0,
+        solarCrucible: 0
       },
       log: ["The forge is cold. Tap the core to begin."],
-      lastTick: performance.now()
+      lastTick: performance.now(),
+      lastSaved: Date.now()
     };
 
     const storeUi = {};
+    let lastRender = 0;
 
     function pushLog(text) {
       state.log.unshift(text);
-      state.log = state.log.slice(0, 6);
+      state.log = state.log.slice(0, 7);
     }
 
-    function upgradeCost(id) {
-      const def = upgradeDefs.find((entry) => entry.id === id);
-      const owned = state.upgrades[id];
-      return Math.floor(def.baseCost * Math.pow(def.growth, owned));
+    function milestoneUnlocked(id) {
+      const def = milestoneDefs.find((entry) => entry.id === id);
+      return Boolean(def && def.unlocked());
     }
 
     function globalBonus() {
-      return 1 + state.cores * 0.25;
+      let bonus = 1 + state.cores * 0.22 + state.renown * 0.04;
+      if (milestoneUnlocked("firstFlame")) {
+        bonus *= 1.15;
+      }
+      if (milestoneUnlocked("refineryChain")) {
+        bonus *= 1.2;
+      }
+      if (milestoneUnlocked("contractHeat")) {
+        bonus *= 1.1;
+      }
+      return bonus;
     }
 
     function archiveBonus() {
-      return 1 + state.upgrades.archive * 0.1;
+      return 1 + state.upgrades.archive * 0.11;
+    }
+
+    function heatCap() {
+      return 100 + state.ordersCompleted * 4 + state.cores * (milestoneUnlocked("coreMemory") ? 10 : 5);
+    }
+
+    function heatBonus() {
+      const cap = heatCap();
+      const heatRatio = cap > 0 ? Math.min(1, state.heat / cap) : 0;
+      return 1 + heatRatio * (0.65 + state.upgrades.bellows * 0.035 + state.cores * 0.01);
+    }
+
+    function heatDecayRate() {
+      const base = 8.5;
+      const bellowsReduction = Math.min(0.55, state.upgrades.bellows * 0.025);
+      const milestoneReduction = milestoneUnlocked("stableBellows") ? 0.25 : 0;
+      return base * Math.max(0.22, 1 - bellowsReduction - milestoneReduction);
     }
 
     function clickPower() {
-      return Math.max(1, Math.floor((1 + state.upgrades.tapRig) * archiveBonus() * globalBonus()));
+      let power = (1 + state.upgrades.tapRig * 1.18) * (1 + state.upgrades.bellows * 0.06);
+      power *= archiveBonus() * globalBonus() * heatBonus();
+      if (milestoneUnlocked("hotHands")) {
+        power *= 1.3;
+      }
+      return Math.max(1, power);
     }
 
     function perSecond() {
-      const flat = state.upgrades.drone * 0.7;
-      const refinery = 1 + state.upgrades.refinery * 0.15;
-      return flat * refinery * archiveBonus() * globalBonus();
+      const drone = state.upgrades.drone * 0.8;
+      const bellows = state.upgrades.bellows * 0.24;
+      const solar = state.upgrades.solarCrucible * (8 + state.cores * 2.4);
+      let idle = drone + bellows + solar;
+      idle *= (1 + state.upgrades.refinery * 0.17) * archiveBonus() * globalBonus() * heatBonus();
+      if (milestoneUnlocked("droneSwarm")) {
+        idle *= 1.35;
+      }
+      return idle;
     }
 
     function formatNumber(value) {
-      if (value >= 1000000) {
-        return (value / 1000000).toFixed(2) + "m";
+      const abs = Math.abs(value);
+      const units = [
+        [1e15, "q"],
+        [1e12, "t"],
+        [1e9, "b"],
+        [1e6, "m"],
+        [1e3, "k"]
+      ];
+      for (const [threshold, suffix] of units) {
+        if (abs >= threshold) {
+          return (value / threshold).toFixed(abs >= threshold * 100 ? 1 : 2).replace(/\.0+$/, "") + suffix;
+        }
       }
-      if (value >= 1000) {
-        return (value / 1000).toFixed(2) + "k";
-      }
-      return value.toFixed(value >= 100 ? 0 : 1).replace(".0", "");
+      return value.toFixed(abs >= 100 ? 0 : abs >= 10 ? 1 : 2).replace(/\.0+$/, "");
     }
 
-    function addSparks(amount) {
+    function addSparks(amount, countRunTotal = true) {
+      if (!Number.isFinite(amount) || amount <= 0) {
+        return;
+      }
       state.sparks += amount;
-      state.total += amount;
+      state.lifetime += amount;
+      if (countRunTotal) {
+        state.runTotal += amount;
+      }
+    }
+
+    function upgradeCost(id, offset = 0) {
+      const def = upgradeDefs.find((entry) => entry.id === id);
+      const owned = state.upgrades[id] + offset;
+      return Math.floor(def.baseCost * Math.pow(def.growth, owned));
+    }
+
+    function upgradeCostForQuantity(id, quantity) {
+      let total = 0;
+      for (let index = 0; index < quantity; index += 1) {
+        total += upgradeCost(id, index);
+      }
+      return total;
+    }
+
+    function maxAffordable(id) {
+      let count = 0;
+      let total = 0;
+      while (count < 500) {
+        const nextCost = upgradeCost(id, count);
+        if (total + nextCost > state.sparks) {
+          break;
+        }
+        total += nextCost;
+        count += 1;
+      }
+      return { count, cost: total };
+    }
+
+    function isUpgradeUnlocked(def) {
+      return def.unlock();
+    }
+
+    function purchasePlan(id) {
+      const def = upgradeDefs.find((entry) => entry.id === id);
+      if (!def || !isUpgradeUnlocked(def)) {
+        return { count: 0, cost: 0 };
+      }
+      if (state.buyQty === "max") {
+        return maxAffordable(id);
+      }
+      const requested = Number(state.buyQty);
+      const cost = upgradeCostForQuantity(id, requested);
+      return state.sparks >= cost ? { count: requested, cost } : { count: 0, cost };
     }
 
     function buyUpgrade(id) {
-      const cost = upgradeCost(id);
-      if (state.sparks < cost) {
+      const plan = purchasePlan(id);
+      if (plan.count <= 0) {
         return;
       }
 
-      state.sparks -= cost;
-      state.upgrades[id] += 1;
+      state.sparks -= plan.cost;
+      state.upgrades[id] += plan.count;
       const def = upgradeDefs.find((entry) => entry.id === id);
-      pushLog(def.name + " installed.");
-      render();
+      pushLog(`${def.name} installed x${plan.count}.`);
+      render(true);
       save();
     }
 
+    function overclockGain() {
+      if (state.runTotal < 500) {
+        return 0;
+      }
+      return Math.max(1, Math.floor(Math.sqrt(state.runTotal / 500)));
+    }
+
     function canOverclock() {
-      return state.total >= 500 && state.sparks >= 250;
+      return overclockGain() > 0 && state.sparks >= 250;
     }
 
     function overclock() {
+      const gained = overclockGain();
       if (!canOverclock()) {
         return;
       }
 
-      state.cores += 1;
+      state.cores += gained;
       state.sparks = 0;
+      state.runTotal = 0;
+      state.heat = 0;
       state.upgrades = {
         tapRig: 0,
         drone: 0,
+        bellows: 0,
         refinery: 0,
-        archive: 0
+        archive: 0,
+        solarCrucible: 0
       };
-      pushLog("The forge collapses inward and comes back stronger.");
-      render();
+      pushLog(`The forge collapses inward and reforms with +${gained} ember core${gained === 1 ? "" : "s"}.`);
+      render(true);
+      save();
+    }
+
+    function currentOrder() {
+      const index = state.ordersCompleted;
+      const fixedOrders = [
+        {
+          title: "Fit The First Tools",
+          text: "Own 3 Tap Rigs.",
+          progress() {
+            return `${Math.min(state.upgrades.tapRig, 3)} / 3 Tap Rigs`;
+          },
+          complete() {
+            return state.upgrades.tapRig >= 3;
+          },
+          reward() {
+            addSparks(75, false);
+          },
+          rewardText: "+75 sparks"
+        },
+        {
+          title: "Light Automation",
+          text: "Own 4 Relay Drones.",
+          progress() {
+            return `${Math.min(state.upgrades.drone, 4)} / 4 Relay Drones`;
+          },
+          complete() {
+            return state.upgrades.drone >= 4;
+          },
+          reward() {
+            addSparks(160, false);
+            state.renown += 1;
+          },
+          rewardText: "+160 sparks, +1 renown"
+        },
+        {
+          title: "Hold A Bright Charge",
+          text: "Bank 1,000 current sparks.",
+          progress() {
+            return `${formatNumber(Math.min(state.sparks, 1000))} / 1k sparks`;
+          },
+          complete() {
+            return state.sparks >= 1000;
+          },
+          reward() {
+            addSparks(300, false);
+          },
+          rewardText: "+300 sparks"
+        },
+        {
+          title: "Bellows Calibration",
+          text: "Own 3 Bellows Arrays and reach 60 heat.",
+          progress() {
+            return `${Math.min(state.upgrades.bellows, 3)} / 3 bellows, ${formatNumber(Math.min(state.heat, 60))} / 60 heat`;
+          },
+          complete() {
+            return state.upgrades.bellows >= 3 && state.heat >= 60;
+          },
+          reward() {
+            state.renown += 2;
+          },
+          rewardText: "+2 renown"
+        },
+        {
+          title: "Refinery Proof",
+          text: "Reach 25 sparks per second.",
+          progress() {
+            return `${formatNumber(Math.min(perSecond(), 25))} / 25 per second`;
+          },
+          complete() {
+            return perSecond() >= 25;
+          },
+          reward() {
+            addSparks(1000, false);
+            state.renown += 1;
+          },
+          rewardText: "+1k sparks, +1 renown"
+        },
+        {
+          title: "Core Study",
+          text: "Perform your first overclock.",
+          progress() {
+            return `${Math.min(state.cores, 1)} / 1 ember core`;
+          },
+          complete() {
+            return state.cores >= 1;
+          },
+          reward() {
+            state.renown += 3;
+          },
+          rewardText: "+3 renown"
+        }
+      ];
+
+      if (index < fixedOrders.length) {
+        return fixedOrders[index];
+      }
+
+      const cycle = index - fixedOrders.length + 1;
+      const targetSparks = 2500 * Math.pow(1.55, cycle);
+      const targetRate = 40 * Math.pow(1.28, cycle);
+      return {
+        title: `Solar Contract ${cycle}`,
+        text: `Bank ${formatNumber(targetSparks)} sparks and reach ${formatNumber(targetRate)} sparks per second.`,
+        progress() {
+          return `${formatNumber(Math.min(state.sparks, targetSparks))} / ${formatNumber(targetSparks)} sparks, ${formatNumber(Math.min(perSecond(), targetRate))} / ${formatNumber(targetRate)} per second`;
+        },
+        complete() {
+          return state.sparks >= targetSparks && perSecond() >= targetRate;
+        },
+        reward() {
+          addSparks(targetSparks * 0.28, false);
+          state.renown += 1;
+        },
+        rewardText: `+${formatNumber(targetSparks * 0.28)} sparks, +1 renown`
+      };
+    }
+
+    function claimOrder() {
+      const order = currentOrder();
+      if (!order.complete()) {
+        return;
+      }
+      order.reward();
+      state.ordersCompleted += 1;
+      pushLog(`Order complete: ${order.title}.`);
+      render(true);
       save();
     }
 
@@ -579,6 +1080,9 @@
         card.innerHTML =
           "<h2>" + def.name + "</h2>" +
           "<p>" + def.text + "</p>";
+
+        const effect = document.createElement("div");
+        effect.className = "store-effect";
 
         const meta = document.createElement("div");
         meta.className = "store-meta";
@@ -593,15 +1097,7 @@
 
         const tag = document.createElement("span");
         tag.className = "store-tag";
-        if (def.id === "tapRig") {
-          tag.textContent = "Manual gain";
-        } else if (def.id === "drone") {
-          tag.textContent = "Idle income";
-        } else if (def.id === "refinery") {
-          tag.textContent = "Global multiplier";
-        } else {
-          tag.textContent = "Routing bonus";
-        }
+        tag.textContent = def.tag;
 
         const button = document.createElement("button");
         button.type = "button";
@@ -611,11 +1107,14 @@
 
         row.appendChild(tag);
         row.appendChild(button);
+        card.appendChild(effect);
         card.appendChild(meta);
         card.appendChild(row);
         storeNode.appendChild(card);
 
         storeUi[def.id] = {
+          card,
+          effect,
           ownedLabel,
           costLabel,
           button
@@ -623,17 +1122,85 @@
       });
     }
 
+    function upgradeEffectText(id) {
+      if (id === "tapRig") {
+        return `Click base: +${formatNumber(1.18)} per rank before multipliers.`;
+      }
+      if (id === "drone") {
+        return `Idle base: +${formatNumber(0.8)} sparks/sec per rank.`;
+      }
+      if (id === "bellows") {
+        return "Adds idle pressure, heat strength, and slower heat decay.";
+      }
+      if (id === "refinery") {
+        return `All production: +${formatNumber(17)}% per rank.`;
+      }
+      if (id === "archive") {
+        return `Click and idle routing: +${formatNumber(11)}% per rank.`;
+      }
+      return "Scales hard with ember cores for late-run idle output.";
+    }
+
     function renderStore() {
       upgradeDefs.forEach((def) => {
-        const cost = upgradeCost(def.id);
         const owned = state.upgrades[def.id];
         const ui = storeUi[def.id];
         if (!ui) {
           return;
         }
+
+        const unlocked = isUpgradeUnlocked(def);
+        const plan = state.buyQty === "max" ? maxAffordable(def.id) : {
+          count: Number(state.buyQty),
+          cost: upgradeCostForQuantity(def.id, Number(state.buyQty))
+        };
+        ui.card.classList.toggle("locked", !unlocked);
+        ui.effect.textContent = unlocked ? upgradeEffectText(def.id) : def.lockedText;
         ui.ownedLabel.textContent = "Owned: " + owned;
-        ui.costLabel.textContent = "Cost: " + formatNumber(cost);
-        ui.button.disabled = state.sparks < cost;
+        ui.costLabel.textContent = unlocked
+          ? state.buyQty === "max"
+            ? plan.count > 0 ? `Max: ${plan.count} for ${formatNumber(plan.cost)}` : "Max: not enough sparks"
+            : `Cost x${plan.count}: ${formatNumber(plan.cost)}`
+          : "Locked";
+        ui.button.disabled = !unlocked || plan.count <= 0 || state.sparks < plan.cost;
+        ui.button.textContent = state.buyQty === "max" ? "Buy Max" : `Buy x${plan.count}`;
+      });
+    }
+
+    function renderOrder() {
+      const order = currentOrder();
+      const complete = order.complete();
+      orderCard.innerHTML = "";
+      const title = document.createElement("h3");
+      title.textContent = order.title;
+      const text = document.createElement("p");
+      text.textContent = order.text;
+      const progress = document.createElement("div");
+      progress.className = "order-row";
+      progress.innerHTML = `<span>${order.progress()}</span><strong>${order.rewardText}</strong>`;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "button";
+      button.textContent = complete ? "Claim Order" : "In Progress";
+      button.disabled = !complete;
+      button.addEventListener("click", claimOrder);
+      orderCard.appendChild(title);
+      orderCard.appendChild(text);
+      orderCard.appendChild(progress);
+      orderCard.appendChild(button);
+    }
+
+    function renderMilestones() {
+      milestoneList.innerHTML = "";
+      milestoneDefs.forEach((def) => {
+        const row = document.createElement("div");
+        const unlocked = def.unlocked();
+        row.className = "milestone-row" + (unlocked ? " unlocked" : "");
+        row.innerHTML = `<span>${def.name}</span><strong>${unlocked ? "Active" : def.text}</strong>`;
+        if (unlocked) {
+          row.title = def.text;
+        }
+        milestoneList.appendChild(row);
       });
     }
 
@@ -647,71 +1214,117 @@
       });
     }
 
-    function render() {
+    function render(force = false) {
+      const now = performance.now();
+      if (!force && now - lastRender < 100) {
+        return;
+      }
+      lastRender = now;
+
       const gain = clickPower();
       const idle = perSecond();
       const bonus = globalBonus();
-      const progress = Math.min(1, state.total / 500);
+      const cap = heatCap();
+      const heatPercent = cap > 0 ? Math.min(100, (state.heat / cap) * 100) : 0;
+      const nextCoreProgress = Math.min(1, state.runTotal / 500);
+      const coresToGain = overclockGain();
 
       sparksStat.textContent = formatNumber(state.sparks);
       rateStat.textContent = formatNumber(idle);
       clickStat.textContent = formatNumber(gain);
       coreStat.textContent = String(state.cores);
+      heatStat.textContent = `${heatPercent.toFixed(0)}%`;
+      orderStat.textContent = String(state.ordersCompleted);
       tapGainLabel.textContent = "+" + formatNumber(gain) + " sparks";
-      bonusStat.textContent = "x" + bonus.toFixed(2) + " bonus";
-      progressBar.style.width = (progress * 100).toFixed(1) + "%";
+      bonusStat.textContent = "x" + bonus.toFixed(2) + " global";
+      heatBonusStat.textContent = "x" + heatBonus().toFixed(2);
+      heatCapStat.textContent = "Cap " + formatNumber(cap);
+      heatFill.style.width = heatPercent.toFixed(1) + "%";
+      progressBar.style.width = (nextCoreProgress * 100).toFixed(1) + "%";
       overclockButton.disabled = !canOverclock();
+      overclockReward.textContent = `Reset for +${coresToGain} core${coresToGain === 1 ? "" : "s"}`;
       overclockHint.textContent = canOverclock()
-        ? "Reset now for a permanent +25% global bonus."
-        : "Reach 500 total sparks and bank 250 current sparks to overclock.";
+        ? "Ready. Larger run totals pay multiple cores at once."
+        : "Reach 500 run sparks and bank 250 current sparks to overclock.";
 
       renderStore();
+      renderOrder();
+      renderMilestones();
       renderLog();
     }
 
     function tick(now) {
       const dt = Math.min(0.25, (now - state.lastTick) / 1000);
       state.lastTick = now;
+      state.heat = Math.max(0, state.heat - heatDecayRate() * dt);
       addSparks(perSecond() * dt);
       render();
       requestAnimationFrame(tick);
     }
 
     function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      try {
+        state.lastSaved = Date.now();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        return;
+      }
     }
 
     function load() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
         if (!raw) {
           return;
         }
         const data = JSON.parse(raw);
-        state.sparks = data.sparks || 0;
-        state.total = data.total || 0;
-        state.cores = data.cores || 0;
+        state.sparks = Number(data.sparks) || 0;
+        state.runTotal = Number(data.runTotal ?? data.total) || 0;
+        state.lifetime = Number(data.lifetime ?? data.total) || state.runTotal;
+        state.cores = Number(data.cores) || 0;
+        state.renown = Number(data.renown) || 0;
+        state.heat = Math.max(0, Number(data.heat) || 0);
+        state.ordersCompleted = Number(data.ordersCompleted) || 0;
+        state.buyQty = data.buyQty || "1";
         state.upgrades = { ...state.upgrades, ...(data.upgrades || {}) };
         state.log = Array.isArray(data.log) && data.log.length ? data.log : state.log;
+
+        const offlineSeconds = Math.min(28800, Math.max(0, (Date.now() - (Number(data.lastSaved) || Date.now())) / 1000));
+        if (offlineSeconds > 30) {
+          state.heat = 0;
+          const offlineSparks = perSecond() * offlineSeconds * 0.55;
+          addSparks(offlineSparks);
+          pushLog(`Offline burn gathered ${formatNumber(offlineSparks)} sparks over ${formatNumber(offlineSeconds / 60)} minutes.`);
+        }
       } catch (error) {
         state.log = ["Save data could not be loaded. Starting fresh."];
       }
     }
 
-    coreButton.addEventListener("click", () => {
+    function stokeForge() {
       const gain = clickPower();
       addSparks(gain);
-      render();
-    });
+      state.heat = Math.min(heatCap(), state.heat + 7 + state.upgrades.bellows * 0.45 + state.cores * 0.08);
+      render(true);
+    }
 
+    coreButton.addEventListener("click", stokeForge);
     overclockButton.addEventListener("click", overclock);
+    qtyButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        state.buyQty = button.dataset.buyQty;
+        qtyButtons.forEach((candidate) => candidate.classList.toggle("active", candidate === button));
+        render(true);
+      });
+    });
 
     window.addEventListener("beforeunload", save);
     setInterval(save, 5000);
 
     load();
     buildStore();
-    render();
+    qtyButtons.forEach((button) => button.classList.toggle("active", button.dataset.buyQty === state.buyQty));
+    render(true);
     requestAnimationFrame((now) => {
       state.lastTick = now;
       tick(now);
