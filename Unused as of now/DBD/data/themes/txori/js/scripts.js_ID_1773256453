@@ -1,0 +1,141 @@
+/*
+    FONCTION MENU MOBILE (Placée en dehors pour être accessible via onclick)
+*/
+
+function mobileMenu() {
+    var container = document.getElementById("mobile-links");
+    var icon = document.getElementById("mobile-menu");
+    
+    if (!container || !icon) return;
+
+    // 1. On lance l'animation de la liste (Grid)
+    container.classList.toggle('is-open');
+    
+    // 2. On lance la rotation de l'icône via CSS
+    icon.classList.toggle('icon-rotate');
+
+    // 3. Changement de glyphe à mi-chemin de la rotation (effet morphing)
+    setTimeout(function() {
+        if (container.classList.contains('is-open')) {
+            icon.classList.replace('fa-bars', 'fa-xmark');
+        } else {
+            icon.classList.replace('fa-xmark', 'fa-bars');
+        }
+    }, 100); 
+}
+
+/*
+    SCRIPTS AU CHARGEMENT DE LA PAGE
+*/
+
+document.addEventListener("DOMContentLoaded", function(event)
+{
+    if (window.location.hostname != "www-txori-com.translate.goog")
+    {
+        if (window.self !== window.top){window.top.location.href=window.location.href;}
+        if (window.location.hostname != "www.txori.com"){window.location = "//www.txori.com";}
+    }
+
+    var scripts = document.getElementsByTagName("script");
+    var regex = new RegExp("\\b(?:hammerhead|rammerhead)\\b", "gi");
+    for (i=0;i<scripts.length;i++){
+        if (scripts[i].src.toString().match(regex)) window.location = "//www.txori.com";
+    }
+
+
+    /*
+        Gestion de la position du menu flottant (impossible en css pur)
+    */
+
+    if (document.getElementById('header')) {
+        function scrollScreen() {
+            var nav = document.getElementById('navfloat');
+            if (window.scrollY < 211) nav.style.display = 'none';
+            else nav.style.display = 'block';
+        }
+        document.addEventListener('scroll', scrollScreen);
+    }
+
+
+    /*
+        Suppression des tooltips Google Translate
+    */
+
+    setTimeout(function() { disableTranslationTooltips(); }, 1000);
+    function disableTranslationTooltips()
+    {  
+        _tipon = function()  { /*Don't display the tooltip*/ };
+        _tipoff = function() { /*Don't hide the tooltip*/ };
+    }
+
+    function matchWordsbis(subject, words)
+    {
+        //var regexMetachars = /[(){[*+?.\\^$|]/g;
+        //for (var i = 0; i < words.length; i++) words[i] = words[i].replace(regexMetachars, "\\$&");
+        //var regex = new RegExp("\\b(?:" + words.join("|") + ")\\b", "gi");
+        var regex = new RegExp("\\b(?:" + words + ")\\b", "gi");
+        if (subject.match(regex)) return true;
+    }
+
+    /*
+        Gentil message ♡
+    */
+    console.log("%c Support my work, instead, so I can continue making the games you ♡", "color:#F700C0;font-size:20px;font-weight:bold;background:#000;padding:10px;border: 2px solid #F700C0;text-align:center");
+
+
+    /*
+        Live online users updater (Focus sensitive)
+    */
+    (function(){
+        const brdStats = document.getElementById('brdstats');
+        if (!brdStats) return;
+
+        const intervalSec = 10;
+        let timerId = null;
+
+        function updateOnline() {
+            clearTimeout(timerId);
+
+            if (document.visibilityState !== 'visible') return; 
+
+            fetch('include/user/ajax_online.php')
+                .then(resp => {
+                    if (!resp.ok) return null;
+                    return resp.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    let html = ``;
+                    if (data.num_guests > 0) html += `Guests online: ${data.num_guests}<br>`;
+                    
+                    const users = Object.entries(data.users);
+                    if (users.length) {
+                        html += 'Online: ' + users.map(([id, name]) => 
+                            `<a href="profile.php?id=${id}">${name}</a>`
+                        ).join(', ');
+                    }
+
+                    brdStats.innerHTML = html;
+                })
+                .catch(err => console.debug("Online update paused"));
+                
+            // On replanifie
+            timerId = setTimeout(updateOnline, intervalSec * 1000);
+        }
+
+        // Gestion du changement de visibilité
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'visible') {
+                // L'utilisateur revient : on rafraîchit immédiatement
+                updateOnline();
+            } else {
+                // L'utilisateur part : on coupe le timer immédiatement
+                clearTimeout(timerId);
+            }
+        });
+
+        // Exécution immédiate au chargement
+        updateOnline();
+    })();
+});

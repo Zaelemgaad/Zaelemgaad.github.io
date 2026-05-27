@@ -1,0 +1,452 @@
+define([], function(m) {
+// This file has been automatically generated.
+
+var exports = {};
+
+var val = 0;
+exports.ICONS_FILLER_0 = val++;
+exports.TRAP_NET = val++;
+exports.MASK_DEEP_WATER = val++;
+exports.MASK_SHALLOW_WATER = val++;
+exports.MASK_DEEP_WATER_MURKY = val++;
+exports.MASK_SHALLOW_WATER_MURKY = val++;
+exports.MASK_DEEP_WATER_SHOALS = val++;
+exports.MASK_SHALLOW_WATER_SHOALS = val++;
+exports.MASK_LAVA = val++;
+exports.CURSOR = val++;
+exports.CURSOR2 = val++;
+exports.CURSOR3 = val++;
+exports.TUTORIAL_CURSOR = val++;
+exports.TRAP_WEB = val++;
+exports.FRIENDLY = val++;
+exports.GOOD_NEUTRAL = val++;
+exports.NEUTRAL = val++;
+exports.ANIMATED_WEAPON = val++;
+exports.SUMMONED = val++;
+exports.PERM_SUMMON = val++;
+exports.POISON = val++;
+exports.STICKY_FLAME = val++;
+exports.INNER_FLAME = val++;
+exports.CONSTRICTED = val++;
+exports.BERSERK = val++;
+exports.GLOWING = val++;
+exports.SLOWED = val++;
+exports.HASTED = val++;
+exports.MIGHT = val++;
+exports.PETRIFYING = val++;
+exports.PETRIFIED = val++;
+exports.BLIND = val++;
+exports.FLEEING = val++;
+exports.MAY_STAB_BRAND = val++;
+exports.STAB_BRAND = val++;
+exports.PAIN_MIRROR = val++;
+exports.DEATHS_DOOR = val++;
+exports.RECALL = val++;
+exports.DRAIN = val++;
+exports.IDEALISED = val++;
+exports.BOUND_SOUL = val++;
+exports.INFESTED = val++;
+exports.CORRODED = val++;
+exports.SWIFT = val++;
+exports.PINNED = val++;
+exports.VILE_CLUTCH = val++;
+exports.POSSESSABLE = val++;
+exports.SOMETHING_UNDER = val++;
+exports.NEW_STAIR = val++;
+exports.NEW_TRANSPORTER = val++;
+exports.MESH = val++;
+exports.OOR_MESH = val++;
+exports.MAGIC_MAP_MESH = val++;
+exports.TRAVEL_EXCLUSION_FG = val++;
+exports.TRAVEL_EXCLUSION_CENTRE_FG = val++;
+exports.NUM0 = val++;
+exports.NUM1 = val++;
+exports.NUM2 = val++;
+exports.NUM3 = val++;
+exports.NUM4 = val++;
+exports.NUM5 = val++;
+exports.NUM6 = val++;
+exports.NUM7 = val++;
+exports.NUM8 = val++;
+exports.NUM9 = val++;
+exports.NUM_MINUS5 = val++;
+exports.NUM_MINUS4 = val++;
+exports.NUM_MINUS3 = val++;
+exports.NUM_MINUS2 = val++;
+exports.NUM_MINUS1 = val++;
+exports.NUM_ZERO = val++;
+exports.NUM_PLUS1 = val++;
+exports.NUM_PLUS2 = val++;
+exports.NUM_PLUS3 = val++;
+exports.NUM_PLUS4 = val++;
+exports.NUM_PLUS5 = val++;
+exports.DEMON_NUM1 = val++;
+exports.DEMON_NUM2 = val++;
+exports.DEMON_NUM3 = val++;
+exports.DEMON_NUM4 = val++;
+exports.DEMON_NUM5 = val++;
+exports.ITEM_SLOT_SELECTED = val++;
+exports.MDAM_LIGHTLY_DAMAGED = val++;
+exports.MDAM_MODERATELY_DAMAGED = val++;
+exports.MDAM_HEAVILY_DAMAGED = val++;
+exports.MDAM_SEVERELY_DAMAGED = val++;
+exports.MDAM_ALMOST_DEAD = val++;
+exports.TRAVEL_PATH_FROM = val++;
+exports.TRAVEL_PATH_FROM_1 = val++;
+exports.TRAVEL_PATH_FROM_2 = val++;
+exports.TRAVEL_PATH_FROM_3 = val++;
+exports.TRAVEL_PATH_FROM_4 = val++;
+exports.TRAVEL_PATH_FROM_5 = val++;
+exports.TRAVEL_PATH_FROM_6 = val++;
+exports.TRAVEL_PATH_FROM_7 = val++;
+exports.TRAVEL_PATH_TO = val++;
+exports.TRAVEL_PATH_TO_1 = val++;
+exports.TRAVEL_PATH_TO_2 = val++;
+exports.TRAVEL_PATH_TO_3 = val++;
+exports.TRAVEL_PATH_TO_4 = val++;
+exports.TRAVEL_PATH_TO_5 = val++;
+exports.TRAVEL_PATH_TO_6 = val++;
+exports.TRAVEL_PATH_TO_7 = val++;
+exports.ICONS_MAX = exports.TILEI_ICONS_MAX = val++;
+
+var tile_info = [
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 0, sy: 0, ex: 32, ey: 32},
+  {w: 32, h: 32, ox: 1, oy: 1, sx: 32, sy: 0, ex: 62, ey: 30},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 62, sy: 0, ex: 94, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 94, sy: 0, ex: 126, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 126, sy: 0, ex: 158, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 158, sy: 0, ex: 190, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 190, sy: 0, ex: 222, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 222, sy: 0, ex: 254, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 16, sx: 254, sy: 0, ex: 286, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 286, sy: 0, ex: 318, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 318, sy: 0, ex: 350, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 350, sy: 0, ex: 382, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 382, sy: 0, ex: 414, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 414, sy: 0, ex: 446, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 446, sy: 0, ex: 478, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 478, sy: 0, ex: 510, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 510, sy: 0, ex: 542, ey: 32},
+  {w: 32, h: 32, ox: 1, oy: 0, sx: 542, sy: 0, ex: 551, ey: 13},
+  {w: 32, h: 32, ox: 1, oy: 1, sx: 542, sy: 13, ex: 548, ey: 19},
+  {w: 32, h: 32, ox: 1, oy: 1, sx: 542, sy: 19, ex: 548, ey: 25},
+  {w: 32, h: 32, ox: 26, oy: 0, sx: 551, sy: 0, ex: 557, ey: 11},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 551, sy: 11, ex: 558, ey: 22},
+  {w: 32, h: 32, ox: 24, oy: 0, sx: 558, sy: 0, ex: 566, ey: 11},
+  {w: 32, h: 32, ox: 21, oy: 1, sx: 558, sy: 11, ex: 569, ey: 20},
+  {w: 32, h: 32, ox: 19, oy: 22, sx: 558, sy: 20, ex: 571, ey: 30},
+  {w: 32, h: 32, ox: 24, oy: 0, sx: 571, sy: 0, ex: 579, ey: 11},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 571, sy: 11, ex: 578, ey: 22},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 579, sy: 0, ex: 586, ey: 11},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 579, sy: 11, ex: 586, ey: 22},
+  {w: 32, h: 32, ox: 25, oy: 2, sx: 579, sy: 22, ex: 586, ey: 31},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 586, sy: 0, ex: 593, ey: 11},
+  {w: 32, h: 32, ox: 21, oy: 2, sx: 586, sy: 11, ex: 597, ey: 18},
+  {w: 32, h: 32, ox: 28, oy: 0, sx: 586, sy: 18, ex: 590, ey: 30},
+  {w: 32, h: 32, ox: 24, oy: 0, sx: 597, sy: 0, ex: 605, ey: 12},
+  {w: 32, h: 32, ox: 19, oy: 0, sx: 597, sy: 12, ex: 610, ey: 23},
+  {w: 32, h: 32, ox: 24, oy: 0, sx: 610, sy: 0, ex: 618, ey: 11},
+  {w: 32, h: 32, ox: 21, oy: 0, sx: 610, sy: 11, ex: 621, ey: 22},
+  {w: 32, h: 32, ox: 23, oy: 0, sx: 621, sy: 0, ex: 630, ey: 11},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 621, sy: 11, ex: 628, ey: 22},
+  {w: 32, h: 32, ox: 19, oy: 23, sx: 621, sy: 22, ex: 634, ey: 31},
+  {w: 32, h: 32, ox: 26, oy: 0, sx: 634, sy: 0, ex: 640, ey: 6},
+  {w: 32, h: 32, ox: 26, oy: 0, sx: 634, sy: 6, ex: 640, ey: 14},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 634, sy: 14, ex: 641, ey: 25},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 641, sy: 0, ex: 648, ey: 11},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 641, sy: 11, ex: 648, ey: 22},
+  {w: 32, h: 32, ox: 21, oy: 0, sx: 648, sy: 0, ex: 659, ey: 10},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 648, sy: 10, ex: 655, ey: 21},
+  {w: 32, h: 32, ox: 0, oy: 23, sx: 648, sy: 21, ex: 664, ey: 30},
+  {w: 32, h: 32, ox: 25, oy: 0, sx: 664, sy: 0, ex: 671, ey: 8},
+  {w: 32, h: 32, ox: 18, oy: 0, sx: 664, sy: 8, ex: 671, ey: 16},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 671, sy: 0, ex: 703, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 703, sy: 0, ex: 735, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 735, sy: 0, ex: 767, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 767, sy: 0, ex: 799, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 799, sy: 0, ex: 831, ey: 32},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 831, sy: 0, ex: 839, ey: 9},
+  {w: 6, h: 14, ox: 0, oy: 2, sx: 831, sy: 9, ex: 837, ey: 18},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 831, sy: 18, ex: 839, ey: 27},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 839, sy: 0, ex: 847, ey: 10},
+  {w: 8, h: 14, ox: 0, oy: 1, sx: 839, sy: 10, ex: 847, ey: 21},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 839, sy: 21, ex: 847, ey: 31},
+  {w: 8, h: 14, ox: 0, oy: 1, sx: 847, sy: 0, ex: 855, ey: 10},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 847, sy: 10, ex: 855, ey: 20},
+  {w: 8, h: 14, ox: 0, oy: 1, sx: 847, sy: 20, ex: 855, ey: 30},
+  {w: 8, h: 14, ox: 0, oy: 2, sx: 855, sy: 0, ex: 863, ey: 10},
+  {w: 32, h: 32, ox: 15, oy: 20, sx: 855, sy: 10, ex: 869, ey: 20},
+  {w: 32, h: 32, ox: 15, oy: 19, sx: 855, sy: 20, ex: 869, ey: 31},
+  {w: 32, h: 32, ox: 16, oy: 20, sx: 869, sy: 0, ex: 882, ey: 10},
+  {w: 32, h: 32, ox: 16, oy: 20, sx: 869, sy: 10, ex: 882, ey: 19},
+  {w: 32, h: 32, ox: 17, oy: 20, sx: 869, sy: 19, ex: 881, ey: 28},
+  {w: 32, h: 32, ox: 21, oy: 20, sx: 882, sy: 0, ex: 890, ey: 9},
+  {w: 32, h: 32, ox: 18, oy: 20, sx: 882, sy: 9, ex: 893, ey: 18},
+  {w: 32, h: 32, ox: 17, oy: 20, sx: 882, sy: 18, ex: 894, ey: 27},
+  {w: 32, h: 32, ox: 17, oy: 20, sx: 894, sy: 0, ex: 906, ey: 10},
+  {w: 32, h: 32, ox: 16, oy: 19, sx: 894, sy: 10, ex: 907, ey: 21},
+  {w: 32, h: 32, ox: 16, oy: 20, sx: 894, sy: 21, ex: 907, ey: 31},
+  {w: 32, h: 32, ox: 19, oy: 19, sx: 907, sy: 0, ex: 920, ey: 13},
+  {w: 32, h: 32, ox: 19, oy: 19, sx: 907, sy: 13, ex: 920, ey: 26},
+  {w: 32, h: 32, ox: 19, oy: 19, sx: 920, sy: 0, ex: 933, ey: 13},
+  {w: 32, h: 32, ox: 19, oy: 19, sx: 920, sy: 13, ex: 933, ey: 26},
+  {w: 32, h: 32, ox: 19, oy: 19, sx: 933, sy: 0, ex: 946, ey: 13},
+  {w: 32, h: 32, ox: 0, oy: 0, sx: 946, sy: 0, ex: 978, ey: 32},
+  {w: 32, h: 32, ox: 0, oy: 30, sx: 978, sy: 0, ex: 1010, ey: 2},
+  {w: 32, h: 32, ox: 0, oy: 30, sx: 978, sy: 2, ex: 1010, ey: 4},
+  {w: 32, h: 32, ox: 0, oy: 30, sx: 978, sy: 4, ex: 1010, ey: 6},
+  {w: 32, h: 32, ox: 0, oy: 30, sx: 978, sy: 6, ex: 1010, ey: 8},
+  {w: 32, h: 32, ox: 0, oy: 30, sx: 978, sy: 8, ex: 1010, ey: 10},
+  {w: 32, h: 32, ox: 12, oy: 0, sx: 978, sy: 10, ex: 986, ey: 26},
+  {w: 32, h: 32, ox: 16, oy: 2, sx: 0, sy: 32, ex: 16, ey: 44},
+  {w: 32, h: 32, ox: 16, oy: 12, sx: 16, sy: 32, ex: 32, ey: 40},
+  {w: 32, h: 32, ox: 18, oy: 16, sx: 32, sy: 32, ex: 44, ey: 48},
+  {w: 32, h: 32, ox: 12, oy: 16, sx: 44, sy: 32, ex: 52, ey: 48},
+  {w: 32, h: 32, ox: 0, oy: 18, sx: 52, sy: 32, ex: 68, ey: 44},
+  {w: 32, h: 32, ox: 0, oy: 12, sx: 68, sy: 32, ex: 84, ey: 40},
+  {w: 32, h: 32, ox: 2, oy: 0, sx: 84, sy: 32, ex: 96, ey: 48},
+  {w: 32, h: 32, ox: 12, oy: 0, sx: 96, sy: 32, ex: 104, ey: 48},
+  {w: 32, h: 32, ox: 16, oy: 2, sx: 104, sy: 32, ex: 120, ey: 44},
+  {w: 32, h: 32, ox: 16, oy: 12, sx: 120, sy: 32, ex: 136, ey: 40},
+  {w: 32, h: 32, ox: 18, oy: 16, sx: 136, sy: 32, ex: 148, ey: 48},
+  {w: 32, h: 32, ox: 12, oy: 16, sx: 148, sy: 32, ex: 156, ey: 48},
+  {w: 32, h: 32, ox: 0, oy: 18, sx: 156, sy: 32, ex: 172, ey: 44},
+  {w: 32, h: 32, ox: 0, oy: 12, sx: 172, sy: 32, ex: 188, ey: 40},
+  {w: 32, h: 32, ox: 2, oy: 0, sx: 188, sy: 32, ex: 200, ey: 48},
+];
+
+exports.get_tile_info = function (idx)
+{
+    return tile_info[idx - 0];
+};
+
+var _tile_count =
+[
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    8,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    8,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+];
+
+exports.tile_count = function (idx)
+{
+    return _tile_count[idx - 0];
+}
+
+var _basetiles =
+[
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    87,
+    87,
+    87,
+    87,
+    87,
+    87,
+    87,
+    95,
+    95,
+    95,
+    95,
+    95,
+    95,
+    95,
+    95,
+];
+
+exports.basetile = function (idx)
+{
+    return _basetiles[idx - 0] + 0;
+};
+
+exports.get_img = function (idx) {
+    return "icons";
+};
+
+return exports;
+});

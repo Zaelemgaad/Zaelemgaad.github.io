@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Free Online naruto vs bleach Games | GamesLOL</title>
+<meta name="robots" content="noindex,follow"><meta name="viewport" content="user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, width=device-width, height=device-height">
+<link rel="manifest" href="manifest.json?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon-v2.png">
+<link rel="canonical" href="https://en.gameslol.net/naruto-vs-bleach-games.php">
+<link rel="alternate" hreflang="fr" href="https://www.gameslol.net/jeux-naruto-vs-bleach.php">
+<link rel="alternate" hreflang="en" href="https://en.gameslol.net/naruto-vs-bleach-games.php">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.min.css?23">
+<script src="js/all.min.js?2"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2304985967143948" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="header">
+  <a class="logo" href="/"><img src="images/logo3.png" alt="GamesLOL - Free Games" width="206" height="38"></a>
+  <div class="headwrap">
+    <div class="search">
+      <form action="search.php" method="get">
+        <input name="q" id="search" value="Search" type="search" maxlength="50" onBlur="if (this.value == '') {this.value = 'Search';}"  onfocus="if (this.value == 'Search') {this.value = '';}">
+        <button type="submit" class="icon-search"></button>
+      </form>
+    </div>
+    <button type="button" class="icon-search2"></button>
+    <div class="search2">
+	  <form action="search.php" method="get">
+	    <input name="q" id="search2" value="Search" type="search" maxlength="50" onBlur="if (this.value == '') {this.value = 'Search';}"  onfocus="if (this.value == 'Search') {this.value = '';}">
+        <span class="icon-close"></span>
+	  </form>
+	</div>
+  </div>
+  <a href="favorites.php" title="My Favorites" class="icon-fav favHead"></a>
+  <a href="https://www.gameslol.net/jeux-naruto-vs-bleach.php" title="Français" class="flag"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 472 309.25">
+      <path d="M157.33 309.24H38.14C4 309.24 0 280.38 0 271.1v-233C0 30.58.8 0 38.14 0h119.2v309.24z" fill="#2F3F8F"></path>
+      <path d="M157.34,0H314.67V309.25H157.34Z" fill="#E6EDF3"></path><path d="M314.67 309.24V0h119.2C470.1 0 472 30.7 472 38.14v233c0 8.18-1.1 38.14-38.14 38.14z" fill="#ff4b55"></path>
+    </svg></a>
+  <a href="https://en.gameslol.net/naruto-vs-bleach-games.php" title="English" class="flag"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 335.45">
+      <path d="M473.65 0H38.36A38.35 38.35 0 0 0 0 38.35V297.1a38.35 38.35 0 0 0 38.35 38.34h435.3A38.35 38.35 0 0 0 512 297.11V38.35A38.35 38.35 0 0 0 473.64 0z" fill="#2F3F8F"></path>
+      <path d="M511.47 32a38.35 38.35 0 0 0-37.81-32h-10L300.14 107.15V0h-88.28v107.15L48.32 0h-10A38.35 38.35 0 0 0 .53 32l139.78 91.58H0v88.27h140.3L.53 303.44a38.35 38.35 0 0 0 37.81 32h10L211.86 228.3v107.15h88.28V228.3l163.54 107.15h10a38.35 38.35 0 0 0 37.82-32l-139.8-91.6H512V123.6H371.7L511.47 32z" fill="#E6EDF3"></path>
+      <path d="M282.48 0h-53v141.24H0v53h229.52v141.2h53V194.2H512v-53H282.48zM24.78 333l186.6-121.14h-32.43L9.22 322a38.52 38.52 0 0 0 15.57 11zm321.6-121.12H314l180.68 117.3A38.55 38.55 0 0 0 507 316.09L346.4 211.86zM4.05 21.2l157.73 102.4h32.43L15.48 7.57A38.41 38.41 0 0 0 4.05 21.2zm328.52 102.4l170-110.38A38.49 38.49 0 0 0 486.9 2.35L300.14 123.6z" fill="#ff4b55"></path>
+	</svg></a>
+</div>
+
+<nav id="menuToggle">
+  <input type="checkbox">
+  <span></span><span></span><span></span>
+  <ul id="menu">
+    <li class="navhome">
+      <div class="navclose"></div>
+      <a href="favorites.php" style="color:#aaa; font-size:17px;margin-left: 15px;" class="icon-fav"></a>
+      <a href="https://www.gameslol.net/jeux-naruto-vs-bleach.php" style="height: 18px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 472 309.25">
+      <path d="M157.33 309.24H38.14C4 309.24 0 280.38 0 271.1v-233C0 30.58.8 0 38.14 0h119.2v309.24z" fill="#2F3F8F"></path>
+      <path d="M157.34,0H314.67V309.25H157.34Z" fill="#E6EDF3"></path><path d="M314.67 309.24V0h119.2C470.1 0 472 30.7 472 38.14v233c0 8.18-1.1 38.14-38.14 38.14z" fill="#ff4b55"></path>
+    </svg></a>
+      <a href="https://en.gameslol.net/naruto-vs-bleach-games.php" style="height: 18px;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 335.45">
+      <path d="M473.65 0H38.36A38.35 38.35 0 0 0 0 38.35V297.1a38.35 38.35 0 0 0 38.35 38.34h435.3A38.35 38.35 0 0 0 512 297.11V38.35A38.35 38.35 0 0 0 473.64 0z" fill="#2F3F8F"></path>
+      <path d="M511.47 32a38.35 38.35 0 0 0-37.81-32h-10L300.14 107.15V0h-88.28v107.15L48.32 0h-10A38.35 38.35 0 0 0 .53 32l139.78 91.58H0v88.27h140.3L.53 303.44a38.35 38.35 0 0 0 37.81 32h10L211.86 228.3v107.15h88.28V228.3l163.54 107.15h10a38.35 38.35 0 0 0 37.82-32l-139.8-91.6H512V123.6H371.7L511.47 32z" fill="#E6EDF3"></path>
+      <path d="M282.48 0h-53v141.24H0v53h229.52v141.2h53V194.2H512v-53H282.48zM24.78 333l186.6-121.14h-32.43L9.22 322a38.52 38.52 0 0 0 15.57 11zm321.6-121.12H314l180.68 117.3A38.55 38.55 0 0 0 507 316.09L346.4 211.86zM4.05 21.2l157.73 102.4h32.43L15.48 7.57A38.41 38.41 0 0 0 4.05 21.2zm328.52 102.4l170-110.38A38.49 38.49 0 0 0 486.9 2.35L300.14 123.6z" fill="#ff4b55"></path>
+	</svg></a>
+    </li>
+        <li class="navover"><a href="1-action-games.html" class="border0"><span class="navicon categ-1" aria-hidden="true"></span><div>Action Games</div></a></li><li class="navover"><a href="2-adventure-games.html" class="border0"><span class="navicon categ-2" aria-hidden="true"></span><div>Adventure Games</div></a></li><li class="navover"><a href="3-kids-games.html" class="border0"><span class="navicon categ-3" aria-hidden="true"></span><div>Kids Games</div></a></li><li class="navover"><a href="4-girl-games.html" class="border0"><span class="navicon categ-4" aria-hidden="true"></span><div>Girl Games</div></a></li><li class="navover"><a href="5-bike-games.html" class="border0"><span class="navicon categ-5" aria-hidden="true"></span><div>Bike Games</div></a></li><li class="navover"><a href="6-puzzle-games.html" class="border0"><span class="navicon categ-6" aria-hidden="true"></span><div>Puzzle Games</div></a></li><li class="navover"><a href="7-sports-games.html" class="border0"><span class="navicon categ-7" aria-hidden="true"></span><div>Sports Games</div></a></li><li class="navover"><a href="8-car-games.html" class="border0"><span class="navicon categ-8" aria-hidden="true"></span><div>Car Games</div></a></li>     <li class="navover"><a href="arcade-games.php" class="border1"><span class="navicon tag-21" aria-hidden="true"></span><div>Arcade</div></a></li> <li class="navover"><a href="board-games.php" class="border1"><span class="navicon tag-24" aria-hidden="true"></span><div>Board</div></a></li> <li class="navover"><a href="bubble-games.php" class="border1"><span class="navicon tag-1" aria-hidden="true"></span><div>Bubble</div></a></li> <li class="navover"><a href="card-games.php" class="border1"><span class="navicon tag-2" aria-hidden="true"></span><div>Card</div></a></li> <li class="navover"><a href="cooking-games.php" class="border1"><span class="navicon tag-4" aria-hidden="true"></span><div>Cooking</div></a></li> <li class="navover"><a href="dress-up-games.php" class="border1"><span class="navicon tag-7" aria-hidden="true"></span><div>Dress Up</div></a></li> <li class="navover"><a href="fighting-games.php" class="border1"><span class="navicon tag-3" aria-hidden="true"></span><div>Fighting</div></a></li> <li class="navover"><a href="hidden-objects-games.php" class="border1"><span class="navicon tag-11" aria-hidden="true"></span><div>Hidden Objects</div></a></li> <li class="navover"><a href="idle-games.php" class="border1"><span class="navicon tag-20" aria-hidden="true"></span><div>Idle</div></a></li> <li class="navover"><a href="mahjong-games.php" class="border1"><span class="navicon tag-8" aria-hidden="true"></span><div>Mahjong</div></a></li> <li class="navover"><a href="match-3-games.php" class="border1"><span class="navicon tag-14" aria-hidden="true"></span><div>Match 3</div></a></li> <li class="navover"><a href="music-games.php" class="border1"><span class="navicon tag-23" aria-hidden="true"></span><div>Music</div></a></li> <li class="navover"><a href="parking-games.php" class="border1"><span class="navicon tag-12" aria-hidden="true"></span><div>Parking</div></a></li> <li class="navover"><a href="platform-games.php" class="border1"><span class="navicon tag-22" aria-hidden="true"></span><div>Platform</div></a></li> <li class="navover"><a href="quiz-games.php" class="border1"><span class="navicon tag-13" aria-hidden="true"></span><div>Quiz</div></a></li> <li class="navover"><a href="retro-games.php" class="border1"><span class="navicon tag-19" aria-hidden="true"></span><div>Retro</div></a></li> <li class="navover"><a href="shooting-games.php" class="border1"><span class="navicon tag-16" aria-hidden="true"></span><div>Shooting</div></a></li> <li class="navover"><a href="simulation-games.php" class="border1"><span class="navicon tag-18" aria-hidden="true"></span><div>Simulation</div></a></li> <li class="navover"><a href="strategy-games.php" class="border1"><span class="navicon tag-15" aria-hidden="true"></span><div>Strategy</div></a></li> <li class="navover"><a href="time-management-games.php" class="border1"><span class="navicon tag-5" aria-hidden="true"></span><div>Time Management</div></a></li> <li class="navover"><a href="war-games.php" class="border1"><span class="navicon tag-6" aria-hidden="true"></span><div>War</div></a></li> <li class="navover"><a href="word-games.php" class="border1"><span class="navicon tag-10" aria-hidden="true"></span><div>Word</div></a></li> <li class="navover"><a href="zuma-games.php" class="border1"><span class="navicon tag-17" aria-hidden="true"></span><div>Zuma</div></a></li>    <li class="navover"><a href="tags.php" class="border2"><span class="navicon navhash">#</span><div>All tags >></div></a></li>
+    <li style="height: 50px"></li>
+  </ul>
+</nav><div id="global">
+  <div class="Lside">
+    <div class="slot_header"><ins class="adsbygoogle"
+     style="display:inline-block;max-width:922px;width:100%;height:90px"
+     data-ad-client="ca-pub-2304985967143948"
+     data-ad-slot="6707406212"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>    
+    <div class="content">
+      <div class="cons_head"><h1 class="entete">Naruto vs bleach Games</h1></div>
+      <div class="sortMenu">
+  <div style="float:left;">
+    <ul><li class="actif" id="tri"><span>Trending</span><img src="images/nav_menu.png" width="12" height="34" alt=""></li></ul>
+    <div id="tri_menu">
+      <ul>
+                <li><a href="naruto-vs-bleach-games.php?sort=1">Latest</a></li>        <li><a href="naruto-vs-bleach-games.php?sort=2">Most Played</a></li>                <li><a href="naruto-vs-bleach-games.php?sort=3">Best Rated</a></li>      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const tri = document.getElementById("tri");
+const menu = document.getElementById("tri_menu");
+tri.onclick = () => {
+  if (menu.offsetHeight === 0) {
+    menu.style.height = menu.scrollHeight + "px";
+  } else {
+    menu.style.height = "0px";
+  }
+};
+</script>      <div class="cons_content">
+          <div class="fil">
+    <div style="color:#BE2121;">Your search "<strong>naruto vs bleach</strong>" found 27 games.</div>
+    <ul><li class="divider"></li></ul>
+  </div>
+                
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-3-1397.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1397.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.3" src="thumbs/jeu-1397.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>111641 votes</span></div>
+		    <span>Played 19 453 046 times</span>
+			<div class="popDesc">Bleach Vs Naruto is finally back in a version 3.3 bringing its share of new features: 3 new main ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-5-1824.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1824.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.5" src="thumbs/jeu-1824.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>3549 votes</span></div>
+		    <span>Played 885 908 times</span>
+			<div class="popDesc">Bleach Vs Naruto, the star of online crossover fighting games, is back in version 3.5, specifically ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-6-1255.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1255.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.6" src="thumbs/jeu-1255.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.6</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.6</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>120974 votes</span></div>
+		    <span>Played 22 110 915 times</span>
+			<div class="popDesc">This excellent fighting game is back with 2 new main fighters and 3 summon characters.
+From the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="comic-stars-fighting-3-6-1209.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1209.webp?v=2" type="image/webp"><img alt="Comic Stars Fighting 3.6" src="thumbs/jeu-1209.jpg?v=2" width="160" height="120"></picture><span class="game_title">Comic Stars Fighting 3.6</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Comic Stars Fighting 3.6</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>3157 votes</span></div>
+		    <span>Played 563 135 times</span>
+			<div class="popDesc">Your favorite anime heroes are back with this version 3.6 of Comic Stars Fighting adding two new ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-0-1309.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1309.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.0" src="thumbs/jeu-1309.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.0</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.0</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>25082 votes</span></div>
+		    <span>Played 4 917 593 times</span>
+			<div class="popDesc">After a year of waiting, Bleach Vs Naruto is back in a redesigned version 3.0.
+Here is the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-4-1171.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1171.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.4" src="thumbs/jeu-1171.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.4</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.4</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>18511 votes</span></div>
+		    <span>Played 4 565 378 times</span>
+			<div class="popDesc">Bleach vs Naruto comes back in a version 2.4 adding two new characters from ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-1-1335.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1335.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.1" src="thumbs/jeu-1335.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.1</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.1</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>17722 votes</span></div>
+		    <span>Played 3 280 665 times</span>
+			<div class="popDesc">Highly anticipated return of this excellent fighting game in a version 3.1 adding a new main ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="anime-battle-1-7-1080.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1080.webp?v=2" type="image/webp"><img alt="Anime Battle 1.7" src="thumbs/jeu-1080.jpg?v=2" width="160" height="120"></picture><span class="game_title">Anime Battle 1.7</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Anime Battle 1.7</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>6160 votes</span></div>
+		    <span>Played 954 128 times</span>
+			<div class="popDesc">Anime Battle, also known as "Fantasy Arms", is back in version 1.7 adding 3 new characters: the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-2-1361.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1361.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.2" src="thumbs/jeu-1361.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.2</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.2</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>16579 votes</span></div>
+		    <span>Played 2 569 868 times</span>
+			<div class="popDesc">Your favorite fighting game is back with version 3.2 adding 2 new main characters and 5 new summon ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-0-1456.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1456.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.0" src="thumbs/jeu-1456.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.0</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.0</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>13029 votes</span></div>
+		    <span>Played 2 472 327 times</span>
+			<div class="popDesc">Feverishly awaited by the many fans of the series, this version 2.0 adds the falsely polite and ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="fairy-tail-vs-one-piece-0-6-377.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-377.webp?v=2" type="image/webp"><img alt="Fairy Tail Vs One Piece 0.6" src="thumbs/jeu-377.jpg?v=2" width="160" height="120"></picture><span class="game_title">Fairy Tail Vs One Piece 0.6</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Fairy Tail Vs One Piece 0.6</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>2426 votes</span></div>
+		    <span>Played 352 665 times</span>
+			<div class="popDesc">The creators of the excellent "Bleach vs Naruto" series give us here a new fighting game, in the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-5-1217.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1217.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.5" src="thumbs/jeu-1217.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>30866 votes</span></div>
+		    <span>Played 5 820 399 times</span>
+			<div class="popDesc">Highly anticipated by fans, this version 2.5 of Bleach vs Naruto adds four new characters (two main ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="anime-battle-2-1-1274.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1274.webp?v=2" type="image/webp"><img alt="Anime Battle 2.1" src="thumbs/jeu-1274.jpg?v=2" width="160" height="120"></picture><span class="game_title">Anime Battle 2.1</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Anime Battle 2.1</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>7394 votes</span></div>
+		    <span>Played 1 021 621 times</span>
+			<div class="popDesc">This great crossover fighting game is back with a gigantic update featuring no less than 9 new ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="comic-stars-fighting-3-5-1072.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1072.webp?v=2" type="image/webp"><img alt="Comic Stars Fighting 3.5" src="thumbs/jeu-1072.jpg?v=2" width="160" height="120"></picture><span class="game_title">Comic Stars Fighting 3.5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Comic Stars Fighting 3.5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>1561 votes</span></div>
+		    <span>Played 348 647 times</span>
+			<div class="popDesc">New version 3.5 of this crossover fighting game (beat 'em up type) adding 3 new characters: Tobi ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-1-68-139.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-139.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 1.68" src="thumbs/jeu-139.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 1.68</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 1.68</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>733 votes</span></div>
+		    <span>Played 169 611 times</span>
+			<div class="popDesc">Online fighting game in which you'll be able to confront all your favorite heroes of these two cult ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="the-anime-world-972.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-972.webp?v=2" type="image/webp"><img alt="The Anime World" src="thumbs/jeu-972.jpg?v=2" width="160" height="120"></picture><span class="game_title">The Anime World</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">The Anime World</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>1929 votes</span></div>
+		    <span>Played 393 249 times</span>
+			<div class="popDesc">Sasuke was abducted by Orochimaru and, in desperation, Sakura turned to Luffy to go rescue ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-3-1117.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1117.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.3" src="thumbs/jeu-1117.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>14724 votes</span></div>
+		    <span>Played 3 166 692 times</span>
+			<div class="popDesc">Bleach vs Naruto is back in version 2.3 adding 2 new characters and a new summon character.
+For ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="comic-stars-fighting-3-2-495.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-495.webp?v=2" type="image/webp"><img alt="Comic Stars Fighting 3.2" src="thumbs/jeu-495.jpg?v=2" width="160" height="120"></picture><span class="game_title">Comic Stars Fighting 3.2</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Comic Stars Fighting 3.2</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>303 votes</span></div>
+		    <span>Played 111 567 times</span>
+			<div class="popDesc">Choose your favorite anime/manga character from Naruto, One Piece, Dragon Ball Z, Bleach or Fairy ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-2-1067.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1067.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.2" src="thumbs/jeu-1067.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.2</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.2</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>14504 votes</span></div>
+		    <span>Played 2 578 283 times</span>
+			<div class="popDesc">The fight continues with this version 2.2 adding two new characters: Tobi, aka Obito Uchiha, the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-1-8-438.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-438.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 1.8" src="thumbs/jeu-438.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 1.8</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 1.8</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>1446 votes</span></div>
+		    <span>Played 242 973 times</span>
+			<div class="popDesc">This great fighting game is back in version 1.8, adding characters Gaara (the young ninja with a ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-1-9-1455.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1455.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 1.9" src="thumbs/jeu-1455.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 1.9</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 1.9</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>5727 votes</span></div>
+		    <span>Played 719 793 times</span>
+			<div class="popDesc">New version of one of the best online fighting games, Bleach vs Naruto 1.9 allows you to play ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="comic-stars-fighting-3-4-943.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-943.webp?v=2" type="image/webp"><img alt="Comic Stars Fighting 3.4" src="thumbs/jeu-943.jpg?v=2" width="160" height="120"></picture><span class="game_title">Comic Stars Fighting 3.4</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Comic Stars Fighting 3.4</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>1686 votes</span></div>
+		    <span>Played 376 251 times</span>
+			<div class="popDesc">This "beat'em up" fighting game is back in a 3.4 version adding three new characters: Killua ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-1-1457.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1457.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.1" src="thumbs/jeu-1457.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.1</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.1</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>9245 votes</span></div>
+		    <span>Played 1 398 314 times</span>
+			<div class="popDesc">The release of the 2.1 version of this famous fighting game, in the world of Bleach and Naruto, is ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-1-7-233.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-233.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 1.7" src="thumbs/jeu-233.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 1.7</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 1.7</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>578 votes</span></div>
+		    <span>Played 122 996 times</span>
+			<div class="popDesc">Version 1.7, eagerly awaited by the numerous fans of this fighting game, adds the new character ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="comic-stars-fighting-3-3-816.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-816.webp?v=2" type="image/webp"><img alt="Comic Stars Fighting 3.3" src="thumbs/jeu-816.jpg?v=2" width="160" height="120"></picture><span class="game_title">Comic Stars Fighting 3.3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Comic Stars Fighting 3.3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>931 votes</span></div>
+		    <span>Played 177 391 times</span>
+			<div class="popDesc">Fighting game containing all your favorite anime heroes from Naruto, Dragon Ball Z, One Piece, ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image grayfilter">
+	  <div class="thumbwrap"><a href="anime-battle-3-5-1347.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1347.webp?v=2" type="image/webp"><img alt="Anime Battle 3.5" src="thumbs/jeu-1347.jpg?v=2" width="160" height="120"></picture><span class="game_title">Anime Battle 3.5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Anime Battle 3.5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>20053 votes</span></div>
+		    <span>Played 1 386 402 times</span>
+			<div class="popDesc">This famous crossover fighting game is back with a version 3.5 adding 5 new characters and not the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image grayfilter">
+	  <div class="thumbwrap"><a href="bnobdsy-1-3-1103.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1103.webp?v=2" type="image/webp"><img alt="Bnobdsy 1.3" src="thumbs/jeu-1103.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bnobdsy 1.3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bnobdsy 1.3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>2719 votes</span></div>
+		    <span>Played 731 306 times</span>
+			<div class="popDesc">Fighting game, with a dream cast, featuring no less than 37 characters from your favorite ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>                <div class="pagination"><span class="current">1</span></div>      </div>
+    </div>
+  </div>
+  
+  <div class="Rside">
+    <div class="slotRight"><ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-2304985967143948"
+     data-ad-slot="3951777494"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+               
+    <div class="colonne_droite">
+      <div class="cons_head entete">Today's Top</div>
+      <div class="moreGames">
+        <a href="/?sort=4"><img src="images/nav_plus.png" width="38" height="34" alt="+"></a>
+      </div>
+      <div class="cons_content">
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="hearts-card-game-712.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-712.webp?v=2" type="image/webp"><img alt="Hearts Card Game" src="thumbs/jeu-712.jpg?v=2" width="160" height="120"></picture><span class="game_title">Hearts Card Game</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Hearts Card Game</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>57330 votes</span></div>
+		    <span>Played 29 298 833 times</span>
+			<div class="popDesc">Play Hearts card game online against 3 players controlled by the computer.
+Your goal is to score ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-3-1397.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1397.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.3" src="thumbs/jeu-1397.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>111641 votes</span></div>
+		    <span>Played 19 453 046 times</span>
+			<div class="popDesc">Bleach Vs Naruto is finally back in a version 3.3 bringing its share of new features: 3 new main ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bejeweled-3-68.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-68.webp?v=2" type="image/webp"><img alt="Bejeweled 3" src="thumbs/jeu-68.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bejeweled 3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bejeweled 3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>21231 votes</span></div>
+		    <span>Played 14 948 135 times</span>
+			<div class="popDesc">Bejeweled 3 is the latest installment of the sequel, created by Popcap, which is at the origin of ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="monopoly-1122.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1122.webp?v=2" type="image/webp"><img alt="Monopoly" src="thumbs/jeu-1122.jpg?v=2" width="160" height="120"></picture><span class="game_title">Monopoly</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Monopoly</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>26419 votes</span></div>
+		    <span>Played 10 349 701 times</span>
+			<div class="popDesc">No need to introduce Monopoly, probably the most famous board game in the world, whose goal is to ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-3-5-1824.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1824.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 3.5" src="thumbs/jeu-1824.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 3.5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 3.5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>3549 votes</span></div>
+		    <span>Played 885 908 times</span>
+			<div class="popDesc">Bleach Vs Naruto, the star of online crossover fighting games, is back in version 3.5, specifically ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="text-twist-644.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-644.webp?v=2" type="image/webp"><img alt="Text Twist" src="thumbs/jeu-644.jpg?v=2" width="160" height="120"></picture><span class="game_title">Text Twist</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Text Twist</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>7269 votes</span></div>
+		    <span>Played 15 577 042 times</span>
+			<div class="popDesc">Make a maximum of English words, from a random selection of six letters, and find a word using all ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="fairy-tail-vs-one-piece-2-0-1358.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1358.webp?v=2" type="image/webp"><img alt="Fairy Tail Vs One Piece 2.0" src="thumbs/jeu-1358.jpg?v=2" width="160" height="120"></picture><span class="game_title">Fairy Tail Vs One Piece 2.0</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Fairy Tail Vs One Piece 2.0</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>42237 votes</span></div>
+		    <span>Played 5 599 850 times</span>
+			<div class="popDesc">Luffy, Natsu and all their mates are back with a major update of the famous fighting game: Fairy ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bleach-vs-naruto-2-6-1255.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1255.webp?v=2" type="image/webp"><img alt="Bleach Vs Naruto 2.6" src="thumbs/jeu-1255.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bleach Vs Naruto 2.6</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bleach Vs Naruto 2.6</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>120974 votes</span></div>
+		    <span>Played 22 110 915 times</span>
+			<div class="popDesc">This excellent fighting game is back with 2 new main fighters and 3 summon characters.
+From the ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="plants-vs-zombies-69.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-69.webp?v=2" type="image/webp"><img alt="Plants vs Zombies" src="thumbs/jeu-69.jpg?v=2" width="160" height="120"></picture><span class="game_title">Plants vs Zombies</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Plants vs Zombies</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>17565 votes</span></div>
+		    <span>Played 2 114 184 times</span>
+			<div class="popDesc">Plants vs Zombies is a real-time strategy / tower defense game, developed by Popcap, in which you ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="doki-doki-literature-club-1828.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1828.webp?v=2" type="image/webp"><img alt="Doki Doki Literature Club!" src="thumbs/jeu-1828.jpg?v=2" width="160" height="120"></picture><span class="game_title">Doki Doki Literature Club!</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Doki Doki Literature Club!</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>1366 votes</span></div>
+		    <span>Played 138 106 times</span>
+			<div class="popDesc">Doki Doki Literature Club! (DDLC for short) is a visual novel that begins as a lighthearted, ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="backgammon-749.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-749.webp?v=2" type="image/webp"><img alt="Backgammon" src="thumbs/jeu-749.jpg?v=2" width="160" height="120"></picture><span class="game_title">Backgammon</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Backgammon</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-7"><span>4796 votes</span></div>
+		    <span>Played 3 204 369 times</span>
+			<div class="popDesc">Nice online backgammon game where you can face the computer on 2 levels of difficulty.
+The goal is ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="scrabble-1871.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1871.webp?v=2" type="image/webp"><img alt="Scrabble" src="thumbs/jeu-1871.jpg?v=2" width="160" height="120"></picture><span class="game_title">Scrabble</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Scrabble</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>238 votes</span></div>
+		    <span>Played 63 352 times</span>
+			<div class="popDesc">Play Scrabble online against the computer in English, with no registration or download ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="bloons-td-5-262.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-262.webp?v=2" type="image/webp"><img alt="Bloons TD 5" src="thumbs/jeu-262.jpg?v=2" width="160" height="120"></picture><span class="game_title">Bloons TD 5</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Bloons TD 5</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>5443 votes</span></div>
+		    <span>Played 1 231 065 times</span>
+			<div class="popDesc">Bloons Tower Defense 5 is the latest installment of one of the most famous game of its kind, where ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="zuma-s-revenge-67.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-67.webp?v=2" type="image/webp"><img alt="Zuma's Revenge" src="thumbs/jeu-67.jpg?v=2" width="160" height="120"></picture><span class="game_title">Zuma's Revenge</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Zuma's Revenge</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>12901 votes</span></div>
+		    <span>Played 6 164 157 times</span>
+			<div class="popDesc">Zuma revenge is the sequel of the famous online game of the same name, published by Popcap, which ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="five-nights-at-freddy-s-1148.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1148.webp?v=2" type="image/webp"><img alt="Five Nights at Freddy's" src="thumbs/jeu-1148.jpg?v=2" width="160" height="120"></picture><span class="game_title">Five Nights at Freddy's</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Five Nights at Freddy's</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>203101 votes</span></div>
+		    <span>Played 31 325 176 times</span>
+			<div class="popDesc">Freddy Fazbear's Pizza is a restaurant that kids love for its puppet show, the animatronics, during ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="anime-battle-4-1461.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1461.webp?v=2" type="image/webp"><img alt="Anime Battle 4" src="thumbs/jeu-1461.jpg?v=2" width="160" height="120"></picture><span class="game_title">Anime Battle 4</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Anime Battle 4</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>7933 votes</span></div>
+		    <span>Played 1 463 331 times</span>
+			<div class="popDesc">After the Flash Player end of life, Anime Battle is back in a new version, rewritten in HTML5 and ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="texttwist-2-337.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-337.webp?v=2" type="image/webp"><img alt="TextTwist 2" src="thumbs/jeu-337.jpg?v=2" width="160" height="120"></picture><span class="game_title">TextTwist 2</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">TextTwist 2</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>1044 votes</span></div>
+		    <span>Played 1 620 979 times</span>
+			<div class="popDesc">Addictive word game in which you have to compose a maximum of valid English words, between 3 and 7 ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="tekken-3-1498.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1498.webp?v=2" type="image/webp"><img alt="Tekken 3" src="thumbs/jeu-1498.jpg?v=2" width="160" height="120"></picture><span class="game_title">Tekken 3</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Tekken 3</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-8"><span>2811 votes</span></div>
+		    <span>Played 315 196 times</span>
+			<div class="popDesc">Play with nostalgia this legendary fighting game, first released on arcade machines and then ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="plants-vs-zombies-2-gardendless-1904.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1904.webp?v=2" type="image/webp"><img alt="Plants vs Zombies 2 Gardendless" src="thumbs/jeu-1904.jpg?v=2" width="160" height="120"></picture><span class="game_title">Plants vs Zombies 2 Gardendless</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Plants vs Zombies 2 Gardendless</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-9"><span>284 votes</span></div>
+		    <span>Played 15 400 times</span>
+			<div class="popDesc">Plants vs Zombies 2 Gardendless is a tower defense game where you must protect your garden from ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="plug_image">
+	  <div class="thumbwrap"><a href="belote-1725.html" class="trigger"><picture><source srcset="thumbs/webp/jeu-1725.webp?v=2" type="image/webp"><img alt="Belote" src="thumbs/jeu-1725.jpg?v=2" width="160" height="120"></picture><span class="game_title">Belote</span></a></div>
+	  <div class="popup">
+	    <div class="popwrap">
+	      <div class="popTitle">Belote</div>
+		  <div class="popContent">
+		    <div class="ratingstars stars-7"><span>1438 votes</span></div>
+		    <span>Played 444 964 times</span>
+			<div class="popDesc">Relax with this online belote game without registration against the computer.
+Very popular card ...</div>
+		  </div>
+		</div>
+	  </div>
+	</div></div>
+    </div>
+  </div>
+  
+  
+</div>
+
+<footer class="footer">
+  <span class="textfoot"><img src="images/logo3.png" alt="GamesLOL" width="114" height="21"></span>
+  <a href="privacy.php">Privacy Policy</a><a href="contact.php">Contact</a>
+</footer></body>
+</html>

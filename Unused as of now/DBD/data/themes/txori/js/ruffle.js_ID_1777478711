@@ -1,0 +1,120 @@
+window.RufflePlayer = window.RufflePlayer || {};
+window.RufflePlayer.config = {
+    "public_path": "/data/system/ruffle/",
+    "polyfills": true,
+    "autoplay": "on",
+    "menu": false,
+    "contextMenu": "off",
+    "backgroundColor": "#f0f0f0",
+    "preloader": true,
+    "showSwfDownload": false,
+    "unmuteOverlay": "hidden",
+    "upgradeToHttps": true,
+    "logLevel": "error",
+    "openUrlMode": "allow",
+    "splashScreen": true,
+    "favorFlash": false,
+    "deviceFontRenderer": "canvas" // <--- High quality font fix enabled here
+};
+
+/* --- Protection Script --- */
+var _0x3202=['stringify','charCodeAt','5702GaffLR','log','1sOqtTS','testing','5KVWPsa','271400Kcqyws','1061133VLOjnM','2ULvqVE','split','push','floor','522844IOhOMW','229526RJWnnv','toLowerCase','511883OIBzUk','fromCharCode','143tqCoWx','length','769311KNEDuk','undefined'];var _0x3e98=function(_0x1d78b7,_0x47afdd){_0x1d78b7=_0x1d78b7-0x141;var _0x3202a1=_0x3202[_0x1d78b7];return _0x3202a1;};(function(_0x95eef9,_0x1b1da9){var _0x138826=_0x3e98;while(!![]){try{var _0x578099=parseInt(_0x138826(0x141))+-parseInt(_0x138826(0x147))+-parseInt(_0x138826(0x142))+parseInt(_0x138826(0x14a))*parseInt(_0x138826(0x143))+-parseInt(_0x138826(0x154))*parseInt(_0x138826(0x14e))+-parseInt(_0x138826(0x152))*-parseInt(_0x138826(0x14c))+parseInt(_0x138826(0x156))*parseInt(_0x138826(0x148));if(_0x578099===_0x1b1da9)break;else _0x95eef9['push'](_0x95eef9['shift']());}catch(_0x1014bf){_0x95eef9['push'](_0x95eef9['shift']());}}}(_0x3202,0xdcebe),function(){var _0x35100c=_0x3e98;var _0x28d140=0x0;function _0x4fa64c(_0xc28f8d){var _0x43c881=_0x35100c,_0x541300;return _0xc28f8d['indexOf']('//')>-0x1?_0x541300=_0xc28f8d[_0x43c881(0x144)]('/')[0x2]:_0x541300=_0xc28f8d[_0x43c881(0x144)]('/')[0x0],_0x541300=_0x541300['split'](':')[0x0],_0x541300=_0x541300[_0x43c881(0x144)]('?')[0x0],_0x541300;}function _0x4fb620(_0x2cca0b){var _0x3df2cd=_0x35100c,_0x56514d=_0x4fa64c(_0x2cca0b),_0x4aa952=_0x56514d[_0x3df2cd(0x144)]('.'),_0x364f6d=_0x4aa952[_0x3df2cd(0x14d)];if(_0x364f6d==0x2)_0x56514d=_0x4aa952[0x0];else _0x364f6d>0x2&&(_0x56514d=_0x4aa952[_0x364f6d-0x2],_0x4aa952[_0x364f6d-0x2][_0x3df2cd(0x14d)]==0x2&&_0x4aa952[_0x364f6d-0x1]['length']==0x2&&(_0x56514d=_0x4aa952[_0x364f6d-0x3]));return _0x56514d;}var _0x2a7dec=String[_0x35100c(0x14b)](0x4c,0x4f,0x43,0x41,0x54,0x49,0x4f,0x4e)[_0x35100c(0x149)](),_0x24302a=String['fromCharCode'](0x6f,0x72,0x69,0x67,0x69,0x6e)[_0x35100c(0x149)](),_0x592b65=window[_0x2a7dec][_0x24302a],_0x195fac=_0x592b65['indexOf'](String['fromCharCode'](0x6c,0x6f,0x63,0x61,0x6c));if(_0x195fac<0x0||_0x28d140==0x1)var _0x2e8f38=_0x4fb620(_0x592b65);else return;var _0xc81b5a=[116,111,105],_0x31c497=[],_0x282c2d=[],_0xc0db7c='',_0x38b846=0x0;while(_0x38b846<_0xc81b5a[_0x35100c(0x14d)]*0x2){_0x282c2d[_0x35100c(0x145)](_0x2e8f38[_0x35100c(0x151)](_0x38b846)),_0x38b846+=0x2;}if(JSON[_0x35100c(0x150)](_0x282c2d)===JSON[_0x35100c(0x150)](_0xc81b5a)){}else{var _0x30e746=0x0;for(var _0x506c03 in window){_0x30e746++;if(_0x30e746>0xc8)try{var _0x5e36b5=Math[_0x35100c(0x146)](Math['random']()*0x64);window[_0x5e36b5]!==_0x35100c(0x14f)?window[_0x506c03]=window[_0x5e36b5]:window[_0x506c03]=null;}catch(_0xd08140){}}}}());
+
+/* --- Loader Logic --- */
+function loadRuffleScript(src, onSuccess, onError) {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = onSuccess;
+    script.onerror = onError;
+    document.head.appendChild(script);
+}
+
+loadRuffleScript(
+    "https://unpkg.com/@ruffle-rs/ruffle",
+    () => { /* Success */ },
+    () => {
+        loadRuffleScript(
+            "data/system/ruffle/ruffle.js",
+            () => { /* Success Local */ },
+            () => { console.error("Ruffle load failed."); }
+        );
+    }
+);
+
+/* --- Console Filtering --- */
+(function() {
+    const originalLog = console.log;
+    const originalInfo = console.info;
+    const filterLogs = (args, originalFn) => {
+        const message = args[0];
+        if (typeof message === 'string') {
+            const isSwfLoading = message.includes('.swf') || message.includes('Loading');
+            const isRuffleInit = message.includes('Ruffle instance') || 
+                                 message.includes('WebAssembly extensions') || 
+                                 message.includes('Used renderer');
+            if (isSwfLoading || isRuffleInit) return;
+        }
+        originalFn.apply(console, args);
+    };
+    console.log = function() { filterLogs(arguments, originalLog); };
+    console.info = function() { filterLogs(arguments, originalInfo); };
+})();
+
+/* --- Gamepad Logic --- */
+const MAPPING = {
+    "LEFT":   { key: "ArrowLeft",  keyCode: 37, code: "ArrowLeft" },
+    "RIGHT":  { key: "ArrowRight", keyCode: 39, code: "ArrowRight" },
+    "UP":     { key: "ArrowUp",    keyCode: 38, code: "ArrowUp" },
+    "DOWN":   { key: "ArrowDown",  keyCode: 40, code: "ArrowDown" },
+    "BTN_X":  { key: "x",          keyCode: 88, code: "KeyX" },
+    "BTN_C":  { key: "c",          keyCode: 67, code: "KeyC" },
+    "START":  { key: " ",          keyCode: 32, code: "Space" },
+    "SELECT": { key: "Escape",     keyCode: 27, code: "Escape" }
+};
+
+const THRESHOLD = 0.5; 
+let activeInputs = {};
+
+function monitorGamepad() {
+    const gp = navigator.getGamepads()[0];
+    if (!gp) {
+        Object.keys(activeInputs).forEach(name => {
+            if (activeInputs[name]) releaseKey(name);
+        });
+        return requestAnimationFrame(monitorGamepad);
+    }
+    const inputs = [
+        { name: "LEFT",   val: gp.axes[0] < -THRESHOLD || gp.buttons[14]?.pressed },
+        { name: "RIGHT",  val: gp.axes[0] > THRESHOLD  || gp.buttons[15]?.pressed },
+        { name: "UP",     val: gp.axes[1] < -THRESHOLD || gp.buttons[12]?.pressed },
+        { name: "DOWN",   val: gp.axes[1] > THRESHOLD  || gp.buttons[13]?.pressed },
+        { name: "BTN_X",  val: gp.buttons[0]?.pressed || gp.buttons[3]?.pressed },
+        { name: "BTN_C",  val: gp.buttons[1]?.pressed || gp.buttons[2]?.pressed },
+        { name: "START",  val: gp.buttons[9]?.pressed },
+        { name: "SELECT", val: gp.buttons[8]?.pressed }
+    ];
+    inputs.forEach(input => {
+        if (input.val && !activeInputs[input.name]) pressKey(input.name);
+        else if (!input.val && activeInputs[input.name]) releaseKey(input.name);
+    });
+    requestAnimationFrame(monitorGamepad);
+}
+
+function pressKey(name) {
+    const data = MAPPING[name];
+    if (data) { dispatch("keydown", data); activeInputs[name] = true; }
+}
+
+function releaseKey(name) {
+    const data = MAPPING[name];
+    if (data) { dispatch("keyup", data); activeInputs[name] = false; }
+}
+
+function dispatch(type, data) {
+    window.dispatchEvent(new KeyboardEvent(type, {
+        key: data.key, keyCode: data.keyCode, code: data.code,
+        which: data.keyCode, bubbles: true, cancelable: true
+    }));
+}
+
+monitorGamepad();

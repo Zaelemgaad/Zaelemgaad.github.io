@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Fighting Games - Two Player Games</title>
+    <meta name="description" content="Give up fighting in the streets. Blow off your steam with these flash games." />
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width">
+    <link rel="canonical" href="https://www.twoplayergames.org/fighting">
+    <link rel="alternate" hreflang="de" href="https://de.twoplayergames.org/kampf" />
+    <link rel="alternate" hreflang="en" href="https://www.twoplayergames.org/fighting" />
+    <link rel="alternate" hreflang="es" href="https://es.twoplayergames.org/peleas" />
+    <link rel="alternate" hreflang="et" href="https://ee.twoplayergames.org/voitlus" />
+    <link rel="alternate" hreflang="fr" href="https://fr.twoplayergames.org/combat" />
+    <link rel="alternate" hreflang="pt" href="https://br.twoplayergames.org/luta" />
+    <link rel="alternate" hreflang="tr" href="https://tr.twoplayergames.org/dovus" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest"/>
+    <link rel="preconnect" href="https://images.twoplayergames.org" crossorigin>
+
+    <link href="/dist/twoplayergames-4dfb7ae6.css" rel="stylesheet">
+
+<link rel="preconnect" href="https://cmp.setupcmp.com">
+<style>span.stpd_poweredby_setupad {display:none !important}</style>
+<script>
+!function(){function e(){document.cookie="euconsent-v2=; path=/; domain=."+document.location.hostname+"; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax"}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e):e()}();
+</script>
+<script data-prop-id="8226">
+(()=>{let e="__tcfapiLocator",t=[],a=window,n=a,s,c;for(;n;){try{if(n.frames[e]){s=n;break}}catch(o){}if(n===a.top)break;n=a.parent}s||(!function t(){let n=a.document,s=!!a.frames[e];if(!s){if(n.body){let c=n.createElement("iframe");c.style.cssText="display:none",c.name=e,n.body.appendChild(c)}else setTimeout(t,5)}return!s}(),a.__tcfapi=function e(...a){if(!a.length)return t;"setGdprApplies"===a[0]?a.length>3&&2===parseInt(a[1],10)&&"boolean"==typeof a[3]&&(c=a[3],"function"==typeof a[2]&&a[2]("set",!0)):"ping"===a[0]?"function"==typeof a[2]&&a[2]({gdprApplies:c,cmpLoaded:!1,cmpStatus:"stub"}):t.push(a)},a.addEventListener("message",function e(t){let a="string"==typeof t.data,n={};if(a)try{n=JSON.parse(t.data)}catch(s){}else n=t.data;let c="object"==typeof n&&null!==n?n.__tcfapiCall:null;c&&window.__tcfapi(c.command,c.version,function(e,n){let s={__tcfapiReturn:{returnValue:e,success:n,callId:c.callId}};t&&t.source&&t.source.postMessage&&t.source.postMessage(a?JSON.stringify(s):s,"*")},c.parameter)},!1))})();
+</script>
+<script src="https://cmp.setupcmp.com/cmp/cmp/cmp-v1.js" data-prop-stpd-cmp-id="8226" async></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBVFHP4VG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LSBVFHP4VG');
+</script>
+<script>(function(w, n) {w[n]=w[n]||function(){(w[n].a=w[n].a||[]).push(arguments)};w[n].l=1*new Date();})(window, 'ym');</script>
+<script async src="https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js"></script>
+<script>ym(95246838, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:false});</script>
+<link rel="preconnect" href="https://securepubads.g.doubleclick.net">
+<link rel="preconnect" href="https://stpd.cloud">
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" crossorigin="anonymous"></script>
+<script>
+  window.stpd = window.stpd || {que: []};
+  window.googletag = window.googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  var adRandomChance = Math.round(Math.random());
+
+  googletag.cmd.push(function() {
+    var bodyWidth = Math.max(document.querySelector('.site-left').clientWidth, 990);
+
+    var mappingLeft = googletag.sizeMapping()
+        .addSize([bodyWidth + 240, 0], [[120,600],[120,240]])
+        .addSize([bodyWidth + 320, 0], [[160,600],[120,600],[160,320],[120,240]])
+        .addSize([0, 0], [])
+        .build();
+
+    var mappingRight = googletag.sizeMapping()
+        .addSize([bodyWidth + 240, 0], [[120,600]])
+        .addSize([bodyWidth + 320, 0], [[160,600],[120,600]])
+        .addSize([bodyWidth + 400, 0], [[160,600],[120,600],[200,600]])
+        .addSize([bodyWidth + 500, 0], [[160,600],[120,600],[200,600],[250,600]])
+        .addSize([bodyWidth + 600, 0], [[300,600],[160,600],[300,250],[300,300],[250,600],[200,600],[300,400]])
+        .addSize([0, 0], [])
+        .build();
+
+    googletag.defineSlot('/22538980388/twoplayergames.org_300x600_right_desktop_test', [[300,600],[160,600],[300,250],[300,300],[250,600],[200,600],[300,400]], 'twoplayergames_org_game_page_right_desktop')
+        .defineSizeMapping(mappingRight)
+        .addService(googletag.pubads());
+
+    if (adRandomChance) {
+      googletag.defineSlot('/22538980388/twoplayergames.org_160x600_left_desktop_test', [[160,600],[120,600],[160,320],[120,240]], 'twoplayergames_org_game_page_left_desktop')
+        .addService(googletag.pubads());
+    } else {
+      googletag.defineSlot('/22538980388/twoplayergames.org_300x250_right_top_desktop_test', [[300,250],[250,250],[120,240]], 'twoplayergames_org_game_page_right_top_desktop')
+        .addService(googletag.pubads());
+
+      googletag.defineSlot('/22538980388/twoplayergames.org_300x250_right_bottom_desktop_test', [[300,250],[250,250],[120,240]], 'twoplayergames_org_game_page_right_bottom_desktop')
+        .addService(googletag.pubads());
+    }
+
+    googletag.defineSlot('/22538980388/twoplayergames.org_970x90_bottom_desktop_test', [[970,90],[728,90],[970,50],[960,90],[950,90],[980,90],[980,120]], 'twoplayergames_org_game_bottom_desktop')
+      .addService(googletag.pubads());
+
+    googletag.pubads().disableInitialLoad();
+    googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs();
+    googletag.enableServices();
+  });
+</script>
+
+<!-- Prebid controller file -->
+<script async src="https://stpd.cloud/saas/10527"></script>
+</head>
+
+<body>
+
+<div class="site-body">
+        <div class="left-ad">
+        <div class="left-ad-160">
+            <div>
+  <div style="position: sticky; top: 5px;display: flex;flex-direction: column;">
+    <!-- /22538980388/twoplayergames.org_300x600_game_page_right_desktop -->
+    <div id="twoplayergames_org_game_page_right_desktop"></div>
+  </div>
+  <script>
+    googletag.cmd.push(function() {
+        googletag.display('twoplayergames_org_game_page_right_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_desktop');
+        }));
+    });
+  </script>
+</div>
+        </div>
+    </div>
+        <div class="site-left">
+        <div class="top-space">
+    <div class="logo">
+        <a target="_parent" href="https://www.twoplayergames.org/" title="Two Player Games"></a>
+    </div>
+    <div class="top-game-box">
+        <a href="#" class="game-box-btn" draggable="false" data-text-empty="Your game box is empty.">
+            My Game Box
+            <i class="con monochrome-inbox"></i>
+        </a>
+    </div>
+    <div class="top-search">
+        <form action="/search" enctype="application/x-www-form-urlencoded" id="search-form" method="get">
+            <div class="top-search-input-container">
+                <input name="q" class="search-input" type="text" title="Game search" placeholder="Search..."
+                       data-search-endpoint="/search.json" data-suggest-endpoint="/game/suggest.json">
+                <button class="search-button" type="submit" aria-label="Search"><span class="monochrome-search"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="site-top-container">
+    <div class="site-top-left"></div>
+    <div class="site-top">
+        <div class="top-menu" data-text-close="Close">
+    <ul>
+        <li><a href="#" class="menu-toggle" title=""><span class="cat-icon monochrome-plus-sign"></span><span>More</span></a></li>
+            <li>
+            <a href="/action" title="Action Games">
+                <span class="cat-icon monochrome-category-6"></span>
+                <span class="cat-title">Action</span>
+            </a>
+        </li>
+            <li>
+            <a href="/adventure" title="Adventure Games">
+                <span class="cat-icon monochrome-category-1"></span>
+                <span class="cat-title">Adventure</span>
+            </a>
+        </li>
+            <li>
+            <a href="/classic" title="Classic Games">
+                <span class="cat-icon monochrome-category-2"></span>
+                <span class="cat-title">Classic</span>
+            </a>
+        </li>
+            <li>
+            <a href="/fighting" title="Fighting Games">
+                <span class="cat-icon monochrome-category-4"></span>
+                <span class="cat-title">Fighting</span>
+            </a>
+        </li>
+            <li>
+            <a href="/kids" title="Kids Games">
+                <span class="cat-icon monochrome-category-7"></span>
+                <span class="cat-title">Kids</span>
+            </a>
+        </li>
+            <li>
+            <a href="/racing" title="Racing Games">
+                <span class="cat-icon monochrome-category-3"></span>
+                <span class="cat-title">Racing</span>
+            </a>
+        </li>
+            <li>
+            <a href="/sport" title="Sport Games">
+                <span class="cat-icon monochrome-category-5"></span>
+                <span class="cat-title">Sport</span>
+            </a>
+        </li>
+            <li>
+            <a href="/our" title="Our Games">
+                <span class="cat-icon monochrome-category-12"></span>
+                <span class="cat-title">Our</span>
+            </a>
+        </li>
+            <li>
+            <a href="/3-4-player" title="3-4 Player Games">
+                <span class="cat-icon monochrome-category-13"></span>
+                <span class="cat-title">3-4 Player</span>
+            </a>
+        </li>
+            <li>
+            <a href="/1-player" title="1 Player Games">
+                <span class="cat-icon monochrome-category-9"></span>
+                <span class="cat-title">1 Player</span>
+            </a>
+        </li>
+            <li>
+            <a href="/3d" title="3D Games">
+                <span class="cat-icon monochrome-category-8"></span>
+                <span class="cat-title">3D</span>
+            </a>
+        </li>
+            <li>
+            <a href="/aircraft" title="Aircraft Games">
+                <span class="cat-icon monochrome-category-40"></span>
+                <span class="cat-title">Aircraft</span>
+            </a>
+        </li>
+            <li>
+            <a href="/alien" title="Alien Games">
+                <span class="cat-icon monochrome-category-42"></span>
+                <span class="cat-title">Alien</span>
+            </a>
+        </li>
+            <li>
+            <a href="/balance" title="Balance Games">
+                <span class="cat-icon monochrome-category-43"></span>
+                <span class="cat-title">Balance</span>
+            </a>
+        </li>
+            <li>
+            <a href="/basketball" title="Basketball Games">
+                <span class="cat-icon monochrome-category-19"></span>
+                <span class="cat-title">Basketball</span>
+            </a>
+        </li>
+            <li>
+            <a href="/battle" title="Battle Games">
+                <span class="cat-icon monochrome-category-44"></span>
+                <span class="cat-title">Battle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/billiards" title="Billiards Games">
+                <span class="cat-icon monochrome-category-45"></span>
+                <span class="cat-title">Billiards</span>
+            </a>
+        </li>
+            <li>
+            <a href="/board" title="Board Games">
+                <span class="cat-icon monochrome-category-21"></span>
+                <span class="cat-title">Board</span>
+            </a>
+        </li>
+            <li>
+            <a href="/bomber" title="Bomber Games">
+                <span class="cat-icon monochrome-category-46"></span>
+                <span class="cat-title">Bomber</span>
+            </a>
+        </li>
+            <li>
+            <a href="/browser" title="Browser Games">
+                <span class="cat-icon monochrome-category-37"></span>
+                <span class="cat-title">Browser</span>
+            </a>
+        </li>
+            <li>
+            <a href="/car" title="Car Games">
+                <span class="cat-icon monochrome-category-15"></span>
+                <span class="cat-title">Car</span>
+            </a>
+        </li>
+            <li>
+            <a href="/castle" title="Castle Games">
+                <span class="cat-icon monochrome-category-47"></span>
+                <span class="cat-title">Castle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/chess" title="Chess Games">
+                <span class="cat-icon monochrome-category-28"></span>
+                <span class="cat-title">Chess</span>
+            </a>
+        </li>
+            <li>
+            <a href="/crazy" title="Crazy Games">
+                <span class="cat-icon monochrome-category-41"></span>
+                <span class="cat-title">Crazy</span>
+            </a>
+        </li>
+            <li>
+            <a href="/defense" title="Defense Games">
+                <span class="cat-icon monochrome-category-48"></span>
+                <span class="cat-title">Defense</span>
+            </a>
+        </li>
+            <li>
+            <a href="/dinosaur" title="Dinosaur Games">
+                <span class="cat-icon monochrome-category-49"></span>
+                <span class="cat-title">Dinosaur</span>
+            </a>
+        </li>
+            <li>
+            <a href="/driving" title="Driving Games">
+                <span class="cat-icon monochrome-category-50"></span>
+                <span class="cat-title">Driving</span>
+            </a>
+        </li>
+            <li>
+            <a href="/educational" title="Educational Games">
+                <span class="cat-icon monochrome-category-51"></span>
+                <span class="cat-title">Educational</span>
+            </a>
+        </li>
+            <li>
+            <a href="/escape" title="Escape Games">
+                <span class="cat-icon monochrome-category-52"></span>
+                <span class="cat-title">Escape</span>
+            </a>
+        </li>
+            <li>
+            <a href="/flying" title="Flying Games">
+                <span class="cat-icon monochrome-category-20"></span>
+                <span class="cat-title">Flying</span>
+            </a>
+        </li>
+            <li>
+            <a href="/food" title="Food Games">
+                <span class="cat-icon monochrome-category-25"></span>
+                <span class="cat-title">Food</span>
+            </a>
+        </li>
+            <li>
+            <a href="/fun" title="Fun Games">
+                <span class="cat-icon monochrome-category-23"></span>
+                <span class="cat-title">Fun</span>
+            </a>
+        </li>
+            <li>
+            <a href="/girl" title="Girl Games">
+                <span class="cat-icon monochrome-category-29"></span>
+                <span class="cat-title">Girl</span>
+            </a>
+        </li>
+            <li>
+            <a href="/golf" title="Golf Games">
+                <span class="cat-icon monochrome-category-53"></span>
+                <span class="cat-title">Golf</span>
+            </a>
+        </li>
+            <li>
+            <a href="/jumping" title="Jumping Games">
+                <span class="cat-icon monochrome-category-70"></span>
+                <span class="cat-title">Jumping</span>
+            </a>
+        </li>
+            <li>
+            <a href="/math" title="Math Games">
+                <span class="cat-icon monochrome-category-33"></span>
+                <span class="cat-title">Math</span>
+            </a>
+        </li>
+            <li>
+            <a href="/maze" title="Maze Games">
+                <span class="cat-icon monochrome-category-54"></span>
+                <span class="cat-title">Maze</span>
+            </a>
+        </li>
+            <li>
+            <a href="/monster" title="Monster Games">
+                <span class="cat-icon monochrome-category-55"></span>
+                <span class="cat-title">Monster</span>
+            </a>
+        </li>
+            <li>
+            <a href="/motorcycle" title="Motorcycle Games">
+                <span class="cat-icon monochrome-category-34"></span>
+                <span class="cat-title">Motorcycle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/online" title="Online Games">
+                <span class="cat-icon monochrome-category-22"></span>
+                <span class="cat-title">Online</span>
+            </a>
+        </li>
+            <li>
+            <a href="/pixel-art" title="Pixel Art Games">
+                <span class="cat-icon monochrome-category-56"></span>
+                <span class="cat-title">Pixel Art</span>
+            </a>
+        </li>
+            <li>
+            <a href="/platform" title="Platform Games">
+                <span class="cat-icon monochrome-category-57"></span>
+                <span class="cat-title">Platform</span>
+            </a>
+        </li>
+            <li>
+            <a href="/pool" title="Pool Games">
+                <span class="cat-icon monochrome-category-32"></span>
+                <span class="cat-title">Pool</span>
+            </a>
+        </li>
+            <li>
+            <a href="/puppet" title="Puppet Games">
+                <span class="cat-icon monochrome-category-58"></span>
+                <span class="cat-title">Puppet</span>
+            </a>
+        </li>
+            <li>
+            <a href="/puzzle" title="Puzzle Games">
+                <span class="cat-icon monochrome-category-59"></span>
+                <span class="cat-title">Puzzle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/reaction" title="Reaction Games">
+                <span class="cat-icon monochrome-category-38"></span>
+                <span class="cat-title">Reaction</span>
+            </a>
+        </li>
+            <li>
+            <a href="/retro" title="Retro Games">
+                <span class="cat-icon monochrome-category-60"></span>
+                <span class="cat-title">Retro</span>
+            </a>
+        </li>
+            <li>
+            <a href="/robot" title="Robot Games">
+                <span class="cat-icon monochrome-category-61"></span>
+                <span class="cat-title">Robot</span>
+            </a>
+        </li>
+            <li>
+            <a href="/running" title="Running Games">
+                <span class="cat-icon monochrome-category-17"></span>
+                <span class="cat-title">Running</span>
+            </a>
+        </li>
+            <li>
+            <a href="/school" title="School Games">
+                <span class="cat-icon monochrome-category-62"></span>
+                <span class="cat-title">School</span>
+            </a>
+        </li>
+            <li>
+            <a href="/shooting" title="Shooting Games">
+                <span class="cat-icon monochrome-category-24"></span>
+                <span class="cat-title">Shooting</span>
+            </a>
+        </li>
+            <li>
+            <a href="/soccer" title="Soccer Games">
+                <span class="cat-icon monochrome-category-31"></span>
+                <span class="cat-title">Soccer</span>
+            </a>
+        </li>
+            <li>
+            <a href="/space" title="Space Games">
+                <span class="cat-icon monochrome-category-63"></span>
+                <span class="cat-title">Space</span>
+            </a>
+        </li>
+            <li>
+            <a href="/stickman" title="Stickman Games">
+                <span class="cat-icon monochrome-category-30"></span>
+                <span class="cat-title">Stickman</span>
+            </a>
+        </li>
+            <li>
+            <a href="/strategy" title="Strategy Games">
+                <span class="cat-icon monochrome-category-64"></span>
+                <span class="cat-title">Strategy</span>
+            </a>
+        </li>
+            <li>
+            <a href="/stunt" title="Stunt Games">
+                <span class="cat-icon monochrome-category-14"></span>
+                <span class="cat-title">Stunt</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tank" title="Tank Games">
+                <span class="cat-icon monochrome-category-16"></span>
+                <span class="cat-title">Tank</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tennis" title="Tennis Games">
+                <span class="cat-icon monochrome-category-65"></span>
+                <span class="cat-title">Tennis</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tic-tac-toe" title="Tic Tac Toe Games">
+                <span class="cat-icon monochrome-category-36"></span>
+                <span class="cat-title">Tic Tac Toe</span>
+            </a>
+        </li>
+            <li>
+            <a href="/touch-screen" title="Touch Screen Games">
+                <span class="cat-icon monochrome-category-66"></span>
+                <span class="cat-title">Touch Screen</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tower" title="Tower Games">
+                <span class="cat-icon monochrome-category-67"></span>
+                <span class="cat-title">Tower</span>
+            </a>
+        </li>
+            <li>
+            <a href="/truck" title="Truck Games">
+                <span class="cat-icon monochrome-category-71"></span>
+                <span class="cat-title">Truck</span>
+            </a>
+        </li>
+            <li>
+            <a href="/war" title="War Games">
+                <span class="cat-icon monochrome-category-68"></span>
+                <span class="cat-title">War</span>
+            </a>
+        </li>
+            <li>
+            <a href="/wrestling" title="Wrestling Games">
+                <span class="cat-icon monochrome-category-69"></span>
+                <span class="cat-title">Wrestling</span>
+            </a>
+        </li>
+            <li>
+            <a href="/zombie" title="Zombie Games">
+                <span class="cat-icon monochrome-category-26"></span>
+                <span class="cat-title">Zombie</span>
+            </a>
+        </li>
+        </ul>
+</div>
+    </div>
+    <div class="site-top-right"></div>
+</div>
+        <div class="site-main pt-10">
+            <div class="fixed-width-container">
+    <div class="module-heading">
+        <span class="category-icon monochrome-category-4"></span>
+        <h1>Fighting Games</h1>
+    </div>
+
+            <div class="container">
+            <div class="item">
+            <span class="new-band">new</span>
+<a href="/game/mechastick-fighter" title="MechaStick Fighter" data-game-id="3235" data-game-slug="mechastick-fighter" data-game-image="o6/mecha-stick-fighter/MechaStick-fighter.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o6/mecha-stick-fighter/MechaStick-fighter.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o6/mecha-stick-fighter/MechaStick-fighter.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o6/mecha-stick-fighter/MechaStick-fighter.jpg?auto=format&amp;w=100" width="100" height="75" alt="MechaStick Fighter"/>
+</div>
+    <div class="title">MechaStick Fighter</div>
+</a>
+
+        </div>
+            <div class="item">
+            <span class="new-band">new</span>
+<a href="/game/stick-arena-battle" title="Stick Arena: Battle" data-game-id="3166" data-game-slug="stick-arena-battle" data-game-image="other/stick-arena-battle.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/stick-arena-battle.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/stick-arena-battle.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/stick-arena-battle.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Arena: Battle"/>
+</div>
+    <div class="title">Stick Arena: Battle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stickman-kombat-2d" title="Stickman Kombat 2D" data-game-id="3029" data-game-slug="stickman-kombat-2d" data-game-image="other/stickman-kombat-2d.jpg" data-video-thumb='{"mp4":"other\/stickman-kombat-2d-200x150.mp4","webm":"other\/stickman-kombat-2d-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/stickman-kombat-2d.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/stickman-kombat-2d.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/stickman-kombat-2d.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stickman Kombat 2D"/>
+</div>
+    <div class="title">Stickman Kombat 2D</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stickman-battle-fighting" title="Stickman Battle Fighting" data-game-id="2950" data-game-slug="stickman-battle-fighting" data-game-image="other/stickman-battle-fighting.jpg" data-video-thumb='{"mp4":"other\/stickman-battle-fighting-200x150.mp4","webm":"other\/stickman-battle-fighting-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/stickman-battle-fighting.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/stickman-battle-fighting.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/stickman-battle-fighting.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stickman Battle Fighting"/>
+</div>
+    <div class="title">Stickman Battle Fighting</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/karate-bros" title="Karate Bros" data-game-id="2748" data-game-slug="karate-bros" data-game-image="other/karatebros.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/karatebros.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/karatebros.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/karatebros.jpg?auto=format&amp;w=100" width="100" height="75" alt="Karate Bros"/>
+</div>
+    <div class="title">Karate Bros</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/wresle-bros" title="Wrestle Bros" data-game-id="2746" data-game-slug="wresle-bros" data-game-image="other/WrestleBros.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/WrestleBros.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/WrestleBros.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/WrestleBros.jpg?auto=format&amp;w=100" width="100" height="75" alt="Wrestle Bros"/>
+</div>
+    <div class="title">Wrestle Bros</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/one-piece-pirate-battle" title="One Piece Pirate Battle" data-game-id="2571" data-game-slug="one-piece-pirate-battle" data-game-image="o5/one-piecepirate-battle.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/one-piecepirate-battle.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/one-piecepirate-battle.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/one-piecepirate-battle.jpg?auto=format&amp;w=100" width="100" height="75" alt="One Piece Pirate Battle"/>
+</div>
+    <div class="title">One Piece Pirate Battle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/getaway-shootout" title="Getaway Shootout" data-game-id="1380" data-game-slug="getaway-shootout" data-game-image="other/Getaway_Shootout/getaway-shootout-v2.jpg" data-video-thumb='{"mp4":"other\/Getaway_Shootout\/getaway-shootout-200x150.mp4","webm":"other\/Getaway_Shootout\/getaway-shootout-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Getaway_Shootout/getaway-shootout-v2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Getaway_Shootout/getaway-shootout-v2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Getaway_Shootout/getaway-shootout-v2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Getaway Shootout"/>
+</div>
+    <div class="title">Getaway Shootout</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/boxing-random" title="Boxing Random" data-game-id="2037" data-game-slug="boxing-random" data-game-image="other/Boxing_Random/boxing-random.jpg" data-video-thumb='{"mp4":"other\/boxing-random-200x150.mp4","webm":"other\/boxing-random-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Boxing_Random/boxing-random.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Boxing_Random/boxing-random.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Boxing_Random/boxing-random.jpg?auto=format&amp;w=100" width="100" height="75" alt="Boxing Random"/>
+</div>
+    <div class="title">Boxing Random</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/gun-mayhem-2-more-mayhem" title="Gun Mayhem 2 More Mayhem" data-game-id="709" data-game-slug="gun-mayhem-2-more-mayhem" data-game-image="o3/gun-mayhem-2-more-mayhem.jpg" data-video-thumb='{"mp4":"o3\/gun-mayhem-2-more-mayhem-200x150.mp4","webm":"o3\/gun-mayhem-2-more-mayhem-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/gun-mayhem-2-more-mayhem.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/gun-mayhem-2-more-mayhem.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/gun-mayhem-2-more-mayhem.jpg?auto=format&amp;w=100" width="100" height="75" alt="Gun Mayhem 2 More Mayhem"/>
+</div>
+    <div class="title">Gun Mayhem 2 More Mayhem</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/rooftop-snipers" title="Rooftop Snipers" data-game-id="1378" data-game-slug="rooftop-snipers" data-game-image="other/Rooftop_Snipers/rooftop-snipers-v5.jpg" data-video-thumb='{"mp4":"other\/Rooftop_Snipers\/rooftop-snipers-200x150.mp4","webm":"other\/Rooftop_Snipers\/rooftop-snipers-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Rooftop_Snipers/rooftop-snipers-v5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Rooftop_Snipers/rooftop-snipers-v5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Rooftop_Snipers/rooftop-snipers-v5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Rooftop Snipers"/>
+</div>
+    <div class="title">Rooftop Snipers</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/minibattles-2-6-players" title="MiniBattles 2-6 Players" data-game-id="1810" data-game-slug="minibattles-2-6-players" data-game-image="o2/MiniBattles/minibattles.jpg" data-video-thumb='{"mp4":"o2\/MiniBattles\/minibattles-2-6-players-200x150.mp4","webm":"o2\/MiniBattles\/minibattles-2-6-players-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o2/MiniBattles/minibattles.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o2/MiniBattles/minibattles.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o2/MiniBattles/minibattles.jpg?auto=format&amp;w=100" width="100" height="75" alt="MiniBattles 2-6 Players"/>
+</div>
+    <div class="title">MiniBattles 2-6 Players</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/get-on-top" title="Get on Top" data-game-id="904" data-game-slug="get-on-top" data-game-image="o4/Get_on_Top/get-on-top-v2.jpg" data-video-thumb='{"mp4":"o4\/Get_on_Top\/get-on-top-200x150.mp4","webm":"o4\/Get_on_Top\/get-on-top-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Get_on_Top/get-on-top-v2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Get_on_Top/get-on-top-v2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Get_on_Top/get-on-top-v2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Get on Top"/>
+</div>
+    <div class="title">Get on Top</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-war-infinity-duel" title="Stick War: Infinity Duel" data-game-id="2157" data-game-slug="stick-war-infinity-duel" data-game-image="other/Stick_War_Infinity_Duel.jpg" data-video-thumb='{"mp4":"other\/stick-war-infinity-duel-200x150.mp4","webm":"other\/stick-war-infinity-duel-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Stick_War_Infinity_Duel.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Stick_War_Infinity_Duel.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Stick_War_Infinity_Duel.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick War: Infinity Duel"/>
+</div>
+    <div class="title">Stick War: Infinity Duel</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-fist-3" title="Dragon Fist 3" data-game-id="619" data-game-slug="dragon-fist-3" data-game-image="o3/dragon-fist-3.jpg" data-video-thumb='{"mp4":"o3\/dragon-fist-3-200x150.mp4","webm":"o3\/dragon-fist-3-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/dragon-fist-3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/dragon-fist-3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/dragon-fist-3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Fist 3"/>
+</div>
+    <div class="title">Dragon Fist 3</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/super-smash-flash-2" title="Super Smash Flash 2" data-game-id="2503" data-game-slug="super-smash-flash-2" data-game-image="o3/super-smash-flash-2-v1.3/super-smash-flash2.jpg" data-video-thumb='{"mp4":"o3\/super-smash-flash-2-v1.3\/super-smash-flash-2-200x150.mp4","webm":"o3\/super-smash-flash-2-v1.3\/super-smash-flash-2-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/super-smash-flash-2-v1.3/super-smash-flash2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/super-smash-flash-2-v1.3/super-smash-flash2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/super-smash-flash-2-v1.3/super-smash-flash2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Super Smash Flash 2"/>
+</div>
+    <div class="title">Super Smash Flash 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/janissary-battles" title="Janissary Battles" data-game-id="1575" data-game-slug="janissary-battles" data-game-image="other/Janissary_Battles/Janissary_Battles.jpg" data-video-thumb='{"mp4":"other\/Janissary_Battles\/janissary-battles-200x150.mp4","webm":"other\/Janissary_Battles\/janissary-battles-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Janissary_Battles/Janissary_Battles.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Janissary_Battles/Janissary_Battles.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Janissary_Battles/Janissary_Battles.jpg?auto=format&amp;w=100" width="100" height="75" alt="Janissary Battles"/>
+</div>
+    <div class="title">Janissary Battles</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-z-battle" title="Dragon Ball Z Battle" data-game-id="1092" data-game-slug="dragon-ball-z-battle" data-game-image="o5/dragon-ball-z-battle.jpg" data-video-thumb='{"mp4":"o5\/dragon-ball-z-battle-200x150.mp4","webm":"o5\/dragon-ball-z-battle-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/dragon-ball-z-battle.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/dragon-ball-z-battle.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/dragon-ball-z-battle.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Z Battle"/>
+</div>
+    <div class="title">Dragon Ball Z Battle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/bleach-vs-naruto" title="Bleach vs Naruto" data-game-id="2540" data-game-slug="bleach-vs-naruto" data-game-image="o5/bleach-vs-naruto/bleach-vs-naruto.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/bleach-vs-naruto/bleach-vs-naruto.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/bleach-vs-naruto/bleach-vs-naruto.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/bleach-vs-naruto/bleach-vs-naruto.jpg?auto=format&amp;w=100" width="100" height="75" alt="Bleach vs Naruto"/>
+</div>
+    <div class="title">Bleach vs Naruto</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-boxing" title="Drunken Boxing" data-game-id="1876" data-game-slug="drunken-boxing" data-game-image="o1/Drunken_Boxing/drunken-boxing.jpg" data-video-thumb='{"mp4":"o1\/Drunken_Boxing\/drunken-boxing-200x150.mp4","webm":"o1\/Drunken_Boxing\/drunken-boxing-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Drunken_Boxing/drunken-boxing.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Drunken_Boxing/drunken-boxing.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Drunken_Boxing/drunken-boxing.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Boxing"/>
+</div>
+    <div class="title">Drunken Boxing</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/fairy-tail-vs-one-piece-2-0" title="Fairy Tail vs One Piece 2.0" data-game-id="2553" data-game-slug="fairy-tail-vs-one-piece-2-0" data-game-image="o6/fairy-tail-vs-one-piece-v2/fairy-tail-vs-one-piece.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece-v2/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece-v2/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece-v2/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=100" width="100" height="75" alt="Fairy Tail vs One Piece 2.0"/>
+</div>
+    <div class="title">Fairy Tail vs One Piece 2.0</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/12-minibattles" title="12 MiniBattles" data-game-id="1414" data-game-slug="12-minibattles" data-game-image="o1/12_MiniBattles/12_MiniBattles.jpg" data-video-thumb='{"mp4":"o1\/12_MiniBattles\/12-minibattles-200x150.mp4","webm":"o1\/12_MiniBattles\/12-minibattles-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/12_MiniBattles/12_MiniBattles.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/12_MiniBattles/12_MiniBattles.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/12_MiniBattles/12_MiniBattles.jpg?auto=format&amp;w=100" width="100" height="75" alt="12 MiniBattles"/>
+</div>
+    <div class="title">12 MiniBattles</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/super-fighters-ultimate" title="Super Fighters Ultimate" data-game-id="1265" data-game-slug="super-fighters-ultimate" data-game-image="o5/Super_Fighters_Ultimate.jpg" data-video-thumb='{"mp4":"o5\/super-fighters-ultimate-200x150.mp4","webm":"o5\/super-fighters-ultimate-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Super_Fighters_Ultimate.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Super_Fighters_Ultimate.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Super_Fighters_Ultimate.jpg?auto=format&amp;w=100" width="100" height="75" alt="Super Fighters Ultimate"/>
+</div>
+    <div class="title">Super Fighters Ultimate</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/ragdoll-duel-boxing" title="Ragdoll Duel: Boxing" data-game-id="2204" data-game-slug="ragdoll-duel-boxing" data-game-image="other/Ragdoll_Duel_Boxing.jpg" data-video-thumb='{"mp4":"other\/ragdoll-duel-boxing-200x150.mp4","webm":"other\/ragdoll-duel-boxing-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Ragdoll_Duel_Boxing.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Ragdoll_Duel_Boxing.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Ragdoll_Duel_Boxing.jpg?auto=format&amp;w=100" width="100" height="75" alt="Ragdoll Duel: Boxing"/>
+</div>
+    <div class="title">Ragdoll Duel: Boxing</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-2-9" title="Dragon Ball Fierce Fighting 2.9" data-game-id="1070" data-game-slug="dragon-ball-fierce-fighting-2-9" data-game-image="o5/Dragon-Ball-Fierce-Fighting-2_9.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.9"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.9</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/comic-stars-fighting-3-6" title="Comic Stars Fighting 3.6" data-game-id="907" data-game-slug="comic-stars-fighting-3-6" data-game-image="o4/comic-star-fighting-3-6.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-6.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-6.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-6.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.6"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.6</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-duel-2" title="Drunken Duel 2" data-game-id="1846" data-game-slug="drunken-duel-2" data-game-image="o1/Drunken_Duel_2/Drunken_Duel_2.jpg" data-video-thumb='{"mp4":"o1\/Drunken_Duel_2\/drunken-duel-2-200x150.mp4","webm":"o1\/Drunken_Duel_2\/drunken-duel-2-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Drunken_Duel_2/Drunken_Duel_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Drunken_Duel_2/Drunken_Duel_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Drunken_Duel_2/Drunken_Duel_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Duel 2"/>
+</div>
+    <div class="title">Drunken Duel 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-6" title="Dragon Ball: Fierce Fighting 6" data-game-id="844" data-game-slug="dragon-ball-fierce-fighting-6" data-game-image="o4/DragonBall_Fierce_Fighting_6.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/DragonBall_Fierce_Fighting_6.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/DragonBall_Fierce_Fighting_6.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/DragonBall_Fierce_Fighting_6.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball: Fierce Fighting 6"/>
+</div>
+    <div class="title">Dragon Ball: Fierce Fighting 6</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-fist-2" title="Dragon Fist 2" data-game-id="618" data-game-slug="dragon-fist-2" data-game-image="o3/Dragon_Fist_2_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/Dragon_Fist_2_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/Dragon_Fist_2_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/Dragon_Fist_2_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Fist 2"/>
+</div>
+    <div class="title">Dragon Fist 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-duel-the-war" title="Stick Duel: The War" data-game-id="2282" data-game-slug="stick-duel-the-war" data-game-image="o1/Stick_Duel_The_War/Stick_Duel_The_War.jpg" data-video-thumb='{"mp4":"o1\/Stick_Duel_The_War\/stick-duel-the-war-200x150.mp4","webm":"o1\/Stick_Duel_The_War\/stick-duel-the-war-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Stick_Duel_The_War/Stick_Duel_The_War.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Stick_Duel_The_War/Stick_Duel_The_War.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Stick_Duel_The_War/Stick_Duel_The_War.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Duel: The War"/>
+</div>
+    <div class="title">Stick Duel: The War</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-boxing-2" title="Drunken Boxing 2" data-game-id="2067" data-game-slug="drunken-boxing-2" data-game-image="other/drunken-boxing-2.jpg" data-video-thumb='{"mp4":"other\/drunken-boxing-2-200x150.mp4","webm":"other\/drunken-boxing-2-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/drunken-boxing-2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/drunken-boxing-2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/drunken-boxing-2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Boxing 2"/>
+</div>
+    <div class="title">Drunken Boxing 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-4-0" title="Dragon Ball Fierce Fighting 4.0" data-game-id="1075" data-game-slug="dragon-ball-fierce-fighting-4-0" data-game-image="o5/Dragon-Ball-Fierce-Fighting-4-0.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-4-0.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-4-0.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-4-0.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 4.0"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 4.0</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-z-devolution" title="Dragon Ball Z Devolution" data-game-id="908" data-game-slug="dragon-ball-z-devolution" data-game-image="o5/Dragon_Ball_Z_Devolution.jpg" data-video-thumb='{"mp4":"o4\/dragon-ball-z-devolution-200x150.mp4","webm":"o4\/dragon-ball-z-devolution-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Dragon_Ball_Z_Devolution.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Dragon_Ball_Z_Devolution.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Dragon_Ball_Z_Devolution.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Z Devolution"/>
+</div>
+    <div class="title">Dragon Ball Z Devolution</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-battle-1-8" title="Anime Battle 1.8" data-game-id="1000" data-game-slug="anime-battle-1-8" data-game-image="other/animebattle18/anime-battle-18.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Battle 1.8"/>
+</div>
+    <div class="title">Anime Battle 1.8</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dog-fight" title="Dog-Fight" data-game-id="332" data-game-slug="dog-fight" data-game-image="o2/dog-fight.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o2/dog-fight.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o2/dog-fight.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o2/dog-fight.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dog-Fight"/>
+</div>
+    <div class="title">Dog-Fight</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/godzilla-daikaiju-battle-royale" title="Godzilla Daikaiju Battle Royale" data-game-id="2558" data-game-slug="godzilla-daikaiju-battle-royale" data-game-image="o5/godzilla.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/godzilla.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/godzilla.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/godzilla.jpg?auto=format&amp;w=100" width="100" height="75" alt="Godzilla Daikaiju Battle Royale"/>
+</div>
+    <div class="title">Godzilla Daikaiju Battle Royale</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/fighter-legends-duo" title="Fighter Legends Duo" data-game-id="2342" data-game-slug="fighter-legends-duo" data-game-image="o1/Fighter_Legends_Duo/Fighter_Legends_Duo.jpg" data-video-thumb='{"mp4":"o1\/Fighter_Legends_Duo\/fighter_legends_duo-200x150.mp4","webm":"o1\/Fighter_Legends_Duo\/fighter_legends_duo-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Fighter_Legends_Duo/Fighter_Legends_Duo.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Fighter_Legends_Duo/Fighter_Legends_Duo.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Fighter_Legends_Duo/Fighter_Legends_Duo.jpg?auto=format&amp;w=100" width="100" height="75" alt="Fighter Legends Duo"/>
+</div>
+    <div class="title">Fighter Legends Duo</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/comic-stars-fighting-3-5" title="Comic Stars Fighting 3.5" data-game-id="981" data-game-slug="comic-stars-fighting-3-5" data-game-image="o4/comic-star-fighting-3-5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.5"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.5</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/sumos" title="Sumos" data-game-id="82" data-game-slug="sumos" data-game-image="o1/Sumos_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Sumos_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Sumos_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Sumos_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Sumos"/>
+</div>
+    <div class="title">Sumos</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/khan-kluay-kids-war" title="Khan Kluay Kids War" data-game-id="225" data-game-slug="khan-kluay-kids-war" data-game-image="o1/Khan-Kluay-Kids-War.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Khan-Kluay-Kids-War.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Khan-Kluay-Kids-War.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Khan-Kluay-Kids-War.jpg?auto=format&amp;w=100" width="100" height="75" alt="Khan Kluay Kids War"/>
+</div>
+    <div class="title">Khan Kluay Kids War</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/gang-fall-party" title="Gang Fall Party" data-game-id="2072" data-game-slug="gang-fall-party" data-game-image="o1/GangFallParty/GangFallParty.jpg" data-video-thumb='{"mp4":"o1\/GangFallParty\/gang-fall-party-200x150.mp4","webm":"o1\/GangFallParty\/gang-fall-party-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/GangFallParty/GangFallParty.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/GangFallParty/GangFallParty.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/GangFallParty/GangFallParty.jpg?auto=format&amp;w=100" width="100" height="75" alt="Gang Fall Party"/>
+</div>
+    <div class="title">Gang Fall Party</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/oil-wrestling" title="Oil Wrestling" data-game-id="1476" data-game-slug="oil-wrestling" data-game-image="other/Oil_Wrestling/oil-wrestling.jpg" data-video-thumb='{"mp4":"other\/Oil_Wrestling\/oil-wrestling-200x150.mp4","webm":"other\/Oil_Wrestling\/oil-wrestling-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Oil_Wrestling/oil-wrestling.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Oil_Wrestling/oil-wrestling.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Oil_Wrestling/oil-wrestling.jpg?auto=format&amp;w=100" width="100" height="75" alt="Oil Wrestling"/>
+</div>
+    <div class="title">Oil Wrestling</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-fighter-3d" title="Stick Fighter 3D" data-game-id="2125" data-game-slug="stick-fighter-3d" data-game-image="other/Stick_Fighter_3D.jpg" data-video-thumb='{"mp4":"other\/stick-fighter-3d-200x150.mp4","webm":"other\/stick-fighter-3d-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Stick_Fighter_3D.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Stick_Fighter_3D.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Stick_Fighter_3D.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Fighter 3D"/>
+</div>
+    <div class="title">Stick Fighter 3D</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-fighter-2" title="Stick Fighter 2" data-game-id="676" data-game-slug="stick-fighter-2" data-game-image="other/stick-fighter-2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/stick-fighter-2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/stick-fighter-2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/stick-fighter-2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Fighter 2"/>
+</div>
+    <div class="title">Stick Fighter 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/fairy-tail-vs-one-piece-1-1" title="Fairy Tail vs One Piece 1.1" data-game-id="2547" data-game-slug="fairy-tail-vs-one-piece-1-1" data-game-image="o6/fairy-tail-vs-one-piece/fairy-tail-vs-one-piece.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o6/fairy-tail-vs-one-piece/fairy-tail-vs-one-piece.jpg?auto=format&amp;w=100" width="100" height="75" alt="Fairy Tail vs One Piece 1.1"/>
+</div>
+    <div class="title">Fairy Tail vs One Piece 1.1</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-2-5" title="Dragon Ball Fierce Fighting 2.5" data-game-id="865" data-game-slug="dragon-ball-fierce-fighting-2-5" data-game-image="o4/Dragon_Ball_Fierce_Fighting_2_5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.5"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.5</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/super-smash-flash" title="Super Smash Flash" data-game-id="2502" data-game-slug="super-smash-flash" data-game-image="o2/super-smash-flash.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o2/super-smash-flash.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o2/super-smash-flash.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o2/super-smash-flash.jpg?auto=format&amp;w=100" width="100" height="75" alt="Super Smash Flash"/>
+</div>
+    <div class="title">Super Smash Flash</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-duel-shadow-fight" title="Stick Duel: Shadow Fight" data-game-id="2177" data-game-slug="stick-duel-shadow-fight" data-game-image="other/Stick_Duel_Shadow_Fight.jpg" data-video-thumb='{"mp4":"other\/stick-duel-shadow-fight-200x150.mp4","webm":"other\/stick-duel-shadow-fight-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Stick_Duel_Shadow_Fight.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Stick_Duel_Shadow_Fight.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Stick_Duel_Shadow_Fight.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Duel: Shadow Fight"/>
+</div>
+    <div class="title">Stick Duel: Shadow Fight</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/newgrounds-rumble" title="Newgrounds Rumble" data-game-id="2563" data-game-slug="newgrounds-rumble" data-game-image="o5/newgrounds-rumble.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/newgrounds-rumble.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/newgrounds-rumble.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/newgrounds-rumble.jpg?auto=format&amp;w=100" width="100" height="75" alt="Newgrounds Rumble"/>
+</div>
+    <div class="title">Newgrounds Rumble</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/shadow-fighters-hero-duel" title="Shadow Fighters: Hero Duel" data-game-id="2244" data-game-slug="shadow-fighters-hero-duel" data-game-image="other/Shadow_Fighters_Hero_Duel.jpg" data-video-thumb='{"mp4":"other\/shadow-fighters-hero-duel-200x150.mp4","webm":"other\/shadow-fighters-hero-duel-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Shadow_Fighters_Hero_Duel.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Shadow_Fighters_Hero_Duel.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Shadow_Fighters_Hero_Duel.jpg?auto=format&amp;w=100" width="100" height="75" alt="Shadow Fighters: Hero Duel"/>
+</div>
+    <div class="title">Shadow Fighters: Hero Duel</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-2-6" title="Dragon Ball Fierce Fighting 2.6" data-game-id="867" data-game-slug="dragon-ball-fierce-fighting-2-6" data-game-image="o4/Dragon_Ball_Fierce_Fighting_2-6.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2-6.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2-6.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2-6.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.6"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.6</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/naruto-vs-one-piece-2-0" title="Naruto vs One Piece 2.0" data-game-id="821" data-game-slug="naruto-vs-one-piece-2-0" data-game-image="o4/Naruto_vs_One_Piece_2-0.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Naruto_vs_One_Piece_2-0.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Naruto_vs_One_Piece_2-0.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Naruto_vs_One_Piece_2-0.jpg?auto=format&amp;w=100" width="100" height="75" alt="Naruto vs One Piece 2.0"/>
+</div>
+    <div class="title">Naruto vs One Piece 2.0</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/ultimate-robo-duel-3d" title="Ultimate Robo Duel 3D" data-game-id="2230" data-game-slug="ultimate-robo-duel-3d" data-game-image="other/Ultimate_Robo_Duel_3D/ultimate-robo-duel-3d.jpg" data-video-thumb='{"mp4":"other\/Ultimate_Robo_Duel_3D\/ultimate-robo-duel-3d.mp4-200x150.mp4","webm":"other\/Ultimate_Robo_Duel_3D\/ultimate-robo-duel-3d.mp4-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Ultimate_Robo_Duel_3D/ultimate-robo-duel-3d.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Ultimate_Robo_Duel_3D/ultimate-robo-duel-3d.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Ultimate_Robo_Duel_3D/ultimate-robo-duel-3d.jpg?auto=format&amp;w=100" width="100" height="75" alt="Ultimate Robo Duel 3D"/>
+</div>
+    <div class="title">Ultimate Robo Duel 3D</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/gangsters" title="Gangsters" data-game-id="1416" data-game-slug="gangsters" data-game-image="other/Gangsters/Gangsters_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Gangsters/Gangsters_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Gangsters/Gangsters_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Gangsters/Gangsters_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Gangsters"/>
+</div>
+    <div class="title">Gangsters</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/striker-dummies" title="Striker Dummies" data-game-id="1702" data-game-slug="striker-dummies" data-game-image="other/Striker_Dummies.jpg" data-video-thumb='{"mp4":"other\/striker-dummies-200x150.mp4","webm":"other\/striker-dummies-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Striker_Dummies.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Striker_Dummies.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Striker_Dummies.jpg?auto=format&amp;w=100" width="100" height="75" alt="Striker Dummies"/>
+</div>
+    <div class="title">Striker Dummies</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/donut-vs-donut" title="Donut vs Donut" data-game-id="1449" data-game-slug="donut-vs-donut" data-game-image="other/donut_vs_donut/Donut_vs_Donut.jpg" data-video-thumb='{"mp4":"other\/donut_vs_donut\/donut-vs-donut-200x150.mp4","webm":"other\/donut_vs_donut\/donut-vs-donut-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/donut_vs_donut/Donut_vs_Donut.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/donut_vs_donut/Donut_vs_Donut.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/donut_vs_donut/Donut_vs_Donut.jpg?auto=format&amp;w=100" width="100" height="75" alt="Donut vs Donut"/>
+</div>
+    <div class="title">Donut vs Donut</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/street-mayhem-beat-em-up" title="Street Mayhem - Beat &#039;Em Up" data-game-id="2228" data-game-slug="street-mayhem-beat-em-up" data-game-image="o1/StreetMayhemBeatEmUp/StreetMayhemBeatEmUp.jpg" data-video-thumb='{"mp4":"o1\/StreetMayhemBeatEmUp\/street-mayhem-beat-em-up-200x150.mp4","webm":"o1\/StreetMayhemBeatEmUp\/street-mayhem-beat-em-up-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/StreetMayhemBeatEmUp/StreetMayhemBeatEmUp.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/StreetMayhemBeatEmUp/StreetMayhemBeatEmUp.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/StreetMayhemBeatEmUp/StreetMayhemBeatEmUp.jpg?auto=format&amp;w=100" width="100" height="75" alt="Street Mayhem - Beat &#039;Em Up"/>
+</div>
+    <div class="title">Street Mayhem - Beat &#039;Em Up</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/double-edged" title="Double Edged" data-game-id="755" data-game-slug="double-edged" data-game-image="o3/Double_Edged.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/Double_Edged.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/Double_Edged.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/Double_Edged.jpg?auto=format&amp;w=100" width="100" height="75" alt="Double Edged"/>
+</div>
+    <div class="title">Double Edged</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-z-ultimate-power-2" title="Dragon Ball Z Ultimate Power 2" data-game-id="1189" data-game-slug="dragon-ball-z-ultimate-power-2" data-game-image="o5/DragonBall_Z_Ultimate_Power_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/DragonBall_Z_Ultimate_Power_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/DragonBall_Z_Ultimate_Power_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/DragonBall_Z_Ultimate_Power_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Z Ultimate Power 2"/>
+</div>
+    <div class="title">Dragon Ball Z Ultimate Power 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/yanloong-legend-3-double-swallow" title="Yanloong Legend 3: Double Swallow" data-game-id="1152" data-game-slug="yanloong-legend-3-double-swallow" data-game-image="o5/Yanloong_Legend_3_Double_Swallow.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Yanloong_Legend_3_Double_Swallow.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Yanloong_Legend_3_Double_Swallow.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Yanloong_Legend_3_Double_Swallow.jpg?auto=format&amp;w=100" width="100" height="75" alt="Yanloong Legend 3: Double Swallow"/>
+</div>
+    <div class="title">Yanloong Legend 3: Double Swallow</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-legends-2-5" title="Anime Legends 2.5" data-game-id="1183" data-game-slug="anime-legends-2-5" data-game-image="other/anime_legends_2_5/anime-legends-2-5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Legends 2.5"/>
+</div>
+    <div class="title">Anime Legends 2.5</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-fighters-cr-sasuke" title="Anime Fighters CR: Sasuke" data-game-id="1005" data-game-slug="anime-fighters-cr-sasuke" data-game-image="o4/Anime-Fighters-CR_Sasuke.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Fighters CR: Sasuke"/>
+</div>
+    <div class="title">Anime Fighters CR: Sasuke</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/regular-show-fist-punch" title="Regular Show Fist Punch" data-game-id="1062" data-game-slug="regular-show-fist-punch" data-game-image="o5/Regular_Show_Fist_Punch_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Regular_Show_Fist_Punch_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Regular_Show_Fist_Punch_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Regular_Show_Fist_Punch_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Regular Show Fist Punch"/>
+</div>
+    <div class="title">Regular Show Fist Punch</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-legends-2-4" title="Anime Legends 2.4" data-game-id="1148" data-game-slug="anime-legends-2-4" data-game-image="other/AnimeLegends24/anime-legends-24.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/AnimeLegends24/anime-legends-24.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/AnimeLegends24/anime-legends-24.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/AnimeLegends24/anime-legends-24.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Legends 2.4"/>
+</div>
+    <div class="title">Anime Legends 2.4</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/mini-duels-battle" title="Mini Duels Battle" data-game-id="2343" data-game-slug="mini-duels-battle" data-game-image="o1/Mini_Duel_Battles/Mini_Duel_Battles.jpg" data-video-thumb='{"mp4":"o1\/Mini_Duel_Battles\/mini_duels_battle-200x150.mp4","webm":"o1\/Mini_Duel_Battles\/mini_duels_battle-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Mini_Duel_Battles/Mini_Duel_Battles.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Mini_Duel_Battles/Mini_Duel_Battles.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Mini_Duel_Battles/Mini_Duel_Battles.jpg?auto=format&amp;w=100" width="100" height="75" alt="Mini Duels Battle"/>
+</div>
+    <div class="title">Mini Duels Battle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/king-of-fighters-wing-ex" title="King of Fighters Wing EX" data-game-id="863" data-game-slug="king-of-fighters-wing-ex" data-game-image="o4/King_of_Fighters_Wing_EX.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/King_of_Fighters_Wing_EX.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/King_of_Fighters_Wing_EX.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/King_of_Fighters_Wing_EX.jpg?auto=format&amp;w=100" width="100" height="75" alt="King of Fighters Wing EX"/>
+</div>
+    <div class="title">King of Fighters Wing EX</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/fire-vs-water-fights" title="Fire vs. Water Fights" data-game-id="2098" data-game-slug="fire-vs-water-fights" data-game-image="other/Fire_vs_Water_Fights.jpg" data-video-thumb='{"mp4":"other\/fire-vs-water-fights-200x150.mp4","webm":"other\/fire-vs-water-fights-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Fire_vs_Water_Fights.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Fire_vs_Water_Fights.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Fire_vs_Water_Fights.jpg?auto=format&amp;w=100" width="100" height="75" alt="Fire vs. Water Fights"/>
+</div>
+    <div class="title">Fire vs. Water Fights</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/capoeira-fighter-3-ultimate-world-tournament" title="Capoeira Fighter 3: Ultimate World Tournament" data-game-id="2546" data-game-slug="capoeira-fighter-3-ultimate-world-tournament" data-game-image="o6/capoeira-fighter-3/capoeira-fighter-3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o6/capoeira-fighter-3/capoeira-fighter-3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o6/capoeira-fighter-3/capoeira-fighter-3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o6/capoeira-fighter-3/capoeira-fighter-3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Capoeira Fighter 3: Ultimate World Tournament"/>
+</div>
+    <div class="title">Capoeira Fighter 3: Ultimate World Tournament</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-slap-wars" title="Drunken Slap Wars" data-game-id="2112" data-game-slug="drunken-slap-wars" data-game-image="other/Drunken_Slap_Wars.jpg" data-video-thumb='{"mp4":"other\/drunken-slap-wars-200x150.mp4","webm":"other\/drunken-slap-wars-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Drunken_Slap_Wars.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Drunken_Slap_Wars.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Drunken_Slap_Wars.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Slap Wars"/>
+</div>
+    <div class="title">Drunken Slap Wars</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/stick-warrior-hero-battle" title="Stick Warrior Hero Battle" data-game-id="2279" data-game-slug="stick-warrior-hero-battle" data-game-image="o1/Stick_Warrior_Hero_Battle/Stick_Warrior_Hero_Battle.jpg" data-video-thumb='{"mp4":"o1\/Stick_Warrior_Hero_Battle\/stick-warrior-hero-battle-200x150.mp4","webm":"o1\/Stick_Warrior_Hero_Battle\/stick-warrior-hero-battle-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Stick_Warrior_Hero_Battle/Stick_Warrior_Hero_Battle.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Stick_Warrior_Hero_Battle/Stick_Warrior_Hero_Battle.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Stick_Warrior_Hero_Battle/Stick_Warrior_Hero_Battle.jpg?auto=format&amp;w=100" width="100" height="75" alt="Stick Warrior Hero Battle"/>
+</div>
+    <div class="title">Stick Warrior Hero Battle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/thumb-fighter" title="Thumb Fighter" data-game-id="998" data-game-slug="thumb-fighter" data-game-image="o4/Thumb_Fighter_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Thumb_Fighter_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Thumb_Fighter_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Thumb_Fighter_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Thumb Fighter"/>
+</div>
+    <div class="title">Thumb Fighter</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-legends-2" title="Anime Legends 2" data-game-id="1069" data-game-slug="anime-legends-2" data-game-image="other/anime-legends-2/anime-legends2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Legends 2"/>
+</div>
+    <div class="title">Anime Legends 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/comic-stars-fighting-3-4" title="Comic Stars Fighting 3.4" data-game-id="874" data-game-slug="comic-stars-fighting-3-4" data-game-image="o4/Comic_Stars_Fighting_3_4.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.4"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.4</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/mortal-kombat" title="Mortal Kombat" data-game-id="286" data-game-slug="mortal-kombat" data-game-image="o2/Mortal-Kombat.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o2/Mortal-Kombat.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o2/Mortal-Kombat.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o2/Mortal-Kombat.jpg?auto=format&amp;w=100" width="100" height="75" alt="Mortal Kombat"/>
+</div>
+    <div class="title">Mortal Kombat</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-2-7" title="Dragon Ball Fierce Fighting 2.7" data-game-id="912" data-game-slug="dragon-ball-fierce-fighting-2-7" data-game-image="o4/Dragon_Ball_Fierce_Fighting_2_7.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.7"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.7</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/bomb-it-3" title="Bomb It 3" data-game-id="544" data-game-slug="bomb-it-3" data-game-image="other/Bomb_it_3_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Bomb_it_3_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Bomb_it_3_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Bomb_it_3_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Bomb It 3"/>
+</div>
+    <div class="title">Bomb It 3</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/yanloong-legend-2" title="Yanloong Legend 2" data-game-id="257" data-game-slug="yanloong-legend-2" data-game-image="o2/Yanloong_Legend_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o2/Yanloong_Legend_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o2/Yanloong_Legend_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o2/Yanloong_Legend_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Yanloong Legend 2"/>
+</div>
+    <div class="title">Yanloong Legend 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/shadow-fights" title="Shadow Fights" data-game-id="2027" data-game-slug="shadow-fights" data-game-image="o1/Shadow_Fights/Shadow_Fights.jpg" data-video-thumb='{"mp4":"o1\/Shadow_Fights\/shadow-fights-200x150.mp4","webm":"o1\/Shadow_Fights\/shadow-fights-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Shadow_Fights/Shadow_Fights.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Shadow_Fights/Shadow_Fights.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Shadow_Fights/Shadow_Fights.jpg?auto=format&amp;w=100" width="100" height="75" alt="Shadow Fights"/>
+</div>
+    <div class="title">Shadow Fights</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/ragdoll-gangs" title="Ragdoll Gangs" data-game-id="1828" data-game-slug="ragdoll-gangs" data-game-image="o1/Ragdoll_Gangs/Ragdoll_Gangs.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Ragdoll_Gangs/Ragdoll_Gangs.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Ragdoll_Gangs/Ragdoll_Gangs.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Ragdoll_Gangs/Ragdoll_Gangs.jpg?auto=format&amp;w=100" width="100" height="75" alt="Ragdoll Gangs"/>
+</div>
+    <div class="title">Ragdoll Gangs</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-z-vs-cr-vegeta" title="Dragon Ball Z vs CR Vegeta" data-game-id="1170" data-game-slug="dragon-ball-z-vs-cr-vegeta" data-game-image="o5/Dragon_Ball_ZvsCR_Vegeta.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Dragon_Ball_ZvsCR_Vegeta.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Dragon_Ball_ZvsCR_Vegeta.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Dragon_Ball_ZvsCR_Vegeta.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Z vs CR Vegeta"/>
+</div>
+    <div class="title">Dragon Ball Z vs CR Vegeta</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/boxing" title="Boxing" data-game-id="92" data-game-slug="boxing" data-game-image="o1/boxing-new.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/boxing-new.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/boxing-new.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/boxing-new.jpg?auto=format&amp;w=100" width="100" height="75" alt="Boxing"/>
+</div>
+    <div class="title">Boxing</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-boxing-ultimate" title="Drunken Boxing: Ultimate" data-game-id="2198" data-game-slug="drunken-boxing-ultimate" data-game-image="other/Drunken_Boxing_Ultimate.jpg" data-video-thumb='{"mp4":"other\/drunken-boxing-ultimate-200x150.mp4","webm":"other\/drunken-boxing-ultimate-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Drunken_Boxing_Ultimate.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Drunken_Boxing_Ultimate.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Drunken_Boxing_Ultimate.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Boxing: Ultimate"/>
+</div>
+    <div class="title">Drunken Boxing: Ultimate</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/wrestle-jump" title="Wrestle Jump" data-game-id="875" data-game-slug="wrestle-jump" data-game-image="other/Wrestle_Jump.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Wrestle_Jump.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Wrestle_Jump.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Wrestle_Jump.jpg?auto=format&amp;w=100" width="100" height="75" alt="Wrestle Jump"/>
+</div>
+    <div class="title">Wrestle Jump</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/one-piece-fighting-cr-sanji" title="One Piece Fighting CR: Sanji" data-game-id="1156" data-game-slug="one-piece-fighting-cr-sanji" data-game-image="o5/One_Piece_Fighting_CR_Sanji.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/One_Piece_Fighting_CR_Sanji.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/One_Piece_Fighting_CR_Sanji.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/One_Piece_Fighting_CR_Sanji.jpg?auto=format&amp;w=100" width="100" height="75" alt="One Piece Fighting CR: Sanji"/>
+</div>
+    <div class="title">One Piece Fighting CR: Sanji</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-spin-punch" title="Drunken Spin Punch" data-game-id="2101" data-game-slug="drunken-spin-punch" data-game-image="other/Drunken_Spin_Punch.jpg" data-video-thumb='{"mp4":"other\/drunken-spin-punch-200x150.mp4","webm":"other\/drunken-spin-punch-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Drunken_Spin_Punch.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Drunken_Spin_Punch.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Drunken_Spin_Punch.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Spin Punch"/>
+</div>
+    <div class="title">Drunken Spin Punch</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/comic-stars-fighting-3-3" title="Comic Stars Fighting 3.3" data-game-id="859" data-game-slug="comic-stars-fighting-3-3" data-game-image="o4/Comic_Stars_Fighting_3_3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.3"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.3</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/paper-fighter-3d" title="Paper Fighter 3D" data-game-id="2261" data-game-slug="paper-fighter-3d" data-game-image="other/PaperFighter3D/PaperFighter3D.jpg" data-video-thumb='{"mp4":"other\/PaperFighter3D\/paper-fighter-3d-200x150.mp4","webm":"other\/PaperFighter3D\/paper-fighter-3d-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/PaperFighter3D/PaperFighter3D.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/PaperFighter3D/PaperFighter3D.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/PaperFighter3D/PaperFighter3D.jpg?auto=format&amp;w=100" width="100" height="75" alt="Paper Fighter 3D"/>
+</div>
+    <div class="title">Paper Fighter 3D</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/anime-fighting-jam-wing" title="Anime Fighting Jam Wing" data-game-id="614" data-game-slug="anime-fighting-jam-wing" data-game-image="o3/Anime_Fighting_Jam-Wing.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/Anime_Fighting_Jam-Wing.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/Anime_Fighting_Jam-Wing.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/Anime_Fighting_Jam-Wing.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Fighting Jam Wing"/>
+</div>
+    <div class="title">Anime Fighting Jam Wing</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-5" title="Dragon Ball: Fierce Fighting 5" data-game-id="843" data-game-slug="dragon-ball-fierce-fighting-5" data-game-image="o4/Dragon_Ball_Fierce_Fighting_5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball: Fierce Fighting 5"/>
+</div>
+    <div class="title">Dragon Ball: Fierce Fighting 5</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/royal-city-clashers" title="Royal City Clashers" data-game-id="1225" data-game-slug="royal-city-clashers" data-game-image="other/RoyalCityClashers/Royal_City_Clashers_180x135.jpg" data-video-thumb='{"mp4":"other\/RoyalCityClashers\/royal-city-clashers-200x150.mp4","webm":"other\/RoyalCityClashers\/royal-city-clashers-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/RoyalCityClashers/Royal_City_Clashers_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/RoyalCityClashers/Royal_City_Clashers_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/RoyalCityClashers/Royal_City_Clashers_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Royal City Clashers"/>
+</div>
+    <div class="title">Royal City Clashers</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/king-of-fighters-4" title="King of Fighters 4" data-game-id="758" data-game-slug="king-of-fighters-4" data-game-image="o3/King_of_Fighters_4.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/King_of_Fighters_4.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/King_of_Fighters_4.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/King_of_Fighters_4.jpg?auto=format&amp;w=100" width="100" height="75" alt="King of Fighters 4"/>
+</div>
+    <div class="title">King of Fighters 4</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/mighty-knight-2" title="Mighty Knight 2" data-game-id="948" data-game-slug="mighty-knight-2" data-game-image="o4/Mighty_Knight_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Mighty_Knight_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Mighty_Knight_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Mighty_Knight_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Mighty Knight 2"/>
+</div>
+    <div class="title">Mighty Knight 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/street-fighter-creation-3" title="Street Fighter Creation 3" data-game-id="1009" data-game-slug="street-fighter-creation-3" data-game-image="o4/Street_Fighter_Creation_3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Street Fighter Creation 3"/>
+</div>
+    <div class="title">Street Fighter Creation 3</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-table-wars" title="Drunken Table Wars" data-game-id="2017" data-game-slug="drunken-table-wars" data-game-image="other/Drunken_Table_Wars.jpg" data-video-thumb='{"mp4":"other\/drunken-table-wars-200x150.mp4","webm":"other\/drunken-table-wars-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Drunken_Table_Wars.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Drunken_Table_Wars.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Drunken_Table_Wars.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Table Wars"/>
+</div>
+    <div class="title">Drunken Table Wars</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/drunken-wrestle" title="Drunken Wrestle" data-game-id="2044" data-game-slug="drunken-wrestle" data-game-image="o1/Drunken_Wrestle/Drunken_Wrestle.jpg" data-video-thumb='{"mp4":"o1\/Drunken_Wrestle\/drunken-wrestle-200x150.mp4","webm":"o1\/Drunken_Wrestle\/drunken-wrestle-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Drunken_Wrestle/Drunken_Wrestle.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Drunken_Wrestle/Drunken_Wrestle.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Drunken_Wrestle/Drunken_Wrestle.jpg?auto=format&amp;w=100" width="100" height="75" alt="Drunken Wrestle"/>
+</div>
+    <div class="title">Drunken Wrestle</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/fleabag-vs--mutt-2" title="Fleabag vs. Mutt 2" data-game-id="640" data-game-slug="fleabag-vs--mutt-2" data-game-image="o3/FleabagvsMutt_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/FleabagvsMutt_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/FleabagvsMutt_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/FleabagvsMutt_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Fleabag vs. Mutt 2"/>
+</div>
+    <div class="title">Fleabag vs. Mutt 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/boxing-stars" title="Boxing Stars" data-game-id="2391" data-game-slug="boxing-stars" data-game-image="o1/Boxing_Stars/Boxing_Star.jpg" data-video-thumb='{"mp4":"o1\/Boxing_Stars\/boxing-stars-200x150.mp4","webm":"o1\/Boxing_Stars\/boxing-stars-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Boxing_Stars/Boxing_Star.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Boxing_Stars/Boxing_Star.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Boxing_Stars/Boxing_Star.jpg?auto=format&amp;w=100" width="100" height="75" alt="Boxing Stars"/>
+</div>
+    <div class="title">Boxing Stars</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-fist-3d" title="Dragon Fist 3D" data-game-id="778" data-game-slug="dragon-fist-3d" data-game-image="o4/dragon-fist-3d.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/dragon-fist-3d.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/dragon-fist-3d.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/dragon-fist-3d.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Fist 3D"/>
+</div>
+    <div class="title">Dragon Fist 3D</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/zombie-to-shoot" title="Zombie to Shoot" data-game-id="32" data-game-slug="zombie-to-shoot" data-game-image="o1/Zombie_to_Shoot_180x135.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o1/Zombie_to_Shoot_180x135.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o1/Zombie_to_Shoot_180x135.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o1/Zombie_to_Shoot_180x135.jpg?auto=format&amp;w=100" width="100" height="75" alt="Zombie to Shoot"/>
+</div>
+    <div class="title">Zombie to Shoot</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-3" title="Dragon Ball: Fierce Fighting 3" data-game-id="779" data-game-slug="dragon-ball-fierce-fighting-3" data-game-image="o4/Dragon_Ball_Fierce_Fighting_3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball: Fierce Fighting 3"/>
+</div>
+    <div class="title">Dragon Ball: Fierce Fighting 3</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-goku-fight" title="Dragon Ball Goku Fight" data-game-id="963" data-game-slug="dragon-ball-goku-fight" data-game-image="o4/Dragon-Ball-Goku-Fight.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Goku Fight"/>
+</div>
+    <div class="title">Dragon Ball Goku Fight</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/dragon-ball-fierce-fighting-2" title="Dragon Ball: Fierce Fighting 2" data-game-id="767" data-game-slug="dragon-ball-fierce-fighting-2" data-game-image="o4/Dragon_Ball_Fierce_Fighting_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball: Fierce Fighting 2"/>
+</div>
+    <div class="title">Dragon Ball: Fierce Fighting 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/king-of-fighters-2" title="King of Fighters 2" data-game-id="508" data-game-slug="king-of-fighters-2" data-game-image="o3/King_of_Fighters-2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/King_of_Fighters-2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/King_of_Fighters-2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/King_of_Fighters-2.jpg?auto=format&amp;w=100" width="100" height="75" alt="King of Fighters 2"/>
+</div>
+    <div class="title">King of Fighters 2</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/march-of-the-cards" title="March of the Cards" data-game-id="928" data-game-slug="march-of-the-cards" data-game-image="o4/March_of_the_Cards.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/March_of_the_Cards.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/March_of_the_Cards.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/March_of_the_Cards.jpg?auto=format&amp;w=100" width="100" height="75" alt="March of the Cards"/>
+</div>
+    <div class="title">March of the Cards</div>
+</a>
+
+        </div>
+            <div class="item">
+            
+<a href="/game/martial-arts-fighter-duel" title="Martial Arts: Fighter Duel" data-game-id="2234" data-game-slug="martial-arts-fighter-duel" data-game-image="other/Martial_Arts_Fighter_Duel/Martial_Arts_Fighter_Duel.jpg" data-video-thumb='{"mp4":"other\/Martial_Arts_Fighter_Duel\/martial-arts-fighter-duel-200x150.mp4","webm":"other\/Martial_Arts_Fighter_Duel\/martial-arts-fighter-duel-200x150.webm"}'>
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Martial_Arts_Fighter_Duel/Martial_Arts_Fighter_Duel.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Martial_Arts_Fighter_Duel/Martial_Arts_Fighter_Duel.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Martial_Arts_Fighter_Duel/Martial_Arts_Fighter_Duel.jpg?auto=format&amp;w=100" width="100" height="75" alt="Martial Arts: Fighter Duel"/>
+</div>
+    <div class="title">Martial Arts: Fighter Duel</div>
+</a>
+
+        </div>
+    </div>
+
+    
+        <ul class="pagination justify-content-center">
+        
+                                    <li class="page-item active"><a class="page-link" href="/fighting">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="/fighting/2">2</a></li>
+                                                <li class="page-item"><a class="page-link" href="/fighting/3">3</a></li>
+                    
+                    <li class="page-item"><a class="page-link page-next" href="/fighting/2">Next &raquo;</a></li>
+            </ul>
+</div>
+        </div>
+
+
+        <footer>
+            <div class="footer-links">
+    <a href="/p/about-us">About Us</a>
+    <a href="/p/help">Help</a>
+    <a href="/p/privacy-policy">Privacy Policy</a>
+    <a href="/p/cookies">Cookies</a>
+    <a href="/p/contact">Contact</a>
+    <a href="/blog" title="Game Blog">Game Blog</a>
+                <a id="locale-switcher" href="#" data-locale-en="English" data-locale-fr="Français" data-locale-es="Español" data-locale-de="Deutsch" data-locale-pt="Português" data-locale-et="Eesti keel" data-locale-tr="Türkçe">
+            <span class="locale-flag locale-en"></span> English
+        </a>
+    </div>
+<div class="footer-stores">
+    <a target="_blank" title="Google Play Store" href="https://play.google.com/store/apps/developer?id=RHM+Interactive+OÜ" rel="noopener"><span class="google-play"></span></a>
+    <a target="_blank" title="Apple AppStore" href="https://apps.apple.com/developer/rhm-interactive-o%C3%BC/id1463271031" rel="noopener"><span class="app-store"></span></a>
+</div>
+<div class="footer-social">
+    <a class="youtube" target="_blank" title="Subscribe our YouTube channel" href="https://www.youtube.com/c/TwoplayergamesorgTV" rel="noopener"><span class="monochrome-youtube"></span></a>
+</div>
+<div class="footer-text">
+    &copy; 2008 - 2026<br>
+    TwoPlayerGames.org is an initiative of RHM Interactive OÜ<br>
+    Tallinn, Estonia<br>
+    VAT: EE 102120545
+</div>        </footer>
+    </div>
+        <div class="right-ad">
+        <div class="right-ad-160">
+            <div>
+  <div style="position: sticky; top: 5px;display: flex;flex-direction: column;">
+    <!-- /22538980388/twoplayergames.org_160x600_left_desktop_test -->
+    <div id="twoplayergames_org_game_page_left_desktop"></div>
+    <!-- /22538980388/twoplayergames.org_300x250_game_page_right_top_desktop -->
+    <div id="twoplayergames_org_game_page_right_top_desktop"></div>
+    <!-- /22538980388/twoplayergames.org_300x250_game_page_right_bottom_desktop -->
+    <div id="twoplayergames_org_game_page_right_bottom_desktop" style="margin-top: 5px;"></div>
+  </div>
+  <script>
+    googletag.cmd.push(function() {
+      if (adRandomChance) {
+        googletag.display('twoplayergames_org_game_page_left_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_left_desktop');
+        }));
+      } else {
+        googletag.display('twoplayergames_org_game_page_right_top_desktop');
+        googletag.display('twoplayergames_org_game_page_right_bottom_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_top_desktop');
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_bottom_desktop');
+        }));
+      }
+    });
+  </script>
+</div>
+        </div>
+    </div>
+    </div>
+
+<script>
+    window.siteConfig = {"domain":"twoplayergames.org","origin":{"desktop":"https:\/\/www.twoplayergames.org","mobile":"https:\/\/m.twoplayergames.org","files":"https:\/\/files.twoplayergames.org","images":"https:\/\/images.twoplayergames.org"},"gamesDir":"files\/games"}
+</script>
+<script src="/dist/twoplayergames-e96ef07e.js" defer></script>
+<script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+
+
+</body>
+</html>

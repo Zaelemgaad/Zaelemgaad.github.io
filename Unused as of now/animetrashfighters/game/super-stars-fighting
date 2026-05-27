@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Super Stars Fighting 🕹️ Two Player Games</title>
+    <meta name="description" content="The cartoon fighters who are very famous in the cartoon world, are coming together in this game for the lovers of it. If you want, you can embark on a fighting adventure as a single player or you can embark on a fighting..." />
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width">
+    <link rel="canonical" href="https://www.twoplayergames.org/game/super-stars-fighting">
+    
+    <link rel="alternate" hreflang="de" href="https://de.twoplayergames.org/spiel/super-stars-fighting" />
+    <link rel="alternate" hreflang="en" href="https://www.twoplayergames.org/game/super-stars-fighting" />
+    <link rel="alternate" hreflang="es" href="https://es.twoplayergames.org/juego/super-stars-fighting" />
+    <link rel="alternate" hreflang="et" href="https://ee.twoplayergames.org/mangu/super-stars-fighting" />
+    <link rel="alternate" hreflang="fr" href="https://fr.twoplayergames.org/jeu/super-stars-fighting" />
+    <link rel="alternate" hreflang="pt" href="https://br.twoplayergames.org/jogo/super-stars-fighting" />
+    <link rel="alternate" hreflang="tr" href="https://tr.twoplayergames.org/oyun/super-stars-fighting" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?fm=png8&amp;w=32&amp;h=32&amp;fit=crop&amp;mask=corners&amp;corner-radius=4,4,4,4">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?fm=png8&amp;w=48&amp;h=48&amp;fit=crop&amp;mask=corners&amp;corner-radius=6,6,6,6">
+    <link rel="manifest" href="/site.webmanifest"/>
+    <link rel="preconnect" href="https://images.twoplayergames.org" crossorigin>
+
+    <link href="/dist/twoplayergames-4dfb7ae6.css" rel="stylesheet">
+
+<link rel="preconnect" href="https://cmp.setupcmp.com">
+<style>span.stpd_poweredby_setupad {display:none !important}</style>
+<script>
+!function(){function e(){document.cookie="euconsent-v2=; path=/; domain=."+document.location.hostname+"; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax"}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",e):e()}();
+</script>
+<script data-prop-id="8226">
+(()=>{let e="__tcfapiLocator",t=[],a=window,n=a,s,c;for(;n;){try{if(n.frames[e]){s=n;break}}catch(o){}if(n===a.top)break;n=a.parent}s||(!function t(){let n=a.document,s=!!a.frames[e];if(!s){if(n.body){let c=n.createElement("iframe");c.style.cssText="display:none",c.name=e,n.body.appendChild(c)}else setTimeout(t,5)}return!s}(),a.__tcfapi=function e(...a){if(!a.length)return t;"setGdprApplies"===a[0]?a.length>3&&2===parseInt(a[1],10)&&"boolean"==typeof a[3]&&(c=a[3],"function"==typeof a[2]&&a[2]("set",!0)):"ping"===a[0]?"function"==typeof a[2]&&a[2]({gdprApplies:c,cmpLoaded:!1,cmpStatus:"stub"}):t.push(a)},a.addEventListener("message",function e(t){let a="string"==typeof t.data,n={};if(a)try{n=JSON.parse(t.data)}catch(s){}else n=t.data;let c="object"==typeof n&&null!==n?n.__tcfapiCall:null;c&&window.__tcfapi(c.command,c.version,function(e,n){let s={__tcfapiReturn:{returnValue:e,success:n,callId:c.callId}};t&&t.source&&t.source.postMessage&&t.source.postMessage(a?JSON.stringify(s):s,"*")},c.parameter)},!1))})();
+</script>
+<script src="https://cmp.setupcmp.com/cmp/cmp/cmp-v1.js" data-prop-stpd-cmp-id="8226" async></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LSBVFHP4VG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LSBVFHP4VG');
+</script>
+<script>(function(w, n) {w[n]=w[n]||function(){(w[n].a=w[n].a||[]).push(arguments)};w[n].l=1*new Date();})(window, 'ym');</script>
+<script async src="https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js"></script>
+<script>ym(95246838, "init", {clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:false});</script>
+<link rel="preconnect" href="https://securepubads.g.doubleclick.net">
+<link rel="preconnect" href="https://stpd.cloud">
+<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" crossorigin="anonymous"></script>
+<script>
+  window.stpd = window.stpd || {que: []};
+  window.googletag = window.googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+(()=>{let e=function(){};function t(e){document.querySelector("#game-frame").contentWindow.postMessage("tpg://"+JSON.stringify(e))}function r(r){console.log("Rewarded: Ready!"),e=r.makeRewardedVisible,document.fullscreenElement||t({type:"rewarded-ready"})}function a(e){googletag.destroySlots([e.slot]),console.log(e.payload?"You just got a reward: ":"Reward dismissed",e.payload),t({type:"start-game"}),n()}function d(e){if(!e)return{a:!1,r:"Rewarded: Not supported"};let t=localStorage.getItem("rewarded_last_shown");if(!t)return{a:!0,r:null};let r=Date.now()-parseInt(t,10);return r>36e5?{a:!0,r:null}:{a:!1,r:`Rewarded: Shown recently. Wait ~${Math.ceil((36e5-r)/6e4)} minutes.`}}function n(){localStorage.setItem("rewarded_last_shown",Date.now().toString())}window.addEventListener("message",function(t){if("string"==typeof t.data&&t.data.startsWith("tpg://")){let r=t.data.slice(6);try{let a=JSON.parse(r);"rewarded-trigger"===a.type&&e()}catch(d){console.error(d)}}}),document.addEventListener("fullscreenchange",function(){document.fullscreenElement&&t({type:"rewarded-cancel"})}),googletag.cmd.push(function(){let e=googletag.defineOutOfPageSlot("/22538980388/twoplayergames.org_rewarded2",googletag.enums.OutOfPageFormat.REWARDED),t=d(e);t.a?(e.addService(googletag.pubads()),googletag.pubads().addEventListener("rewardedSlotReady",r),googletag.pubads().addEventListener("rewardedSlotClosed",a),googletag.pubads().addEventListener("rewardedSlotGranted",a),googletag.enableServices(),googletag.display(e),googletag.pubads().refresh([e])):console.log(t.r)})})();
+</script>
+<script>
+  var adRandomChance = Math.round(Math.random());
+
+  googletag.cmd.push(function() {
+    var bodyWidth = Math.max(document.querySelector('.site-left').clientWidth, 990);
+
+    var mappingLeft = googletag.sizeMapping()
+        .addSize([bodyWidth + 240, 0], [[120,600],[120,240]])
+        .addSize([bodyWidth + 320, 0], [[160,600],[120,600],[160,320],[120,240]])
+        .addSize([0, 0], [])
+        .build();
+
+    var mappingRight = googletag.sizeMapping()
+        .addSize([bodyWidth + 240, 0], [[120,600]])
+        .addSize([bodyWidth + 320, 0], [[160,600],[120,600]])
+        .addSize([bodyWidth + 400, 0], [[160,600],[120,600],[200,600]])
+        .addSize([bodyWidth + 500, 0], [[160,600],[120,600],[200,600],[250,600]])
+        .addSize([bodyWidth + 600, 0], [[300,600],[160,600],[300,250],[300,300],[250,600],[200,600],[300,400]])
+        .addSize([0, 0], [])
+        .build();
+
+    googletag.defineSlot('/22538980388/twoplayergames.org_300x600_right_desktop_test', [[300,600],[160,600],[300,250],[300,300],[250,600],[200,600],[300,400]], 'twoplayergames_org_game_page_right_desktop')
+        .defineSizeMapping(mappingRight)
+        .addService(googletag.pubads());
+
+    if (adRandomChance) {
+      googletag.defineSlot('/22538980388/twoplayergames.org_160x600_left_desktop_test', [[160,600],[120,600],[160,320],[120,240]], 'twoplayergames_org_game_page_left_desktop')
+        .addService(googletag.pubads());
+    } else {
+      googletag.defineSlot('/22538980388/twoplayergames.org_300x250_right_top_desktop_test', [[300,250],[250,250],[120,240]], 'twoplayergames_org_game_page_right_top_desktop')
+        .addService(googletag.pubads());
+
+      googletag.defineSlot('/22538980388/twoplayergames.org_300x250_right_bottom_desktop_test', [[300,250],[250,250],[120,240]], 'twoplayergames_org_game_page_right_bottom_desktop')
+        .addService(googletag.pubads());
+    }
+
+    googletag.defineSlot('/22538980388/twoplayergames.org_970x90_bottom_desktop_test', [[970,90],[728,90],[970,50],[960,90],[950,90],[980,90],[980,120]], 'twoplayergames_org_game_bottom_desktop')
+      .addService(googletag.pubads());
+
+    googletag.pubads().disableInitialLoad();
+    googletag.pubads().enableSingleRequest();
+    googletag.pubads().collapseEmptyDivs();
+    googletag.enableServices();
+  });
+</script>
+
+<!-- Prebid controller file -->
+<script async src="https://stpd.cloud/saas/10527"></script>
+    <link rel="preload" href="https://www.twoplayergames.org/gameframe/super-stars-fighting" as="document">
+    <link rel="prerender" href="https://www.twoplayergames.org/gameframe/super-stars-fighting" />
+
+    <meta property="og:url" content="https://www.twoplayergames.org/game/super-stars-fighting" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Super Stars Fighting" />
+    <meta property="og:description" content="The cartoon fighters who are very famous in the cartoon world, are coming together in this game for the lovers of it. If you want, you can embark on a fighting adventure as a single player or you can embark on a fighting...">
+    <meta property="og:image" content="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=200" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="twoplayergames.org">
+    <meta property="twitter:url" content="https://www.twoplayergames.org/game/super-stars-fighting">
+    <meta name="twitter:title" content="Super Stars Fighting">
+    <meta name="twitter:description" content="The cartoon fighters who are very famous in the cartoon world, are coming together in this game for the lovers of it. If you want, you can embark on a fighting adventure as a single player or you can embark on a fighting...">
+    <meta name="twitter:image" content="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=200">
+</head>
+
+<body>
+
+<div class="site-body">
+        <div class="left-ad">
+        <div class="left-ad-160">
+            <div>
+  <div style="position: sticky; top: 5px;display: flex;flex-direction: column;">
+    <!-- /22538980388/twoplayergames.org_300x600_game_page_right_desktop -->
+    <div id="twoplayergames_org_game_page_right_desktop"></div>
+  </div>
+  <script>
+    googletag.cmd.push(function() {
+        googletag.display('twoplayergames_org_game_page_right_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_desktop');
+        }));
+    });
+  </script>
+</div>
+        </div>
+    </div>
+        <div class="site-left">
+        <div class="top-space">
+    <div class="logo">
+        <a target="_parent" href="https://www.twoplayergames.org/" title="Two Player Games"></a>
+    </div>
+    <div class="top-game-box">
+        <a href="#" class="game-box-btn" draggable="false" data-text-empty="Your game box is empty.">
+            My Game Box
+            <i class="con monochrome-inbox"></i>
+        </a>
+    </div>
+    <div class="top-search">
+        <form action="/search" enctype="application/x-www-form-urlencoded" id="search-form" method="get">
+            <div class="top-search-input-container">
+                <input name="q" class="search-input" type="text" title="Game search" placeholder="Search..."
+                       data-search-endpoint="/search.json" data-suggest-endpoint="/game/suggest.json">
+                <button class="search-button" type="submit" aria-label="Search"><span class="monochrome-search"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="site-top-container">
+    <div class="site-top-left"></div>
+    <div class="site-top">
+        <div class="top-menu" data-text-close="Close">
+    <ul>
+        <li><a href="#" class="menu-toggle" title=""><span class="cat-icon monochrome-plus-sign"></span><span>More</span></a></li>
+            <li>
+            <a href="/action" title="Action Games">
+                <span class="cat-icon monochrome-category-6"></span>
+                <span class="cat-title">Action</span>
+            </a>
+        </li>
+            <li>
+            <a href="/adventure" title="Adventure Games">
+                <span class="cat-icon monochrome-category-1"></span>
+                <span class="cat-title">Adventure</span>
+            </a>
+        </li>
+            <li>
+            <a href="/classic" title="Classic Games">
+                <span class="cat-icon monochrome-category-2"></span>
+                <span class="cat-title">Classic</span>
+            </a>
+        </li>
+            <li>
+            <a href="/fighting" title="Fighting Games">
+                <span class="cat-icon monochrome-category-4"></span>
+                <span class="cat-title">Fighting</span>
+            </a>
+        </li>
+            <li>
+            <a href="/kids" title="Kids Games">
+                <span class="cat-icon monochrome-category-7"></span>
+                <span class="cat-title">Kids</span>
+            </a>
+        </li>
+            <li>
+            <a href="/racing" title="Racing Games">
+                <span class="cat-icon monochrome-category-3"></span>
+                <span class="cat-title">Racing</span>
+            </a>
+        </li>
+            <li>
+            <a href="/sport" title="Sport Games">
+                <span class="cat-icon monochrome-category-5"></span>
+                <span class="cat-title">Sport</span>
+            </a>
+        </li>
+            <li>
+            <a href="/our" title="Our Games">
+                <span class="cat-icon monochrome-category-12"></span>
+                <span class="cat-title">Our</span>
+            </a>
+        </li>
+            <li>
+            <a href="/3-4-player" title="3-4 Player Games">
+                <span class="cat-icon monochrome-category-13"></span>
+                <span class="cat-title">3-4 Player</span>
+            </a>
+        </li>
+            <li>
+            <a href="/1-player" title="1 Player Games">
+                <span class="cat-icon monochrome-category-9"></span>
+                <span class="cat-title">1 Player</span>
+            </a>
+        </li>
+            <li>
+            <a href="/3d" title="3D Games">
+                <span class="cat-icon monochrome-category-8"></span>
+                <span class="cat-title">3D</span>
+            </a>
+        </li>
+            <li>
+            <a href="/aircraft" title="Aircraft Games">
+                <span class="cat-icon monochrome-category-40"></span>
+                <span class="cat-title">Aircraft</span>
+            </a>
+        </li>
+            <li>
+            <a href="/alien" title="Alien Games">
+                <span class="cat-icon monochrome-category-42"></span>
+                <span class="cat-title">Alien</span>
+            </a>
+        </li>
+            <li>
+            <a href="/balance" title="Balance Games">
+                <span class="cat-icon monochrome-category-43"></span>
+                <span class="cat-title">Balance</span>
+            </a>
+        </li>
+            <li>
+            <a href="/basketball" title="Basketball Games">
+                <span class="cat-icon monochrome-category-19"></span>
+                <span class="cat-title">Basketball</span>
+            </a>
+        </li>
+            <li>
+            <a href="/battle" title="Battle Games">
+                <span class="cat-icon monochrome-category-44"></span>
+                <span class="cat-title">Battle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/billiards" title="Billiards Games">
+                <span class="cat-icon monochrome-category-45"></span>
+                <span class="cat-title">Billiards</span>
+            </a>
+        </li>
+            <li>
+            <a href="/board" title="Board Games">
+                <span class="cat-icon monochrome-category-21"></span>
+                <span class="cat-title">Board</span>
+            </a>
+        </li>
+            <li>
+            <a href="/bomber" title="Bomber Games">
+                <span class="cat-icon monochrome-category-46"></span>
+                <span class="cat-title">Bomber</span>
+            </a>
+        </li>
+            <li>
+            <a href="/browser" title="Browser Games">
+                <span class="cat-icon monochrome-category-37"></span>
+                <span class="cat-title">Browser</span>
+            </a>
+        </li>
+            <li>
+            <a href="/car" title="Car Games">
+                <span class="cat-icon monochrome-category-15"></span>
+                <span class="cat-title">Car</span>
+            </a>
+        </li>
+            <li>
+            <a href="/castle" title="Castle Games">
+                <span class="cat-icon monochrome-category-47"></span>
+                <span class="cat-title">Castle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/chess" title="Chess Games">
+                <span class="cat-icon monochrome-category-28"></span>
+                <span class="cat-title">Chess</span>
+            </a>
+        </li>
+            <li>
+            <a href="/crazy" title="Crazy Games">
+                <span class="cat-icon monochrome-category-41"></span>
+                <span class="cat-title">Crazy</span>
+            </a>
+        </li>
+            <li>
+            <a href="/defense" title="Defense Games">
+                <span class="cat-icon monochrome-category-48"></span>
+                <span class="cat-title">Defense</span>
+            </a>
+        </li>
+            <li>
+            <a href="/dinosaur" title="Dinosaur Games">
+                <span class="cat-icon monochrome-category-49"></span>
+                <span class="cat-title">Dinosaur</span>
+            </a>
+        </li>
+            <li>
+            <a href="/driving" title="Driving Games">
+                <span class="cat-icon monochrome-category-50"></span>
+                <span class="cat-title">Driving</span>
+            </a>
+        </li>
+            <li>
+            <a href="/educational" title="Educational Games">
+                <span class="cat-icon monochrome-category-51"></span>
+                <span class="cat-title">Educational</span>
+            </a>
+        </li>
+            <li>
+            <a href="/escape" title="Escape Games">
+                <span class="cat-icon monochrome-category-52"></span>
+                <span class="cat-title">Escape</span>
+            </a>
+        </li>
+            <li>
+            <a href="/flying" title="Flying Games">
+                <span class="cat-icon monochrome-category-20"></span>
+                <span class="cat-title">Flying</span>
+            </a>
+        </li>
+            <li>
+            <a href="/food" title="Food Games">
+                <span class="cat-icon monochrome-category-25"></span>
+                <span class="cat-title">Food</span>
+            </a>
+        </li>
+            <li>
+            <a href="/fun" title="Fun Games">
+                <span class="cat-icon monochrome-category-23"></span>
+                <span class="cat-title">Fun</span>
+            </a>
+        </li>
+            <li>
+            <a href="/girl" title="Girl Games">
+                <span class="cat-icon monochrome-category-29"></span>
+                <span class="cat-title">Girl</span>
+            </a>
+        </li>
+            <li>
+            <a href="/golf" title="Golf Games">
+                <span class="cat-icon monochrome-category-53"></span>
+                <span class="cat-title">Golf</span>
+            </a>
+        </li>
+            <li>
+            <a href="/jumping" title="Jumping Games">
+                <span class="cat-icon monochrome-category-70"></span>
+                <span class="cat-title">Jumping</span>
+            </a>
+        </li>
+            <li>
+            <a href="/math" title="Math Games">
+                <span class="cat-icon monochrome-category-33"></span>
+                <span class="cat-title">Math</span>
+            </a>
+        </li>
+            <li>
+            <a href="/maze" title="Maze Games">
+                <span class="cat-icon monochrome-category-54"></span>
+                <span class="cat-title">Maze</span>
+            </a>
+        </li>
+            <li>
+            <a href="/monster" title="Monster Games">
+                <span class="cat-icon monochrome-category-55"></span>
+                <span class="cat-title">Monster</span>
+            </a>
+        </li>
+            <li>
+            <a href="/motorcycle" title="Motorcycle Games">
+                <span class="cat-icon monochrome-category-34"></span>
+                <span class="cat-title">Motorcycle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/online" title="Online Games">
+                <span class="cat-icon monochrome-category-22"></span>
+                <span class="cat-title">Online</span>
+            </a>
+        </li>
+            <li>
+            <a href="/pixel-art" title="Pixel Art Games">
+                <span class="cat-icon monochrome-category-56"></span>
+                <span class="cat-title">Pixel Art</span>
+            </a>
+        </li>
+            <li>
+            <a href="/platform" title="Platform Games">
+                <span class="cat-icon monochrome-category-57"></span>
+                <span class="cat-title">Platform</span>
+            </a>
+        </li>
+            <li>
+            <a href="/pool" title="Pool Games">
+                <span class="cat-icon monochrome-category-32"></span>
+                <span class="cat-title">Pool</span>
+            </a>
+        </li>
+            <li>
+            <a href="/puppet" title="Puppet Games">
+                <span class="cat-icon monochrome-category-58"></span>
+                <span class="cat-title">Puppet</span>
+            </a>
+        </li>
+            <li>
+            <a href="/puzzle" title="Puzzle Games">
+                <span class="cat-icon monochrome-category-59"></span>
+                <span class="cat-title">Puzzle</span>
+            </a>
+        </li>
+            <li>
+            <a href="/reaction" title="Reaction Games">
+                <span class="cat-icon monochrome-category-38"></span>
+                <span class="cat-title">Reaction</span>
+            </a>
+        </li>
+            <li>
+            <a href="/retro" title="Retro Games">
+                <span class="cat-icon monochrome-category-60"></span>
+                <span class="cat-title">Retro</span>
+            </a>
+        </li>
+            <li>
+            <a href="/robot" title="Robot Games">
+                <span class="cat-icon monochrome-category-61"></span>
+                <span class="cat-title">Robot</span>
+            </a>
+        </li>
+            <li>
+            <a href="/running" title="Running Games">
+                <span class="cat-icon monochrome-category-17"></span>
+                <span class="cat-title">Running</span>
+            </a>
+        </li>
+            <li>
+            <a href="/school" title="School Games">
+                <span class="cat-icon monochrome-category-62"></span>
+                <span class="cat-title">School</span>
+            </a>
+        </li>
+            <li>
+            <a href="/shooting" title="Shooting Games">
+                <span class="cat-icon monochrome-category-24"></span>
+                <span class="cat-title">Shooting</span>
+            </a>
+        </li>
+            <li>
+            <a href="/soccer" title="Soccer Games">
+                <span class="cat-icon monochrome-category-31"></span>
+                <span class="cat-title">Soccer</span>
+            </a>
+        </li>
+            <li>
+            <a href="/space" title="Space Games">
+                <span class="cat-icon monochrome-category-63"></span>
+                <span class="cat-title">Space</span>
+            </a>
+        </li>
+            <li>
+            <a href="/stickman" title="Stickman Games">
+                <span class="cat-icon monochrome-category-30"></span>
+                <span class="cat-title">Stickman</span>
+            </a>
+        </li>
+            <li>
+            <a href="/strategy" title="Strategy Games">
+                <span class="cat-icon monochrome-category-64"></span>
+                <span class="cat-title">Strategy</span>
+            </a>
+        </li>
+            <li>
+            <a href="/stunt" title="Stunt Games">
+                <span class="cat-icon monochrome-category-14"></span>
+                <span class="cat-title">Stunt</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tank" title="Tank Games">
+                <span class="cat-icon monochrome-category-16"></span>
+                <span class="cat-title">Tank</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tennis" title="Tennis Games">
+                <span class="cat-icon monochrome-category-65"></span>
+                <span class="cat-title">Tennis</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tic-tac-toe" title="Tic Tac Toe Games">
+                <span class="cat-icon monochrome-category-36"></span>
+                <span class="cat-title">Tic Tac Toe</span>
+            </a>
+        </li>
+            <li>
+            <a href="/touch-screen" title="Touch Screen Games">
+                <span class="cat-icon monochrome-category-66"></span>
+                <span class="cat-title">Touch Screen</span>
+            </a>
+        </li>
+            <li>
+            <a href="/tower" title="Tower Games">
+                <span class="cat-icon monochrome-category-67"></span>
+                <span class="cat-title">Tower</span>
+            </a>
+        </li>
+            <li>
+            <a href="/truck" title="Truck Games">
+                <span class="cat-icon monochrome-category-71"></span>
+                <span class="cat-title">Truck</span>
+            </a>
+        </li>
+            <li>
+            <a href="/war" title="War Games">
+                <span class="cat-icon monochrome-category-68"></span>
+                <span class="cat-title">War</span>
+            </a>
+        </li>
+            <li>
+            <a href="/wrestling" title="Wrestling Games">
+                <span class="cat-icon monochrome-category-69"></span>
+                <span class="cat-title">Wrestling</span>
+            </a>
+        </li>
+            <li>
+            <a href="/zombie" title="Zombie Games">
+                <span class="cat-icon monochrome-category-26"></span>
+                <span class="cat-title">Zombie</span>
+            </a>
+        </li>
+        </ul>
+</div>
+    </div>
+    <div class="site-top-right"></div>
+</div>
+        <div class="site-main pt-10">
+            <div class="game-page-top">
+    <div class="game-page-top-left">
+        <noscript>
+            <div class="alert">JavaScript must be enabled to play this game.</div>
+        </noscript>
+
+        <div class="game">
+            <div id="game-container" style="width:900px; height:730px;">
+                <iframe title="Super Stars Fighting" name="game-frame" id="game-frame" src="https://www.twoplayergames.org/gameframe/super-stars-fighting" tabindex="0" allowfullscreen></iframe>
+                <div class="game-bottom-bar">
+                    <div class="game-details">
+                        <img alt="Super Stars Fighting" class="image" height="38" src="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=100" title="Super Stars Fighting" width="50"/>
+                        <div class="title">Super Stars Fighting</div>
+                    </div>
+                    <div class="game-tools">
+                        <a href="#" class="game-box-add" aria-label="Add game to your game-box." rel="tipsy-s"
+                           data-text-add="Add to My Game Box"
+                           data-text-in="This game is in your Game Box."><span class="monochrome-inbox-in"></span></a>
+                        <a href="#" class="lights-on-off" aria-label="Turn on/off the lights." rel="tipsy-s"
+                           data-text-turn-off="Turn Off the Lights"
+                           data-text-turn-on="Turn On the Lights"
+                           data-text-confirm="Are you sure you want to exit the game?"><span class="monochrome-lightbulb"></span></a>
+                        <a href="#" class="game-full-screen" aria-label="Switch to full-screen." rel="tipsy-s"
+                           title="Switch to Full-screen"><span class="monochrome-fullscreen"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="game-page-related">
+    <ul class="game-list">
+            <li>
+            
+<a href="/game/comic-stars-fighting-3" title="Comic Stars Fighting 3" data-game-id="801" data-game-slug="comic-stars-fighting-3" data-game-image="o4/Comic_Stars_Fighting_3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3"/>
+</div>
+    <div class="title">Comic Stars Fighting 3</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting-3-5" title="Comic Stars Fighting 3.5" data-game-id="981" data-game-slug="comic-stars-fighting-3-5" data-game-image="o4/comic-star-fighting-3-5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/comic-star-fighting-3-5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.5"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.5</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/dragon-ball-fierce-fighting-2-8" title="Dragon Ball Fierce Fighting 2.8" data-game-id="941" data-game-slug="dragon-ball-fierce-fighting-2-8" data-game-image="o4/dragon-ball_Fierce_Fighting_2_8.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/dragon-ball_Fierce_Fighting_2_8.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/dragon-ball_Fierce_Fighting_2_8.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/dragon-ball_Fierce_Fighting_2_8.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.8"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.8</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/dragon-ball-goku-fight" title="Dragon Ball Goku Fight" data-game-id="963" data-game-slug="dragon-ball-goku-fight" data-game-image="o4/Dragon-Ball-Goku-Fight.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon-Ball-Goku-Fight.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Goku Fight"/>
+</div>
+    <div class="title">Dragon Ball Goku Fight</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting-2" title="Comic Stars Fighting 2" data-game-id="800" data-game-slug="comic-stars-fighting-2" data-game-image="o4/Comic_Stars_Fighting_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 2"/>
+</div>
+    <div class="title">Comic Stars Fighting 2</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/superhero-fight" title="Superhero Fight" data-game-id="1366" data-game-slug="superhero-fight" data-game-image="other/Super_Hero_Fight.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/Super_Hero_Fight.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/Super_Hero_Fight.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/Super_Hero_Fight.jpg?auto=format&amp;w=100" width="100" height="75" alt="Superhero Fight"/>
+</div>
+    <div class="title">Superhero Fight</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting-3-2" title="Comic Stars Fighting 3.2" data-game-id="857" data-game-slug="comic-stars-fighting-3-2" data-game-image="o4/Comic_Stars_Fighting_3_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.2"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.2</div>
+</a>
+
+        </li>
+    </ul>
+
+</div>
+<div class="game-page-ad">
+    <!-- /22538980388/twoplayergames.org_970x90_game_bottom_desktop -->
+<div style="display:flex;height:100%;max-height:120px">
+  <div id="twoplayergames_org_game_bottom_desktop" style="min-width: 468px; max-width: 980px; min-height: 60px; max-height: 120px; margin: 0 auto"></div>
+  <script>
+    googletag.cmd.push(function() {
+      googletag.display('twoplayergames_org_game_bottom_desktop');
+
+      stpd.que.push((function() {
+          stpd.initializeAdUnit('twoplayergames_org_game_bottom_desktop');
+      }));
+    });
+  </script>
+</div>
+</div>
+<div class="game-page-related">
+    <ul class="game-list">
+            <li>
+            
+<a href="/game/dragon-ball-fierce-fighting-2-7" title="Dragon Ball Fierce Fighting 2.7" data-game-id="912" data-game-slug="dragon-ball-fierce-fighting-2-7" data-game-image="o4/Dragon_Ball_Fierce_Fighting_2_7.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Dragon_Ball_Fierce_Fighting_2_7.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.7"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.7</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/super-pocket-fighter-adventure" title="Super Pocket Fighter Adventure" data-game-id="1236" data-game-slug="super-pocket-fighter-adventure" data-game-image="o5/Super_Pocket_Fighter_Adventure.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Super_Pocket_Fighter_Adventure.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Super_Pocket_Fighter_Adventure.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Super_Pocket_Fighter_Adventure.jpg?auto=format&amp;w=100" width="100" height="75" alt="Super Pocket Fighter Adventure"/>
+</div>
+    <div class="title">Super Pocket Fighter Adventure</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting-3-4" title="Comic Stars Fighting 3.4" data-game-id="874" data-game-slug="comic-stars-fighting-3-4" data-game-image="o4/Comic_Stars_Fighting_3_4.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_4.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.4"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.4</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting-3-3" title="Comic Stars Fighting 3.3" data-game-id="859" data-game-slug="comic-stars-fighting-3-3" data-game-image="o4/Comic_Stars_Fighting_3_3.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Comic_Stars_Fighting_3_3.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting 3.3"/>
+</div>
+    <div class="title">Comic Stars Fighting 3.3</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/dragon-ball-fierce-fighting-2-9" title="Dragon Ball Fierce Fighting 2.9" data-game-id="1070" data-game-slug="dragon-ball-fierce-fighting-2-9" data-game-image="o5/Dragon-Ball-Fierce-Fighting-2_9.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/Dragon-Ball-Fierce-Fighting-2_9.jpg?auto=format&amp;w=100" width="100" height="75" alt="Dragon Ball Fierce Fighting 2.9"/>
+</div>
+    <div class="title">Dragon Ball Fierce Fighting 2.9</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/anime-legends-2" title="Anime Legends 2" data-game-id="1069" data-game-slug="anime-legends-2" data-game-image="other/anime-legends-2/anime-legends2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/anime-legends-2/anime-legends2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Legends 2"/>
+</div>
+    <div class="title">Anime Legends 2</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/one-piece-vs-cr-zoro" title="One Piece vs CR: Zoro" data-game-id="1151" data-game-slug="one-piece-vs-cr-zoro" data-game-image="o5/One_Piece_vs_CR_Zoro.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o5/One_Piece_vs_CR_Zoro.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o5/One_Piece_vs_CR_Zoro.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o5/One_Piece_vs_CR_Zoro.jpg?auto=format&amp;w=100" width="100" height="75" alt="One Piece vs CR: Zoro"/>
+</div>
+    <div class="title">One Piece vs CR: Zoro</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/yuyu-hakusho-wars" title="Yuyu Hakusho Wars" data-game-id="966" data-game-slug="yuyu-hakusho-wars" data-game-image="o4/Yuyu_Hakusho_Wars.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Yuyu_Hakusho_Wars.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Yuyu_Hakusho_Wars.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Yuyu_Hakusho_Wars.jpg?auto=format&amp;w=100" width="100" height="75" alt="Yuyu Hakusho Wars"/>
+</div>
+    <div class="title">Yuyu Hakusho Wars</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/comic-stars-fighting" title="Comic Stars Fighting" data-game-id="603" data-game-slug="comic-stars-fighting" data-game-image="o3/comic-star-fighting.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o3/comic-star-fighting.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o3/comic-star-fighting.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o3/comic-star-fighting.jpg?auto=format&amp;w=100" width="100" height="75" alt="Comic Stars Fighting"/>
+</div>
+    <div class="title">Comic Stars Fighting</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/street-fighter-creation-2" title="Street Fighter Creation 2" data-game-id="798" data-game-slug="street-fighter-creation-2" data-game-image="o4/Street_Fighter_Creation_2.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_2.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_2.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Street_Fighter_Creation_2.jpg?auto=format&amp;w=100" width="100" height="75" alt="Street Fighter Creation 2"/>
+</div>
+    <div class="title">Street Fighter Creation 2</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/anime-legends-2-5" title="Anime Legends 2.5" data-game-id="1183" data-game-slug="anime-legends-2-5" data-game-image="other/anime_legends_2_5/anime-legends-2-5.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/anime_legends_2_5/anime-legends-2-5.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Legends 2.5"/>
+</div>
+    <div class="title">Anime Legends 2.5</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/anime-battle-1-8" title="Anime Battle 1.8" data-game-id="1000" data-game-slug="anime-battle-1-8" data-game-image="other/animebattle18/anime-battle-18.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/other/animebattle18/anime-battle-18.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Battle 1.8"/>
+</div>
+    <div class="title">Anime Battle 1.8</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/rumblah-flash-fighting" title="Rumblah Flash Fighting" data-game-id="982" data-game-slug="rumblah-flash-fighting" data-game-image="o4/Rumblah_Flash_Fighting.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Rumblah_Flash_Fighting.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Rumblah_Flash_Fighting.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Rumblah_Flash_Fighting.jpg?auto=format&amp;w=100" width="100" height="75" alt="Rumblah Flash Fighting"/>
+</div>
+    <div class="title">Rumblah Flash Fighting</div>
+</a>
+
+        </li>
+            <li>
+            
+<a href="/game/anime-fighters-cr-sasuke" title="Anime Fighters CR: Sasuke" data-game-id="1005" data-game-slug="anime-fighters-cr-sasuke" data-game-image="o4/Anime-Fighters-CR_Sasuke.jpg">
+    <div class="image"><img draggable="false" srcset="https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=100 1x, https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=200 2x" src="https://images.twoplayergames.org/files/games/o4/Anime-Fighters-CR_Sasuke.jpg?auto=format&amp;w=100" width="100" height="75" alt="Anime Fighters CR: Sasuke"/>
+</div>
+    <div class="title">Anime Fighters CR: Sasuke</div>
+</a>
+
+        </li>
+    </ul>
+
+</div>
+<div class="game-page-bottom">
+    <div class="game-page-bottom-top">
+        <div class="game-page-title">
+            <h1>Super Stars Fighting</h1>
+        </div>
+
+        <div class="game-page-title-img">
+            <img alt="Super Stars Fighting" class="game-page-img game-box-clone" height="50" src="https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=200" title="Super Stars Fighting" width="65"/>
+        </div>
+
+        <div class="game-page-rate">
+            <div class="game-star-rating-wrapper">
+                <div class="game-star-rating" data-endpoint="/game/rating.json"></div>
+                <div class="game-score">
+                    <span id="rating">4.4</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-page-social">
+                            <div class="game-page-share-embed" data-text-btn="Embed"
+                     data-text-embed="Embed" data-text-share="Share"
+                     data-text-copy="Copy"></div>
+                        <div id="facebookLike"></div>
+            <div id="twitterTweet"></div>
+        </div>
+    </div>
+
+    <div class="game-page-description">
+                    <div class="game-page-description-content">
+                <p><em>The cartoon fighters who are very famous in the cartoon world, are coming together in this game for the lovers of it. If you want, you can embark on a fighting adventure as a single player or you can embark on a fighting adventure as a two-player with your buddy. In both ways, get ready to have a lot of fun. <strong>Luffy</strong>, <strong>Naruto</strong>,<strong> Son Goku</strong>, and more different nine fighters are waiting for you in this game. Pick your fighter and take your place in this entertaining adventure!</em></p>
+<p>When the game is loaded, the game screen will proceed to the main menu automatically. Click on the "<strong>START</strong>" button. You can play the game in three different game modes "<strong>Challenge Mode, Single Mode, and Double Mode</strong>". Select the game mode and then pick your fighter then start to game.</p>
+<p>Game controls are the following:<br>
+<strong>1st Player:</strong><br>
+Move: "<strong>W, A, S, D</strong>"<br>
+Attack: "<strong>J, K, L, U, I, O</strong>"</p>
+<p><strong>2nd Player:</strong><br>
+Move: "<strong>ARROW KEYS</strong>"<br>
+Attack: "<strong>1,2,3,4,5,6</strong>" (From Numeric Keyboard)</p>
+<p><em><strong>Have fun!</strong></em></p>
+            </div>
+            </div>
+
+    <div class="gp-categories">
+        <ul class="gp-category-items">
+                            <li><a title="2 Player Games" href="/2-player"><span class="icon"><img alt="2 Player" height="32" src="https://images.twoplayergames.org/files/icons/2-player.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop"
+                        srcset="https://images.twoplayergames.org/files/icons/2-player.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop 1x, https://images.twoplayergames.org/files/icons/2-player.jpg?auto=format&amp;w=64&amp;h=64&amp;fit=crop 2x" width="32"></span> <span>2 Player</span></a></li>
+                            <li><a title="Fighting Games" href="/fighting"><span class="icon"><img alt="Fighting" height="32" src="https://images.twoplayergames.org/files/icons/fighting.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop"
+                        srcset="https://images.twoplayergames.org/files/icons/fighting.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop 1x, https://images.twoplayergames.org/files/icons/fighting.jpg?auto=format&amp;w=64&amp;h=64&amp;fit=crop 2x" width="32"></span> <span>Fighting</span></a></li>
+                            <li><a title="Action Games" href="/action"><span class="icon"><img alt="Action" height="32" src="https://images.twoplayergames.org/files/icons/action.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop"
+                        srcset="https://images.twoplayergames.org/files/icons/action.jpg?auto=format&amp;w=32&amp;h=32&amp;fit=crop 1x, https://images.twoplayergames.org/files/icons/action.jpg?auto=format&amp;w=64&amp;h=64&amp;fit=crop 2x" width="32"></span> <span>Action</span></a></li>
+                    </ul>
+    </div>
+</div>
+        </div>
+
+
+        <footer>
+            <div class="footer-links">
+    <a href="/p/about-us">About Us</a>
+    <a href="/p/help">Help</a>
+    <a href="/p/privacy-policy">Privacy Policy</a>
+    <a href="/p/cookies">Cookies</a>
+    <a href="/p/contact">Contact</a>
+    <a href="/blog" title="Game Blog">Game Blog</a>
+                <a id="locale-switcher" href="#" data-locale-en="English" data-locale-fr="Français" data-locale-es="Español" data-locale-de="Deutsch" data-locale-pt="Português" data-locale-et="Eesti keel" data-locale-tr="Türkçe">
+            <span class="locale-flag locale-en"></span> English
+        </a>
+    </div>
+<div class="footer-stores">
+    <a target="_blank" title="Google Play Store" href="https://play.google.com/store/apps/developer?id=RHM+Interactive+OÜ" rel="noopener"><span class="google-play"></span></a>
+    <a target="_blank" title="Apple AppStore" href="https://apps.apple.com/developer/rhm-interactive-o%C3%BC/id1463271031" rel="noopener"><span class="app-store"></span></a>
+</div>
+<div class="footer-social">
+    <a class="youtube" target="_blank" title="Subscribe our YouTube channel" href="https://www.youtube.com/c/TwoplayergamesorgTV" rel="noopener"><span class="monochrome-youtube"></span></a>
+</div>
+<div class="footer-text">
+    &copy; 2008 - 2026<br>
+    TwoPlayerGames.org is an initiative of RHM Interactive OÜ<br>
+    Tallinn, Estonia<br>
+    VAT: EE 102120545
+</div>        </footer>
+    </div>
+        <div class="right-ad">
+        <div class="right-ad-160">
+            <div>
+  <div style="position: sticky; top: 5px;display: flex;flex-direction: column;">
+    <!-- /22538980388/twoplayergames.org_160x600_left_desktop_test -->
+    <div id="twoplayergames_org_game_page_left_desktop"></div>
+    <!-- /22538980388/twoplayergames.org_300x250_game_page_right_top_desktop -->
+    <div id="twoplayergames_org_game_page_right_top_desktop"></div>
+    <!-- /22538980388/twoplayergames.org_300x250_game_page_right_bottom_desktop -->
+    <div id="twoplayergames_org_game_page_right_bottom_desktop" style="margin-top: 5px;"></div>
+  </div>
+  <script>
+    googletag.cmd.push(function() {
+      if (adRandomChance) {
+        googletag.display('twoplayergames_org_game_page_left_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_left_desktop');
+        }));
+      } else {
+        googletag.display('twoplayergames_org_game_page_right_top_desktop');
+        googletag.display('twoplayergames_org_game_page_right_bottom_desktop');
+
+        stpd.que.push((function() {
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_top_desktop');
+            stpd.initializeAdUnit('twoplayergames_org_game_page_right_bottom_desktop');
+        }));
+      }
+    });
+  </script>
+</div>
+        </div>
+    </div>
+    </div>
+
+<script>
+    window.siteConfig = {"domain":"twoplayergames.org","origin":{"desktop":"https:\/\/www.twoplayergames.org","mobile":"https:\/\/m.twoplayergames.org","files":"https:\/\/files.twoplayergames.org","images":"https:\/\/images.twoplayergames.org"},"gamesDir":"files\/games"}
+</script>
+<script src="/dist/twoplayergames-e96ef07e.js" defer></script>
+<script src="//instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"></script>
+
+
+
+
+
+<!--
+Direct embed file:
+https://files.twoplayergames.org/files/games/o4/Super_Stars_Fighting.swf
+
+Our beloved CDN:
+tinyurl.com/TPG-CDN
+-->
+<script>
+    window.gameData = {"id":803,"title":"Super Stars Fighting","slug":"super-stars-fighting","imageFile":"o4\/Super_Stars_Fighting.jpg","url":"https:\/\/www.twoplayergames.org\/game\/super-stars-fighting","embed":"https:\/\/files.twoplayergames.org\/files\/games\/o4\/Super_Stars_Fighting.swf","embedBase":"https:\/\/files.twoplayergames.org\/files\/games\/o4","embedFrame":"https:\/\/www.twoplayergames.org\/embed\/super-stars-fighting","isExternal":false,"preAd":true,"rating":"4.4"}
+</script>
+<script type="application/ld+json">
+    [
+        {
+            "@context": "http://schema.org/",
+            "@type": "WebApplication",
+            "id": "https://www.twoplayergames.org/game/super-stars-fighting#WebApplication",
+            "name": "Super Stars Fighting",
+            "image": "https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=200",
+            "applicationCategory": "Game",
+            "url": "https://www.twoplayergames.org/game/super-stars-fighting",
+            "applicationSubCategory": "2 Player Games",
+            "operatingSystem": "Windows, Chrome OS, Linux, MacOS, Android, iOS",
+            "description": "The cartoon fighters who are very famous in the cartoon world, are coming together in this game for the lovers of it. If you want, you can embark on a fighting adventure as a single player or you can embark on a fighting...",
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "itemReviewed": "Super Stars Fighting",
+                "bestRating": "5",
+                "worstRating": "1",
+                "ratingCount": "1422",
+                "ratingValue": "4.4"
+            },
+            "offers": {
+                "@type": "Offer",
+                "availability": "http://schema.org/InStock",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "screenshot": {
+                "@type": "ImageObject",
+                "thumbnailUrl": "https://images.twoplayergames.org/files/games/o4/Super_Stars_Fighting.jpg?auto=format&amp;w=200"
+            }
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Two Player Games",
+                    "item": "https://www.twoplayergames.org/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "2 Player",
+                    "item": "https://www.twoplayergames.org/2-player"
+                }            ]
+        }
+    ]
+</script>
+
+</body>
+</html>

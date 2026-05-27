@@ -118,9 +118,8 @@
     .sidebar-card {
       border: 1px solid var(--border);
       border-radius: 24px;
-      background: linear-gradient(180deg, var(--panel), var(--panel-2));
-      box-shadow: 0 26px 54px var(--shadow);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(35, 28, 55, 0.96), rgba(44, 44, 68, 0.98));
+      box-shadow: 0 20px 42px var(--shadow);
     }
 
     .game-card {
@@ -207,8 +206,47 @@
       background: linear-gradient(135deg, #ffe29a, #fff0c0);
     }
 
+    .button.level-ready {
+      color: #141222;
+      background: linear-gradient(135deg, var(--accent-3), #ffe5a3);
+      border-color: rgba(247, 212, 127, 0.38);
+      box-shadow: 0 10px 28px rgba(247, 212, 127, 0.24);
+    }
+
+    .button.level-ready:hover,
+    .button.level-ready:focus-visible {
+      background: linear-gradient(135deg, #ffe29a, #fff0c0);
+    }
+
+    .button.danger {
+      color: #ffd2d8;
+      background: linear-gradient(135deg, rgba(112, 22, 34, 0.74), rgba(58, 18, 28, 0.9));
+      border-color: rgba(255, 122, 150, 0.34);
+      box-shadow: 0 10px 24px rgba(255, 80, 112, 0.12);
+    }
+
+    .button.danger:hover,
+    .button.danger:focus-visible {
+      border-color: rgba(255, 122, 150, 0.58);
+      background: linear-gradient(135deg, rgba(142, 30, 46, 0.82), rgba(72, 20, 32, 0.96));
+    }
+
     .button.alt {
       background: linear-gradient(135deg, rgba(119, 168, 255, 0.16), rgba(163, 53, 238, 0.2));
+    }
+
+    .button.toggle-active {
+      color: #141222;
+      background: linear-gradient(135deg, #7ef3ce, #d7fff1);
+      border-color: rgba(126, 243, 206, 0.42);
+      box-shadow: 0 10px 24px rgba(126, 243, 206, 0.18);
+    }
+
+    .button.small {
+      padding: 8px 11px;
+      border-radius: 12px;
+      font-size: 0.76rem;
+      letter-spacing: 0.03em;
     }
 
     .button[disabled] {
@@ -217,11 +255,25 @@
       transform: none;
     }
 
-    .control-row {
+    .debug-toolbar {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px;
+      grid-template-columns: minmax(150px, 220px) auto;
+      gap: 8px;
       align-items: center;
+    }
+
+    .debug-toolbar .control-select {
+      padding: 11px 12px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+    }
+
+    .toolbar-debug-note {
+      grid-column: 1 / -1;
+      max-width: 300px;
+      margin: -2px 0 0;
+      font-size: 0.74rem;
+      line-height: 1.25;
     }
 
     .control-select {
@@ -245,6 +297,12 @@
       color: var(--muted);
       font-size: 0.92rem;
       line-height: 1.5;
+    }
+
+    .debug-note.toolbar-debug-note {
+      margin: -2px 0 0;
+      font-size: 0.74rem;
+      line-height: 1.25;
     }
 
     .canvas-shell {
@@ -274,6 +332,129 @@
       touch-action: none;
     }
 
+    canvas:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      background: #05070d;
+    }
+
+    .canvas-shell:fullscreen {
+      width: 100vw;
+      height: 100vh;
+      padding: 0;
+      background: #000;
+    }
+
+    .canvas-shell:fullscreen canvas {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    .mobile-control-layer {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .mobile-stick,
+    .mobile-quick-button,
+    .mobile-exit-fullscreen {
+      pointer-events: auto;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .mobile-stick {
+      position: absolute;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: 112px;
+      height: 112px;
+      border: 1px solid rgba(119, 168, 255, 0.26);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(119, 168, 255, 0.12), rgba(17, 16, 30, 0.34) 62%, rgba(17, 16, 30, 0.16));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 12px 28px rgba(0, 0, 0, 0.28);
+      --knob-x: 0px;
+      --knob-y: 0px;
+    }
+
+    .mobile-stick::before {
+      content: "";
+      position: absolute;
+      inset: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(236, 231, 255, 0.18);
+    }
+
+    .mobile-stick::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(236, 231, 255, 0.76);
+      box-shadow: 0 0 18px rgba(119, 168, 255, 0.24);
+      transform: translate(calc(-50% + var(--knob-x)), calc(-50% + var(--knob-y)));
+    }
+
+    .mobile-move-stick {
+      left: max(18px, env(safe-area-inset-left));
+    }
+
+    .mobile-aim-stick {
+      right: max(18px, env(safe-area-inset-right));
+    }
+
+    .mobile-quick-button,
+    .mobile-exit-fullscreen {
+      position: absolute;
+      border: 1px solid rgba(119, 168, 255, 0.26);
+      border-radius: 999px;
+      background: rgba(17, 16, 30, 0.64);
+      color: var(--text);
+      min-width: 62px;
+      min-height: 44px;
+      padding: 9px 13px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+    }
+
+    .mobile-dash-button {
+      right: max(26px, calc(env(safe-area-inset-right) + 8px));
+      bottom: calc(max(18px, env(safe-area-inset-bottom)) + 122px);
+    }
+
+    .mobile-level-button {
+      left: 50%;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+    }
+
+    .mobile-level-button[hidden] {
+      display: none;
+    }
+
+    .mobile-exit-fullscreen {
+      display: none;
+      top: max(12px, env(safe-area-inset-top));
+      right: max(12px, env(safe-area-inset-right));
+      z-index: 6;
+    }
+
     .overlay,
     .draft-panel {
       position: absolute;
@@ -284,9 +465,12 @@
       padding: 24px;
       border-radius: 24px;
       background: rgba(8, 10, 18, 0.58);
-      backdrop-filter: blur(10px);
       transition: opacity 160ms ease, visibility 160ms ease;
-      z-index: 2;
+      z-index: 4;
+    }
+
+    .canvas-shell:fullscreen .mobile-control-layer {
+      z-index: 6;
     }
 
     .overlay.hidden,
@@ -333,6 +517,12 @@
       gap: 12px;
       margin-top: 18px;
       text-align: left;
+    }
+
+    .draft-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
     }
 
     .draft-option {
@@ -389,6 +579,43 @@
       font-size: 1.08rem;
     }
 
+    .loadout-card {
+      display: block;
+    }
+
+    .loadout-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0;
+      color: var(--text);
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .loadout-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .loadout-summary::after {
+      content: "Show";
+      color: var(--accent-3);
+      font: 700 0.72rem/1 "Fira Code", monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .loadout-card[open] .loadout-summary {
+      margin-bottom: 10px;
+    }
+
+    .loadout-card[open] .loadout-summary::after {
+      content: "Hide";
+    }
+
     .sidebar-card p {
       margin: 0;
       color: var(--muted);
@@ -400,11 +627,6 @@
       padding-left: 18px;
       color: var(--muted);
       line-height: 1.6;
-    }
-
-    .touch-note {
-      margin-top: 12px;
-      color: var(--accent-3);
     }
 
     .stat-grid {
@@ -466,6 +688,70 @@
       line-height: 1.5;
     }
 
+    .loadout-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .remove-loadout {
+      flex: 0 0 auto;
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(255, 122, 122, 0.26);
+      border-radius: 50%;
+      background: rgba(255, 92, 92, 0.1);
+      color: #ffd2d8;
+      cursor: pointer;
+      font: 800 0.8rem/1 "Inter", sans-serif;
+    }
+
+    .remove-loadout:hover,
+    .remove-loadout:focus-visible {
+      border-color: rgba(255, 122, 122, 0.48);
+      background: rgba(255, 92, 92, 0.2);
+      outline: none;
+    }
+
+    .controls-strip {
+      grid-column: 1 / -1;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(35, 28, 55, 0.9), rgba(44, 44, 68, 0.94));
+      box-shadow: 0 20px 42px var(--shadow);
+    }
+
+    .controls-strip h2 {
+      margin: 0 0 12px;
+      font-size: 1.08rem;
+    }
+
+    .controls-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .controls-list li,
+    .control-touch-note {
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(17, 16, 30, 0.46);
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .control-touch-note {
+      margin: 10px 0 0;
+      color: var(--accent-3);
+    }
+
     @media (max-width: 1100px) {
       .layout {
         grid-template-columns: 1fr;
@@ -474,12 +760,111 @@
 
     @media (max-width: 720px) {
       .shell {
-        width: min(100vw, calc(100vw - 12px));
-        padding-inline: 12px;
+        width: 100vw;
+        padding: 8px 6px 28px;
+      }
+
+      .back-link {
+        margin-bottom: 8px;
+        font-size: 0.72rem;
+      }
+
+      .hero {
+        gap: 5px;
+        margin-bottom: 10px;
+      }
+
+      .eyebrow {
+        font-size: 0.68rem;
+      }
+
+      h1 {
+        font-size: 1.95rem;
+      }
+
+      .lead {
+        display: none;
+      }
+
+      .layout,
+      .sidebar {
+        gap: 8px;
+      }
+
+      .game-card,
+      .sidebar-card {
+        border-radius: 14px;
+      }
+
+      .game-toolbar {
+        padding: 7px;
+        gap: 7px;
+      }
+
+      .toolbar-cluster {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+      }
+
+      .hud-pill {
+        min-width: 0;
+        padding: 6px 5px;
+        border-radius: 9px;
+      }
+
+      .hud-pill span {
+        margin-bottom: 3px;
+        font-size: 0.52rem;
+        letter-spacing: 0.02em;
+      }
+
+      .hud-pill strong {
+        font-size: 0.72rem;
+      }
+
+      .toolbar-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+      }
+
+      .debug-toolbar {
+        grid-column: 1 / -1;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 5px;
+      }
+
+      .debug-toolbar .control-select {
+        min-width: 0;
+        padding: 7px 8px;
+        border-radius: 10px;
+        font-size: 0.72rem;
+      }
+
+      .toolbar-debug-note {
+        display: none;
+      }
+
+      .button,
+      .button.small {
+        min-height: 34px;
+        padding: 7px 8px;
+        border-radius: 10px;
+        font-size: 0.72rem;
+      }
+
+      .canvas-shell {
+        padding: 0;
       }
 
       canvas {
-        min-height: 340px;
+        width: 100%;
+        height: 62vh;
+        min-height: 360px;
+        border-radius: 12px;
       }
 
       .overlay,
@@ -496,6 +881,70 @@
       .draft-grid {
         grid-template-columns: 1fr;
       }
+
+      .draft-option {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .sidebar-card {
+        padding: 12px;
+      }
+
+      .controls-strip {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .controls-list {
+        gap: 6px;
+      }
+
+      .controls-list li,
+      .control-touch-note {
+        width: 100%;
+        padding: 7px 8px;
+        border-radius: 10px;
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (pointer: coarse), (max-width: 720px) {
+      .canvas-shell.mobile-controls-active .mobile-control-layer,
+      .canvas-shell:fullscreen .mobile-control-layer {
+        display: block;
+      }
+
+      .canvas-shell:fullscreen:not(.mobile-controls-active) .mobile-stick,
+      .canvas-shell:fullscreen:not(.mobile-controls-active) .mobile-quick-button {
+        display: none;
+      }
+
+      .canvas-shell:fullscreen .mobile-exit-fullscreen {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .mobile-stick {
+        width: 96px;
+        height: 96px;
+      }
+
+      .mobile-stick::before {
+        inset: 29px;
+      }
+
+      .mobile-stick::after {
+        width: 36px;
+        height: 36px;
+      }
+
+      .mobile-dash-button {
+        bottom: calc(max(18px, env(safe-area-inset-bottom)) + 104px);
+      }
     }
   </style>
 </head>
@@ -506,7 +955,7 @@
     <section class="hero">
       <div class="eyebrow">Astral Tempest</div>
       <h1>Starfall Survivor</h1>
-      <p class="lead">A survival-shooter baseline built around focused cursor aim, token-powered levelups, weapon slots, passive slots, and chest-based weapon fusion instead of wave-tied upgrade boons.</p>
+      <p class="lead">Survive as long as you can. Break enemies for tokens, use those tokens to level up into new upgrades.</p>
     </section>
 
     <section class="layout">
@@ -532,10 +981,23 @@
           </div>
 
           <div class="toolbar-actions">
-            <button class="button primary" id="startButton" type="button">Start Run</button>
-            <button class="button" id="pauseButton" type="button">Pause</button>
+            <div class="debug-toolbar">
+              <select class="control-select" id="debugAction">
+                <option value="level-up">Trigger level-up</option>
+                <option value="advance-1">Advance 1 wave</option>
+                <option value="advance-5">Advance 5 waves</option>
+                <option value="add-time">Add 10 minutes</option>
+                <option value="spawn-chest">Spawn chest now</option>
+                <option value="spawn-boss">Spawn boss now</option>
+              </select>
+              <button class="button alt" id="debugRunButton" type="button">Run</button>
+              <p class="debug-note toolbar-debug-note" id="debugStatus">Testing actions start a run automatically if needed.</p>
+            </div>
+            <button class="button" id="levelUpButton" type="button" disabled>Level Up</button>
             <button class="button alt" id="dashButton" type="button">Dash Burst</button>
             <button class="button" id="fullscreenButton" type="button">Full Screen</button>
+            <button class="button" id="pauseButton" type="button">Pause</button>
+            <button class="button primary" id="startButton" type="button">Start Run</button>
           </div>
         </div>
 
@@ -557,18 +1019,27 @@
               <h2 id="draftTitle">Choose An Item</h2>
               <p class="overlay-copy" id="draftText">Pick a new item or reinforce one you already own.</p>
               <div class="draft-grid" id="draftOptions"></div>
+              <div class="draft-actions">
+                <button class="button small" id="autoUpgradeButton" type="button">Auto</button>
+                <button class="button small" id="rerollButton" type="button">Reroll</button>
+                <button class="button small" id="hideDraftButton" type="button">Hide</button>
+              </div>
             </div>
+          </div>
+
+          <audio id="backgroundMusic" src="./Galactic%20Firestorm.mp3" preload="auto" loop></audio>
+
+          <div class="mobile-control-layer" id="mobileControls" aria-hidden="true">
+            <button class="mobile-exit-fullscreen" id="mobileExitFullscreenButton" type="button">Exit</button>
+            <button class="mobile-quick-button mobile-level-button" id="mobileLevelButton" type="button" hidden>Level</button>
+            <button class="mobile-quick-button mobile-dash-button" id="mobileDashButton" type="button">Dash</button>
+            <div class="mobile-stick mobile-move-stick" id="mobileMoveStick" role="button" aria-label="Move ship"></div>
+            <div class="mobile-stick mobile-aim-stick" id="mobileAimStick" role="button" aria-label="Aim weapons"></div>
           </div>
         </div>
       </div>
 
       <aside class="sidebar">
-        <section class="sidebar-card">
-          <h2>Mission</h2>
-          <p>Survive as long as you can. Break enemies for tokens, use those tokens to level up into new weapons or overall passives, and stay alive long enough for fusion chests to start dropping.</p>
-          <p class="touch-note">Touch note: drag inside the arena to move and aim together, then tap <strong>Dash Burst</strong> when the screen gets crowded.</p>
-        </section>
-
         <section class="sidebar-card">
           <h2>Run Intel</h2>
           <div class="stat-grid">
@@ -596,11 +1067,15 @@
               <span>Fusion Chest</span>
               <strong id="chestValue">After 10:00</strong>
             </div>
+            <div class="stat-row">
+              <span>Overflow Boost</span>
+              <strong id="overflowValue">None</strong>
+            </div>
           </div>
         </section>
 
-        <section class="sidebar-card">
-          <h2>Loadout</h2>
+        <details class="sidebar-card loadout-card" open>
+          <summary class="loadout-summary">Loadout</summary>
           <div class="loadout-group">
             <h3>Weapons</h3>
             <ul class="loadout-list" id="weaponList"></ul>
@@ -609,46 +1084,27 @@
             <h3>Passives</h3>
             <ul class="loadout-list" id="passiveList"></ul>
           </div>
-        </section>
-
-        <section class="sidebar-card">
-          <h2>Controls</h2>
-          <ul>
-            <li><strong>Move:</strong> <code>WASD</code> or <code>Arrow Keys</code></li>
-            <li><strong>Aim:</strong> move the cursor across the arena</li>
-            <li><strong>Pause:</strong> <code>P</code> or the pause button</li>
-            <li><strong>Dash:</strong> <code>Space</code> or the dash button</li>
-            <li><strong>Touch:</strong> drag inside the arena to steer and aim</li>
-          </ul>
-        </section>
-
-        <section class="sidebar-card">
-          <h2>Overview</h2>
-          <p>This pass is focused on a better weapon and passive system, slower enemy speed scaling with higher density, and a longer-term fusion path instead of wave-based reward rails.</p>
-        </section>
-
-        <section class="sidebar-card">
-          <h2>Testing Tools</h2>
-          <div class="control-row">
-            <select class="control-select" id="debugAction">
-              <option value="level-up">Trigger level-up</option>
-              <option value="advance-1">Advance 1 wave</option>
-              <option value="advance-5">Advance 5 waves</option>
-              <option value="add-time">Add 10 minutes</option>
-              <option value="spawn-chest">Spawn chest now</option>
-              <option value="spawn-boss">Spawn boss now</option>
-            </select>
-            <button class="button alt" id="debugRunButton" type="button">Run</button>
-          </div>
-          <p class="debug-note" id="debugStatus">Testing actions start a run automatically if needed.</p>
-        </section>
+        </details>
       </aside>
+
+      <section class="controls-strip">
+        <h2>Controls</h2>
+        <ul class="controls-list">
+          <li><strong>Move:</strong> <code>WASD</code> or <code>Arrow Keys</code></li>
+          <li><strong>Aim:</strong> move the cursor across the arena</li>
+          <li><strong>Pause:</strong> <code>P</code> or the pause button</li>
+          <li><strong>Dash:</strong> <code>Space</code> or the dash button</li>
+          <li><strong>Touch:</strong> use the on-screen pads for movement and aim</li>
+        </ul>
+        <p class="control-touch-note">Touch note: phones get separate move and aim pads over the arena, plus quick dash and level buttons.</p>
+      </section>
     </section>
   </main>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
+    const canvasShell = canvas.closest(".canvas-shell");
+    const ctx = canvas.getContext("2d", { alpha: false });
     const gameCard = document.getElementById("gameCard");
     const overlay = document.getElementById("overlay");
     const overlayTitle = document.getElementById("overlayTitle");
@@ -660,14 +1116,25 @@
     const draftText = document.getElementById("draftText");
     const draftOptionsNode = document.getElementById("draftOptions");
     const startButton = document.getElementById("startButton");
+    const levelUpButton = document.getElementById("levelUpButton");
     const pauseButton = document.getElementById("pauseButton");
     const dashButton = document.getElementById("dashButton");
     const fullscreenButton = document.getElementById("fullscreenButton");
     const debugAction = document.getElementById("debugAction");
     const debugRunButton = document.getElementById("debugRunButton");
     const debugStatus = document.getElementById("debugStatus");
+    const autoUpgradeButton = document.getElementById("autoUpgradeButton");
+    const rerollButton = document.getElementById("rerollButton");
+    const hideDraftButton = document.getElementById("hideDraftButton");
     const weaponList = document.getElementById("weaponList");
     const passiveList = document.getElementById("passiveList");
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    const mobileControls = document.getElementById("mobileControls");
+    const mobileMoveStick = document.getElementById("mobileMoveStick");
+    const mobileAimStick = document.getElementById("mobileAimStick");
+    const mobileDashButton = document.getElementById("mobileDashButton");
+    const mobileLevelButton = document.getElementById("mobileLevelButton");
+    const mobileExitFullscreenButton = document.getElementById("mobileExitFullscreenButton");
 
     const hud = {
       health: document.getElementById("healthValue"),
@@ -679,18 +1146,56 @@
       tokens: document.getElementById("tokenValue"),
       level: document.getElementById("levelValue"),
       xp: document.getElementById("xpValue"),
-      chest: document.getElementById("chestValue")
+      chest: document.getElementById("chestValue"),
+      overflow: document.getElementById("overflowValue")
     };
 
     const STORAGE_KEY = "astral-tempest-starfall-survivor-best-score";
     const BASE_ARENA_WIDTH = 960;
     const BASE_ARENA_HEIGHT = 600;
-    const MAX_WEAPONS = 5;
-    const MAX_PASSIVES = 6;
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const BASE_PLAYER_MAX_HP = 5;
+    const BASE_PLAYER_SPEED = 236;
+    const BASE_REPAIR_PER_HULL = 24;
+    const WORLD_WIDTH = 5200;
+    const WORLD_HEIGHT = 3400;
+    const MOBILE_CONTROL_QUERY = window.matchMedia("(pointer: coarse)");
+    const DPR = Math.min(window.devicePixelRatio || 1, MOBILE_CONTROL_QUERY.matches || window.innerWidth <= 720 ? 1.35 : 2);
+    const STORM_ESCALATION_TIME = 1800;
+    const MAX_PARTICLES = 260;
+    const MAX_TOKEN_BURST_PICKUPS = 6;
+    const COLLISION_CELL_SIZE = 96;
+    const STAR_CELL_SIZE = 260;
+    const COLLISION_GRID_COLUMNS = Math.ceil(WORLD_WIDTH / COLLISION_CELL_SIZE);
+    const COLLISION_GRID_ROWS = Math.ceil(WORLD_HEIGHT / COLLISION_CELL_SIZE);
+    const STAR_GRID_COLUMNS = Math.ceil(WORLD_WIDTH / STAR_CELL_SIZE);
+    const STAR_GRID_ROWS = Math.ceil(WORLD_HEIGHT / STAR_CELL_SIZE);
+    const TIMED_EVENT_INTERVAL = 300;
+    const ENDGAME_WAVE_EVENT_TIME = 1200;
+    const TAU = Math.PI * 2;
+    const MUSIC_VOLUME = 0.2;
+    const TOKEN_TIERS = {
+      sapphire: { value: 1, color: "#3fa7ff", glow: "rgba(63, 167, 255, 0.24)", shine: "rgba(228, 246, 255, 0.86)", radius: 4.5 },
+      aquamarine: { value: 2, color: "#69f4df", glow: "rgba(105, 244, 223, 0.25)", shine: "rgba(234, 255, 251, 0.9)", radius: 5.1 },
+      amethyst: { value: 5, color: "#b56dff", glow: "rgba(181, 109, 255, 0.27)", shine: "rgba(246, 231, 255, 0.88)", radius: 6.1 },
+      ruby: { value: 50, color: "#ff3158", glow: "rgba(255, 49, 88, 0.31)", shine: "rgba(255, 226, 232, 0.92)", radius: 8.3 }
+    };
     const keys = new Set();
     const pointer = { active: false, x: 0, y: 0 };
     const mouseAim = { x: BASE_ARENA_WIDTH * 0.65, y: BASE_ARENA_HEIGHT * 0.4, active: false };
+    const canvasMetrics = { left: 0, top: 0, width: BASE_ARENA_WIDTH, height: BASE_ARENA_HEIGHT, scaleX: 1, scaleY: 1 };
+    const hudCache = new Map();
+    const collisionGrids = {
+      bullets: new Map(),
+      hazards: new Map()
+    };
+    const worldStars = [];
+    const starBuckets = new Map();
+    const virtualControls = {
+      move: { active: false, pointerId: null, x: 0, y: 0 },
+      aim: { active: false, pointerId: null, x: 0, y: 0 }
+    };
+    let collisionQueryId = 0;
+    let starQueryId = 0;
 
     const weaponDefs = {
       single_shot: {
@@ -763,31 +1268,27 @@
         offer: true,
         describe(rank) {
           return rank
-            ? `Twin side mounts. Rank ${rank} sharpens damage and reload speed.`
-            : "Paired side turrets that fire angled support shots.";
+            ? `Twin side mounts. Rank ${rank} sharpens side-shot damage and reload speed.`
+            : "Paired side turrets that fire directly out from your left and right sides.";
         },
         cooldown(rank) {
           return Math.max(0.3, 0.68 - rank * 0.018);
         },
         fire(instance, mods) {
-          forEachDirectionalCast(mods, (castAngle) => {
-            const angleOffsets = [-0.22, 0.22];
-            angleOffsets.forEach((offset, index) => {
-              const baseAngle = castAngle + offset;
-              const lateral = index === 0 ? -8 : 8;
-              const sideX = state.player.x + Math.cos(castAngle + Math.PI / 2) * lateral;
-              const sideY = state.player.y + Math.sin(castAngle + Math.PI / 2) * lateral;
-              spawnBullet({
-                kind: "normal",
-                x: sideX + Math.cos(baseAngle) * 10,
-                y: sideY + Math.sin(baseAngle) * 10,
-                vx: Math.cos(baseAngle) * (390 + instance.rank * 5),
-                vy: Math.sin(baseAngle) * (390 + instance.rank * 5),
-                radius: (2.3 + instance.rank * 0.06) * mods.projectileSize,
-                damage: (4.6 + instance.rank * 1.45) * mods.damage,
-                lifetime: 1.02,
-                color: "#ffe7a8"
-              });
+          [-1, 1].forEach((side) => {
+            const angle = state.player.aimAngle + side * Math.PI / 2;
+            const mountX = state.player.x + Math.cos(angle) * 10;
+            const mountY = state.player.y + Math.sin(angle) * 10;
+            spawnBullet({
+              kind: "normal",
+              x: mountX + Math.cos(angle) * 8,
+              y: mountY + Math.sin(angle) * 8,
+              vx: Math.cos(angle) * (405 + instance.rank * 5),
+              vy: Math.sin(angle) * (405 + instance.rank * 5),
+              radius: (2.4 + instance.rank * 0.06) * mods.projectileSize,
+              damage: (5.2 + instance.rank * 1.45) * mods.damage,
+              lifetime: 1.02,
+              color: "#ffe7a8"
             });
           });
         }
@@ -833,8 +1334,8 @@
         offer: true,
         describe(rank) {
           return rank
-            ? `A constant toxic circle. Rank ${rank} increases both radius and damage.`
-            : "A short-radius poison field that hurts anything staying close.";
+            ? `A toxic field. Rank ${rank} increases radius, damage, and tick speed.`
+            : "A short-radius poison field that hits immediately on contact, then ticks while enemies stay inside.";
         },
         passive: true
       },
@@ -862,11 +1363,45 @@
               radius: (4.1 + instance.rank * 0.08) * mods.projectileSize,
               damage: (16 + instance.rank * 4.2) * mods.damage,
               lifetime: 3.0,
-              color: "#ffcb78",
+              color: "#b8753e",
               bouncesRemaining: 1 + Math.floor((instance.rank - 1) / 3),
               trailTimer: 0.05,
               trailRadius: (8 + instance.rank * 0.45) * mods.projectileSize,
               trailDamage: (8 + instance.rank * 1.3) * mods.damage
+            });
+          });
+        }
+      },
+      seeker_trail: {
+        name: "Seeker Trail",
+        maxRank: 10,
+        rarity: "fusion",
+        offer: false,
+        describe(rank) {
+          return `Fusion weapon. Rank ${rank} makes ricochet trail shots bend toward nearby enemies.`;
+        },
+        cooldown(rank) {
+          return Math.max(0.42, 1.08 - rank * 0.045);
+        },
+        fire(instance, mods) {
+          forEachDirectionalCast(mods, (angle) => {
+            spawnBullet({
+              kind: "ricochet",
+              x: state.player.x + Math.cos(angle) * 15,
+              y: state.player.y + Math.sin(angle) * 15,
+              vx: Math.cos(angle) * (280 + instance.rank * 7),
+              vy: Math.sin(angle) * (280 + instance.rank * 7),
+              radius: (4.3 + instance.rank * 0.09) * mods.projectileSize,
+              damage: (18 + instance.rank * 4.6) * mods.damage,
+              lifetime: 3.25,
+              color: "#69f4df",
+              bouncesRemaining: 1 + Math.floor((instance.rank - 1) / 3),
+              trailTimer: 0.045,
+              trailRadius: (8.5 + instance.rank * 0.5) * mods.projectileSize,
+              trailDamage: (8.5 + instance.rank * 1.45) * mods.damage,
+              trailColor: "rgba(75, 219, 206, 0.13)",
+              homingStrength: 2.9 + instance.rank * 0.11,
+              homingRange: 540 + instance.rank * 34
             });
           });
         }
@@ -907,15 +1442,156 @@
           });
         }
       },
+      omni_star_halo: {
+        name: "Omni Star Halo",
+        maxRank: 10,
+        rarity: "fusion",
+        offer: false,
+        describe(rank) {
+          return `Fusion weapon. Rank ${rank} fires a wider rotating radial burst from your ship.`;
+        },
+        cooldown(rank) {
+          return Math.max(0.16, 0.46 - rank * 0.02);
+        },
+        fire(instance, mods) {
+          const baseAngle = getOmniBurstAngle(instance.rank);
+          const shotCount = 12 + Math.floor((instance.rank - 1) / 2) * 2;
+          const speed = 430 + instance.rank * 10;
+          const radius = (2.4 + instance.rank * 0.08) * mods.projectileSize;
+          const spawnRadius = (10 + instance.rank * 0.25) * mods.projectileSize;
+          const damage = (5.5 + instance.rank * 1.7) * mods.damage;
+
+          for (let index = 0; index < shotCount; index += 1) {
+            const angle = baseAngle + (TAU * index) / shotCount;
+            spawnBullet({
+              kind: "normal",
+              x: state.player.x + Math.cos(angle) * spawnRadius,
+              y: state.player.y + Math.sin(angle) * spawnRadius,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              radius,
+              damage,
+              lifetime: 1.06,
+              color: index % 2 === 0 ? "#77a8ff" : "#ffe39e"
+            });
+          }
+        }
+      },
+      ricochet_halo: {
+        name: "Ricochet Halo",
+        maxRank: 10,
+        rarity: "ultimate",
+        offer: false,
+        describe(rank) {
+          return `Ultimate fusion. Rank ${rank} fires omni-directional ricochet trail shots from rotating points on your ship.`;
+        },
+        cooldown(rank) {
+          return Math.max(0.22, 0.64 - rank * 0.026);
+        },
+        fire(instance, mods) {
+          const baseAngle = getOmniBurstAngle(instance.rank) * 0.9;
+          const shotCount = 10 + Math.floor((instance.rank - 1) / 2) * 2;
+          const speed = 300 + instance.rank * 8;
+          const radius = (4.0 + instance.rank * 0.09) * mods.projectileSize;
+          const spawnRadius = (12 + instance.rank * 0.3) * mods.projectileSize;
+          const damage = (12 + instance.rank * 3.2) * mods.damage;
+
+          for (let index = 0; index < shotCount; index += 1) {
+            const angle = baseAngle + (TAU * index) / shotCount;
+            spawnBullet({
+              kind: "ricochet",
+              x: state.player.x + Math.cos(angle) * spawnRadius,
+              y: state.player.y + Math.sin(angle) * spawnRadius,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              radius,
+              damage,
+              lifetime: 3.2,
+              color: index % 2 === 0 ? "#b8753e" : "#c99754",
+              bouncesRemaining: 1 + Math.floor((instance.rank - 1) / 3),
+              trailTimer: 0.045,
+              trailRadius: (9 + instance.rank * 0.5) * mods.projectileSize,
+              trailDamage: (8 + instance.rank * 1.4) * mods.damage
+            });
+          }
+        }
+      },
+      crescent_orbit: {
+        name: "Crescent Orbit",
+        maxRank: 10,
+        rarity: "fusion",
+        offer: false,
+        describe(rank) {
+          return `Fusion weapon. Rank ${rank} makes orbiting blades emit larger circular pulses.`;
+        },
+        cooldown(rank) {
+          return Math.max(0.34, 0.92 - rank * 0.032);
+        },
+        fire(instance, mods) {
+          const orbit = getOrbitWeaponStats(mods, "crescent_orbit");
+          if (!orbit) {
+            return;
+          }
+
+          const radius = (42 + instance.rank * 2.8) * mods.projectileSize;
+          const damage = (17 + instance.rank * 3.1) * mods.damage;
+          const orbiters = getOrbiters(orbit);
+          for (let index = 0; index < orbiters.length; index += 1) {
+            spawnOrbitPulse(index, radius, damage, colorWithAlpha("#ffd27f", 0.62), 0.22);
+          }
+        }
+      },
       miasma_orbit: {
         name: "Miasma Orbit",
         maxRank: 10,
         rarity: "fusion",
         offer: false,
         describe(rank) {
-          return `Fusion weapon. Rank ${rank} intensifies both the poison field and orbiting blades.`;
+          return `Fusion weapon. Rank ${rank} intensifies the ticking poison field and orbiting blades.`;
         },
         passive: true
+      },
+      siphon_field: {
+        name: "Siphon Field",
+        maxRank: 10,
+        rarity: "fusion",
+        offer: false,
+        describe(rank) {
+          return `Fusion weapon. Rank ${rank} upgrades poison into a life-stealing field with global shard pull.`;
+        },
+        passive: true
+      },
+      void_maelstrom: {
+        name: "Void Maelstrom",
+        maxRank: 10,
+        rarity: "ultimate",
+        offer: false,
+        describe(rank) {
+          return `Ultimate fusion. Rank ${rank} merges poison, orbit, magnet, and arc effects into a life-stealing storm.`;
+        },
+        cooldown(rank) {
+          return Math.max(0.24, 0.68 - rank * 0.028);
+        },
+        fire(instance, mods) {
+          const orbit = getOrbitWeaponStats(mods, "void_maelstrom");
+          if (orbit) {
+            const orbiters = getOrbiters(orbit);
+            const pulseRadius = (56 + instance.rank * 3.2) * mods.projectileSize;
+            const pulseDamage = (24 + instance.rank * 4.5) * mods.damage;
+            orbiters.forEach((orbiter, index) => {
+              spawnOrbitPulse(index, pulseRadius, pulseDamage, colorWithAlpha("#8b3cff", 0.38), 0.26, colorWithAlpha("#b886ff", 0.38));
+            });
+          }
+
+          const arcCount = 4 + Math.floor((instance.rank - 1) / 3);
+          const baseAngle = state.runTime * (1.4 + instance.rank * 0.02);
+          const range = (78 + instance.rank * 3.4) * mods.projectileSize;
+          const width = (0.85 + instance.rank * 0.018) * mods.projectileSize;
+          const damage = (22 + instance.rank * 4.2) * mods.damage;
+          for (let index = 0; index < arcCount; index += 1) {
+            spawnArcPulse(state.player.x, state.player.y, baseAngle + (TAU * index) / arcCount, range, width, damage, colorWithAlpha("#8b3cff", 0.36), 0.12);
+          }
+        }
       }
     };
 
@@ -961,8 +1637,8 @@
         maxRank: 1,
         describe(rank) {
           return rank
-            ? "Directional weapons now echo once in reverse, firing a mirrored copy behind you."
-            : "Single-rank passive. Directional weapons fire one mirrored copy behind you.";
+            ? "Directional weapons echo once behind you, and poison fields tick 50% faster for 50% more damage."
+            : "Single-rank passive. Directional weapons fire one mirrored copy behind you and poison fields become more violent.";
         }
       },
       health: {
@@ -1022,14 +1698,82 @@
         }
       },
       {
+        result: "omni_star_halo",
+        name: "Omni Star Halo",
+        componentSets: [
+          ["starburst_array", "sidecar_turrets"],
+          ["single_shot", "twin_shot", "sidecar_turrets"],
+          ["single_shot", "sidecar_turrets"],
+          ["twin_shot", "sidecar_turrets"]
+        ],
+        describe(components) {
+          if (components.includes("starburst_array")) {
+            return "Fuse Starburst Array with Sidecar Turrets into a rotating omni-directional burst emitter.";
+          }
+          return "Fuse Sidecar Turrets with Single Shot, Twin Shot, or both into a rotating omni-directional burst emitter.";
+        }
+      },
+      {
+        result: "seeker_trail",
+        name: "Seeker Trail",
+        components: ["ricochet_trail", "magnet"],
+        describe() {
+          return "Fuse Ricochet Trail and Magnet Coil so trail rounds track nearby enemies while keeping their screen-edge ricochets.";
+        }
+      },
+      {
+        result: "ricochet_halo",
+        name: "Ricochet Halo",
+        components: ["ricochet_trail", "omni_star_halo"],
+        describe() {
+          return "Fuse Ricochet Trail and Omni Star Halo into an ultimate omni-directional barrage that leaves damaging trails.";
+        }
+      },
+      {
+        result: "crescent_orbit",
+        name: "Crescent Orbit",
+        components: ["arc_sweep", "orbit_ring"],
+        describe() {
+          return "Fuse Arc Sweep and Orbit Ring so the orbiting blades periodically release crescent pulses.";
+        }
+      },
+      {
         result: "miasma_orbit",
         name: "Miasma Orbit",
         components: ["orbit_ring", "poison_field"],
         describe() {
           return "Fuse Orbit Ring and Poison Field into one continuous close-range fusion weapon.";
         }
+      },
+      {
+        result: "siphon_field",
+        name: "Siphon Field",
+        components: ["poison_field", "magnet"],
+        describe() {
+          return "Fuse Poison Field and Magnet Coil into a life-stealing field that pulls token shards from anywhere in the arena.";
+        }
+      },
+      {
+        result: "void_maelstrom",
+        name: "Void Maelstrom",
+        requiredEffects: ["poison", "orbit", "magnet", "arc"],
+        describe() {
+          return "Fuse poison, orbit, magnet, and arc effects into an ultimate constant-drain storm with orbit pulses and global shard pull.";
+        }
       }
     ];
+
+    const fusionComponentEffects = {
+      poison_field: ["poison"],
+      orbit_ring: ["orbit"],
+      magnet: ["magnet"],
+      arc_sweep: ["arc"],
+      miasma_orbit: ["poison", "orbit"],
+      siphon_field: ["poison", "magnet"],
+      crescent_orbit: ["orbit", "arc"],
+      seeker_trail: ["magnet"],
+      void_maelstrom: ["poison", "orbit", "magnet", "arc"]
+    };
 
     const state = {
       running: false,
@@ -1038,6 +1782,10 @@
       lastTick: 0,
       arenaWidth: BASE_ARENA_WIDTH,
       arenaHeight: BASE_ARENA_HEIGHT,
+      worldWidth: WORLD_WIDTH,
+      worldHeight: WORLD_HEIGHT,
+      cameraX: 0,
+      cameraY: 0,
       bestScore: readBestScore(),
       score: 0,
       wave: 1,
@@ -1046,6 +1794,8 @@
       spawnClock: 0,
       tokensCollected: 0,
       runTime: 0,
+      nextTimedEventAt: TIMED_EVENT_INTERVAL,
+      lastEndgameWaveEvent: 0,
       level: 1,
       xp: 0,
       xpToNext: 8,
@@ -1061,8 +1811,15 @@
       pickups: [],
       hazards: [],
       swings: [],
+      enemyShots: [],
+      enemyBeams: [],
       touchId: null,
       draftOptions: [],
+      lockedWeapons: new Set(),
+      lockedPassives: new Set(),
+      overflowStats: null,
+      overflowMessage: "None",
+      autoLevel: false,
       enemyIdSeed: 1
     };
 
@@ -1080,6 +1837,15 @@
       } catch (error) {
         return;
       }
+    }
+
+    function saveBestScoreFromCurrentRun() {
+      if (state.score <= state.bestScore) {
+        return false;
+      }
+      state.bestScore = state.score;
+      writeBestScore(state.bestScore);
+      return true;
     }
 
     function formatTime(totalSeconds) {
@@ -1104,6 +1870,44 @@
       return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
     }
 
+    function wrapValue(value, size) {
+      return ((value % size) + size) % size;
+    }
+
+    function shortestDelta(from, to, size) {
+      let delta = to - from;
+      if (delta > size * 0.5) {
+        delta -= size;
+      } else if (delta < -size * 0.5) {
+        delta += size;
+      }
+      return delta;
+    }
+
+    function wrappedDistanceSquared(x1, y1, x2, y2) {
+      const dx = shortestDelta(x1, x2, state.worldWidth);
+      const dy = shortestDelta(y1, y2, state.worldHeight);
+      return dx * dx + dy * dy;
+    }
+
+    function worldToScreen(x, y) {
+      return {
+        x: state.arenaWidth * 0.5 + shortestDelta(state.player.x, x, state.worldWidth),
+        y: state.arenaHeight * 0.5 + shortestDelta(state.player.y, y, state.worldHeight)
+      };
+    }
+
+    function screenToWorld(x, y) {
+      return {
+        x: wrapValue(state.player.x + x - state.arenaWidth * 0.5, state.worldWidth),
+        y: wrapValue(state.player.y + y - state.arenaHeight * 0.5, state.worldHeight)
+      };
+    }
+
+    function isOnScreen(point, padding = 80) {
+      return point.x >= -padding && point.x <= state.arenaWidth + padding && point.y >= -padding && point.y <= state.arenaHeight + padding;
+    }
+
     function shuffle(list) {
       const clone = [...list];
       for (let index = clone.length - 1; index > 0; index -= 1) {
@@ -1117,6 +1921,178 @@
       debugStatus.textContent = message;
     }
 
+    function distanceSquared(x1, y1, x2, y2) {
+      const dx = x1 - x2;
+      const dy = y1 - y2;
+      return dx * dx + dy * dy;
+    }
+
+    function circlesOverlap(x1, y1, radius1, x2, y2, radius2) {
+      const combinedRadius = radius1 + radius2;
+      return wrappedDistanceSquared(x1, y1, x2, y2) <= combinedRadius * combinedRadius;
+    }
+
+    function spatialGridKey(column, row) {
+      return row * 10000 + column;
+    }
+
+    function spatialGridColumns() {
+      return COLLISION_GRID_COLUMNS;
+    }
+
+    function spatialGridRows() {
+      return COLLISION_GRID_ROWS;
+    }
+
+    function starGridKey(column, row) {
+      return row * 10000 + column;
+    }
+
+    function addStarToGrid(star) {
+      const column = Math.floor(star.x / STAR_CELL_SIZE);
+      const row = Math.floor(star.y / STAR_CELL_SIZE);
+      const key = starGridKey(column, row);
+      let bucket = starBuckets.get(key);
+      if (!bucket) {
+        bucket = [];
+        starBuckets.set(key, bucket);
+      }
+      bucket.push(star);
+    }
+
+    function forEachVisibleStar(callback) {
+      starQueryId += 1;
+      const queryId = starQueryId;
+      const padding = 8;
+      const minX = state.player.x - state.arenaWidth * 0.5 - padding;
+      const maxX = state.player.x + state.arenaWidth * 0.5 + padding;
+      const minY = state.player.y - state.arenaHeight * 0.5 - padding;
+      const maxY = state.player.y + state.arenaHeight * 0.5 + padding;
+      const minColumn = Math.floor(minX / STAR_CELL_SIZE);
+      const maxColumn = Math.floor(maxX / STAR_CELL_SIZE);
+      const minRow = Math.floor(minY / STAR_CELL_SIZE);
+      const maxRow = Math.floor(maxY / STAR_CELL_SIZE);
+
+      for (let row = minRow; row <= maxRow; row += 1) {
+        for (let column = minColumn; column <= maxColumn; column += 1) {
+          const bucket = starBuckets.get(starGridKey(wrapValue(column, STAR_GRID_COLUMNS), wrapValue(row, STAR_GRID_ROWS)));
+          if (!bucket) {
+            continue;
+          }
+
+          for (const star of bucket) {
+            if (star.queryId === queryId) {
+              continue;
+            }
+            star.queryId = queryId;
+            callback(star);
+          }
+        }
+      }
+    }
+
+    function addToSpatialGrid(grid, entity) {
+      const minColumn = Math.floor((entity.x - entity.radius) / COLLISION_CELL_SIZE);
+      const maxColumn = Math.floor((entity.x + entity.radius) / COLLISION_CELL_SIZE);
+      const minRow = Math.floor((entity.y - entity.radius) / COLLISION_CELL_SIZE);
+      const maxRow = Math.floor((entity.y + entity.radius) / COLLISION_CELL_SIZE);
+      const columns = spatialGridColumns();
+      const rows = spatialGridRows();
+
+      for (let row = minRow; row <= maxRow; row += 1) {
+        for (let column = minColumn; column <= maxColumn; column += 1) {
+          const key = spatialGridKey(wrapValue(column, columns), wrapValue(row, rows));
+          let bucket = grid.get(key);
+          if (!bucket) {
+            bucket = [];
+            grid.set(key, bucket);
+          }
+          bucket.push(entity);
+        }
+      }
+    }
+
+    function rebuildSpatialGrid(grid, entities) {
+      grid.clear();
+      for (const entity of entities) {
+        if (!entity.dead) {
+          addToSpatialGrid(grid, entity);
+        }
+      }
+    }
+
+    function rebuildCollisionGrids() {
+      rebuildSpatialGrid(collisionGrids.bullets, state.bullets);
+      rebuildSpatialGrid(collisionGrids.hazards, state.hazards);
+    }
+
+    function forEachNearbyEntity(grid, x, y, radius, callback) {
+      collisionQueryId += 1;
+      const queryId = collisionQueryId;
+      const minColumn = Math.floor((x - radius) / COLLISION_CELL_SIZE);
+      const maxColumn = Math.floor((x + radius) / COLLISION_CELL_SIZE);
+      const minRow = Math.floor((y - radius) / COLLISION_CELL_SIZE);
+      const maxRow = Math.floor((y + radius) / COLLISION_CELL_SIZE);
+      const columns = spatialGridColumns();
+      const rows = spatialGridRows();
+
+      for (let row = minRow; row <= maxRow; row += 1) {
+        for (let column = minColumn; column <= maxColumn; column += 1) {
+          const bucket = grid.get(spatialGridKey(wrapValue(column, columns), wrapValue(row, rows)));
+          if (!bucket) {
+            continue;
+          }
+
+          for (const entity of bucket) {
+            if (entity.queryId === queryId) {
+              continue;
+            }
+            entity.queryId = queryId;
+            callback(entity);
+          }
+        }
+      }
+    }
+
+    function pruneDeadBullets() {
+      for (let index = state.bullets.length - 1; index >= 0; index -= 1) {
+        if (state.bullets[index].dead) {
+          state.bullets.splice(index, 1);
+        }
+      }
+    }
+
+    function isCanvasFullscreen() {
+      return document.fullscreenElement === canvas || document.fullscreenElement === canvasShell;
+    }
+
+    function setHudValue(key, node, value) {
+      if (hudCache.get(key) === value) {
+        return;
+      }
+      hudCache.set(key, value);
+      node.textContent = value;
+    }
+
+    function rebuildWorldStars() {
+      worldStars.length = 0;
+      starBuckets.clear();
+      const count = 18000;
+      for (let index = 0; index < count; index += 1) {
+        const roll = Math.random();
+        const colorRoll = Math.random();
+        const star = {
+          x: Math.random() * state.worldWidth,
+          y: Math.random() * state.worldHeight,
+          size: roll > 0.992 ? 2.2 : roll > 0.94 ? 1.35 : roll > 0.62 ? 0.9 : 0.55,
+          alpha: roll > 0.992 ? 0.95 : roll > 0.94 ? 0.68 : 0.18 + Math.random() * 0.42,
+          color: colorRoll > 0.975 ? "255, 232, 172" : colorRoll > 0.94 ? "176, 205, 255" : "238, 242, 255"
+        };
+        worldStars.push(star);
+        addStarToGrid(star);
+      }
+    }
+
     function forEachDirectionalCast(mods, callback) {
       callback(state.player.aimAngle, false);
       if (mods.mirroredShots) {
@@ -1126,6 +2102,10 @@
 
     function getThreatWave() {
       return state.wave + 4;
+    }
+
+    function isStormEscalated() {
+      return state.runTime >= STORM_ESCALATION_TIME;
     }
 
     function getWeapon(key) {
@@ -1145,16 +2125,96 @@
       return passive ? passive.rank : 0;
     }
 
+    function getFusionComponent(key) {
+      return getWeapon(key) || getPassive(key);
+    }
+
+    function getFusionComponentDef(key) {
+      return weaponDefs[key] || passiveDefs[key] || null;
+    }
+
+    function isFusionComponentReady(key) {
+      const component = getFusionComponent(key);
+      const def = getFusionComponentDef(key);
+      return Boolean(component && def && component.rank >= def.maxRank);
+    }
+
+    function getFusionComponentSets(fusion) {
+      return fusion.componentSets || [fusion.components];
+    }
+
+    function getReadyFusionEffects(fusion) {
+      if (!fusion.requiredEffects) {
+        return null;
+      }
+
+      const readyComponents = Object.entries(fusionComponentEffects)
+        .filter(([key]) => key !== fusion.result && isFusionComponentReady(key))
+        .map(([key, effects]) => ({ key, effects }));
+      const uncovered = new Set(fusion.requiredEffects);
+      const selected = [];
+
+      while (uncovered.size > 0) {
+        let best = null;
+        let bestCoverage = 0;
+        for (const component of readyComponents) {
+          if (selected.includes(component.key)) {
+            continue;
+          }
+          const coverage = component.effects.reduce((total, effect) => total + (uncovered.has(effect) ? 1 : 0), 0);
+          if (coverage > bestCoverage) {
+            best = component;
+            bestCoverage = coverage;
+          }
+        }
+
+        if (!best) {
+          return null;
+        }
+
+        selected.push(best.key);
+        best.effects.forEach((effect) => uncovered.delete(effect));
+      }
+
+      return selected;
+    }
+
+    function getReadyFusionComponents(fusion) {
+      const effectComponents = getReadyFusionEffects(fusion);
+      if (fusion.requiredEffects) {
+        return effectComponents;
+      }
+      return getFusionComponentSets(fusion).find((components) => components.every(isFusionComponentReady)) || null;
+    }
+
+    function isWeaponLocked(key) {
+      return state.lockedWeapons.has(key);
+    }
+
+    function isPassiveLocked(key) {
+      return state.lockedPassives.has(key);
+    }
+
+    function lockFusionComponents(components) {
+      for (const key of components) {
+        if (weaponDefs[key]) {
+          state.lockedWeapons.add(key);
+        } else if (passiveDefs[key]) {
+          state.lockedPassives.add(key);
+        }
+      }
+    }
+
     function createPlayer() {
       return {
-        x: state.arenaWidth * 0.5,
-        y: state.arenaHeight * 0.5,
+        x: state.worldWidth * 0.5,
+        y: state.worldHeight * 0.5,
         radius: 10,
         aimAngle: -Math.PI / 2,
         moveStrength: 0,
-        baseSpeed: 236,
-        hp: 5,
-        maxHp: 5,
+        baseSpeed: BASE_PLAYER_SPEED,
+        hp: BASE_PLAYER_MAX_HP,
+        maxHp: BASE_PLAYER_MAX_HP,
         damageInvulnerability: 0.72,
         dashSpeedMultiplier: 3.55,
         dashDuration: 0.18,
@@ -1167,20 +2227,203 @@
       };
     }
 
-    function getStatMods() {
+    function createOverflowStats() {
       return {
-        damage: 1 + passiveRank("damage") * 0.12,
-        attackSpeed: 1 + passiveRank("attack_speed") * 0.1,
-        projectileSize: 1 + passiveRank("projectile_size") * 0.08,
-        mirroredShots: passiveRank("projectile_count") > 0,
-        xpGain: 1 + passiveRank("xp_gain") * 0.12,
-        moveSpeed: 1 + passiveRank("move_speed") * 0.06,
-        magnet: passiveRank("magnet") * 16,
-        defenseScale: Math.max(0.42, 1 - passiveRank("defense") * 0.06),
-        bonusIframe: passiveRank("defense") * 0.08,
-        luck: passiveRank("luck") * 0.04,
-        dashBonus: passiveRank("move_speed") * 0.08
+        damage: 0,
+        attackSpeed: 0,
+        projectileSize: 0,
+        projectileSpeed: 0,
+        xpGain: 0,
+        luck: 0,
+        moveSpeed: 0,
+        maxHp: 0,
+        armor: 0,
+        dashCooldown: 0,
+        dashPower: 0,
+        magnet: 0
       };
+    }
+
+    function recalculatePassiveDerivedStats() {
+      if (!state.player) {
+        return;
+      }
+
+      const overflow = state.overflowStats || createOverflowStats();
+      const previousMaxHp = state.player.maxHp;
+      state.player.baseSpeed = BASE_PLAYER_SPEED + passiveRank("move_speed") * 6;
+      state.player.maxHp = BASE_PLAYER_MAX_HP * (1 + overflow.maxHp) + passiveRank("health");
+      state.player.hp = Math.min(state.player.hp, state.player.maxHp);
+      state.repairPerHull = BASE_REPAIR_PER_HULL - passiveRank("magnet") * 2;
+
+      if (state.player.maxHp > previousMaxHp) {
+        state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.maxHp - previousMaxHp);
+      }
+    }
+
+    function getStatMods() {
+      const magnetRank = passiveRank("magnet");
+      const globalMagnetWeapon = hasWeapon("siphon_field") || hasWeapon("void_maelstrom");
+      const overflow = state.overflowStats || createOverflowStats();
+      return {
+        damage: (1 + passiveRank("damage") * 0.12) * (1 + overflow.damage),
+        attackSpeed: (1 + passiveRank("attack_speed") * 0.1) * (1 + overflow.attackSpeed),
+        projectileSize: (1 + passiveRank("projectile_size") * 0.08) * (1 + overflow.projectileSize),
+        projectileSpeed: 1 + overflow.projectileSpeed,
+        mirroredShots: passiveRank("projectile_count") > 0,
+        xpGain: (1 + passiveRank("xp_gain") * 0.12) * (1 + overflow.xpGain),
+        moveSpeed: (1 + passiveRank("move_speed") * 0.06) * (1 + overflow.moveSpeed),
+        magnet: globalMagnetWeapon ? Math.max(magnetRank * 16, 16000) : magnetRank * 16 * (1 + overflow.magnet),
+        globalMagnet: globalMagnetWeapon,
+        defenseScale: Math.max(0, (1 - passiveRank("defense") * 0.06) / (1 + overflow.armor)),
+        bonusIframe: passiveRank("defense") * 0.08,
+        luck: passiveRank("luck") * 0.04 + overflow.luck,
+        dashBonus: passiveRank("move_speed") * 0.08 + overflow.dashPower,
+        dashCooldownScale: Math.max(0, 1 - overflow.dashCooldown),
+        dashNoCooldown: overflow.dashCooldown >= 1
+      };
+    }
+
+    function getPoisonFieldStats(mods) {
+      const mirrorPoison = passiveRank("projectile_count") > 0 ? 1.5 : 1;
+      if (hasWeapon("void_maelstrom")) {
+        const weapon = getWeapon("void_maelstrom");
+        return {
+          key: "void_maelstrom",
+          rank: weapon.rank,
+          fusion: true,
+          radius: (62 + weapon.rank * 2.8) * mods.projectileSize,
+          damagePerSecond: ((22 + weapon.rank * 3.8) * mods.damage * mods.attackSpeed * mirrorPoison),
+          tickInterval: 0,
+          constantDamage: true,
+          fill: "rgba(44, 12, 88, 0.28)",
+          stroke: "rgba(139, 60, 255, 0.5)",
+          lifeSteal: 0.045 + weapon.rank * 0.004
+        };
+      }
+
+      if (hasWeapon("siphon_field")) {
+        const weapon = getWeapon("siphon_field");
+        return {
+          key: "siphon_field",
+          rank: weapon.rank,
+          fusion: true,
+          radius: (52 + weapon.rank * 2.2) * mods.projectileSize,
+          damagePerSecond: ((16 + weapon.rank * 2.6) * mods.damage * mods.attackSpeed * mirrorPoison),
+          tickInterval: Math.max(0.06, (0.3 - weapon.rank * 0.014) / (mods.attackSpeed * mirrorPoison)),
+          fill: "rgba(126, 243, 206, 0.13)",
+          stroke: "rgba(126, 243, 206, 0.34)",
+          lifeSteal: 0.03 + weapon.rank * 0.003
+        };
+      }
+
+      if (hasWeapon("miasma_orbit")) {
+        const weapon = getWeapon("miasma_orbit");
+        return {
+          key: "miasma_orbit",
+          rank: weapon.rank,
+          fusion: true,
+          radius: (44 + weapon.rank * 1.7) * mods.projectileSize,
+          damagePerSecond: ((14 + weapon.rank * 2.4) * mods.damage * mods.attackSpeed * mirrorPoison),
+          tickInterval: Math.max(0.07, (0.34 - weapon.rank * 0.016) / (mods.attackSpeed * mirrorPoison)),
+          fill: "rgba(44, 12, 88, 0.24)",
+          stroke: "rgba(74, 24, 128, 0.42)",
+          lifeSteal: 0
+        };
+      }
+
+      if (hasWeapon("poison_field")) {
+        const weapon = getWeapon("poison_field");
+        return {
+          key: "poison_field",
+          rank: weapon.rank,
+          fusion: false,
+          radius: (34 + weapon.rank * 1.5) * mods.projectileSize,
+          damagePerSecond: ((10 + weapon.rank * 1.9) * mods.damage * mods.attackSpeed * mirrorPoison),
+          tickInterval: Math.max(0.075, (0.36 - weapon.rank * 0.018) / (mods.attackSpeed * mirrorPoison)),
+          fill: "rgba(104, 227, 163, 0.1)",
+          stroke: "rgba(126, 243, 206, 0.24)",
+          lifeSteal: 0
+        };
+      }
+
+      return null;
+    }
+
+    function getOrbitWeaponStats(mods, preferredKey = null) {
+      const key = preferredKey && hasWeapon(preferredKey)
+        ? preferredKey
+        : hasWeapon("void_maelstrom")
+          ? "void_maelstrom"
+          : hasWeapon("crescent_orbit")
+            ? "crescent_orbit"
+            : hasWeapon("miasma_orbit")
+              ? "miasma_orbit"
+              : hasWeapon("orbit_ring")
+                ? "orbit_ring"
+                : null;
+
+      if (!key) {
+        return null;
+      }
+
+      const weapon = getWeapon(key);
+      const fusion = key !== "orbit_ring";
+      return {
+        key,
+        rank: weapon.rank,
+        fusion,
+        count: key === "void_maelstrom" ? 4 + Math.floor((weapon.rank - 1) / 5) : key === "crescent_orbit" && weapon.rank >= 6 ? 3 : fusion ? 3 : 2,
+        radius: ((key === "void_maelstrom" ? 42 : key === "crescent_orbit" ? 34 : 28) + weapon.rank * (key === "void_maelstrom" ? 1.1 : key === "crescent_orbit" ? 0.9 : 0.6)) * mods.projectileSize,
+        orbiterSize: ((key === "void_maelstrom" ? 5.6 : key === "crescent_orbit" ? 4.8 : 4.2) + weapon.rank * 0.04) * mods.projectileSize,
+        damage: ((key === "void_maelstrom" ? 24 : key === "crescent_orbit" ? 12 : 16) + weapon.rank * (key === "void_maelstrom" ? 3.4 : key === "crescent_orbit" ? 2.1 : 2.7)) * mods.damage,
+        spinSpeed: key === "void_maelstrom" ? 3.85 + weapon.rank * 0.1 : key === "crescent_orbit" ? 3.35 + weapon.rank * 0.09 : 3 + weapon.rank * 0.08,
+        color: key === "void_maelstrom" ? "#8b3cff" : key === "crescent_orbit" ? "#ffd27f" : fusion ? "#9dffb0" : "#ffd27f"
+      };
+    }
+
+    function getOrbiters(orbit) {
+      const orbiters = [];
+      const spin = state.runTime * orbit.spinSpeed;
+      for (let blade = 0; blade < orbit.count; blade += 1) {
+        const angle = spin + (TAU * blade) / orbit.count;
+        orbiters.push({
+          angle,
+          x: wrapValue(state.player.x + Math.cos(angle) * orbit.radius, state.worldWidth),
+          y: wrapValue(state.player.y + Math.sin(angle) * orbit.radius, state.worldHeight),
+          radius: orbit.orbiterSize,
+          damage: orbit.damage
+        });
+      }
+      return orbiters;
+    }
+
+    function getOmniBurstAngle(rank) {
+      return state.runTime * (3.35 + rank * 0.055);
+    }
+
+    function getOrbitPulseColliders(mods) {
+      const orbit = getOrbitWeaponStats(mods, hasWeapon("void_maelstrom") ? "void_maelstrom" : "crescent_orbit");
+      if (!orbit) {
+        return [];
+      }
+
+      const orbiters = getOrbiters(orbit);
+      return state.swings
+        .filter((swing) => swing.kind === "orbit_pulse")
+        .map((pulse) => {
+          const orbiter = orbiters[pulse.bladeIndex % orbiters.length];
+          const progress = 1 - pulse.lifetime / pulse.maxLifetime;
+          return {
+            x: orbiter.x,
+            y: orbiter.y,
+            radius: pulse.radius * (0.35 + progress * 0.65),
+            damagePerSecond: pulse.damage / pulse.maxLifetime,
+            alpha: Math.max(0, pulse.lifetime / pulse.maxLifetime),
+            color: pulse.color,
+            stroke: pulse.stroke || colorWithAlpha("#ffe39e", 0.42)
+          };
+        });
     }
 
     function clearRunEntities() {
@@ -1190,6 +2433,12 @@
       state.pickups = [];
       state.hazards = [];
       state.swings = [];
+      state.enemyShots = [];
+      state.enemyBeams = [];
+    }
+
+    function hasRunProgress() {
+      return state.runTime > 0 || state.score > 0 || state.wave > 1 || state.tokensCollected > 0 || Boolean(state.player && state.player.hp <= 0);
     }
 
     function updateHud() {
@@ -1197,22 +2446,38 @@
         return;
       }
 
-      const chestText = state.runTime < 600
-        ? `After ${formatTime(600 - state.runTime)}`
-        : hasAvailableFusion() ? "Eligible" : state.chestUnlocked ? `${Math.max(0, Math.ceil(state.chestCooldown))}s` : "Ready";
+      const chestText = hasAvailableFusion()
+        ? "Eligible"
+        : state.runTime >= ENDGAME_WAVE_EVENT_TIME
+          ? "Each wave"
+          : `Next ${formatTime(state.nextTimedEventAt - state.runTime)}`;
 
-      hud.health.textContent = `${formatHealth(state.player.hp)} / ${state.player.maxHp}`;
-      hud.score.textContent = state.score.toLocaleString();
-      hud.wave.textContent = String(state.wave);
-      hud.dash.textContent = state.player.dashCooldownRemaining <= 0 ? "Ready" : `${state.player.dashCooldownRemaining.toFixed(1)}s`;
-      hud.best.textContent = state.bestScore.toLocaleString();
-      hud.time.textContent = formatTime(state.runTime);
-      hud.tokens.textContent = String(state.tokensCollected);
-      hud.level.textContent = String(state.level);
-      hud.xp.textContent = `${state.xp} / ${state.xpToNext}`;
-      hud.chest.textContent = chestText;
-      pauseButton.textContent = state.paused ? "Resume" : "Pause";
-      fullscreenButton.textContent = document.fullscreenElement ? "Exit Full" : "Full Screen";
+      setHudValue("health", hud.health, `${formatHealth(state.player.hp)} / ${formatHealth(state.player.maxHp)}`);
+      setHudValue("score", hud.score, state.score.toLocaleString());
+      setHudValue("wave", hud.wave, String(state.wave));
+      setHudValue("dash", hud.dash, state.player.dashCooldownRemaining <= 0 ? "Ready" : `${state.player.dashCooldownRemaining.toFixed(1)}s`);
+      setHudValue("best", hud.best, state.bestScore.toLocaleString());
+      setHudValue("time", hud.time, formatTime(state.runTime));
+      setHudValue("tokens", hud.tokens, String(state.tokensCollected));
+      setHudValue("level", hud.level, String(state.level));
+      setHudValue("xp", hud.xp, `${state.xp} / ${state.xpToNext}`);
+      setHudValue("chest", hud.chest, chestText);
+      setHudValue("overflow", hud.overflow, state.overflowMessage || "None");
+      setHudValue("pauseButton", pauseButton, state.paused ? "Resume" : "Pause");
+      setHudValue("fullscreenButton", fullscreenButton, isCanvasFullscreen() ? "Exit Full" : "Full Screen");
+      const levelAvailable = state.pendingLevels > 0;
+      const levelBlocked = !state.running || state.draftMode === "starter" || state.draftMode === "fusion";
+      const autoIndicator = state.autoLevel && !levelAvailable;
+      setHudValue("levelUpButton", levelUpButton, autoIndicator ? "Auto On" : levelAvailable ? `Level Up ${state.pendingLevels}` : "Level Up");
+      levelUpButton.disabled = levelBlocked || (!levelAvailable && !state.autoLevel);
+      levelUpButton.classList.toggle("level-ready", levelAvailable && !levelUpButton.disabled);
+      levelUpButton.classList.toggle("toggle-active", autoIndicator && !levelUpButton.disabled);
+      const restartMode = state.running || hasRunProgress();
+      startButton.classList.toggle("primary", !restartMode);
+      startButton.classList.toggle("danger", restartMode);
+      autoUpgradeButton.classList.toggle("toggle-active", state.autoLevel);
+      autoUpgradeButton.textContent = state.autoLevel ? "Auto On" : "Auto Off";
+      updateMobileControlUi();
     }
 
     function renderLoadout() {
@@ -1222,12 +2487,12 @@
 
       const weapons = state.player.weapons.map((weapon) => {
         const def = weaponDefs[weapon.key];
-        return `<li>${def.name} R${weapon.rank}</li>`;
+        return `<li><span class="loadout-entry"><span>${def.name} R${weapon.rank}</span><button class="remove-loadout" type="button" data-type="weapon" data-key="${weapon.key}" aria-label="Remove ${def.name}">x</button></span></li>`;
       });
 
       const passives = state.player.passives.map((passive) => {
         const def = passiveDefs[passive.key];
-        return `<li>${def.name} R${passive.rank}</li>`;
+        return `<li><span class="loadout-entry"><span>${def.name} R${passive.rank}</span><button class="remove-loadout" type="button" data-type="passive" data-key="${passive.key}" aria-label="Remove ${def.name}">x</button></span></li>`;
       });
 
       weaponList.innerHTML = weapons.length ? weapons.join("") : "<li>No starting weapon selected yet.</li>";
@@ -1241,11 +2506,43 @@
       overlay.classList.remove("hidden");
     }
 
+    function setBackgroundMusicPlaying(playing) {
+      if (!backgroundMusic) {
+        return;
+      }
+      backgroundMusic.volume = MUSIC_VOLUME;
+      backgroundMusic.loop = true;
+
+      if (playing) {
+        const playPromise = backgroundMusic.play();
+        if (playPromise) {
+          playPromise.catch(() => {});
+        }
+      } else {
+        backgroundMusic.pause();
+      }
+    }
+
+    function resetBackgroundMusic() {
+      if (!backgroundMusic) {
+        return;
+      }
+      setBackgroundMusicPlaying(false);
+      try {
+        backgroundMusic.currentTime = 0;
+      } catch {
+        // Some browsers reject seeking before metadata is ready.
+      }
+    }
+
     function closeDraft() {
+      const wasBlocking = state.draftMode === "fusion";
       state.draftMode = null;
       state.draftOptions = [];
       draftPanel.classList.add("hidden");
-      state.lastTick = 0;
+      if (wasBlocking) {
+        state.lastTick = 0;
+      }
     }
 
     function showDraft(kicker, title, text, options, mode) {
@@ -1268,32 +2565,31 @@
         draftOptionsNode.appendChild(button);
       });
 
+      autoUpgradeButton.hidden = mode !== "level";
+      rerollButton.hidden = mode !== "level";
+      hideDraftButton.hidden = mode !== "level";
       draftPanel.classList.remove("hidden");
     }
 
     function buildStarterDraftOptions() {
-      const guaranteedKeys = ["single_shot", "twin_shot"];
-      const bonusKeys = shuffle(
-        Object.entries(weaponDefs)
-          .filter(([key, def]) => def.offer && !guaranteedKeys.includes(key))
-          .map(([key]) => key)
-      ).slice(0, 2);
-
-      return [...guaranteedKeys, ...bonusKeys].map((key) => {
-        const def = weaponDefs[key];
-        return {
-          id: `starter-${key}`,
-          typeLabel: "starter weapon",
-          title: def.name,
-          text: def.describe(0),
-          apply() {
-            addWeapon(key, 1);
-            closeDraft();
-            startRun();
-            setDebugStatus(`Started with ${def.name}.`);
-          }
-        };
-      });
+      return Object.entries(weaponDefs)
+        .filter(([, def]) => def.offer)
+        .map(([key]) => key)
+        .map((key) => {
+          const def = weaponDefs[key];
+          return {
+            id: `starter-${key}`,
+            typeLabel: "starter weapon",
+            title: def.name,
+            text: def.describe(0),
+            apply() {
+              addWeapon(key, 1);
+              closeDraft();
+              startRun();
+              setDebugStatus(`Started with ${def.name}.`);
+            }
+          };
+        });
     }
 
     function openStarterDraft() {
@@ -1312,8 +2608,12 @@
     }
 
     function resetRun() {
+      saveBestScoreFromCurrentRun();
+      hudCache.clear();
       state.running = false;
       state.paused = false;
+      resetBackgroundMusic();
+      resetVirtualControls();
       state.draftMode = null;
       state.lastTick = 0;
       state.score = 0;
@@ -1321,8 +2621,12 @@
       state.waveClock = 0;
       state.waveDuration = 18;
       state.spawnClock = 0;
+      state.cameraX = 0;
+      state.cameraY = 0;
       state.tokensCollected = 0;
       state.runTime = 0;
+      state.nextTimedEventAt = TIMED_EVENT_INTERVAL;
+      state.lastEndgameWaveEvent = 0;
       state.level = 1;
       state.xp = 0;
       state.xpToNext = 8;
@@ -1331,8 +2635,14 @@
       state.repairPerHull = 24;
       state.chestCooldown = 999;
       state.chestUnlocked = false;
+      state.lockedWeapons = new Set();
+      state.lockedPassives = new Set();
+      state.overflowStats = createOverflowStats();
+      state.overflowMessage = "None";
       state.player = createPlayer();
+      recalculatePassiveDerivedStats();
       state.enemyIdSeed = 1;
+      rebuildWorldStars();
       clearRunEntities();
       closeDraft();
       overlay.classList.remove("hidden");
@@ -1359,6 +2669,7 @@
       state.lastTick = 0;
       overlay.classList.add("hidden");
       startButton.textContent = "Restart Run";
+      setBackgroundMusicPlaying(true);
       requestAnimationFrame(loop);
     }
 
@@ -1368,12 +2679,15 @@
       }
 
       if (state.running) {
+        if (!window.confirm("Restart the current run and choose a new starter?")) {
+          return;
+        }
         resetRun();
         openStarterDraft();
         return;
       }
 
-      const hasProgress = state.runTime > 0 || state.score > 0 || state.wave > 1 || state.tokensCollected > 0 || state.player.hp <= 0;
+      const hasProgress = hasRunProgress();
       if (hasProgress || state.player.weapons.length || state.player.passives.length) {
         resetRun();
       }
@@ -1382,44 +2696,155 @@
     }
 
     function togglePause() {
-      if (!state.running || state.draftMode) {
+      if (!state.running || state.draftMode === "starter" || state.draftMode === "fusion") {
         return;
       }
       state.paused = !state.paused;
       if (!state.paused) {
         state.lastTick = 0;
       }
+      setBackgroundMusicPlaying(!state.paused);
       updateHud();
+    }
+
+    function updateCanvasMetrics(rect = canvas.getBoundingClientRect()) {
+      canvasMetrics.left = rect.left;
+      canvasMetrics.top = rect.top;
+      canvasMetrics.width = rect.width || state.arenaWidth;
+      canvasMetrics.height = rect.height || state.arenaHeight;
+      canvasMetrics.scaleX = state.arenaWidth / canvasMetrics.width;
+      canvasMetrics.scaleY = state.arenaHeight / canvasMetrics.height;
     }
 
     function resizeArena() {
       const rect = canvas.getBoundingClientRect();
-      state.arenaWidth = Math.max(720, Math.round(rect.width));
-      state.arenaHeight = Math.max(360, Math.round(rect.height));
+      const minWidth = isCanvasFullscreen() ? 1 : 720;
+      const minHeight = isCanvasFullscreen() ? 1 : 360;
+      state.arenaWidth = Math.max(minWidth, Math.round(rect.width));
+      state.arenaHeight = Math.max(minHeight, Math.round(rect.height));
+      updateCanvasMetrics(rect);
       canvas.width = Math.round(state.arenaWidth * DPR);
       canvas.height = Math.round(state.arenaHeight * DPR);
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       if (state.player) {
-        state.player.x = Math.min(Math.max(state.player.x, state.player.radius), state.arenaWidth - state.player.radius);
-        state.player.y = Math.min(Math.max(state.player.y, state.player.radius), state.arenaHeight - state.player.radius);
+        state.cameraX = wrapValue(state.player.x - state.arenaWidth * 0.5, state.worldWidth);
+        state.cameraY = wrapValue(state.player.y - state.arenaHeight * 0.5, state.worldHeight);
       }
       draw();
     }
 
     function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        if (gameCard.requestFullscreen) {
-          gameCard.requestFullscreen().catch(() => {});
+      if (!isCanvasFullscreen()) {
+        const target = canvasShell || canvas;
+        if (target.requestFullscreen) {
+          target.requestFullscreen().catch(() => {});
         }
       } else if (document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
       }
     }
 
+    function shouldUseMobileControls() {
+      return MOBILE_CONTROL_QUERY.matches || window.innerWidth <= 720;
+    }
+
+    function setStickKnob(node, x, y) {
+      if (!node) {
+        return;
+      }
+      node.style.setProperty("--knob-x", `${x}px`);
+      node.style.setProperty("--knob-y", `${y}px`);
+    }
+
+    function updateVirtualStick(event, node, control) {
+      const rect = node.getBoundingClientRect();
+      const centerX = rect.left + rect.width * 0.5;
+      const centerY = rect.top + rect.height * 0.5;
+      const maxDistance = rect.width * 0.34;
+      const rawX = event.clientX - centerX;
+      const rawY = event.clientY - centerY;
+      const distance = Math.hypot(rawX, rawY);
+      const scale = distance > maxDistance ? maxDistance / distance : 1;
+      const knobX = rawX * scale;
+      const knobY = rawY * scale;
+      const normalizedX = knobX / maxDistance;
+      const normalizedY = knobY / maxDistance;
+      const deadzone = 0.13;
+
+      control.x = Math.abs(normalizedX) < deadzone ? 0 : normalizedX;
+      control.y = Math.abs(normalizedY) < deadzone ? 0 : normalizedY;
+      control.active = true;
+      setStickKnob(node, knobX, knobY);
+      event.preventDefault();
+    }
+
+    function resetVirtualStick(node, control) {
+      control.active = false;
+      control.pointerId = null;
+      control.x = 0;
+      control.y = 0;
+      setStickKnob(node, 0, 0);
+    }
+
+    function bindVirtualStick(node, control) {
+      if (!node) {
+        return;
+      }
+
+      node.addEventListener("pointerdown", (event) => {
+        control.pointerId = event.pointerId;
+        node.setPointerCapture(event.pointerId);
+        updateVirtualStick(event, node, control);
+      });
+
+      node.addEventListener("pointermove", (event) => {
+        if (control.pointerId === event.pointerId) {
+          updateVirtualStick(event, node, control);
+        }
+      });
+
+      const release = (event) => {
+        if (control.pointerId !== event.pointerId) {
+          return;
+        }
+        if (node.hasPointerCapture(event.pointerId)) {
+          node.releasePointerCapture(event.pointerId);
+        }
+        resetVirtualStick(node, control);
+      };
+
+      node.addEventListener("pointerup", release);
+      node.addEventListener("pointercancel", release);
+      node.addEventListener("lostpointercapture", () => resetVirtualStick(node, control));
+    }
+
+    function resetVirtualControls() {
+      resetVirtualStick(mobileMoveStick, virtualControls.move);
+      resetVirtualStick(mobileAimStick, virtualControls.aim);
+    }
+
+    function updateMobileControlUi() {
+      const enabled = shouldUseMobileControls() && state.running;
+      if (canvasShell) {
+        canvasShell.classList.toggle("mobile-controls-active", enabled);
+      }
+      if (mobileControls) {
+        mobileControls.setAttribute("aria-hidden", enabled ? "false" : "true");
+      }
+      if (mobileLevelButton) {
+        const canLevel = state.running && state.pendingLevels > 0 && state.draftMode !== "starter" && state.draftMode !== "fusion";
+        mobileLevelButton.hidden = !canLevel;
+        mobileLevelButton.disabled = !canLevel;
+      }
+    }
+
     function spawnParticle(x, y, color, size = 3, lifetime = 0.32) {
+      if (state.particles.length >= MAX_PARTICLES) {
+        return;
+      }
       state.particles.push({
-        x,
-        y,
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
         vx: (Math.random() - 0.5) * 170,
         vy: (Math.random() - 0.5) * 170,
         size,
@@ -1436,11 +2861,12 @@
     }
 
     function spawnBullet(config) {
+      const speedScale = state.player ? getStatMods().projectileSpeed : 1;
       state.bullets.push({
-        x: config.x,
-        y: config.y,
-        vx: config.vx,
-        vy: config.vy,
+        x: wrapValue(config.x, state.worldWidth),
+        y: wrapValue(config.y, state.worldHeight),
+        vx: config.vx * speedScale,
+        vy: config.vy * speedScale,
         radius: config.radius,
         damage: config.damage,
         lifetime: config.lifetime,
@@ -1450,15 +2876,19 @@
         trailTimer: config.trailTimer || 0,
         trailRadius: config.trailRadius || 0,
         trailDamage: config.trailDamage || 0,
+        trailColor: config.trailColor || "rgba(184, 117, 62, 0.15)",
+        homingStrength: config.homingStrength || 0,
+        homingRange: config.homingRange || 0,
         ignoreEnemyId: null,
-        ignoreTimer: 0
+        ignoreTimer: 0,
+        dead: false
       });
     }
 
     function spawnHazard(x, y, radius, damagePerSecond, lifetime, color) {
       state.hazards.push({
-        x,
-        y,
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
         radius,
         damagePerSecond,
         lifetime,
@@ -1467,23 +2897,53 @@
       });
     }
 
-    function spawnSwing(range, width, damage, color, angle = state.player.aimAngle) {
+    function spawnEnemyRocket(x, y, angle, speed, damage) {
+      state.enemyShots.push({
+        kind: "rocket",
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius: 7,
+        damage,
+        turnRate: 2.4,
+        lifetime: 5.2,
+        maxLifetime: 5.2,
+        color: "#ff6b4a"
+      });
+    }
+
+    function spawnEnemyLaser(x, y, angle, length, damage) {
+      state.enemyBeams.push({
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
+        angle,
+        length,
+        width: 18,
+        damage,
+        lifetime: 0.36,
+        maxLifetime: 0.36,
+        color: "rgba(255, 76, 116, 0.48)"
+      });
+    }
+
+    function spawnArcPulse(x, y, angle, range, width, damage, color, lifetime = 0.13) {
       state.swings.push({
-        x: state.player.x,
-        y: state.player.y,
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
         angle,
         range,
         width,
-        lifetime: 0.13,
-        maxLifetime: 0.13,
+        lifetime,
+        maxLifetime: lifetime,
         color
       });
 
       for (const enemy of state.enemies) {
-        const dx = enemy.x - state.player.x;
-        const dy = enemy.y - state.player.y;
-        const distance = Math.hypot(dx, dy);
-        if (distance > range + enemy.radius) {
+        const dx = shortestDelta(x, enemy.x, state.worldWidth);
+        const dy = shortestDelta(y, enemy.y, state.worldHeight);
+        const reach = range + enemy.radius;
+        if (dx * dx + dy * dy > reach * reach) {
           continue;
         }
         const enemyAngle = Math.atan2(dy, dx);
@@ -1494,13 +2954,28 @@
       }
     }
 
+    function spawnSwing(range, width, damage, color, angle = state.player.aimAngle) {
+      spawnArcPulse(state.player.x, state.player.y, angle, range, width, damage, color, 0.13);
+    }
+
+    function spawnOrbitPulse(bladeIndex, radius, damage, color, lifetime = 0.22, stroke = null) {
+      state.swings.push({
+        kind: "orbit_pulse",
+        bladeIndex,
+        radius,
+        damage,
+        lifetime,
+        maxLifetime: lifetime,
+        color,
+        stroke
+      });
+    }
+
     function nearestEnemy() {
       let best = null;
       let bestDistance = Infinity;
       for (const enemy of state.enemies) {
-        const dx = enemy.x - state.player.x;
-        const dy = enemy.y - state.player.y;
-        const distance = dx * dx + dy * dy;
+        const distance = wrappedDistanceSquared(state.player.x, state.player.y, enemy.x, enemy.y);
         if (distance < bestDistance) {
           bestDistance = distance;
           best = enemy;
@@ -1509,28 +2984,59 @@
       return best;
     }
 
+    function nearestEnemyToPoint(x, y, maxDistance = Infinity) {
+      let best = null;
+      let bestDistance = maxDistance * maxDistance;
+      for (const enemy of state.enemies) {
+        const distance = wrappedDistanceSquared(x, y, enemy.x, enemy.y);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          best = enemy;
+        }
+      }
+      return best;
+    }
+
+    function makeTokenPickup(x, y, value, color, radius, glow = null, shine = null) {
+      const angle = Math.random() * TAU;
+      const speed = 28 + Math.random() * 58;
+      return {
+        type: "token",
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius,
+        value,
+        color,
+        glow: glow || colorWithAlpha(color, 0.22),
+        shine: shine || "rgba(255, 255, 255, 0.78)"
+      };
+    }
+
+    function pushTokenGem(x, y, tierKey, count = 1) {
+      const tier = TOKEN_TIERS[tierKey] || TOKEN_TIERS.sapphire;
+      for (let index = 0; index < count; index += 1) {
+        state.pickups.push(makeTokenPickup(x, y, tier.value, tier.color, tier.radius, tier.glow, tier.shine));
+      }
+    }
+
     function pushTokenBurst(x, y, amount, color = "#7ef3ce") {
-      for (let index = 0; index < amount; index += 1) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 28 + Math.random() * 58;
-        state.pickups.push({
-          type: "token",
-          x,
-          y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          radius: 4.3,
-          value: 1,
-          color
-        });
+      const pickupCount = Math.max(1, Math.min(amount, MAX_TOKEN_BURST_PICKUPS));
+      let remainingValue = amount;
+
+      for (let index = 0; index < pickupCount; index += 1) {
+        const value = Math.ceil(remainingValue / (pickupCount - index));
+        remainingValue -= value;
+        state.pickups.push(makeTokenPickup(x, y, value, color, 4.3 + Math.min(3, value * 0.35)));
       }
     }
 
     function spawnChest(x, y) {
       state.pickups.push({
         type: "chest",
-        x,
-        y,
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
         vx: (Math.random() - 0.5) * 40,
         vy: (Math.random() - 0.5) * 40,
         radius: 8.5,
@@ -1545,7 +3051,10 @@
       }
 
       const mods = getStatMods();
-      const scaled = Math.max(0.35, amount * mods.defenseScale);
+      const scaled = Math.max(0, amount * mods.defenseScale);
+      if (scaled <= 0) {
+        return;
+      }
       state.player.hp -= scaled;
       state.player.damageTimer = state.player.damageInvulnerability + mods.bonusIframe;
 
@@ -1555,13 +3064,19 @@
       }
     }
 
+    function healPlayer(amount) {
+      if (amount <= 0 || state.player.hp >= state.player.maxHp) {
+        return;
+      }
+      state.player.hp = Math.min(state.player.maxHp, state.player.hp + amount);
+    }
+
     function finishRun() {
       state.running = false;
-      const isNewBest = state.score > state.bestScore;
-      if (isNewBest) {
-        state.bestScore = state.score;
-        writeBestScore(state.bestScore);
-      }
+      setBackgroundMusicPlaying(false);
+      resetVirtualControls();
+      startButton.textContent = "Restart Run";
+      const isNewBest = saveBestScoreFromCurrentRun();
       setOverlay(
         "Run Complete",
         `You survived through <strong>wave ${state.wave}</strong> and scored <strong>${state.score.toLocaleString()}</strong>. ${isNewBest ? "That is the new site high score." : `Current best is <strong>${state.bestScore.toLocaleString()}</strong>.`}`,
@@ -1571,19 +3086,27 @@
     }
 
     function triggerDash() {
-      if (!state.running || state.paused || state.draftMode || state.player.dashCooldownRemaining > 0 || state.player.dashTimer > 0) {
+      const mods = getStatMods();
+      if (!state.running || state.paused || state.draftMode === "starter" || state.draftMode === "fusion" || (!mods.dashNoCooldown && state.player.dashCooldownRemaining > 0) || state.player.dashTimer > 0) {
         return;
       }
       state.player.dashTimer = state.player.dashDuration;
-      state.player.dashCooldownRemaining = state.player.dashCooldown;
+      state.player.dashCooldownRemaining = mods.dashNoCooldown ? 0 : state.player.dashCooldown * mods.dashCooldownScale;
       emitBurst(state.player.x, state.player.y, "#f7d47f", 16, 4);
     }
 
     function updateAim() {
-      if (pointer.active) {
-        state.player.aimAngle = Math.atan2(pointer.y - state.player.y, pointer.x - state.player.x);
+      const aimStrength = Math.hypot(virtualControls.aim.x, virtualControls.aim.y);
+      const moveStrength = Math.hypot(virtualControls.move.x, virtualControls.move.y);
+
+      if (virtualControls.aim.active && aimStrength > 0.05) {
+        state.player.aimAngle = Math.atan2(virtualControls.aim.y, virtualControls.aim.x);
+      } else if (virtualControls.move.active && moveStrength > 0.05) {
+        state.player.aimAngle = Math.atan2(virtualControls.move.y, virtualControls.move.x);
+      } else if (pointer.active) {
+        state.player.aimAngle = Math.atan2(pointer.y - state.arenaHeight * 0.5, pointer.x - state.arenaWidth * 0.5);
       } else if (mouseAim.active) {
-        state.player.aimAngle = Math.atan2(mouseAim.y - state.player.y, mouseAim.x - state.player.x);
+        state.player.aimAngle = Math.atan2(mouseAim.y - state.arenaHeight * 0.5, mouseAim.x - state.arenaWidth * 0.5);
       } else if (state.player.moveStrength > 0) {
         return;
       }
@@ -1606,9 +3129,12 @@
         moveY -= 1;
       }
 
-      if (pointer.active) {
-        moveX = pointer.x - state.player.x;
-        moveY = pointer.y - state.player.y;
+      if (virtualControls.move.active) {
+        moveX = virtualControls.move.x;
+        moveY = virtualControls.move.y;
+      } else if (pointer.active) {
+        moveX = pointer.x - state.arenaWidth * 0.5;
+        moveY = pointer.y - state.arenaHeight * 0.5;
       }
 
       const length = Math.hypot(moveX, moveY);
@@ -1619,12 +3145,12 @@
         const normalizedX = moveX / length;
         const normalizedY = moveY / length;
         const speed = state.player.baseSpeed * mods.moveSpeed * (state.player.dashTimer > 0 ? state.player.dashSpeedMultiplier + mods.dashBonus : 1);
-        state.player.x += normalizedX * speed * dt;
-        state.player.y += normalizedY * speed * dt;
+        state.player.x = wrapValue(state.player.x + normalizedX * speed * dt, state.worldWidth);
+        state.player.y = wrapValue(state.player.y + normalizedY * speed * dt, state.worldHeight);
       }
 
-      state.player.x = Math.min(Math.max(state.player.x, state.player.radius), state.arenaWidth - state.player.radius);
-      state.player.y = Math.min(Math.max(state.player.y, state.player.radius), state.arenaHeight - state.player.radius);
+      state.cameraX = wrapValue(state.player.x - state.arenaWidth * 0.5, state.worldWidth);
+      state.cameraY = wrapValue(state.player.y - state.arenaHeight * 0.5, state.worldHeight);
     }
 
     function updateWeapons(dt) {
@@ -1649,15 +3175,90 @@
       updateAim();
       updateWeapons(dt);
       state.player.damageTimer = Math.max(0, state.player.damageTimer - dt);
-      state.player.dashCooldownRemaining = Math.max(0, state.player.dashCooldownRemaining - dt);
+      state.player.dashCooldownRemaining = getStatMods().dashNoCooldown ? 0 : Math.max(0, state.player.dashCooldownRemaining - dt);
       state.player.dashTimer = Math.max(0, state.player.dashTimer - dt);
+    }
+
+    function resolveRicochetScreenEdge(bullet) {
+      const point = worldToScreen(bullet.x, bullet.y);
+      const minX = bullet.radius;
+      const maxX = state.arenaWidth - bullet.radius;
+      const minY = bullet.radius;
+      const maxY = state.arenaHeight - bullet.radius;
+      let screenX = point.x;
+      let screenY = point.y;
+      let horizontalHit = 0;
+      let verticalHit = 0;
+
+      if (point.x < minX) {
+        screenX = minX;
+        horizontalHit = -1;
+      } else if (point.x > maxX) {
+        screenX = maxX;
+        horizontalHit = 1;
+      }
+
+      if (point.y < minY) {
+        screenY = minY;
+        verticalHit = -1;
+      } else if (point.y > maxY) {
+        screenY = maxY;
+        verticalHit = 1;
+      }
+
+      if (!horizontalHit && !verticalHit) {
+        return;
+      }
+
+      const clamped = screenToWorld(screenX, screenY);
+      bullet.x = clamped.x;
+      bullet.y = clamped.y;
+      emitBurst(bullet.x, bullet.y, bullet.color, 4, Math.max(1.8, bullet.radius * 0.45));
+
+      if (bullet.bouncesRemaining <= 0) {
+        bullet.dead = true;
+        return;
+      }
+
+      if (horizontalHit < 0) {
+        bullet.vx = Math.abs(bullet.vx);
+      } else if (horizontalHit > 0) {
+        bullet.vx = -Math.abs(bullet.vx);
+      }
+
+      if (verticalHit < 0) {
+        bullet.vy = Math.abs(bullet.vy);
+      } else if (verticalHit > 0) {
+        bullet.vy = -Math.abs(bullet.vy);
+      }
+
+      bullet.bouncesRemaining -= 1;
     }
 
     function updateBullets(dt) {
       for (let index = state.bullets.length - 1; index >= 0; index -= 1) {
         const bullet = state.bullets[index];
-        bullet.x += bullet.vx * dt;
-        bullet.y += bullet.vy * dt;
+        if (bullet.dead) {
+          state.bullets.splice(index, 1);
+          continue;
+        }
+
+        if (bullet.homingStrength > 0) {
+          const target = nearestEnemyToPoint(bullet.x, bullet.y, bullet.homingRange || Infinity);
+          if (target) {
+            const desiredAngle = Math.atan2(shortestDelta(bullet.y, target.y, state.worldHeight), shortestDelta(bullet.x, target.x, state.worldWidth));
+            const currentAngle = Math.atan2(bullet.vy, bullet.vx);
+            const delta = Math.atan2(Math.sin(desiredAngle - currentAngle), Math.cos(desiredAngle - currentAngle));
+            const turn = Math.max(-bullet.homingStrength * dt, Math.min(bullet.homingStrength * dt, delta));
+            const speed = Math.hypot(bullet.vx, bullet.vy);
+            const nextAngle = currentAngle + turn;
+            bullet.vx = Math.cos(nextAngle) * speed;
+            bullet.vy = Math.sin(nextAngle) * speed;
+          }
+        }
+
+        bullet.x = wrapValue(bullet.x + bullet.vx * dt, state.worldWidth);
+        bullet.y = wrapValue(bullet.y + bullet.vy * dt, state.worldHeight);
         bullet.lifetime -= dt;
         bullet.ignoreTimer = Math.max(0, bullet.ignoreTimer - dt);
         if (bullet.ignoreTimer <= 0) {
@@ -1665,49 +3266,19 @@
         }
 
         if (bullet.kind === "ricochet") {
+          resolveRicochetScreenEdge(bullet);
+          if (bullet.dead) {
+            state.bullets.splice(index, 1);
+            continue;
+          }
           bullet.trailTimer -= dt;
           if (bullet.trailTimer <= 0) {
             bullet.trailTimer = 0.05;
-            spawnHazard(bullet.x, bullet.y, bullet.trailRadius, bullet.trailDamage, 0.5, "rgba(255, 188, 92, 0.34)");
+            spawnHazard(bullet.x, bullet.y, bullet.trailRadius, bullet.trailDamage, 0.5, bullet.trailColor);
           }
         }
 
-        if (bullet.kind === "ricochet") {
-          let bounced = false;
-          if (bullet.x < bullet.radius || bullet.x > state.arenaWidth - bullet.radius) {
-            if (bullet.bouncesRemaining > 0) {
-              bullet.vx *= -1;
-              bullet.bouncesRemaining -= 1;
-              bullet.x = Math.min(Math.max(bullet.x, bullet.radius), state.arenaWidth - bullet.radius);
-              bounced = true;
-            } else {
-              state.bullets.splice(index, 1);
-              continue;
-            }
-          }
-          if (bullet.y < bullet.radius || bullet.y > state.arenaHeight - bullet.radius) {
-            if (bullet.bouncesRemaining > 0) {
-              bullet.vy *= -1;
-              bullet.bouncesRemaining -= 1;
-              bullet.y = Math.min(Math.max(bullet.y, bullet.radius), state.arenaHeight - bullet.radius);
-              bounced = true;
-            } else {
-              state.bullets.splice(index, 1);
-              continue;
-            }
-          }
-          if (bounced) {
-            emitBurst(bullet.x, bullet.y, "rgba(255, 188, 92, 0.46)", 4, 2);
-          }
-        }
-
-        if (
-          bullet.lifetime <= 0 ||
-          bullet.x < -40 ||
-          bullet.x > state.arenaWidth + 40 ||
-          bullet.y < -40 ||
-          bullet.y > state.arenaHeight + 40
-        ) {
+        if (bullet.lifetime <= 0) {
           state.bullets.splice(index, 1);
         }
       }
@@ -1731,29 +3302,122 @@
       }
     }
 
+    function updateEnemyAttacks(dt) {
+      for (let index = state.enemyBeams.length - 1; index >= 0; index -= 1) {
+        const beam = state.enemyBeams[index];
+        beam.lifetime -= dt;
+
+        const dx = shortestDelta(beam.x, state.player.x, state.worldWidth);
+        const dy = shortestDelta(beam.y, state.player.y, state.worldHeight);
+        const axisX = Math.cos(beam.angle);
+        const axisY = Math.sin(beam.angle);
+        const projection = dx * axisX + dy * axisY;
+        if (projection >= 0 && projection <= beam.length) {
+          const perpendicular = Math.abs(dx * axisY - dy * axisX);
+          if (perpendicular <= beam.width * 0.5 + state.player.radius) {
+            damagePlayer(beam.damage);
+          }
+        }
+
+        if (beam.lifetime <= 0) {
+          state.enemyBeams.splice(index, 1);
+        }
+      }
+
+      for (let index = state.enemyShots.length - 1; index >= 0; index -= 1) {
+        const shot = state.enemyShots[index];
+        shot.lifetime -= dt;
+
+        if (shot.kind === "rocket") {
+          const desiredAngle = Math.atan2(shortestDelta(shot.y, state.player.y, state.worldHeight), shortestDelta(shot.x, state.player.x, state.worldWidth));
+          const currentAngle = Math.atan2(shot.vy, shot.vx);
+          const delta = Math.atan2(Math.sin(desiredAngle - currentAngle), Math.cos(desiredAngle - currentAngle));
+          const turn = Math.max(-shot.turnRate * dt, Math.min(shot.turnRate * dt, delta));
+          const speed = Math.hypot(shot.vx, shot.vy);
+          const nextAngle = currentAngle + turn;
+          shot.vx = Math.cos(nextAngle) * speed;
+          shot.vy = Math.sin(nextAngle) * speed;
+        }
+
+        shot.x = wrapValue(shot.x + shot.vx * dt, state.worldWidth);
+        shot.y = wrapValue(shot.y + shot.vy * dt, state.worldHeight);
+
+        if (circlesOverlap(shot.x, shot.y, shot.radius, state.player.x, state.player.y, state.player.radius)) {
+          damagePlayer(shot.damage);
+          emitBurst(shot.x, shot.y, shot.color, 10, 3.2);
+          state.enemyShots.splice(index, 1);
+          continue;
+        }
+
+        if (shot.lifetime <= 0) {
+          state.enemyShots.splice(index, 1);
+        }
+      }
+    }
+
     function getContinuousWeaponStats() {
       const mods = getStatMods();
-      const orbit = hasWeapon("miasma_orbit")
-        ? { rank: getWeapon("miasma_orbit").rank, fusion: true }
-        : hasWeapon("orbit_ring")
-          ? { rank: getWeapon("orbit_ring").rank, fusion: false }
-          : null;
-      const poison = hasWeapon("miasma_orbit")
-        ? { rank: getWeapon("miasma_orbit").rank, fusion: true }
-        : hasWeapon("poison_field")
-          ? { rank: getWeapon("poison_field").rank, fusion: false }
-          : null;
+      return {
+        mods,
+        orbit: getOrbitWeaponStats(mods),
+        poison: getPoisonFieldStats(mods)
+      };
+    }
 
-      return { mods, orbit, poison };
+    function applyPoisonTick(enemy, poison, dt) {
+      if (enemy.poisonKey !== poison.key) {
+        enemy.poisonKey = poison.key;
+        enemy.poisonTimer = 0;
+      }
+
+      enemy.poisonTimer -= dt;
+      let damageDealt = 0;
+      while (enemy.poisonTimer <= 0) {
+        const tickDamage = poison.damagePerSecond * poison.tickInterval;
+        const before = enemy.hp;
+        enemy.hp -= tickDamage;
+        damageDealt += Math.max(0, before - Math.max(0, enemy.hp));
+        enemy.poisonTimer += poison.tickInterval;
+      }
+
+      return damageDealt;
+    }
+
+    function clearPoisonContact(enemy) {
+      enemy.poisonKey = null;
+      enemy.poisonTimer = 0;
+    }
+
+    function fireMothershipWeapons(enemy, dt) {
+      enemy.laserTimer -= dt;
+      enemy.rocketTimer -= dt;
+
+      const targetAngle = Math.atan2(shortestDelta(enemy.y, state.player.y, state.worldHeight), shortestDelta(enemy.x, state.player.x, state.worldWidth));
+      if (enemy.laserTimer <= 0) {
+        enemy.laserTimer += Math.max(1.25, 2.65 - state.wave * 0.012);
+        for (let index = -1; index <= 1; index += 1) {
+          spawnEnemyLaser(enemy.x, enemy.y, targetAngle + index * 0.18, Math.max(state.arenaWidth, state.arenaHeight) * 0.9, 1.35);
+        }
+      }
+
+      if (enemy.rocketTimer <= 0) {
+        enemy.rocketTimer += Math.max(0.72, 1.55 - state.wave * 0.006);
+        for (let index = -1; index <= 1; index += 1) {
+          spawnEnemyRocket(enemy.x, enemy.y, targetAngle + index * 0.34, 150 + state.wave * 1.8, 1.15);
+        }
+      }
     }
 
     function onEnemyDefeated(enemy) {
       const mods = getStatMods();
       state.score += enemy.score;
-      const bonusToken = Math.random() < mods.luck * 0.35 ? 1 : 0;
-      pushTokenBurst(enemy.x, enemy.y, enemy.drop + bonusToken, "#7ef3ce");
+      const dropTier = TOKEN_TIERS[enemy.dropTier] ? enemy.dropTier : "sapphire";
+      pushTokenGem(enemy.x, enemy.y, dropTier);
+      if (Math.random() < mods.luck * 0.35) {
+        pushTokenGem(enemy.x, enemy.y, "sapphire");
+      }
 
-      if (state.runTime >= 600 && hasAvailableFusion() && state.chestCooldown <= 0) {
+      if (state.runTime >= TIMED_EVENT_INTERVAL && hasAvailableFusion() && state.chestCooldown <= 0) {
         const chance = enemy.type === "boss"
           ? 1
           : enemy.type === "hunter"
@@ -1761,99 +3425,17 @@
             : 0.03 + mods.luck * 0.5;
         if (Math.random() < chance) {
           spawnChest(enemy.x, enemy.y);
-          state.chestCooldown = Math.max(20, 48 - passiveRank("luck") * 2);
+          state.chestCooldown = Math.max(0, 48 - passiveRank("luck") * 2 - mods.luck * 10);
           state.chestUnlocked = true;
         }
       }
 
-      emitBurst(enemy.x, enemy.y, enemy.core, enemy.type === "boss" ? 20 : 10, enemy.type === "boss" ? 5 : 2.8);
+      const bossBurst = enemy.type === "boss" || enemy.type === "mothership";
+      emitBurst(enemy.x, enemy.y, enemy.core, bossBurst ? 24 : 10, bossBurst ? 5.6 : 2.8);
     }
 
-    function updateEnemies(dt) {
-      const { mods, orbit, poison } = getContinuousWeaponStats();
-
-      for (let enemyIndex = state.enemies.length - 1; enemyIndex >= 0; enemyIndex -= 1) {
-        const enemy = state.enemies[enemyIndex];
-        const dx = state.player.x - enemy.x;
-        const dy = state.player.y - enemy.y;
-        const distance = Math.hypot(dx, dy) || 1;
-
-        enemy.x += (dx / distance) * enemy.speed * dt;
-        enemy.y += (dy / distance) * enemy.speed * dt;
-
-        if (distance < enemy.radius + state.player.radius + 3) {
-          damagePlayer(enemy.damage);
-        }
-
-        if (orbit) {
-          const orbitCount = orbit.fusion ? 3 : 2;
-          const orbitRadius = (28 + orbit.rank * 0.6) * mods.projectileSize;
-          const orbiterDamage = (16 + orbit.rank * 2.7) * mods.damage;
-          const orbiterSize = (4.2 + orbit.rank * 0.04) * mods.projectileSize;
-          for (let blade = 0; blade < orbitCount; blade += 1) {
-            const angle = state.runTime * (3 + orbit.rank * 0.08) + (Math.PI * 2 * blade) / orbitCount;
-            const orbiterX = state.player.x + Math.cos(angle) * orbitRadius;
-            const orbiterY = state.player.y + Math.sin(angle) * orbitRadius;
-            if (Math.hypot(orbiterX - enemy.x, orbiterY - enemy.y) <= enemy.radius + orbiterSize) {
-              enemy.hp -= orbiterDamage * dt;
-            }
-          }
-        }
-
-        if (poison) {
-          const radius = ((poison.fusion ? 44 : 34) + poison.rank * (poison.fusion ? 1.7 : 1.5)) * mods.projectileSize;
-          const damage = ((poison.fusion ? 14 : 10) + poison.rank * (poison.fusion ? 2.4 : 1.9)) * mods.damage * mods.attackSpeed;
-          if (distance <= radius + enemy.radius) {
-            enemy.hp -= damage * dt;
-          }
-        }
-
-        for (const hazard of state.hazards) {
-          if (Math.hypot(hazard.x - enemy.x, hazard.y - enemy.y) <= hazard.radius + enemy.radius) {
-            enemy.hp -= hazard.damagePerSecond * dt;
-          }
-        }
-
-        for (let bulletIndex = state.bullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
-          const bullet = state.bullets[bulletIndex];
-          if (bullet.ignoreEnemyId === enemy.id) {
-            continue;
-          }
-          if (Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y) <= bullet.radius + enemy.radius) {
-            enemy.hp -= bullet.damage;
-            spawnParticle(enemy.x, enemy.y, colorWithAlpha(enemy.core, 0.82), 2.4, 0.16);
-
-            if (bullet.kind === "ricochet" && bullet.bouncesRemaining > 0) {
-              const normalX = (bullet.x - enemy.x) / Math.max(0.01, Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y));
-              const normalY = (bullet.y - enemy.y) / Math.max(0.01, Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y));
-              const dot = bullet.vx * normalX + bullet.vy * normalY;
-              bullet.vx = bullet.vx - 2 * dot * normalX;
-              bullet.vy = bullet.vy - 2 * dot * normalY;
-              bullet.bouncesRemaining -= 1;
-              bullet.ignoreEnemyId = enemy.id;
-              bullet.ignoreTimer = 0.05;
-              bullet.x += normalX * 6;
-              bullet.y += normalY * 6;
-            } else {
-              state.bullets.splice(bulletIndex, 1);
-            }
-            break;
-          }
-        }
-
-        if (enemy.hp <= 0) {
-          onEnemyDefeated(enemy);
-          state.enemies.splice(enemyIndex, 1);
-        }
-      }
-    }
-
-    function collectToken(pickup) {
-      const mods = getStatMods();
-      state.tokensCollected += pickup.value;
-      state.score += pickup.value * 18;
-      state.repairCharge += pickup.value;
-      state.xp += Math.max(1, Math.round(pickup.value * mods.xpGain));
+    function grantLevelXp(rawXp, mods = getStatMods()) {
+      state.xp += Math.max(1, Math.round(rawXp * mods.xpGain));
 
       while (state.xp >= state.xpToNext) {
         state.xp -= state.xpToNext;
@@ -1862,23 +3444,170 @@
         state.xpToNext = Math.min(60, Math.round(state.xpToNext * 1.16 + 2));
       }
 
+      settlePendingLevels();
+    }
+
+    function updateEnemies(dt) {
+      const { mods, orbit, poison } = getContinuousWeaponStats();
+      const orbiters = orbit ? getOrbiters(orbit) : [];
+      const orbitPulses = getOrbitPulseColliders(mods);
+      let poisonHealing = 0;
+
+      rebuildCollisionGrids();
+
+      for (let enemyIndex = state.enemies.length - 1; enemyIndex >= 0; enemyIndex -= 1) {
+        const enemy = state.enemies[enemyIndex];
+        if (enemy.escortOf) {
+          const parent = state.enemies.find((candidate) => candidate.id === enemy.escortOf);
+          if (parent) {
+            enemy.escortAngle += enemy.escortSpin * dt;
+            enemy.x = wrapValue(parent.x + Math.cos(enemy.escortAngle) * enemy.escortRadius, state.worldWidth);
+            enemy.y = wrapValue(parent.y + Math.sin(enemy.escortAngle) * enemy.escortRadius, state.worldHeight);
+          } else {
+            enemy.escortOf = null;
+          }
+        }
+
+        const dx = shortestDelta(enemy.x, state.player.x, state.worldWidth);
+        const dy = shortestDelta(enemy.y, state.player.y, state.worldHeight);
+        const distanceSq = dx * dx + dy * dy;
+        const distance = Math.sqrt(distanceSq) || 1;
+
+        if (!enemy.escortOf) {
+          enemy.x = wrapValue(enemy.x + (dx / distance) * enemy.speed * dt, state.worldWidth);
+          enemy.y = wrapValue(enemy.y + (dy / distance) * enemy.speed * dt, state.worldHeight);
+        }
+
+        if (enemy.type === "mothership") {
+          fireMothershipWeapons(enemy, dt);
+        }
+
+        const movedDx = shortestDelta(enemy.x, state.player.x, state.worldWidth);
+        const movedDy = shortestDelta(enemy.y, state.player.y, state.worldHeight);
+        const movedDistanceSq = movedDx * movedDx + movedDy * movedDy;
+        const contactRadius = enemy.radius + state.player.radius + 3;
+        enemy.dashSparkTimer = Math.max(0, (enemy.dashSparkTimer || 0) - dt);
+        if (state.player.dashTimer > 0) {
+          const dashRadius = enemy.radius + state.player.radius + 12;
+          if (movedDistanceSq < dashRadius * dashRadius) {
+            enemy.hp -= (220 + state.level * 12) * mods.damage * dt * 8;
+            if (enemy.dashSparkTimer <= 0) {
+              emitBurst(enemy.x, enemy.y, "#f7d47f", 6, 3.2);
+              enemy.dashSparkTimer = 0.06;
+            }
+          }
+        }
+        if (movedDistanceSq < contactRadius * contactRadius) {
+          damagePlayer(enemy.damage);
+        }
+
+        for (const orbiter of orbiters) {
+          if (circlesOverlap(orbiter.x, orbiter.y, orbiter.radius, enemy.x, enemy.y, enemy.radius)) {
+            enemy.hp -= orbiter.damage * dt;
+          }
+        }
+
+        for (const pulse of orbitPulses) {
+          if (circlesOverlap(pulse.x, pulse.y, pulse.radius, enemy.x, enemy.y, enemy.radius)) {
+            enemy.hp -= pulse.damagePerSecond * dt;
+          }
+        }
+
+        if (poison) {
+          const radius = poison.radius + enemy.radius;
+          if (movedDistanceSq <= radius * radius) {
+            let poisonDamageDealt = 0;
+            if (poison.constantDamage) {
+              const before = enemy.hp;
+              enemy.hp -= poison.damagePerSecond * dt;
+              poisonDamageDealt = Math.max(0, before - Math.max(0, enemy.hp));
+            } else {
+              poisonDamageDealt = applyPoisonTick(enemy, poison, dt);
+            }
+            poisonHealing += poisonDamageDealt * poison.lifeSteal;
+          } else {
+            clearPoisonContact(enemy);
+          }
+        }
+
+        forEachNearbyEntity(collisionGrids.hazards, enemy.x, enemy.y, enemy.radius, (hazard) => {
+          if (circlesOverlap(hazard.x, hazard.y, hazard.radius, enemy.x, enemy.y, enemy.radius)) {
+            enemy.hp -= hazard.damagePerSecond * dt;
+          }
+        });
+
+        let bulletResolved = false;
+        forEachNearbyEntity(collisionGrids.bullets, enemy.x, enemy.y, enemy.radius, (bullet) => {
+          if (bulletResolved || bullet.dead || bullet.ignoreEnemyId === enemy.id) {
+            return;
+          }
+
+          const bulletDx = shortestDelta(enemy.x, bullet.x, state.worldWidth);
+          const bulletDy = shortestDelta(enemy.y, bullet.y, state.worldHeight);
+          const hitRadius = bullet.radius + enemy.radius;
+          const hitDistanceSq = bulletDx * bulletDx + bulletDy * bulletDy;
+          if (hitDistanceSq <= hitRadius * hitRadius) {
+            enemy.hp -= bullet.damage;
+            spawnParticle(enemy.x, enemy.y, enemy.hitSpark, 2.4, 0.16);
+
+            if (bullet.kind === "ricochet" && bullet.bouncesRemaining > 0) {
+              const inverseDistance = 1 / Math.max(0.01, Math.sqrt(hitDistanceSq));
+              const normalX = bulletDx * inverseDistance;
+              const normalY = bulletDy * inverseDistance;
+              const dot = bullet.vx * normalX + bullet.vy * normalY;
+              bullet.vx = bullet.vx - 2 * dot * normalX;
+              bullet.vy = bullet.vy - 2 * dot * normalY;
+              bullet.bouncesRemaining -= 1;
+              bullet.ignoreEnemyId = enemy.id;
+              bullet.ignoreTimer = 0.05;
+              bullet.x = wrapValue(bullet.x + normalX * 6, state.worldWidth);
+              bullet.y = wrapValue(bullet.y + normalY * 6, state.worldHeight);
+            } else {
+              bullet.dead = true;
+            }
+            bulletResolved = true;
+          }
+        });
+
+        if (enemy.hp <= 0) {
+          onEnemyDefeated(enemy);
+          state.enemies.splice(enemyIndex, 1);
+        }
+      }
+
+      if (poison && poison.lifeSteal > 0 && poisonHealing > 0) {
+        healPlayer(poisonHealing);
+      }
+
+      pruneDeadBullets();
+    }
+
+    function collectToken(pickup) {
+      const mods = getStatMods();
+      state.tokensCollected += pickup.value;
+      state.score += pickup.value * 18;
+      state.repairCharge += pickup.value;
+      grantLevelXp(pickup.value, mods);
+
       while (state.player.hp < state.player.maxHp && state.repairCharge >= state.repairPerHull) {
         state.repairCharge -= state.repairPerHull;
         state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1);
       }
-
-      if (!state.draftMode && state.pendingLevels > 0) {
-        openLevelDraft();
-      }
     }
 
     function availableFusions() {
-      return fusionDefs.filter((fusion) =>
-        fusion.components.every((key) => {
-          const weapon = getWeapon(key);
-          return weapon && weapon.rank >= 10;
-        }) && !hasWeapon(fusion.result)
-      );
+      const matches = [];
+      for (const fusion of fusionDefs) {
+        if (hasWeapon(fusion.result)) {
+          continue;
+        }
+
+        const components = getReadyFusionComponents(fusion);
+        if (components) {
+          matches.push({ ...fusion, components });
+        }
+      }
+      return matches;
     }
 
     function hasAvailableFusion() {
@@ -1888,8 +3617,10 @@
     function collectChest() {
       const fusions = availableFusions();
       if (!fusions.length) {
-        state.player.hp = Math.min(state.player.maxHp, state.player.hp + 2);
-        pushTokenBurst(state.player.x, state.player.y, 6, "#ffe39e");
+        const xpDrop = 60 + Math.floor(Math.random() * 121);
+        grantLevelXp(xpDrop);
+        state.score += xpDrop * 8;
+        setDebugStatus(`Chest converted into ${xpDrop} XP.`);
         return;
       }
       openFusionDraft(fusions);
@@ -1900,23 +3631,29 @@
 
       for (let index = state.pickups.length - 1; index >= 0; index -= 1) {
         const pickup = state.pickups[index];
-        pickup.x += pickup.vx * dt;
-        pickup.y += pickup.vy * dt;
+        pickup.x = wrapValue(pickup.x + pickup.vx * dt, state.worldWidth);
+        pickup.y = wrapValue(pickup.y + pickup.vy * dt, state.worldHeight);
         pickup.vx *= 0.9;
         pickup.vy *= 0.9;
 
-        const dx = state.player.x - pickup.x;
-        const dy = state.player.y - pickup.y;
-        const distance = Math.hypot(dx, dy) || 1;
-        const magnetRadius = pickup.type === "token" ? 84 + mods.magnet : 72;
+        const dx = shortestDelta(pickup.x, state.player.x, state.worldWidth);
+        const dy = shortestDelta(pickup.y, state.player.y, state.worldHeight);
+        const magnetRadius = pickup.type === "token"
+          ? mods.globalMagnet ? Math.max(state.worldWidth, state.worldHeight) : 84 + mods.magnet
+          : 72;
+        const collectRadius = state.player.radius + pickup.radius + 5;
+        const distanceSq = dx * dx + dy * dy;
 
-        if (distance < magnetRadius) {
-          const pull = pickup.type === "token" ? 160 + (magnetRadius - distance) * 4.4 : 110;
-          pickup.x += (dx / distance) * pull * dt;
-          pickup.y += (dy / distance) * pull * dt;
+        if (distanceSq < magnetRadius * magnetRadius) {
+          const distance = Math.sqrt(distanceSq) || 1;
+          const pull = pickup.type === "token"
+            ? mods.globalMagnet ? 380 + distance * 12 : 160 + (magnetRadius - distance) * 4.4
+            : 110;
+          pickup.x = wrapValue(pickup.x + (dx / distance) * pull * dt, state.worldWidth);
+          pickup.y = wrapValue(pickup.y + (dy / distance) * pull * dt, state.worldHeight);
         }
 
-        if (distance < state.player.radius + pickup.radius + 5) {
+        if (distanceSq < collectRadius * collectRadius) {
           if (pickup.type === "token") {
             collectToken(pickup);
           } else {
@@ -1928,15 +3665,22 @@
     }
 
     function addWeapon(key, rank = 1) {
+      if (hasWeapon(key) || isWeaponLocked(key)) {
+        return;
+      }
+      const def = weaponDefs[key];
       state.player.weapons.push({
         key,
-        rank,
+        rank: Math.min(def.maxRank, rank),
         timer: 0.2 + Math.random() * 0.16
       });
       renderLoadout();
     }
 
     function addPassive(key, rank = 1) {
+      if (isPassiveLocked(key)) {
+        return;
+      }
       const existing = getPassive(key);
       if (existing) {
         existing.rank = Math.min(passiveDefs[key].maxRank, existing.rank + rank);
@@ -1944,16 +3688,7 @@
         state.player.passives.push({ key, rank });
       }
 
-      if (key === "health") {
-        state.player.maxHp += rank;
-        state.player.hp = Math.min(state.player.maxHp, state.player.hp + rank);
-      }
-      if (key === "magnet") {
-        state.repairPerHull = Math.max(12, state.repairPerHull - rank * 2);
-      }
-      if (key === "move_speed") {
-        state.player.baseSpeed += 6 * rank;
-      }
+      recalculatePassiveDerivedStats();
 
       renderLoadout();
     }
@@ -1977,17 +3712,23 @@
         return;
       }
       passive.rank += 1;
-      if (key === "health") {
-        state.player.maxHp += 1;
-        state.player.hp = Math.min(state.player.maxHp, state.player.hp + 1);
-      }
-      if (key === "magnet") {
-        state.repairPerHull = Math.max(12, state.repairPerHull - 2);
-      }
-      if (key === "move_speed") {
-        state.player.baseSpeed += 6;
-      }
+      recalculatePassiveDerivedStats();
       renderLoadout();
+    }
+
+    function removeWeapon(key) {
+      state.player.weapons = state.player.weapons.filter((weapon) => weapon.key !== key);
+      renderLoadout();
+      resolveOverflowLevels();
+      updateHud();
+    }
+
+    function removePassive(key) {
+      state.player.passives = state.player.passives.filter((passive) => passive.key !== key);
+      recalculatePassiveDerivedStats();
+      renderLoadout();
+      resolveOverflowLevels();
+      updateHud();
     }
 
     function buildLevelDraftOptions() {
@@ -1995,27 +3736,25 @@
       const weaponUpgrades = [];
       const passiveChoices = [];
 
-      if (state.player.weapons.length < MAX_WEAPONS) {
-        Object.entries(weaponDefs).forEach(([key, def]) => {
-          if (!def.offer || hasWeapon(key)) {
-            return;
+      Object.entries(weaponDefs).forEach(([key, def]) => {
+        if (!def.offer || hasWeapon(key) || isWeaponLocked(key)) {
+          return;
+        }
+        newWeapons.push({
+          id: `weapon-new-${key}`,
+          typeLabel: "new weapon",
+          title: def.name,
+          text: def.describe(0),
+          apply() {
+            addWeapon(key, 1);
+            consumeLevelChoice();
           }
-          newWeapons.push({
-            id: `weapon-new-${key}`,
-            typeLabel: "new weapon",
-            title: def.name,
-            text: def.describe(0),
-            apply() {
-              addWeapon(key, 1);
-              consumeLevelChoice();
-            }
-          });
         });
-      }
+      });
 
       state.player.weapons.forEach((weapon) => {
         const def = weaponDefs[weapon.key];
-        if (weapon.rank >= def.maxRank) {
+        if (weapon.rank >= def.maxRank || isWeaponLocked(weapon.key)) {
           return;
         }
         weaponUpgrades.push({
@@ -2030,27 +3769,25 @@
         });
       });
 
-      if (state.player.passives.length < MAX_PASSIVES) {
-        Object.entries(passiveDefs).forEach(([key, def]) => {
-          if (getPassive(key)) {
-            return;
+      Object.entries(passiveDefs).forEach(([key, def]) => {
+        if (getPassive(key) || isPassiveLocked(key)) {
+          return;
+        }
+        passiveChoices.push({
+          id: `passive-new-${key}`,
+          typeLabel: "new passive",
+          title: def.name,
+          text: def.describe(0),
+          apply() {
+            addPassive(key, 1);
+            consumeLevelChoice();
           }
-          passiveChoices.push({
-            id: `passive-new-${key}`,
-            typeLabel: "new passive",
-            title: def.name,
-            text: def.describe(0),
-            apply() {
-              addPassive(key, 1);
-              consumeLevelChoice();
-            }
-          });
         });
-      }
+      });
 
       state.player.passives.forEach((passive) => {
         const def = passiveDefs[passive.key];
-        if (passive.rank >= def.maxRank) {
+        if (passive.rank >= def.maxRank || isPassiveLocked(passive.key)) {
           return;
         }
         passiveChoices.push({
@@ -2084,31 +3821,221 @@
       return selected;
     }
 
+    function randomChoice(options) {
+      return options[Math.floor(Math.random() * options.length)] || null;
+    }
+
+    function buildAutoLevelChoice() {
+      const upgrades = [];
+
+      state.player.weapons.forEach((weapon) => {
+        const def = weaponDefs[weapon.key];
+        if (weapon.rank >= def.maxRank || isWeaponLocked(weapon.key)) {
+          return;
+        }
+        upgrades.push({
+          rank: weapon.rank,
+          label: def.name,
+          apply() {
+            upgradeWeapon(weapon.key);
+          }
+        });
+      });
+
+      state.player.passives.forEach((passive) => {
+        const def = passiveDefs[passive.key];
+        if (passive.rank >= def.maxRank || isPassiveLocked(passive.key)) {
+          return;
+        }
+        upgrades.push({
+          rank: passive.rank,
+          label: def.name,
+          apply() {
+            upgradePassive(passive.key);
+          }
+        });
+      });
+
+      if (upgrades.length) {
+        const highestRank = Math.max(...upgrades.map((choice) => choice.rank));
+        return randomChoice(upgrades.filter((choice) => choice.rank === highestRank));
+      }
+
+      const newChoices = [];
+      Object.entries(weaponDefs).forEach(([key, def]) => {
+        if (!def.offer || hasWeapon(key) || isWeaponLocked(key)) {
+          return;
+        }
+        newChoices.push({
+          label: def.name,
+          apply() {
+            addWeapon(key, 1);
+          }
+        });
+      });
+
+      Object.entries(passiveDefs).forEach(([key, def]) => {
+        if (getPassive(key) || isPassiveLocked(key)) {
+          return;
+        }
+        newChoices.push({
+          label: def.name,
+          apply() {
+            addPassive(key, 1);
+          }
+        });
+      });
+
+      return randomChoice(newChoices);
+    }
+
+    function autoSpendLevelUps() {
+      let spent = 0;
+      let lastLabel = "";
+
+      while (state.pendingLevels > 0) {
+        const choice = buildAutoLevelChoice();
+        if (!choice) {
+          resolveOverflowLevels();
+          break;
+        }
+
+        choice.apply();
+        state.pendingLevels = Math.max(0, state.pendingLevels - 1);
+        spent += 1;
+        lastLabel = choice.label;
+      }
+
+      if (spent > 0) {
+        setDebugStatus(spent === 1 ? `Auto leveled ${lastLabel}.` : `Auto spent ${spent} level-ups.`);
+      }
+      if (state.draftMode === "level") {
+        closeDraft();
+      }
+      updateHud();
+    }
+
+    function settlePendingLevels() {
+      if (state.autoLevel) {
+        autoSpendLevelUps();
+      } else {
+        resolveOverflowLevels();
+      }
+    }
+
+    function toggleAutoLevel() {
+      state.autoLevel = !state.autoLevel;
+      if (state.autoLevel) {
+        autoSpendLevelUps();
+      } else {
+        updateHud();
+      }
+    }
+
+    function handleLevelButtonClick() {
+      if (state.autoLevel && state.pendingLevels <= 0) {
+        toggleAutoLevel();
+        return;
+      }
+      openLevelDraft();
+    }
+
+    function applyOverflowLevel() {
+      const overflow = state.overflowStats || createOverflowStats();
+      state.overflowStats = overflow;
+      const entries = [
+        ["damage", "damage"],
+        ["attackSpeed", "fire rate"],
+        ["projectileSize", "weapon area"],
+        ["projectileSpeed", "projectile speed"],
+        ["xpGain", "XP gain"],
+        ["luck", "drop rate"],
+        ["moveSpeed", "move speed"],
+        ["maxHp", "max hull"],
+        ["armor", "armor"],
+        ["dashCooldown", "dash cooldown"],
+        ["dashPower", "dash power"]
+      ];
+
+      if (!hasWeapon("siphon_field") && !hasWeapon("void_maelstrom")) {
+        entries.push(["magnet", "magnet pull"]);
+      }
+
+      const [key, label] = entries[Math.floor(Math.random() * entries.length)];
+      overflow[key] += 0.001;
+      if (key === "maxHp") {
+        recalculatePassiveDerivedStats();
+      }
+      state.overflowMessage = `+0.1% ${label}`;
+    }
+
+    function resolveOverflowLevels() {
+      while (state.pendingLevels > 0 && buildLevelDraftOptions().length === 0) {
+        state.pendingLevels -= 1;
+        applyOverflowLevel();
+      }
+      updateHud();
+    }
+
     function openLevelDraft() {
       if (state.draftMode || state.pendingLevels <= 0 || !state.running) {
         return;
       }
+      if (state.autoLevel) {
+        autoSpendLevelUps();
+        return;
+      }
+      resolveOverflowLevels();
+      if (state.pendingLevels <= 0) {
+        return;
+      }
       const options = buildLevelDraftOptions();
       if (!options.length) {
-        state.pendingLevels = 0;
+        resolveOverflowLevels();
         return;
       }
       showDraft(
         "Level Up",
-        "Choose An Item",
+        `Choose An Item (${state.pendingLevels} left)`,
         "Pick a new weapon or passive, or upgrade something you already have.",
         options,
         "level"
       );
     }
 
+    function refreshLevelDraft() {
+      if (state.pendingLevels <= 0) {
+        closeDraft();
+        updateHud();
+        return;
+      }
+
+      const options = buildLevelDraftOptions();
+      if (!options.length) {
+        resolveOverflowLevels();
+        if (state.pendingLevels <= 0) {
+          closeDraft();
+          updateHud();
+          return;
+        }
+      }
+
+      showDraft(
+        "Level Up",
+        `Choose An Item (${state.pendingLevels} left)`,
+        "Pick a new weapon or passive, or upgrade something you already have.",
+        buildLevelDraftOptions(),
+        "level"
+      );
+    }
+
     function consumeLevelChoice() {
       state.pendingLevels = Math.max(0, state.pendingLevels - 1);
-      closeDraft();
-      updateHud();
-      if (state.pendingLevels > 0) {
-        openLevelDraft();
+      resolveOverflowLevels();
+      if (state.draftMode === "level") {
+        refreshLevelDraft();
       }
+      updateHud();
     }
 
     function openFusionDraft(fusions) {
@@ -2116,7 +4043,7 @@
         id: `fusion-${fusion.result}`,
         typeLabel: "fusion chest",
         title: fusion.name,
-        text: fusion.describe(),
+        text: fusion.describe(fusion.components),
         apply() {
           applyFusion(fusion);
           closeDraft();
@@ -2127,20 +4054,38 @@
       showDraft(
         "Fusion Chest",
         "Forge A Fusion",
-        "Both weapons are maxed and the chest is live. Pick a fusion to merge their attack types and free one weapon slot.",
+        "The required parts are maxed and the chest is live. Pick a fusion to merge them into a new 10-rank weapon.",
         options,
         "fusion"
       );
     }
 
     function applyFusion(fusion) {
-      state.player.weapons = state.player.weapons.filter((weapon) => !fusion.components.includes(weapon.key));
-      addWeapon(fusion.result, 5);
+      const removalKeys = new Set(fusion.components);
+      lockFusionComponents(fusion.components);
+      if (fusion.result === "omni_star_halo") {
+        lockFusionComponents(["single_shot", "twin_shot", "sidecar_turrets", "starburst_array"]);
+        ["single_shot", "twin_shot", "sidecar_turrets", "starburst_array"].forEach((key) => removalKeys.add(key));
+      }
+      if (fusion.result === "void_maelstrom") {
+        const maelstromComponents = ["poison_field", "orbit_ring", "magnet", "arc_sweep", "miasma_orbit", "siphon_field", "crescent_orbit"];
+        lockFusionComponents(maelstromComponents);
+        maelstromComponents.forEach((key) => removalKeys.add(key));
+      }
+      state.player.weapons = state.player.weapons.filter((weapon) => !removalKeys.has(weapon.key));
+      state.player.passives = state.player.passives.filter((passive) => !removalKeys.has(passive.key));
+      recalculatePassiveDerivedStats();
+      addWeapon(fusion.result, 1);
       renderLoadout();
+      resolveOverflowLevels();
     }
 
     function makeEnemy(type) {
       const threatWave = getThreatWave();
+      const storm = isStormEscalated();
+      const stormMultiplier = storm ? 2 : 1;
+      const hunterHp = (12 + Math.floor(threatWave * 1.1)) * stormMultiplier;
+      const bossHp = Math.max((220 + threatWave * 16) * stormMultiplier, hunterHp * 3);
       if (type === "boss") {
         return {
           id: state.enemyIdSeed += 1,
@@ -2148,12 +4093,13 @@
           x: state.arenaWidth * 0.5,
           y: -80,
           radius: 28,
-          speed: 24 + threatWave * 0.28,
-          hp: 220 + threatWave * 16,
-          maxHp: 220 + threatWave * 16,
+          speed: (24 + threatWave * 0.28) * stormMultiplier,
+          hp: bossHp,
+          maxHp: bossHp,
           damage: 2.6,
           score: 1600,
-          drop: 20,
+          drop: 50,
+          dropTier: "ruby",
           shell: "#ff3d46",
           core: "#641118",
           booster: "#7a1b24"
@@ -2167,12 +4113,13 @@
           x: 0,
           y: 0,
           radius: 17,
-          speed: 34 + threatWave * 0.72,
-          hp: 12 + Math.floor(threatWave * 1.1),
-          maxHp: 12 + Math.floor(threatWave * 1.1),
+          speed: (34 + threatWave * 0.72) * stormMultiplier,
+          hp: hunterHp,
+          maxHp: hunterHp,
           damage: 1.35,
           score: 85,
-          drop: 4,
+          drop: 5,
+          dropTier: "amethyst",
           shell: "#ff3d46",
           core: "#ad6aff",
           booster: "#b24028"
@@ -2180,36 +4127,63 @@
       }
 
       if (type === "comet") {
+        const hp = (5 + Math.floor(threatWave * 0.5)) * stormMultiplier;
         return {
           id: state.enemyIdSeed += 1,
           type,
           x: 0,
           y: 0,
           radius: 12,
-          speed: 48 + threatWave * 1.08,
-          hp: 5 + Math.floor(threatWave * 0.5),
-          maxHp: 5 + Math.floor(threatWave * 0.5),
+          speed: (48 + threatWave * 1.08) * stormMultiplier,
+          hp,
+          maxHp: hp,
           damage: 1,
           score: 34,
           drop: 2,
+          dropTier: "aquamarine",
           shell: "#ff3d46",
           core: "#ff9a3c",
           booster: "#ff7a2b"
         };
       }
 
+      if (type === "mothership") {
+        const hp = bossHp * 10;
+        return {
+          id: state.enemyIdSeed += 1,
+          type,
+          x: 0,
+          y: 0,
+          radius: 70,
+          speed: 12 + threatWave * 0.12,
+          hp,
+          maxHp: hp,
+          damage: 3.8,
+          score: 12000,
+          drop: 50,
+          dropTier: "ruby",
+          shell: "#ff3d46",
+          core: "#5122b8",
+          booster: "#b844ff",
+          laserTimer: 0.8,
+          rocketTimer: 0.35
+        };
+      }
+
+      const hp = (3 + Math.floor(threatWave * 0.34)) * stormMultiplier;
       return {
         id: state.enemyIdSeed += 1,
         type: "wisp",
         x: 0,
         y: 0,
         radius: 9,
-        speed: 42 + threatWave * 0.96,
-        hp: 3 + Math.floor(threatWave * 0.34),
-        maxHp: 3 + Math.floor(threatWave * 0.34),
+        speed: (42 + threatWave * 0.96) * stormMultiplier,
+        hp,
+        maxHp: hp,
         damage: 1,
         score: 15,
         drop: 1,
+        dropTier: "sapphire",
         shell: "#ff3d46",
         core: "#f0d45d",
         booster: "#ffb13a"
@@ -2218,19 +4192,24 @@
 
     function positionEnemyOnEdge(enemy) {
       const side = Math.floor(Math.random() * 4);
+      const halfWidth = state.arenaWidth * 0.5;
+      const halfHeight = state.arenaHeight * 0.5;
+      const padding = 52;
       if (side === 0) {
-        enemy.x = -30;
-        enemy.y = Math.random() * state.arenaHeight;
+        enemy.x = state.player.x - halfWidth - padding;
+        enemy.y = state.player.y + (Math.random() - 0.5) * state.arenaHeight;
       } else if (side === 1) {
-        enemy.x = state.arenaWidth + 30;
-        enemy.y = Math.random() * state.arenaHeight;
+        enemy.x = state.player.x + halfWidth + padding;
+        enemy.y = state.player.y + (Math.random() - 0.5) * state.arenaHeight;
       } else if (side === 2) {
-        enemy.x = Math.random() * state.arenaWidth;
-        enemy.y = -30;
+        enemy.x = state.player.x + (Math.random() - 0.5) * state.arenaWidth;
+        enemy.y = state.player.y - halfHeight - padding;
       } else {
-        enemy.x = Math.random() * state.arenaWidth;
-        enemy.y = state.arenaHeight + 30;
+        enemy.x = state.player.x + (Math.random() - 0.5) * state.arenaWidth;
+        enemy.y = state.player.y + halfHeight + padding;
       }
+      enemy.x = wrapValue(enemy.x, state.worldWidth);
+      enemy.y = wrapValue(enemy.y, state.worldHeight);
     }
 
     function hasBossEnemy() {
@@ -2239,10 +4218,13 @@
 
     function spawnEnemy(typeOverride = null) {
       const threatWave = getThreatWave();
+      const storm = isStormEscalated();
       let type = typeOverride;
       if (!type) {
         const roll = Math.random();
-        if (threatWave >= 18) {
+        if (storm) {
+          type = roll < 0.38 ? "boss" : roll < 0.62 ? "hunter" : roll < 0.84 ? "comet" : "wisp";
+        } else if (threatWave >= 18) {
           type = roll < 0.16 ? "hunter" : roll < 0.48 ? "comet" : "wisp";
         } else if (threatWave >= 11) {
           type = roll < 0.12 ? "hunter" : roll < 0.42 ? "comet" : "wisp";
@@ -2252,48 +4234,99 @@
       }
 
       const enemy = makeEnemy(type);
-      if (type === "boss") {
-        enemy.x = state.arenaWidth * 0.5;
-        enemy.y = -80;
+      enemy.glow = colorWithAlpha(enemy.core, 0.16);
+      enemy.hitSpark = colorWithAlpha(enemy.core, 0.82);
+      if (type === "boss" && !storm) {
+        enemy.x = wrapValue(state.player.x, state.worldWidth);
+        enemy.y = wrapValue(state.player.y - state.arenaHeight * 0.5 - 90, state.worldHeight);
       } else {
         positionEnemyOnEdge(enemy);
       }
       state.enemies.push(enemy);
+      return enemy;
+    }
+
+    function spawnMothershipEscorts(mothership) {
+      const escortCount = 7;
+      for (let index = 0; index < escortCount; index += 1) {
+        const escort = makeEnemy("boss");
+        const angle = (TAU * index) / escortCount;
+        escort.escortOf = mothership.id;
+        escort.escortAngle = angle;
+        escort.escortRadius = mothership.radius + escort.radius + 18;
+        escort.escortSpin = 0.42;
+        escort.x = wrapValue(mothership.x + Math.cos(angle) * escort.escortRadius, state.worldWidth);
+        escort.y = wrapValue(mothership.y + Math.sin(angle) * escort.escortRadius, state.worldHeight);
+        escort.glow = colorWithAlpha(escort.core, 0.16);
+        escort.hitSpark = colorWithAlpha(escort.core, 0.82);
+        state.enemies.push(escort);
+      }
+    }
+
+    function spawnChestNearPlayer() {
+      const angle = Math.random() * TAU;
+      const distance = 48 + Math.random() * 34;
+      const x = wrapValue(state.player.x + Math.cos(angle) * distance, state.worldWidth);
+      const y = wrapValue(state.player.y + Math.sin(angle) * distance, state.worldHeight);
+      spawnChest(x, y);
+      state.chestUnlocked = true;
+    }
+
+    function spawnTimedEncounter() {
+      spawnEnemy("boss");
+      spawnChestNearPlayer();
+      state.chestCooldown = 0;
+    }
+
+    function spawnMothershipEncounter() {
+      const mothership = spawnEnemy("mothership");
+      if (mothership) {
+        spawnMothershipEscorts(mothership);
+      }
+      spawnChestNearPlayer();
+      state.chestCooldown = 0;
     }
 
     function advanceWave(count = 1) {
       state.wave += count;
       state.waveClock = 0;
+      if (state.running && isStormEscalated() && state.lastEndgameWaveEvent !== state.wave) {
+        state.lastEndgameWaveEvent = state.wave;
+        spawnMothershipEncounter();
+      } else if (state.running && state.runTime >= ENDGAME_WAVE_EVENT_TIME && state.lastEndgameWaveEvent !== state.wave) {
+        state.lastEndgameWaveEvent = state.wave;
+        spawnTimedEncounter();
+      }
       updateHud();
     }
 
     function updateWaves(dt) {
       state.waveClock += dt;
       const threatWave = getThreatWave();
-      const baseSpawnRate = Math.max(0.18, 0.62 - threatWave * 0.018);
+      const storm = isStormEscalated();
+      const baseSpawnRate = storm
+        ? Math.max(0.06, (0.62 - threatWave * 0.018) / 3)
+        : Math.max(0.18, 0.62 - threatWave * 0.018);
       state.spawnClock -= dt;
       state.chestCooldown = Math.max(0, state.chestCooldown - dt);
 
-      if (state.runTime >= 600) {
+      while (state.runTime >= state.nextTimedEventAt) {
         state.chestUnlocked = true;
-        if (state.chestCooldown === 999) {
-          state.chestCooldown = 0;
-        }
+        spawnTimedEncounter();
+        state.nextTimedEventAt += TIMED_EVENT_INTERVAL;
       }
 
       if (state.spawnClock <= 0) {
-        const spawnCount = 1 + (threatWave >= 8 ? 1 : 0) + (threatWave >= 16 ? 1 : 0) + (threatWave >= 22 && Math.random() > 0.45 ? 1 : 0);
+        const spawnCount = 1 + (threatWave >= 8 ? 1 : 0) + (threatWave >= 16 ? 1 : 0) + (threatWave >= 22 && Math.random() > 0.45 ? 1 : 0) + (storm ? 1 : 0);
         for (let index = 0; index < spawnCount; index += 1) {
           spawnEnemy();
         }
-        if (threatWave >= 7 && Math.random() > 0.72) {
+        if (storm && Math.random() > 0.5) {
+          spawnEnemy("boss");
+        } else if (threatWave >= 7 && Math.random() > 0.72) {
           spawnEnemy("comet");
         }
         state.spawnClock = baseSpawnRate;
-      }
-
-      if (state.wave >= 25 && !hasBossEnemy() && !state.enemies.some((enemy) => enemy.type === "boss") && Math.floor(state.waveClock) === 0) {
-        spawnEnemy("boss");
       }
 
       if (state.waveClock >= state.waveDuration) {
@@ -2316,7 +4349,8 @@
       const action = debugAction.value;
       if (action === "level-up") {
         state.pendingLevels += 1;
-        if (!state.draftMode) {
+        settlePendingLevels();
+        if (!state.autoLevel && !state.draftMode) {
           openLevelDraft();
         }
         setDebugStatus("Triggered a level-up.");
@@ -2347,153 +4381,238 @@
 
     function drawBackground() {
       ctx.clearRect(0, 0, state.arenaWidth, state.arenaHeight);
-
-      const baseGradient = ctx.createLinearGradient(0, 0, 0, state.arenaHeight);
-      baseGradient.addColorStop(0, "#09111f");
-      baseGradient.addColorStop(0.52, "#0b0f1a");
-      baseGradient.addColorStop(1, "#05070d");
-      ctx.fillStyle = baseGradient;
+      ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, state.arenaWidth, state.arenaHeight);
 
-      const violetNebula = ctx.createRadialGradient(state.arenaWidth * 0.18, state.arenaHeight * 0.14, 0, state.arenaWidth * 0.18, state.arenaHeight * 0.14, state.arenaWidth * 0.42);
-      violetNebula.addColorStop(0, "rgba(163, 53, 238, 0.20)");
-      violetNebula.addColorStop(1, "rgba(163, 53, 238, 0)");
-      ctx.fillStyle = violetNebula;
-      ctx.fillRect(0, 0, state.arenaWidth, state.arenaHeight);
-
-      const blueNebula = ctx.createRadialGradient(state.arenaWidth * 0.82, state.arenaHeight * 0.18, 0, state.arenaWidth * 0.82, state.arenaHeight * 0.18, state.arenaWidth * 0.35);
-      blueNebula.addColorStop(0, "rgba(119, 168, 255, 0.18)");
-      blueNebula.addColorStop(1, "rgba(119, 168, 255, 0)");
-      ctx.fillStyle = blueNebula;
-      ctx.fillRect(0, 0, state.arenaWidth, state.arenaHeight);
-
-      const amberGlow = ctx.createRadialGradient(state.arenaWidth * 0.54, state.arenaHeight * 0.88, 0, state.arenaWidth * 0.54, state.arenaHeight * 0.88, state.arenaWidth * 0.44);
-      amberGlow.addColorStop(0, "rgba(247, 212, 127, 0.08)");
-      amberGlow.addColorStop(1, "rgba(247, 212, 127, 0)");
-      ctx.fillStyle = amberGlow;
-      ctx.fillRect(0, 0, state.arenaWidth, state.arenaHeight);
-
-      for (let index = 0; index < 110; index += 1) {
-        const x = (index * 137 + state.runTime * 6) % state.arenaWidth;
-        const y = (index * 73 + state.runTime * 4) % state.arenaHeight;
-        const size = index % 8 === 0 ? 2 : 1.2;
-        ctx.fillStyle = index % 9 === 0 ? "rgba(247, 212, 127, 0.58)" : "rgba(236, 231, 255, 0.42)";
-        ctx.fillRect(x, y, size, size);
-      }
-
-      for (let index = 0; index < 38; index += 1) {
-        const x = (index * 251 + state.runTime * 15) % state.arenaWidth;
-        const y = (index * 157 + state.runTime * 11) % state.arenaHeight;
-        ctx.fillStyle = "rgba(255, 255, 255, 0.14)";
-        ctx.fillRect(x, y, 2.2, 2.2);
-      }
+      forEachVisibleStar((star) => {
+        const point = worldToScreen(star.x, star.y);
+        if (isOnScreen(point, 4)) {
+          ctx.fillStyle = `rgba(${star.color}, ${star.alpha})`;
+          ctx.fillRect(point.x, point.y, star.size, star.size);
+        }
+      });
     }
 
     function drawPickups() {
       for (const pickup of state.pickups) {
+        const point = worldToScreen(pickup.x, pickup.y);
+        if (!isOnScreen(point, 30)) {
+          continue;
+        }
         if (pickup.type === "token") {
+          ctx.fillStyle = pickup.glow || colorWithAlpha(pickup.color, 0.22);
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, pickup.radius + 3.2, 0, TAU);
+          ctx.fill();
           ctx.fillStyle = pickup.color;
           ctx.beginPath();
-          ctx.moveTo(pickup.x, pickup.y - pickup.radius);
-          ctx.lineTo(pickup.x + pickup.radius * 0.7, pickup.y);
-          ctx.lineTo(pickup.x, pickup.y + pickup.radius);
-          ctx.lineTo(pickup.x - pickup.radius * 0.7, pickup.y);
+          ctx.moveTo(point.x, point.y - pickup.radius);
+          ctx.lineTo(point.x + pickup.radius * 0.7, point.y);
+          ctx.lineTo(point.x, point.y + pickup.radius);
+          ctx.lineTo(point.x - pickup.radius * 0.7, point.y);
+          ctx.closePath();
+          ctx.fill();
+          ctx.fillStyle = pickup.shine || "rgba(255, 255, 255, 0.78)";
+          ctx.beginPath();
+          ctx.moveTo(point.x - pickup.radius * 0.18, point.y - pickup.radius * 0.54);
+          ctx.lineTo(point.x + pickup.radius * 0.22, point.y - pickup.radius * 0.12);
+          ctx.lineTo(point.x - pickup.radius * 0.05, point.y + pickup.radius * 0.04);
           ctx.closePath();
           ctx.fill();
         } else {
           ctx.fillStyle = "rgba(247, 212, 127, 0.24)";
           ctx.beginPath();
-          ctx.arc(pickup.x, pickup.y, pickup.radius + 4, 0, Math.PI * 2);
+          ctx.arc(point.x, point.y, pickup.radius + 4, 0, Math.PI * 2);
           ctx.fill();
           ctx.fillStyle = "#f7d47f";
-          ctx.fillRect(pickup.x - 6, pickup.y - 5, 12, 10);
+          ctx.fillRect(point.x - 6, point.y - 5, 12, 10);
           ctx.fillStyle = "#8a5d1f";
-          ctx.fillRect(pickup.x - 6, pickup.y - 1, 12, 6);
+          ctx.fillRect(point.x - 6, point.y - 1, 12, 6);
         }
       }
     }
 
     function drawHazards() {
       for (const hazard of state.hazards) {
+        const point = worldToScreen(hazard.x, hazard.y);
+        if (!isOnScreen(point, hazard.radius + 20)) {
+          continue;
+        }
         ctx.globalAlpha = Math.max(0, hazard.lifetime / hazard.maxLifetime) * 0.85;
         ctx.fillStyle = hazard.color;
         ctx.beginPath();
-        ctx.arc(hazard.x, hazard.y, hazard.radius, 0, Math.PI * 2);
+        ctx.arc(point.x, point.y, hazard.radius, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
     }
 
     function drawSwings() {
+      const orbitPulses = getOrbitPulseColliders(getStatMods());
+
       for (const swing of state.swings) {
+        if (swing.kind === "orbit_pulse") {
+          continue;
+        }
+        const point = worldToScreen(swing.x, swing.y);
+        if (!isOnScreen(point, swing.range + 20)) {
+          continue;
+        }
         ctx.globalAlpha = Math.max(0, swing.lifetime / swing.maxLifetime);
         ctx.fillStyle = swing.color;
         ctx.beginPath();
-        ctx.moveTo(swing.x, swing.y);
-        ctx.arc(swing.x, swing.y, swing.range, swing.angle - swing.width * 0.5, swing.angle + swing.width * 0.5);
+        ctx.moveTo(point.x, point.y);
+        ctx.arc(point.x, point.y, swing.range, swing.angle - swing.width * 0.5, swing.angle + swing.width * 0.5);
         ctx.closePath();
         ctx.fill();
+      }
+
+      for (const pulse of orbitPulses) {
+        const point = worldToScreen(pulse.x, pulse.y);
+        if (!isOnScreen(point, pulse.radius + 20)) {
+          continue;
+        }
+        ctx.globalAlpha = pulse.alpha;
+        ctx.fillStyle = pulse.color;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, pulse.radius, 0, TAU);
+        ctx.fill();
+        ctx.strokeStyle = pulse.stroke;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, pulse.radius, 0, TAU);
+        ctx.stroke();
       }
       ctx.globalAlpha = 1;
     }
 
     function drawBullets() {
       for (const bullet of state.bullets) {
+        const point = worldToScreen(bullet.x, bullet.y);
+        if (!isOnScreen(point, bullet.radius + 10)) {
+          continue;
+        }
         ctx.fillStyle = bullet.color;
         ctx.beginPath();
-        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.arc(point.x, point.y, bullet.radius, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
     function drawParticles() {
       for (const particle of state.particles) {
+        const point = worldToScreen(particle.x, particle.y);
+        if (!isOnScreen(point, particle.size + 10)) {
+          continue;
+        }
         ctx.globalAlpha = Math.max(0, particle.lifetime / particle.maxLifetime);
         ctx.fillStyle = particle.color;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.arc(point.x, point.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.globalAlpha = 1;
     }
 
+    function drawEnemyAttacks() {
+      for (const beam of state.enemyBeams) {
+        const point = worldToScreen(beam.x, beam.y);
+        if (!isOnScreen(point, beam.length + 40)) {
+          continue;
+        }
+        const alpha = Math.max(0, beam.lifetime / beam.maxLifetime);
+        ctx.save();
+        ctx.translate(point.x, point.y);
+        ctx.rotate(beam.angle);
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = beam.color;
+        ctx.lineWidth = beam.width;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(beam.length, 0);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(255, 220, 232, 0.72)";
+        ctx.lineWidth = Math.max(2, beam.width * 0.22);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(beam.length, 0);
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.globalAlpha = 1;
+
+      for (const shot of state.enemyShots) {
+        const point = worldToScreen(shot.x, shot.y);
+        if (!isOnScreen(point, shot.radius + 18)) {
+          continue;
+        }
+        const angle = Math.atan2(shot.vy, shot.vx);
+        ctx.save();
+        ctx.translate(point.x, point.y);
+        ctx.rotate(angle);
+        ctx.fillStyle = "rgba(255, 107, 74, 0.28)";
+        ctx.beginPath();
+        ctx.moveTo(-shot.radius * 2.2, 0);
+        ctx.lineTo(-shot.radius * 0.5, -shot.radius * 0.72);
+        ctx.lineTo(-shot.radius * 0.5, shot.radius * 0.72);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = shot.color;
+        ctx.beginPath();
+        ctx.moveTo(shot.radius, 0);
+        ctx.lineTo(-shot.radius, -shot.radius * 0.7);
+        ctx.lineTo(-shot.radius * 0.45, 0);
+        ctx.lineTo(-shot.radius, shot.radius * 0.7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
     function drawContinuousWeapons() {
       const mods = getStatMods();
-      const orbitWeapon = hasWeapon("miasma_orbit")
-        ? { rank: getWeapon("miasma_orbit").rank, fusion: true }
-        : hasWeapon("orbit_ring")
-          ? { rank: getWeapon("orbit_ring").rank, fusion: false }
-          : null;
-      const poisonWeapon = hasWeapon("miasma_orbit")
-        ? { rank: getWeapon("miasma_orbit").rank, fusion: true }
-        : hasWeapon("poison_field")
-          ? { rank: getWeapon("poison_field").rank, fusion: false }
-          : null;
+      const poisonWeapon = getPoisonFieldStats(mods);
+      const orbitWeapon = getOrbitWeaponStats(mods);
 
       if (poisonWeapon) {
-        const radius = ((poisonWeapon.fusion ? 44 : 34) + poisonWeapon.rank * (poisonWeapon.fusion ? 1.7 : 1.5)) * mods.projectileSize;
-        ctx.fillStyle = poisonWeapon.fusion ? "rgba(122, 255, 170, 0.10)" : "rgba(104, 227, 163, 0.10)";
+        const playerPoint = worldToScreen(state.player.x, state.player.y);
+        ctx.fillStyle = poisonWeapon.fill;
         ctx.beginPath();
-        ctx.arc(state.player.x, state.player.y, radius, 0, Math.PI * 2);
+        ctx.arc(playerPoint.x, playerPoint.y, poisonWeapon.radius, 0, TAU);
         ctx.fill();
-        ctx.strokeStyle = poisonWeapon.fusion ? "rgba(164, 255, 198, 0.28)" : "rgba(126, 243, 206, 0.24)";
+        ctx.strokeStyle = poisonWeapon.stroke;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(state.player.x, state.player.y, radius, 0, Math.PI * 2);
+        ctx.arc(playerPoint.x, playerPoint.y, poisonWeapon.radius, 0, TAU);
         ctx.stroke();
       }
 
       if (orbitWeapon) {
-        const orbitCount = orbitWeapon.fusion ? 3 : 2;
-        const orbitRadius = (28 + orbitWeapon.rank * 0.6) * mods.projectileSize;
-        const orbiterSize = (4.2 + orbitWeapon.rank * 0.04) * mods.projectileSize;
-        for (let blade = 0; blade < orbitCount; blade += 1) {
-          const angle = state.runTime * (3 + orbitWeapon.rank * 0.08) + (Math.PI * 2 * blade) / orbitCount;
-          const x = state.player.x + Math.cos(angle) * orbitRadius;
-          const y = state.player.y + Math.sin(angle) * orbitRadius;
-          ctx.fillStyle = orbitWeapon.fusion ? "#9dffb0" : "#ffd27f";
+        for (const orbiter of getOrbiters(orbitWeapon)) {
+          const point = worldToScreen(orbiter.x, orbiter.y);
+          ctx.fillStyle = orbitWeapon.color;
           ctx.beginPath();
-          ctx.arc(x, y, orbiterSize, 0, Math.PI * 2);
+          ctx.arc(point.x, point.y, orbiter.radius, 0, TAU);
+          ctx.fill();
+        }
+      }
+
+      if (hasWeapon("omni_star_halo")) {
+        const weapon = getWeapon("omni_star_halo");
+        const baseAngle = getOmniBurstAngle(weapon.rank);
+        const originRadius = (10 + weapon.rank * 0.25) * mods.projectileSize;
+        const playerPoint = worldToScreen(state.player.x, state.player.y);
+        ctx.strokeStyle = "rgba(255, 227, 158, 0.28)";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, originRadius, 0, TAU);
+        ctx.stroke();
+        for (let index = 0; index < 4; index += 1) {
+          const angle = baseAngle + (TAU * index) / 4;
+          ctx.fillStyle = index % 2 === 0 ? "#77a8ff" : "#ffe39e";
+          ctx.beginPath();
+          ctx.arc(playerPoint.x + Math.cos(angle) * originRadius, playerPoint.y + Math.sin(angle) * originRadius, 2.2, 0, TAU);
           ctx.fill();
         }
       }
@@ -2504,9 +4623,10 @@
       const dashBoost = state.player.dashTimer > 0 ? 1 : 0;
       const flameLength = dashBoost ? 24 : moving ? 15 : 8;
       const flutter = dashBoost ? Math.sin(state.runTime * 42) * 1.6 : moving ? Math.sin(state.runTime * 24) * 1.1 : Math.sin(state.runTime * 8) * 0.25;
+      const playerPoint = worldToScreen(state.player.x, state.player.y);
 
       ctx.save();
-      ctx.translate(state.player.x, state.player.y);
+      ctx.translate(playerPoint.x, playerPoint.y);
       ctx.rotate(state.player.aimAngle);
 
       ctx.fillStyle = "rgba(255, 124, 62, 0.64)";
@@ -2543,12 +4663,16 @@
 
     function drawEnemies() {
       for (const enemy of state.enemies) {
-        const angle = Math.atan2(state.player.y - enemy.y, state.player.x - enemy.x);
+        const point = worldToScreen(enemy.x, enemy.y);
+        if (!isOnScreen(point, enemy.radius + 50)) {
+          continue;
+        }
+        const angle = Math.atan2(shortestDelta(enemy.y, state.player.y, state.worldHeight), shortestDelta(enemy.x, state.player.x, state.worldWidth));
         ctx.save();
-        ctx.translate(enemy.x, enemy.y);
+        ctx.translate(point.x, point.y);
         ctx.rotate(angle);
 
-        ctx.fillStyle = colorWithAlpha(enemy.core, 0.16);
+        ctx.fillStyle = enemy.glow;
         ctx.beginPath();
         ctx.arc(0, 0, enemy.radius + 6, 0, Math.PI * 2);
         ctx.fill();
@@ -2621,6 +4745,32 @@
           ctx.beginPath();
           ctx.arc(3, 0, enemy.radius * 0.34, 0, Math.PI * 2);
           ctx.fill();
+        } else if (enemy.type === "mothership") {
+          ctx.fillStyle = "#12091f";
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius, 0, TAU);
+          ctx.fill();
+          ctx.strokeStyle = enemy.shell;
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius, 0, TAU);
+          ctx.stroke();
+          ctx.strokeStyle = "rgba(184, 68, 255, 0.64)";
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius * 0.68, 0, TAU);
+          ctx.stroke();
+          ctx.fillStyle = enemy.core;
+          ctx.beginPath();
+          ctx.arc(0, 0, enemy.radius * 0.32, 0, TAU);
+          ctx.fill();
+          ctx.fillStyle = enemy.booster;
+          for (let port = 0; port < 8; port += 1) {
+            const portAngle = (TAU * port) / 8;
+            ctx.beginPath();
+            ctx.arc(Math.cos(portAngle) * enemy.radius * 0.76, Math.sin(portAngle) * enemy.radius * 0.76, enemy.radius * 0.07, 0, TAU);
+            ctx.fill();
+          }
         } else {
           ctx.fillStyle = enemy.booster;
           ctx.beginPath();
@@ -2665,7 +4815,13 @@
       drawParticles();
       drawContinuousWeapons();
       drawEnemies();
+      drawEnemyAttacks();
       drawPlayer();
+    }
+
+    function handleFullscreenChange() {
+      updateHud();
+      requestAnimationFrame(resizeArena);
     }
 
     function loop(timestamp) {
@@ -2682,12 +4838,13 @@
       const dt = Math.min(0.033, (timestamp - state.lastTick) / 1000);
       state.lastTick = timestamp;
 
-      if (!state.paused && !state.draftMode) {
+      if (!state.paused && state.draftMode !== "fusion") {
         state.runTime += dt;
         updatePlayer(dt);
         updateBullets(dt);
         updateHazards(dt);
         updateEnemies(dt);
+        updateEnemyAttacks(dt);
         updatePickups(dt);
         updateParticles(dt);
         updateWaves(dt);
@@ -2704,8 +4861,8 @@
     function updateParticles(dt) {
       for (let index = state.particles.length - 1; index >= 0; index -= 1) {
         const particle = state.particles[index];
-        particle.x += particle.vx * dt;
-        particle.y += particle.vy * dt;
+        particle.x = wrapValue(particle.x + particle.vx * dt, state.worldWidth);
+        particle.y = wrapValue(particle.y + particle.vy * dt, state.worldHeight);
         particle.lifetime -= dt;
         if (particle.lifetime <= 0) {
           state.particles.splice(index, 1);
@@ -2714,10 +4871,9 @@
     }
 
     function pointerFromEvent(event) {
-      const rect = canvas.getBoundingClientRect();
       return {
-        x: (event.clientX - rect.left) * (state.arenaWidth / rect.width),
-        y: (event.clientY - rect.top) * (state.arenaHeight / rect.height)
+        x: (event.clientX - canvasMetrics.left) * canvasMetrics.scaleX,
+        y: (event.clientY - canvasMetrics.top) * canvasMetrics.scaleY
       };
     }
 
@@ -2767,6 +4923,19 @@
       }
     }
 
+    function handleLoadoutClick(event) {
+      const button = event.target.closest(".remove-loadout");
+      if (!button) {
+        return;
+      }
+
+      if (button.dataset.type === "weapon") {
+        removeWeapon(button.dataset.key);
+      } else if (button.dataset.type === "passive") {
+        removePassive(button.dataset.key);
+      }
+    }
+
     canvas.addEventListener("pointerup", releasePointer);
     canvas.addEventListener("pointercancel", releasePointer);
 
@@ -2791,6 +4960,7 @@
     });
 
     startButton.addEventListener("click", handleStartRequest);
+    levelUpButton.addEventListener("click", handleLevelButtonClick);
 
     overlayButton.addEventListener("click", handleStartRequest);
 
@@ -2798,8 +4968,40 @@
     dashButton.addEventListener("click", triggerDash);
     fullscreenButton.addEventListener("click", toggleFullscreen);
     debugRunButton.addEventListener("click", runDebugAction);
-    document.addEventListener("fullscreenchange", updateHud);
-    window.addEventListener("resize", resizeArena);
+    mobileDashButton.addEventListener("click", triggerDash);
+    mobileLevelButton.addEventListener("click", openLevelDraft);
+    mobileExitFullscreenButton.addEventListener("click", toggleFullscreen);
+    autoUpgradeButton.addEventListener("click", () => {
+      if (state.draftMode === "level") {
+        toggleAutoLevel();
+      }
+    });
+    rerollButton.addEventListener("click", () => {
+      if (state.draftMode === "level") {
+        refreshLevelDraft();
+      }
+    });
+    hideDraftButton.addEventListener("click", () => {
+      if (state.draftMode === "level") {
+        closeDraft();
+        updateHud();
+      }
+    });
+    weaponList.addEventListener("click", handleLoadoutClick);
+    passiveList.addEventListener("click", handleLoadoutClick);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    window.addEventListener("resize", () => {
+      resizeArena();
+      updateMobileControlUi();
+    });
+    window.addEventListener("scroll", () => updateCanvasMetrics(), { passive: true });
+    bindVirtualStick(mobileMoveStick, virtualControls.move);
+    bindVirtualStick(mobileAimStick, virtualControls.aim);
+    if (MOBILE_CONTROL_QUERY.addEventListener) {
+      MOBILE_CONTROL_QUERY.addEventListener("change", updateMobileControlUi);
+    } else if (MOBILE_CONTROL_QUERY.addListener) {
+      MOBILE_CONTROL_QUERY.addListener(updateMobileControlUi);
+    }
 
     resetRun();
     resizeArena();

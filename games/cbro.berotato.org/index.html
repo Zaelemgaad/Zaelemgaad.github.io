@@ -1,0 +1,1234 @@
+<html style="--action-font: monospace;"><head>
+<title>WebTiles - Dungeon Crawl Stone Soup</title>
+<link rel="icon" href="/static/stone_soup_icon-32x32.png" type="image/png">
+<script type="text/javascript">
+
+var socket_server = "wss://cbro.berotato.org:8443/socket";
+var game_version = "0.35-a0-268-g36cf4e329c";
+</script>
+<script src="/static/scripts/contrib/require.js?v=0cb51c1a5e8e978cbe069c07f3b8d16d" data-main="/static/scripts/app"></script>
+<link rel="stylesheet" type="text/css" href="/static/style.css?v=82bfd62a3dc6675c8bec9fc6ee0c28fa">
+<link rel="stylesheet" type="text/css" href="/static/fonts/fonts.css?v=f486f054cd3784a132b8aad4e590e93f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=860, initial-scale=1.0">
+<script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="app" src="/static/scripts/app.js"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="/static/scripts/contrib/jquery.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="client" src="/static/scripts/client.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="key_conversion" src="/static/scripts/key_conversion.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="chat" src="/static/scripts/chat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="comm" src="/static/scripts/comm.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/jquery.cookie" src="/static/scripts/contrib/jquery.cookie.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/jquery.tablesorter" src="/static/scripts/contrib/jquery.tablesorter.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/jquery.waitforimages" src="/static/scripts/contrib/jquery.waitforimages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/inflate" src="/static/scripts/contrib/inflate.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="linkify" src="/static/scripts/linkify.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/jquery.json" src="/static/scripts/contrib/jquery.json.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="contrib/ba-linkify.min" src="/static/scripts/contrib/ba-linkify.min.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/game" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/display" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/minimap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/enums" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/messages" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/options" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/text" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/menu" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/action_panel" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/util" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/view_data" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/monster_list" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/textinput" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/scroller" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/simplebar" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/game" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/display" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/enums" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/messages" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/options" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/text" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/menu" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/util" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/game" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/dungeon_renderer" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/display" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/minimap" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/enums" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/messages" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/options" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/text" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/menu" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/player" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/mouse_control" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui-layouts" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/cell_renderer" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/map_knowledge" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-dngn" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/util" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/view_data" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/monster_list" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-player" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-main" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/textinput" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/scroller" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-gui" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/focus-trap" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-icons" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfos" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-floor" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-wall" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-feat" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/simplebar" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/game" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/display" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/enums" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/messages" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/options" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/text" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/menu" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/util" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/game" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/display" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/minimap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/enums" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/messages" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/options" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/text" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/menu" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/action_panel" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/view_data" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/monster_list" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/util" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/textinput" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/scroller" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/simplebar" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/game" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/display" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/enums" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/messages" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/options" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/text" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/menu" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/util" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/game" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/display" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/minimap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/enums" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/messages" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/options" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/text" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/menu" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/action_panel" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/util" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/view_data" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/monster_list" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/textinput" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/scroller" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/simplebar" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/game" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/display" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/enums" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/messages" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/options" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/text" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/menu" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/util" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar" src="/gamedata/8224eda72aa3d4c39395fb58431dc7691f3397bb/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/game" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/dungeon_renderer" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/display" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/minimap" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/enums" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/messages" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/options" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/mouse_control" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/text" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/menu" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/action_panel" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/player" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/ui" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/ui-layouts" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/cell_renderer" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/map_knowledge" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-dngn" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/util" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/view_data" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/monster_list" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-player" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-main" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/textinput" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-gui" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/scroller" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-icons" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/focus-trap" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfos" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-floor" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-wall" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-feat" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-ca7eb22763c1a2743673462370b6a3e9d76fc95c/simplebar" src="/gamedata/ca7eb22763c1a2743673462370b6a3e9d76fc95c/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/game" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/display" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/minimap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/enums" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/messages" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/options" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/text" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/menu" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/action_panel" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/util" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/view_data" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/monster_list" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/textinput" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/scroller" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/simplebar" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/game" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/dungeon_renderer" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/display" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/minimap" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/enums" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/messages" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/options" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/text" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/menu" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/player" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/mouse_control" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui-layouts" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/cell_renderer" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/map_knowledge" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-dngn" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/util" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/view_data" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/monster_list" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-player" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-main" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/textinput" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/scroller" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-gui" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/focus-trap" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-icons" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfos" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-floor" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-wall" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-feat" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-da4a36f33ba2207fe63c48539d615b67d79e3c2c/simplebar" src="/gamedata/da4a36f33ba2207fe63c48539d615b67d79e3c2c/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/game" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/game.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/dungeon_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/display" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/display.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/minimap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/minimap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/enums" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/enums.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/messages" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/messages.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/options" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/options.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/mouse_control.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/text" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/text.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/menu" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/menu.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/action_panel" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/action_panel.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/ui-layouts.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/cell_renderer.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/map_knowledge.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-dngn.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/util" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/util.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/view_data" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/view_data.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/monster_list" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/monster_list.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-player.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-main.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/textinput" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/textinput.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-gui.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/scroller" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/scroller.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-icons.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/focus-trap.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfos.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/status-icon-sizes.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-floor.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-wall.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/tileinfo-feat.js?v=0.35-a0-268-g36cf4e329c"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="game-e8767779bef10bc8fa8fa845344a32bebb243406/simplebar" src="/gamedata/e8767779bef10bc8fa8fa845344a32bebb243406/simplebar.js?v=0.35-a0-268-g36cf4e329c"></script></head>
+<body>
+<noscript>Please enable javascript!</noscript>
+<div id="lobby" style="display: block;">
+<div class="login_placeholder">
+
+<div id="login">
+<span id="login_message">Logged in as Zaelemgaad</span>
+<form action="#" id="login_form" style="display: none;">
+<label for="username">User:</label>
+<input class="text" type="text" name="username" id="username">
+<label for="password">Pass:</label>
+<input class="text" type="password" name="password" id="password">
+<input class="button" type="submit" name="submit" id="submit" value="Login">
+</form>
+<span class="extra_links">|
+<a id="reg_link" href="javascript:" style="display: none;">Register</a>
+
+<a id="chem_link" href="javascript:" style="">Change Email</a>
+<a id="chpw_link" href="javascript:" style="">Change Password</a>
+<a id="logout_link" href="javascript:" style="">Logout</a></span>
+</div></div>
+<div id="register" class="floating_dialog" style="display: none;">
+<span id="register_message"></span>
+<form action="#" id="register_form">
+<label for="username">Username:</label>
+<input class="text" type="text" name="username" id="reg_username">
+<br>
+<label for="reg_password">Password:</label>
+<input class="text" type="password" name="reg_password" id="reg_password">
+<br>
+<label for="reg_repeat_password">Repeat password:</label>
+<input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password">
+<br>
+<label for="reg_email">Email address:</label>
+<input class="text" type="text" name="reg_email" id="reg_email">
+<br>
+<p>If you do not enter an email, you can't recover your password.</p>
+<input class="button" type="button" name="cancel" id="reg_cancel" value="Cancel">
+<input class="button" type="submit" name="submit" id="reg_submit" value="Submit">
+</form>
+</div>
+<div id="change_password" class="floating_dialog" style="display: none;">
+<span id="chpw_message"></span>
+<form action="#" id="chpw_form">
+<label for="change_cur_password">Current password:</label>
+<input class="text" type="password" name="change_cur_password" id="change_cur_password">
+<br>
+<label for="change_password">New password:</label>
+<input class="text" type="password" name="change_new_password" id="change_new_password">
+<br>
+<label for="change_repeat_password">Repeat password:</label>
+<input class="text" type="password" name="change_repeat_password" id="change_repeat_password">
+<br><br>
+<input class="button" type="button" name="cancel" id="chpw_cancel" value="Cancel">
+<input class="button" type="submit" name="submit" id="chpw_submit" value="Submit">
+</form>
+</div>
+<div id="change_email" class="floating_dialog" style="display: none;">
+<p>Your current email address is: <span id="chem_current"></span></p>
+<span id="chem_message"></span>
+<form action="#" id="chem_form">
+<label for="chem_email">Email:</label>
+<input class="text" type="text" name="chem_email" id="chem_email">
+<br>
+<p>If you do not enter an email, you can't recover your password.</p>
+<input class="button" type="button" name="cancel" id="chem_cancel" value="Cancel">
+<input class="button" type="submit" name="submit" id="chem_submit" value="Submit">
+</form>
+</div>
+<div id="floating_ok_message" class="floating_dialog" style="display: none;">
+<span id="ok_message_content"></span>
+<input class="button" type="submit" name="submit" value="OK">
+</div>
+
+
+<div id="rc_edit" class="floating_dialog" style="display: none;">
+<form action="#" id="rc_edit_form">
+<textarea class="text" name="rc_file_contents" id="rc_file_contents" cols="80" rows="25"></textarea>
+<br>
+<input class="button" type="submit" name="submit" id="rc_submit" value="Save" style="float: right;">
+</form>
+</div>
+<div id="exit_game" class="floating_dialog" style="top: 50px; left: 432.5px; display: none;">
+<p id="exit_game_reason" style="display: none;"></p>
+<pre id="exit_game_message">     437 Zaelemgaad the Ducker (level 6, -9/61 HPs)
+             Began as a Troll Berserker on May 12, 2026.
+             Was a Priest of Trog.
+             Mangled by a sleepcap (19 damage)
+             ... while put to sleep by a sleepcap... on level 4 of the Dungeon.
+             The game lasted 00:17:31 (3302 turns).</pre>
+<p id="exit_game_dump"><a target="_blank" href="https://cbro.berotato.org/morgue/Zaelemgaad/morgue-Zaelemgaad-20260512-001839.txt">Morgue file</a></p>
+<a class="hide_dialog" href="javascript:">Close</a>
+</div>
+<div id="banner">Welcome to cbro.berotato.org (CBR2) WebTiles!
+(<a href="https://cbro.berotato.org/morgue/">morgues</a>, <a href="https://cbro.berotato.org/ttyrec/">ttyrecs</a>)
+<br><br>
+By playing here you agree to our (<a href="https://cbro.berotato.org/code_of_conduct.txt">code of conduct</a>). Additionally, Rotato is also in effect, which is simply:<br>Be Rotato:
+"Be Excellent to each other. If you can't be excellent, Be Civil. If you can't be civil, Be Offline"
+<br><br>Users of CBRO in violation of the Code of Conduct or failing to be Rotato may have their accounts suspended temporarily or indefinitely (with little to no notice)
+<br><br>
+Admins may be contacted via <a href="https://discord.gg/GBQaq4vsQS">Discord</a> (in the #dcss channel of roguelikes), IRC (#crawl-dev on libera), zureal at gmail dot com, and at advil at dcss dot io.
+<br>
+<p>
+<a href="http://crawl.develz.org/wordpress/">Crawl Blog</a>
+<br>
+<a href="http://crawl.akrasiac.org/docs/changelog.txt">Latest Changelog</a>
+<br>
+<a href="https://crawl.develz.org/tournament/0.34/">0.34 Tourney Page</a>
+<br>
+</p><p>
+
+</p><p>
+Hello, Zaelemgaad!
+<br>Games on this server are recorded for in-progress viewing and playback. Chat messages might be logged, depending on the player's settings.
+</p>
+
+<p></p>
+</div>
+<div id="account_restricted" style="display:none;">
+This account is being held for administrator approval. Until approved,
+community features and some game modes may be restricted, and games
+will not be visible to other players.
+</div>
+<div>
+<div id="admin_panel_button" style="display:none;">
+<span><a href="javascript:">Toggle admin panel</a></span>
+</div>
+<div id="admin_panel" style="display: none;">
+<div><span><b>Admin panel</b></span></div>
+<hr>
+<div id="admin_announcements">
+<span>Enter text to broadcast to all players. Please do not use this frivolously!</span>
+<form>
+<label for="announcement_text">Announcement: </label>
+<input class="text" type="text" name="announcement_text" id="announcement_text">
+<span><a href="javascript:" id="announcement_submit">send announcement</a></span>
+</form>
+</div>
+<hr>
+
+<div id="admin_panel_log"></div>
+</div>
+</div>
+<div id="play_now">Play now:
+
+
+
+<span>
+
+<br>
+<a href="#play-dcss-git">
+DCSS trunk (Updates Daily)</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-git">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-dcss-git-seeded">
+Trunk custom seed</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-git">
+Sprint trunk</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-git">
+Tutorial trunk</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.34">
+DCSS 0.34 (Latest Version)</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.34">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.34">
+Custom seed 0.34</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.34">
+Sprint 0.34</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.34">
+Tutorial 0.34</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.33">
+DCSS 0.33 (Latest Version)</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.33">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.33">
+Custom seed 0.33</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.33">
+Sprint 0.33</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.33">
+Tutorial 0.33</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.32">
+DCSS 0.32</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.32">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.32">
+Custom seed 0.32</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.32">
+Sprint 0.32</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.32">
+Tutorial 0.32</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.31">
+DCSS 0.31</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.31">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.31">
+Custom seed 0.31</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.31">
+Sprint 0.31</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.31">
+Tutorial 0.31</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.30">
+DCSS 0.30</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.30">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.30">
+Custom seed 0.30</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.30">
+Sprint 0.30</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.30">
+Tutorial 0.30</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.29">
+DCSS 0.29</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.29">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.29">
+Custom seed 0.29</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.29">
+Sprint 0.29</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.29">
+Tutorial 0.29</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.28">
+DCSS 0.28</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.28">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.28">
+Custom seed 0.28</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.28">
+Sprint 0.28</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.28">
+Tutorial 0.28</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.27">
+DCSS 0.27</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.27">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.27">
+Custom seed 0.27</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.27">
+Sprint 0.27</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.27">
+Tutorial 0.27</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.26">
+DCSS 0.26</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.26">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.26">
+Custom seed 0.26</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.26">
+Sprint 0.26</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.26">
+Tutorial 0.26</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.25">
+DCSS 0.25</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.25">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.25">
+Custom seed 0.25</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.25">
+Sprint 0.25</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.25">
+Tutorial 0.25</a>
+
+
+</span>
+
+<span>
+
+<br>
+<a href="#play-dcss-0.24">
+DCSS 0.24</a>
+
+
+<a href="javascript:" class="edit_rc_link" data-game_id="dcss-0.24">(edit rc)</a>
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-seeded-0.24">
+Custom seed 0.24</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-spr-0.24">
+Sprint 0.24</a>
+
+
+</span>
+
+<span>
+
+ | 
+<a href="#play-tut-0.24">
+Tutorial 0.24</a>
+
+
+</span>
+
+
+</div>
+<br>
+<div id="lobby_body">
+<span>
+Games currently running:
+</span>
+<table id="player_list" class="">
+<thead>
+<tr>
+<th class="username header headerSortDown">User</th>
+<th class="game_id header">Game</th>
+<th class="xl header">XL</th>
+<th class="char header">Char</th>
+<th class="place header">Place</th>
+<th class="turn header">Turn</th>
+<th class="dur header">Time</th>
+<th class="god header">God</th>
+<th class="idle_time header">Idle</th>
+<th class="spectator_count header">Specs</th>
+<th class="milestone_col header">Milestone</th>
+</tr>
+</thead>
+<tbody><tr id="game-42054">
+<td class="username"><a href="#watch-alkaid">alkaid</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">10</td>
+<td class="char">GnFi</td>
+<td class="place">D:9</td>
+<td class="turn">6708</td>
+<td class="dur"><span>18m</span></td>
+<td class="god">Cheibriados</td>
+<td class="idle_time" data-time="8644" data-sort="8644"><span>2h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">became a worshipper of Cheibriados.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-41423">
+<td class="username"><a href="#watch-Bowmetheus">Bowmetheus</a></td>
+<td class="game_id">dcss-0.24</td>
+<td class="xl">17</td>
+<td class="char">TrFi</td>
+<td class="place">Shoals:2</td>
+<td class="turn">45596</td>
+<td class="dur"><span>4h 35m</span></td>
+<td class="god">Okawaru</td>
+<td class="idle_time" data-time="6233" data-sort="6233"><span>2h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">&nbsp;</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42229">
+<td class="username"><a href="#watch-bwhre">bwhre</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">15</td>
+<td class="char">GnWn</td>
+<td class="place">Orc:2</td>
+<td class="turn">22684</td>
+<td class="dur"><span>41m</span></td>
+<td class="god">Nemelex Xobeh</td>
+<td class="idle_time" data-time="9266" data-sort="9266"><span>3h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">reached level 2 of the Orcish Mines.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42390">
+<td class="username"><a href="#watch-Calvor">Calvor</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">21</td>
+<td class="char">VSFi</td>
+<td class="place">Vaults:2</td>
+<td class="turn">39916</td>
+<td class="dur"><span>3h 11m</span></td>
+<td class="god">Uskayaw</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">entered the Vaults.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42300">
+<td class="username"><a href="#watch-cdecastro">cdecastro</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">10</td>
+<td class="char">BaBe</td>
+<td class="place">D:9</td>
+<td class="turn">9911</td>
+<td class="dur"><span>14m</span></td>
+<td class="god">Trog</td>
+<td class="idle_time" data-time="2632" data-sort="2632"><span>44m</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">killed Menkaure.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42326">
+<td class="username"><a href="#watch-Doper">Doper</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">11</td>
+<td class="char">DjFE</td>
+<td class="place">D:8</td>
+<td class="turn">11039</td>
+<td class="dur"><span>32m</span></td>
+<td class="god">Makhleb</td>
+<td class="idle_time" data-time="2912" data-sort="2912"><span>49m</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">killed Gastronok.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42388">
+<td class="username"><a href="#watch-fearitself">fearitself</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">3</td>
+<td class="char">MDFw</td>
+<td class="place">D:3</td>
+<td class="turn">2161</td>
+<td class="dur"><span>5m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count">1</td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42384">
+<td class="username"><a href="#watch-Gisli">Gisli</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">9</td>
+<td class="char">HuFi</td>
+<td class="place">D:6</td>
+<td class="turn">5149</td>
+<td class="dur"><span>10m</span></td>
+<td class="god">the Shining One</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone" style="top: 0px;">killed Eustachio.</div>
+<div class="new_milestone" style="top: 0px;">killed Eustachio.</div>
+</div>
+</td>
+</tr><tr id="game-42346">
+<td class="username"><a href="#watch-Lobster4">Lobster4</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">21</td>
+<td class="char">MDFw</td>
+<td class="place">Vaults:4</td>
+<td class="turn">64631</td>
+<td class="dur"><span>5h 3m</span></td>
+<td class="god">Makhleb</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">killed Zenata.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42359">
+<td class="username"><a href="#watch-Marnie">Marnie</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">15</td>
+<td class="char">KoCj</td>
+<td class="place">D:14</td>
+<td class="turn">23268</td>
+<td class="dur"><span>1h 39m</span></td>
+<td class="god">Vehumet</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">killed Snorg.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42343">
+<td class="username"><a href="#watch-mdonais">mdonais</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">21</td>
+<td class="char">GCHu</td>
+<td class="place">Elf:2</td>
+<td class="turn">35250</td>
+<td class="dur"><span>2h 56m</span></td>
+<td class="god">Okawaru</td>
+<td class="idle_time" data-time="1917" data-sort="1917"><span>32m</span></td>
+<td class="spectator_count">1</td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">entered the Elven Halls.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42315">
+<td class="username"><a href="#watch-midjag">midjag</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">17</td>
+<td class="char">KoEn</td>
+<td class="place">Elf:2</td>
+<td class="turn">31227</td>
+<td class="dur"><span>1h 24m</span></td>
+<td class="god">Uskayaw</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">left the Elven Halls.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42340">
+<td class="username"><a href="#watch-MollyMolluskus">MollyMolluskus</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">5</td>
+<td class="char">OpFi</td>
+<td class="place">D:5</td>
+<td class="turn">3117</td>
+<td class="dur"><span>13m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="1821" data-sort="1821"><span>30m</span></td>
+<td class="spectator_count">1</td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">fell down a shaft to D:4.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42356">
+<td class="username"><a href="#watch-mordreal">mordreal</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">17</td>
+<td class="char">DgHu</td>
+<td class="place">Spider:1</td>
+<td class="turn">40615</td>
+<td class="dur"><span>1h 27m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">entered The First Justicar's Armoury.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42259">
+<td class="username"><a href="#watch-Nertanef">Nertanef</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">3</td>
+<td class="char">OpSh</td>
+<td class="place">D:2</td>
+<td class="turn">742</td>
+<td class="dur"><span>56s</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="9997" data-sort="9997"><span>3h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42072">
+<td class="username"><a href="#watch-pokeman">pokeman</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">11</td>
+<td class="char">DEHW</td>
+<td class="place">Gauntlet</td>
+<td class="turn">11258</td>
+<td class="dur"><span>29m</span></td>
+<td class="god">Vehumet</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">entered a Gauntlet.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42003">
+<td class="username"><a href="#watch-robertstho">robertstho</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">3</td>
+<td class="char">DjFE</td>
+<td class="place">D:1</td>
+<td class="turn">990</td>
+<td class="dur"><span>1m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="19571" data-sort="19571"><span>5h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42275">
+<td class="username"><a href="#watch-sco">sco</a></td>
+<td class="game_id">dcss-0.33</td>
+<td class="xl">8</td>
+<td class="char">MfAl</td>
+<td class="place">D:6</td>
+<td class="turn">7396</td>
+<td class="dur"><span>1h 28m</span></td>
+<td class="god">Ashenzari</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone" style="top: 0px;">killed Grinder.</div>
+<div class="new_milestone" style="top: 0px;">killed Grinder.</div>
+</div>
+</td>
+</tr><tr id="game-42370">
+<td class="username"><a href="#watch-Skryme">Skryme</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">10</td>
+<td class="char">DrDe</td>
+<td class="place">D:8</td>
+<td class="turn">7545</td>
+<td class="dur"><span>22m</span></td>
+<td class="god">Ashenzari</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count">1</td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">killed Pikel.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42349">
+<td class="username"><a href="#watch-spaghetti">spaghetti</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">3</td>
+<td class="char">NaAl</td>
+<td class="place">D:1</td>
+<td class="turn">459</td>
+<td class="dur"><span>2m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="2225" data-sort="2225"><span>37m</span></td>
+<td class="spectator_count">1</td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-37309">
+<td class="username"><a href="#watch-Squip">Squip</a></td>
+<td class="game_id">dcss-0.33</td>
+<td class="xl">1</td>
+<td class="char">OnFE</td>
+<td class="place">D:1</td>
+<td class="turn">0</td>
+<td class="dur"><span>16s</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="333400" data-sort="333400"><span>93h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">&nbsp;</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42296">
+<td class="username"><a href="#watch-Sunscream">Sunscream</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">1</td>
+<td class="char">MfGl</td>
+<td class="place">D:1</td>
+<td class="turn">0</td>
+<td class="dur"><span></span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="4414" data-sort="4414"><span>1h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42392">
+<td class="username"><a href="#watch-tarmangani">tarmangani</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl"></td>
+<td class="char"></td>
+<td class="place"></td>
+<td class="turn"></td>
+<td class="dur"></td>
+<td class="god"></td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">started generating a character.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42347">
+<td class="username"><a href="#watch-Terrapin">Terrapin</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">3</td>
+<td class="char">OnCA</td>
+<td class="place">D:2</td>
+<td class="turn">880</td>
+<td class="dur"><span>2m</span></td>
+<td class="god">Ignis</td>
+<td class="idle_time" data-time="2723" data-sort="2723"><span>45m</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-19656">
+<td class="username"><a href="#watch-ToeKNeeBonez">ToeKNeeBonez</a></td>
+<td class="game_id">dcss-0.34</td>
+<td class="xl">11</td>
+<td class="char">MiFi</td>
+<td class="place">Lair:2</td>
+<td class="turn">11507</td>
+<td class="dur"><span>1h 5m</span></td>
+<td class="god">Yredelemnul</td>
+<td class="idle_time" data-time="1314560" data-sort="1314560"><span>365h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">left the Lair of Beasts.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42391">
+<td class="username"><a href="#watch-tweeg707">tweeg707</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">2</td>
+<td class="char">DsIE</td>
+<td class="place">D:1</td>
+<td class="turn">285</td>
+<td class="dur"><span>1m</span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42033">
+<td class="username"><a href="#watch-uglyjohn">uglyjohn</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">1</td>
+<td class="char">MDFw</td>
+<td class="place">D:1</td>
+<td class="turn">0</td>
+<td class="dur"><span></span></td>
+<td class="god"></td>
+<td class="idle_time" data-time="18403" data-sort="18403"><span>5h</span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">began the quest for the Orb.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr><tr id="game-42380">
+<td class="username"><a href="#watch-Zonian">Zonian</a></td>
+<td class="game_id">dcss-git</td>
+<td class="xl">20</td>
+<td class="char">GnSu</td>
+<td class="place">Vaults:1</td>
+<td class="turn">71365</td>
+<td class="dur"><span>5h 37m</span></td>
+<td class="god">Ashenzari</td>
+<td class="idle_time" data-time="0" data-sort="0"><span></span></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">entered the Vaults.</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr></tbody>
+</table>
+<div style="display: none">
+<table>
+<tbody><tr id="game_entry_template">
+<td class="username"></td>
+<td class="game_id"></td>
+<td class="xl"></td>
+<td class="char"></td>
+<td class="place"></td>
+<td class="turn"></td>
+<td class="dur"></td>
+<td class="god"></td>
+<td class="idle_time"></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">&nbsp;</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr>
+</tbody></table>
+</div>
+</div>
+<div id="footer"></div>
+</div>
+<div id="game"><div id="crt" style="display: none;"></div></div>
+<div id="loader" style="height: 847px; display: none;">
+<div id="loader_center">
+<span id="loader_text">Loading...</span><br>
+<img style="display:none;" alt="" loading="lazy" src="/static/title_anon_octopus_wizard.png?v=9094f6ae741ca771c633a2b919423d77">
+<img style="display: none;" alt="" src="/static/title_arbituhhh_tesu.png?v=278d5e885b82ded5287e6ffeff9caed8">
+<img style="display: none;" alt="" src="/static/title_baconkid_duvessa_dowan.png?v=0a4dbeac13fe21c1bd0711620191ba6e">
+<img style="display: none;" alt="" src="/static/title_baconkid_gastronok.png?v=1a5d4694c8f8f53999a32201bea23484">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_baconkid_mnoleg.png?v=71fa9eacf7cf2a784c2d23d8ac5902a1">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_benadryl_antaeus.png?v=83507a25f3d4a1c4e33296c8f52d0c2f">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_benadryl_oni.png?v=1ae91fa00e453b361bea2567f4870dcd">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_Cws_Minotauros.png?v=36df609f2dfa04a664633d4adf1b9cf3">
+<img style="display: none;" alt="" src="/static/title_denzi_dragon.png?v=65bde082d8f0e851bb88540ad53afc9a">
+<img style="display: none;" alt="" src="/static/title_denzi_evil_mage.png?v=1b045834a0915f9c138ae0be54347377">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_invasion.png?v=b8bc5513deb482c3a818d640469eb7a8">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_kitchen_duty.png?v=146fb4f3d5744fca528fdfe326a65d36">
+<img style="display: inline;" alt="" src="/static/title_denzi_summoner.png?v=705a64cecd026bd8ae29fa10b0216f56">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_undead_warrior.png?v=7a8c4f411866805c5772a7f20afccabd">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_e_m_fields.png?v=49da94aa95ab95cb7b946f19a0f4bc58">
+<img style="display: none;" alt="" src="/static/title_firemage.png?v=3c86d51723ba3d51a1a1ccd415f3bcb7">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_goodgod_tengu_gold.png?v=98f74718a737c55417aba1142b0cc0ec">
+<img style="display: none;" alt="" src="/static/title_froggy_jiyva_felid.png?v=864584911cde73a5f2aaf70e2a1b222c">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_natasha_and_boris.png?v=ab951bf4f6d6f550a94eec4f42daa46f">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_rune_and_run_failed_on_dis.png?v=c689b1f8b4097c9ac45ec2d6dba148ab">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_thunder_fist_nikola.png?v=ebed0794cf0b8f61903085989a275d23">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_gompami_kohu_xbow.png?v=9bc78e03941f4706ce1cc52bcb68cade">
+<img style="display: none;" alt="" src="/static/title_kaonedong_ignis_the_dying_flame.png?v=b3e9ad5b54c66f8ca004f459db1adb07">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_kaonedong_menkaure_prince_of_dust.png?v=a614511dc19c52a91231a1ba2c52b28f">
+<img style="display: none;" alt="" src="/static/title_king7artist_eustachio.png?v=4438288f6a52faff507ba65c4af56d16">
+<img style="display: none;" alt="" src="/static/title_lemurrobot_gozag_vaults.png?v=d3bf64122021d3088775c6ba34809b88">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_micah_c_ereshkigal.png?v=58ff2c86c479d28ce4052ee2b3520cff">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_nibiki_octopode.png?v=481b9e0c480715e2babe3bd178a7be99">
+<img style="display: none;" alt="" src="/static/title_omndra_zot_demon.png?v=0f4b0cddcb04f1656a9c7fc908749e60">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_peileppe_bloax_eye.png?v=90228d9a2f50cb7cd7cb67ae88922c12">
+<img style="display: none;" alt="" src="/static/title_ploomutoo_ijyb.png?v=b2ca7ee0fa552381a017f8c1184715c6">
+<img style="display: none;" alt="" src="/static/title_philosopheropposite_palentonga_paladin.png?v=82e94979afbc016653dd2b7ce21816b2">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_pooryurik_knight.png?v=a8478c7cb34e685aa76808f0a4238af6">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_psiweapon_kiku.png?v=0cc596f5354742a63371e4478f8cf635">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_psiweapon_roxanne.png?v=e01f587b152fe1797d1578e5a70a1253">
+<img style="display: none;" alt="" src="/static/title_sastrei_chei.png?v=82c8a321a8174981bb6ef36d1eb5ff48">
+<img style="display: none;" alt="" src="/static/title_shadyamish_octm.png?v=8d101087deaedb337441399bedec22f8">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_SpinningBird_djinn_sears_gnolls.png?v=1b7368c70a5d446d2b4b5e737eeb214e">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_white_noise_entering_the_dungeon.png?v=7aeb94d251916591d068f4c2743da079">
+<img style="display: none;" alt="" src="/static/title_white_noise_grabbing_the_orb.png?v=0e13efbe80b5aaa77cad84bfad5ab046">
+<img style="display: none;" alt="" src="/static/title_ylam_formicid_shrikes.png?v=ff225e5fd2b782a17615ff84df664939">
+</div>
+<div id="stale_processes_message" class="floating_dialog" style="display: none;" tabindex="1000">
+There are some stale <span class="game_name"></span> processes.
+They'll be stopped in <span class="recover_timeout"></span> seconds.
+Press a key now if you don't want this to happen!
+</div>
+<div id="force_terminate" class="floating_dialog" style="display: none;" tabindex="1001">
+Couldn't stop one of your stale <span class="game_name"></span> processes
+gracefully. Force its termination? [yn]
+<br>
+<input class="button" type="button" name="force_terminate_no" id="force_terminate_no" value="No" style="float: right;">
+<input class="button" type="button" name="force_terminate_yes" id="force_terminate_yes" value="Yes" style="float: right;">
+</div>
+</div>
+<div id="overlay" style="display: none;"></div>
+<div id="chat_hidden" style="display: none;"><span><a href="javascript:">+</a></span></div>
+<div id="chat" style="display: none;">
+<a href="javascript:" id="chat_hide_button">
+<span id="chat_hide_button_span">(-)</span>
+</a>
+<a href="javascript:" id="chat_caption">
+<span id="spectator_count">0 spectators</span>
+<span id="message_count">0 new messages</span>
+</a>
+<div id="chat_body" style="display: none;">
+<span id="spectator_list">&nbsp;</span>
+<div id="chat_history_container">
+<span id="chat_history"></span>
+</div>
+<input class="text" type="text" name="chat_input" id="chat_input" style="">
+<div id="chat_login_text" style="display: none;">
+<a id="chat_login_link" href="javascript:">Login</a> to chat
+</div>
+</div>
+</div>
+<div id="prompt" style="display: none;">
+<div>
+<div id="prompt_title"></div>
+<div class="login_placeholder"></div>
+<div id="prompt_footer"></div>
+</div>
+</div>
+
+
+</body></html>

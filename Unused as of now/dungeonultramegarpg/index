@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>WebTiles - Dungeon Crawl Stone Soup</title>
+<link rel="icon" href="/static/stone_soup_icon-32x32.png" type="image/png">
+<script type="text/javascript">
+
+var socket_server = "wss://cbro.berotato.org:8443/socket";
+var game_version = "0.35-a0-268-g36cf4e329c";
+</script>
+<script src="/static/scripts/contrib/require.js?v=0cb51c1a5e8e978cbe069c07f3b8d16d" data-main="/static/scripts/app"></script>
+<link rel="stylesheet" type="text/css" href="/static/style.css?v=82bfd62a3dc6675c8bec9fc6ee0c28fa">
+<link rel="stylesheet" type="text/css" href="/static/fonts/fonts.css?v=f486f054cd3784a132b8aad4e590e93f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=860, initial-scale=1.0">
+</head>
+<body>
+<noscript>Please enable javascript!</noscript>
+<div id="lobby" style="display: none;">
+<div class="login_placeholder">
+<div id="login">
+<span id="login_message"></span>
+<form action="#" id="login_form">
+<label for="username">User:</label>
+<input class="text" type="text" name="username" id="username">
+<label for="password">Pass:</label>
+<input class="text" type="password" name="password" id="password">
+<input class="button" type="submit" name="submit" id="submit" value="Login">
+</form>
+<span class="extra_links">|
+<a id="reg_link" href="javascript:">Register</a>
+
+<a id="chem_link" href="javascript:" style="display: none;">Change Email</a>
+<a id="chpw_link" href="javascript:" style="display: none;">Change Password</a>
+<a id="logout_link" href="javascript:" style="display: none;">Logout</a></span>
+</div>
+</div>
+<div id="register" class="floating_dialog" style="display: none;">
+<span id="register_message"></span>
+<form action="#" id="register_form">
+<label for="username">Username:</label>
+<input class="text" type="text" name="username" id="reg_username">
+<br>
+<label for="reg_password">Password:</label>
+<input class="text" type="password" name="reg_password" id="reg_password">
+<br>
+<label for="reg_repeat_password">Repeat password:</label>
+<input class="text" type="password" name="reg_repeat_password" id="reg_repeat_password">
+<br>
+<label for="reg_email">Email address:</label>
+<input class="text" type="text" name="reg_email" id="reg_email">
+<br>
+<p>If you do not enter an email, you can't recover your password.</p>
+<input class="button" type="button" name="cancel" id="reg_cancel"
+value="Cancel">
+<input class="button" type="submit" name="submit" id="reg_submit" value="Submit">
+</form>
+</div>
+<div id="change_password" class="floating_dialog" style="display: none;">
+<span id="chpw_message"></span>
+<form action="#" id="chpw_form">
+<label for="change_cur_password">Current password:</label>
+<input class="text" type="password" name="change_cur_password" id="change_cur_password">
+<br>
+<label for="change_password">New password:</label>
+<input class="text" type="password" name="change_new_password" id="change_new_password">
+<br>
+<label for="change_repeat_password">Repeat password:</label>
+<input class="text" type="password" name="change_repeat_password" id="change_repeat_password">
+<br><br>
+<input class="button" type="button" name="cancel" id="chpw_cancel"
+value="Cancel">
+<input class="button" type="submit" name="submit" id="chpw_submit" value="Submit">
+</form>
+</div>
+<div id="change_email" class="floating_dialog" style="display: none;">
+<p>Your current email address is: <span id="chem_current"></span></p>
+<span id="chem_message"></span>
+<form action="#" id="chem_form">
+<label for="chem_email">Email:</label>
+<input class="text" type="text" name="chem_email" id="chem_email">
+<br />
+<p>If you do not enter an email, you can't recover your password.</p>
+<input class="button" type="button" name="cancel" id="chem_cancel" value="Cancel">
+<input class="button" type="submit" name="submit" id="chem_submit" value="Submit">
+</form>
+</div>
+<div id="floating_ok_message" class="floating_dialog" style="display: none;">
+<span id="ok_message_content"></span>
+<input class="button" type="submit" name="submit" value="OK">
+</div>
+
+
+<div id="rc_edit" class="floating_dialog" style="display: none;">
+<form action="#" id="rc_edit_form">
+<textarea class="text" name="rc_file_contents" id="rc_file_contents"
+cols="80" rows="25">
+</textarea>
+<br>
+<input class="button" type="submit" name="submit" id="rc_submit" value="Save"
+style="float: right;">
+</form>
+</div>
+<div id="exit_game" class="floating_dialog" style="display: none;">
+<p id="exit_game_reason"></p>
+<pre id="exit_game_message"></pre>
+<p id="exit_game_dump"></p>
+<a class="hide_dialog" href="javascript:">Close</a>
+</div>
+<div id="banner">Welcome to cbro.berotato.org (CBR2) WebTiles!
+(<a href="https://cbro.berotato.org/morgue/">morgues</a>, <a href="https://cbro.berotato.org/ttyrec/">ttyrecs</a>)
+<br><br>
+By playing here you agree to our (<a href="https://cbro.berotato.org/code_of_conduct.txt">code of conduct</a>). Additionally, Rotato is also in effect, which is simply:<br>Be Rotato:
+"Be Excellent to each other. If you can't be excellent, Be Civil. If you can't be civil, Be Offline"
+<br><br>Users of CBRO in violation of the Code of Conduct or failing to be Rotato may have their accounts suspended temporarily or indefinitely (with little to no notice)
+<br><br>
+Admins may be contacted via <a href="https://discord.gg/GBQaq4vsQS">Discord</a> (in the #dcss channel of roguelikes), IRC (#crawl-dev on libera), zureal at gmail dot com, and at advil at dcss dot io.
+<br>
+<p>
+<a href="http://crawl.develz.org/wordpress/">Crawl Blog</a>
+<br>
+<a href="http://crawl.akrasiac.org/docs/changelog.txt">Latest Changelog</a>
+<br>
+<a href="https://crawl.develz.org/tournament/0.34/">0.34 Tourney Page</a>
+<br>
+<p>
+
+</p>
+</div>
+<div id="account_restricted" style="display:none;">
+This account is being held for administrator approval. Until approved,
+community features and some game modes may be restricted, and games
+will not be visible to other players.
+</div>
+<div>
+<div id="admin_panel_button" style="display:none;">
+<span><a href="javascript:">Toggle admin panel</a></span>
+</div>
+<div id="admin_panel" style="display: none;">
+<div><span><b>Admin panel</b></span></div>
+<hr />
+<div id="admin_announcements">
+<span>Enter text to broadcast to all players. Please do not use this frivolously!</span>
+<form>
+<label for="announcement_text">Announcement: </label>
+<input class="text" type="text" name="announcement_text" id="announcement_text" />
+<span><a href="javascript:" id="announcement_submit">send announcement</a></span>
+</form>
+</div>
+<hr />
+
+<div id="admin_panel_log"></div>
+</div>
+</div>
+<div id="play_now"></div>
+<br>
+<div id="lobby_body">
+<span>
+Games currently running:
+</span>
+<table id="player_list" class="no_game_times">
+<thead>
+<tr>
+<th class="username">User</th>
+<th class="game_id">Game</th>
+<th class="xl">XL</th>
+<th class="char">Char</th>
+<th class="place">Place</th>
+<th class="turn">Turn</th>
+<th class="dur">Time</th>
+<th class="god">God</th>
+<th class="idle_time">Idle</th>
+<th class="spectator_count">Specs</th>
+<th class="milestone_col">Milestone</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<div style="display: none">
+<table>
+<tr id="game_entry_template">
+<td class="username"></td>
+<td class="game_id"></td>
+<td class="xl"></td>
+<td class="char"></td>
+<td class="place"></td>
+<td class="turn"></td>
+<td class="dur"></td>
+<td class="god"></td>
+<td class="idle_time"></td>
+<td class="spectator_count"></td>
+<td class="milestone_col">
+<div class="milestone_container">
+<div class="milestone">&nbsp;</div>
+<div class="new_milestone"></div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="footer"></div>
+</div>
+<div id="game">
+<div id="crt" style="display: none;"></div>
+</div>
+<div id="loader">
+<div id="loader_center">
+<span id="loader_text">Loading...</span><br>
+<img style="display:none;" alt="" loading="lazy" src="/static/title_anon_octopus_wizard.png?v=9094f6ae741ca771c633a2b919423d77">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_arbituhhh_tesu.png?v=278d5e885b82ded5287e6ffeff9caed8">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_baconkid_duvessa_dowan.png?v=0a4dbeac13fe21c1bd0711620191ba6e">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_baconkid_gastronok.png?v=1a5d4694c8f8f53999a32201bea23484">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_baconkid_mnoleg.png?v=71fa9eacf7cf2a784c2d23d8ac5902a1">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_benadryl_antaeus.png?v=83507a25f3d4a1c4e33296c8f52d0c2f">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_benadryl_oni.png?v=1ae91fa00e453b361bea2567f4870dcd">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_Cws_Minotauros.png?v=36df609f2dfa04a664633d4adf1b9cf3">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_dragon.png?v=65bde082d8f0e851bb88540ad53afc9a">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_evil_mage.png?v=1b045834a0915f9c138ae0be54347377">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_invasion.png?v=b8bc5513deb482c3a818d640469eb7a8">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_kitchen_duty.png?v=146fb4f3d5744fca528fdfe326a65d36">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_summoner.png?v=705a64cecd026bd8ae29fa10b0216f56">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_denzi_undead_warrior.png?v=7a8c4f411866805c5772a7f20afccabd">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_e_m_fields.png?v=49da94aa95ab95cb7b946f19a0f4bc58">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_firemage.png?v=3c86d51723ba3d51a1a1ccd415f3bcb7">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_goodgod_tengu_gold.png?v=98f74718a737c55417aba1142b0cc0ec">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_jiyva_felid.png?v=864584911cde73a5f2aaf70e2a1b222c">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_natasha_and_boris.png?v=ab951bf4f6d6f550a94eec4f42daa46f">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_rune_and_run_failed_on_dis.png?v=c689b1f8b4097c9ac45ec2d6dba148ab">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_froggy_thunder_fist_nikola.png?v=ebed0794cf0b8f61903085989a275d23">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_gompami_kohu_xbow.png?v=9bc78e03941f4706ce1cc52bcb68cade">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_kaonedong_ignis_the_dying_flame.png?v=b3e9ad5b54c66f8ca004f459db1adb07">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_kaonedong_menkaure_prince_of_dust.png?v=a614511dc19c52a91231a1ba2c52b28f">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_king7artist_eustachio.png?v=4438288f6a52faff507ba65c4af56d16">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_lemurrobot_gozag_vaults.png?v=d3bf64122021d3088775c6ba34809b88">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_micah_c_ereshkigal.png?v=58ff2c86c479d28ce4052ee2b3520cff">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_nibiki_octopode.png?v=481b9e0c480715e2babe3bd178a7be99">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_omndra_zot_demon.png?v=0f4b0cddcb04f1656a9c7fc908749e60">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_peileppe_bloax_eye.png?v=90228d9a2f50cb7cd7cb67ae88922c12">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_ploomutoo_ijyb.png?v=b2ca7ee0fa552381a017f8c1184715c6">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_philosopheropposite_palentonga_paladin.png?v=82e94979afbc016653dd2b7ce21816b2">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_pooryurik_knight.png?v=a8478c7cb34e685aa76808f0a4238af6">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_psiweapon_kiku.png?v=0cc596f5354742a63371e4478f8cf635">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_psiweapon_roxanne.png?v=e01f587b152fe1797d1578e5a70a1253">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_sastrei_chei.png?v=82c8a321a8174981bb6ef36d1eb5ff48">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_shadyamish_octm.png?v=8d101087deaedb337441399bedec22f8">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_SpinningBird_djinn_sears_gnolls.png?v=1b7368c70a5d446d2b4b5e737eeb214e">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_white_noise_entering_the_dungeon.png?v=7aeb94d251916591d068f4c2743da079">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_white_noise_grabbing_the_orb.png?v=0e13efbe80b5aaa77cad84bfad5ab046">
+<img style="display:none;" alt="" loading="lazy" src="/static/title_ylam_formicid_shrikes.png?v=ff225e5fd2b782a17615ff84df664939">
+</div>
+<div id="stale_processes_message" class="floating_dialog"
+style="display: none;" tabindex="1000">
+There are some stale <span class="game_name"></span> processes.
+They'll be stopped in <span class="recover_timeout"></span> seconds.
+Press a key now if you don't want this to happen!
+</div>
+<div id="force_terminate" class="floating_dialog"
+style="display: none;" tabindex="1001">
+Couldn't stop one of your stale <span class="game_name"></span> processes
+gracefully. Force its termination? [yn]
+<br>
+<input class="button" type="button" name="force_terminate_no"
+id="force_terminate_no" value="No" style="float: right;">
+<input class="button" type="button" name="force_terminate_yes"
+id="force_terminate_yes" value="Yes" style="float: right;">
+</div>
+</div>
+<div id="overlay"></div>
+<div id="chat_hidden" style="display: none;"><span><a href="javascript:">+</a></span></div>
+<div id="chat" style="display: none;">
+<a href="javascript:" id="chat_hide_button">
+<span id="chat_hide_button_span">(-)</span>
+</a>
+<a href="javascript:" id="chat_caption">
+<span id="spectator_count">0 spectators</span>
+<span id="message_count">0 new messages</span>
+</a>
+<div id="chat_body" style="display: none;">
+<span id="spectator_list">&nbsp;</span>
+<div id="chat_history_container">
+<span id="chat_history"></span>
+</div>
+<input class="text" type="text" name="chat_input"
+id="chat_input" style="display: none">
+<div id="chat_login_text">
+<a id="chat_login_link" href="javascript:">Login</a> to chat
+</div>
+</div>
+</div>
+<div id="prompt" style="display: none;">
+<div>
+<div id="prompt_title"></div>
+<div class="login_placeholder"></div>
+<div id="prompt_footer"></div>
+</div>
+</div>
+</body>
+</html>
