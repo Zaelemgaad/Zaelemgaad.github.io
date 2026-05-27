@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Astral Tempest | Sunforge Idle</title>
+  <title>Astral Tempest | Solar Genesis Idle</title>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap");
 
     :root {
       color-scheme: dark;
-      --bg: #120f0b;
-      --bg-alt: #241a12;
-      --panel: rgba(45, 31, 18, 0.9);
-      --panel-2: rgba(62, 43, 27, 0.96);
-      --border: rgba(255, 194, 96, 0.24);
-      --border-strong: rgba(255, 194, 96, 0.44);
-      --text: #fff2df;
-      --muted: #dcc4a3;
-      --accent: #ffc260;
-      --accent-2: #ff8f3f;
-      --accent-3: #fff0a4;
+      --bg: #050812;
+      --bg-alt: #0b1530;
+      --panel: rgba(13, 22, 42, 0.9);
+      --panel-2: rgba(18, 30, 54, 0.96);
+      --border: rgba(124, 205, 255, 0.24);
+      --border-strong: rgba(255, 215, 124, 0.48);
+      --text: #edf7ff;
+      --muted: #a9bed4;
+      --accent: #7ccdff;
+      --accent-2: #9f7cff;
+      --accent-3: #ffd77c;
       --shadow: rgba(0, 0, 0, 0.4);
-      --good: #a7ffb5;
+      --good: #8fffc2;
     }
 
     * {
@@ -32,8 +32,9 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top right, rgba(255, 143, 63, 0.16), transparent 28%),
-        radial-gradient(circle at top left, rgba(255, 240, 164, 0.12), transparent 24%),
+        radial-gradient(circle at 78% 14%, rgba(124, 205, 255, 0.14), transparent 22%),
+        radial-gradient(circle at 18% 9%, rgba(159, 124, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 50% 120%, rgba(255, 215, 124, 0.1), transparent 30%),
         linear-gradient(180deg, var(--bg-alt), var(--bg));
       color: var(--text);
       font-family: "Inter", sans-serif;
@@ -117,8 +118,8 @@
 
     .panel-head {
       padding: 18px;
-      border-bottom: 1px solid rgba(255, 194, 96, 0.12);
-      background: rgba(14, 10, 6, 0.44);
+      border-bottom: 1px solid rgba(124, 205, 255, 0.12);
+      background: rgba(4, 8, 18, 0.48);
     }
 
     .split-head {
@@ -129,7 +130,7 @@
       flex-wrap: wrap;
     }
 
-    .forge-shell {
+    .system-shell {
       display: grid;
       gap: 18px;
       padding: 20px;
@@ -144,8 +145,8 @@
     .stat {
       padding: 14px;
       border-radius: 18px;
-      border: 1px solid rgba(255, 194, 96, 0.16);
-      background: rgba(12, 9, 6, 0.48);
+      border: 1px solid rgba(124, 205, 255, 0.16);
+      background: rgba(4, 8, 18, 0.5);
     }
 
     .stat-label {
@@ -158,33 +159,170 @@
     .stat strong {
       font-size: 1rem;
       font-weight: 800;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
     }
 
     .core-shell {
       display: grid;
       place-items: center;
       gap: 18px;
-      min-height: 320px;
+      min-height: 560px;
       padding: 24px;
       border-radius: 24px;
       background:
-        radial-gradient(circle, rgba(255, 194, 96, 0.26), transparent 28%),
-        linear-gradient(180deg, rgba(19, 14, 10, 0.92), rgba(9, 7, 5, 0.96));
-      border: 1px solid rgba(255, 194, 96, 0.12);
+        radial-gradient(circle at 50% 42%, rgba(124, 205, 255, 0.12), transparent 36%),
+        radial-gradient(circle at 22% 18%, rgba(255, 215, 124, 0.12), transparent 22%),
+        linear-gradient(180deg, rgba(4, 9, 22, 0.96), rgba(2, 5, 13, 0.98));
+      border: 1px solid rgba(124, 205, 255, 0.14);
+    }
+
+    .system-stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: min(560px, 100%);
+      aspect-ratio: 1;
+      overflow: hidden;
+      border: 1px solid rgba(124, 205, 255, 0.16);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, rgba(255, 215, 124, 0.1), transparent 18%),
+        radial-gradient(circle at 28% 24%, rgba(124, 205, 255, 0.11), transparent 14%),
+        radial-gradient(circle at 72% 70%, rgba(159, 124, 255, 0.12), transparent 16%),
+        #030712;
+      box-shadow:
+        inset 0 0 120px rgba(124, 205, 255, 0.08),
+        0 28px 68px rgba(0, 0, 0, 0.38);
+    }
+
+    .system-stage::before,
+    .system-stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(237, 247, 255, 0.8) 0 1px, transparent 1.4px),
+        radial-gradient(circle, rgba(255, 215, 124, 0.7) 0 1px, transparent 1.3px);
+      background-size: 74px 74px, 118px 118px;
+      background-position: 12px 18px, 48px 64px;
+      opacity: 0.28;
+    }
+
+    .system-stage::after {
+      filter: blur(0.7px);
+      opacity: 0.18;
+      transform: rotate(18deg) scale(1.1);
+    }
+
+    .orbit-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .orbit-track {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--orbit-size);
+      height: var(--orbit-size);
+      margin-left: calc(var(--orbit-size) / -2);
+      margin-top: calc(var(--orbit-size) / -2);
+      border: 1px solid rgba(124, 205, 255, var(--orbit-alpha, 0.22));
+      border-radius: 50%;
+      animation: orbit-spin var(--orbit-speed, 14s) linear infinite;
+      transform: rotate(var(--orbit-angle, 0deg));
+    }
+
+    .orbit-track.reverse {
+      animation-direction: reverse;
+    }
+
+    .orbit-body {
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      width: var(--body-size, 16px);
+      height: var(--body-size, 16px);
+      border-radius: 50%;
+      background: var(--body-color, #7ccdff);
+      box-shadow:
+        0 0 18px var(--body-glow, rgba(124, 205, 255, 0.4)),
+        inset -5px -7px 10px rgba(0, 0, 0, 0.28),
+        inset 3px 3px 8px rgba(255, 255, 255, 0.22);
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-body.satellite {
+      border-radius: 7px;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .orbit-body.archive {
+      border-radius: 40% 60% 48% 52%;
+      background: linear-gradient(135deg, #c8b5ff, #7ccdff);
+    }
+
+    .orbit-body.panel {
+      border-radius: 3px;
+      background: linear-gradient(135deg, #ffd77c, #fff4ba);
+    }
+
+    .orbit-body.gas {
+      border-radius: 50%;
+      background:
+        linear-gradient(12deg, transparent 35%, rgba(255, 255, 255, 0.28) 36% 43%, transparent 44%),
+        var(--body-color, #9f7cff);
+    }
+
+    .orbit-body.core-shard {
+      border-radius: 42% 58% 45% 55%;
+      background: linear-gradient(135deg, #b391ff, #7ccdff 58%, #fff4ba);
+    }
+
+    .asteroid-belt {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--belt-size);
+      height: var(--belt-size);
+      margin-left: calc(var(--belt-size) / -2);
+      margin-top: calc(var(--belt-size) / -2);
+      border-radius: 50%;
+      border: 2px dotted rgba(255, 215, 124, 0.28);
+      animation: orbit-spin var(--belt-speed, 28s) linear infinite reverse;
+    }
+
+    .system-stage.pulsing .core-button {
+      box-shadow:
+        0 0 0 16px rgba(255, 215, 124, 0.1),
+        0 0 98px rgba(255, 159, 67, 0.58),
+        0 0 180px rgba(124, 205, 255, 0.24),
+        inset 0 -24px 50px rgba(0, 0, 0, 0.24);
+    }
+
+    @keyframes orbit-spin {
+      to {
+        transform: rotate(calc(var(--orbit-angle, 0deg) + 360deg));
+      }
     }
 
     .core-button {
       position: relative;
-      width: min(300px, 62vw);
+      z-index: 4;
+      width: min(190px, 36vw);
       aspect-ratio: 1;
       border: 0;
       border-radius: 50%;
       background:
-        radial-gradient(circle at 35% 30%, #fff5c5, transparent 18%),
-        radial-gradient(circle at center, #ffdd82 0 18%, #ffb858 26%, #ff8f3f 50%, #442411 78%, #1f140d 100%);
+        radial-gradient(circle at 35% 30%, #fff8d2, transparent 18%),
+        radial-gradient(circle at center, #fff1a6 0 18%, #ffd77c 28%, #ff9f43 50%, #a34228 76%, #421424 100%);
       box-shadow:
-        0 0 0 10px rgba(255, 194, 96, 0.08),
-        0 0 45px rgba(255, 143, 63, 0.35),
+        0 0 0 10px rgba(255, 215, 124, 0.08),
+        0 0 70px rgba(255, 159, 67, 0.48),
+        0 0 130px rgba(255, 215, 124, 0.16),
         inset 0 -24px 50px rgba(0, 0, 0, 0.26);
       color: #2b170d;
       cursor: pointer;
@@ -195,8 +333,9 @@
     .core-button:focus-visible {
       transform: scale(1.02);
       box-shadow:
-        0 0 0 10px rgba(255, 194, 96, 0.12),
-        0 0 55px rgba(255, 143, 63, 0.45),
+        0 0 0 10px rgba(255, 215, 124, 0.12),
+        0 0 92px rgba(255, 159, 67, 0.55),
+        0 0 160px rgba(124, 205, 255, 0.2),
         inset 0 -24px 50px rgba(0, 0, 0, 0.24);
       outline: none;
     }
@@ -249,7 +388,7 @@
     .heat-meter {
       height: 14px;
       border-radius: 999px;
-      border: 1px solid rgba(255, 194, 96, 0.16);
+      border: 1px solid rgba(124, 205, 255, 0.16);
       background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
     }
@@ -257,8 +396,8 @@
     .heat-fill {
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, #ff8f3f, #fff0a4);
-      box-shadow: 0 0 18px rgba(255, 194, 96, 0.32);
+      background: linear-gradient(90deg, #7ccdff, #9f7cff, #ffd77c);
+      box-shadow: 0 0 18px rgba(124, 205, 255, 0.32);
       transition: width 120ms ease;
     }
 
@@ -272,8 +411,8 @@
     .sidebar-card {
       padding: 18px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 194, 96, 0.14);
-      background: rgba(12, 9, 6, 0.45);
+      border: 1px solid rgba(124, 205, 255, 0.14);
+      background: rgba(4, 8, 18, 0.46);
     }
 
     .store-item h2,
@@ -374,7 +513,7 @@
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent-2), var(--accent-3));
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
     }
 
     .sidebar {
@@ -392,8 +531,8 @@
     .order-card {
       padding: 14px;
       border-radius: 16px;
-      background: rgba(22, 15, 9, 0.42);
-      border: 1px solid rgba(255, 194, 96, 0.12);
+      background: rgba(4, 8, 18, 0.42);
+      border: 1px solid rgba(124, 205, 255, 0.12);
     }
 
     .order-card h3 {
@@ -408,12 +547,37 @@
     .milestone-row {
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(22, 15, 9, 0.4);
+      background: rgba(4, 8, 18, 0.42);
     }
 
     .milestone-row.unlocked {
       color: var(--good);
       border: 1px solid rgba(167, 255, 181, 0.18);
+    }
+
+    .core-upgrade-row {
+      align-items: center;
+      baseline-source: first;
+    }
+
+    .core-upgrade-copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .core-upgrade-copy strong {
+      color: var(--text);
+    }
+
+    .core-upgrade-copy span {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .core-upgrade-row .button {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      font-size: 0.82rem;
     }
 
     .log {
@@ -425,7 +589,7 @@
     .log-entry {
       padding: 10px 12px;
       border-radius: 14px;
-      background: rgba(22, 15, 9, 0.4);
+      background: rgba(4, 8, 18, 0.42);
       color: var(--muted);
       font-size: 0.93rem;
       line-height: 1.5;
@@ -456,9 +620,9 @@
     <a class="back-link" href="/games/">← Back to Games</a>
 
     <section class="hero">
-      <span class="eyebrow">Clicker / Idle Foundry</span>
-      <h1>Sunforge Idle</h1>
-      <p class="lead">Stoke a living solar forge, ride the heat curve, complete foundry orders, and overclock into stronger production loops.</p>
+      <span class="eyebrow">Solar System Idle</span>
+      <h1>Solar Genesis Idle</h1>
+      <p class="lead">Build a miniature solar system from raw stardust, seed planets and orbital machinery, then collapse each system into cores for the next cosmic loop.</p>
     </section>
 
     <section class="layout">
@@ -467,10 +631,10 @@
           <span class="eyebrow">Ignition Loop</span>
         </div>
 
-        <div class="forge-shell">
+        <div class="system-shell">
           <section class="stats">
             <div class="stat">
-              <span class="stat-label">Sparks</span>
+              <span class="stat-label">Stardust</span>
               <strong id="sparksStat">0</strong>
             </div>
             <div class="stat">
@@ -478,66 +642,69 @@
               <strong id="rateStat">0</strong>
             </div>
             <div class="stat">
-              <span class="stat-label">Click Power</span>
+              <span class="stat-label">Pulse Power</span>
               <strong id="clickStat">1</strong>
             </div>
             <div class="stat">
-              <span class="stat-label">Overclocks</span>
+              <span class="stat-label">Free Cores</span>
               <strong id="coreStat">0</strong>
             </div>
             <div class="stat">
-              <span class="stat-label">Heat</span>
+              <span class="stat-label">Charge</span>
               <strong id="heatStat">0%</strong>
             </div>
             <div class="stat">
-              <span class="stat-label">Orders</span>
+              <span class="stat-label">Missions</span>
               <strong id="orderStat">0</strong>
             </div>
           </section>
 
           <section class="core-shell">
-            <button class="core-button" id="coreButton" type="button">
-              <div class="core-copy">
-                <div>
-                  <span>Stoke the forge</span>
-                  <strong id="tapGainLabel">+1 spark</strong>
+            <div class="system-stage" id="systemStage">
+              <div class="orbit-layer" id="orbitLayer"></div>
+              <button class="core-button" id="coreButton" type="button">
+                <div class="core-copy">
+                  <div>
+                    <span>Pulse star</span>
+                    <strong id="tapGainLabel">+1 dust</strong>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </div>
             <div class="heat-panel">
               <div class="heat-row">
-                <span>Heat multiplier</span>
+                <span>Solar charge multiplier</span>
                 <strong id="heatBonusStat">x1.00</strong>
               </div>
-              <div class="heat-meter" aria-label="Forge heat">
+              <div class="heat-meter" aria-label="Solar charge">
                 <div class="heat-fill" id="heatFill"></div>
               </div>
               <div class="heat-row">
-                <span id="heatHint">Clicking builds heat. Heat fades if the forge is ignored.</span>
+                <span id="heatHint">Pulsing the star builds charge. Charge fades if the system is ignored.</span>
                 <strong id="heatCapStat">Cap 100</strong>
               </div>
             </div>
           </section>
 
           <section class="sidebar-card">
-            <h2>Overclock</h2>
-            <p>Collapse the run into ember cores. Bigger runs award more cores at once, and every core permanently strengthens future loops.</p>
+            <h2>Stellar Rebirth</h2>
+            <p>Collapse this solar system into stellar cores. The requirement rises after every rebirth, and extra stardust over the minimum awards more cores.</p>
             <div class="progress">
               <div class="progress-bar" id="progressBar"></div>
             </div>
             <div class="store-meta">
-              <span id="overclockHint">Reach 500 total sparks to unlock your first overclock.</span>
+              <span id="overclockHint">Reach 500 stardust to unlock your first rebirth.</span>
               <span id="bonusStat">x1.00 bonus</span>
             </div>
             <div class="buy-row">
-              <span class="store-tag" id="overclockReward">Reset for +0 cores</span>
-              <button class="button" id="overclockButton" type="button">Overclock</button>
+              <span class="store-tag" id="overclockReward">Collapse for +0 cores</span>
+              <button class="button" id="overclockButton" type="button">Rebirth</button>
             </div>
           </section>
 
           <section class="sidebar-card">
-            <h2>Forge Orders</h2>
-            <p>Orders give the run a short-term target and pay out sparks or permanent renown when claimed.</p>
+            <h2>System Missions</h2>
+            <p>Missions give the current system a short-term target and pay out stardust or permanent renown when claimed.</p>
             <div class="order-card" id="orderCard"></div>
           </section>
         </div>
@@ -546,7 +713,7 @@
       <aside class="sidebar">
         <section class="panel">
           <div class="panel-head split-head">
-            <span class="eyebrow">Factory Upgrades</span>
+            <span class="eyebrow">Orbital Upgrades</span>
             <div class="qty-controls" role="group" aria-label="Purchase quantity">
               <button class="button qty-button active" type="button" data-buy-qty="1">x1</button>
               <button class="button qty-button" type="button" data-buy-qty="10">x10</button>
@@ -559,12 +726,17 @@
         <section class="panel">
           <div class="store">
             <div class="sidebar-card">
+              <h2>Core Exchange</h2>
+              <p>Spend free cores on permanent cosmic tools. Holding cores keeps your raw core multiplier higher, so spending is a tradeoff.</p>
+              <div class="milestone-list" id="coreStore"></div>
+            </div>
+            <div class="sidebar-card">
               <h2>Milestones</h2>
-              <p>Permanent run bonuses unlocked by reaching specific foundry states.</p>
+              <p>Permanent run bonuses unlocked by reaching specific solar-system states.</p>
               <div class="milestone-list" id="milestoneList"></div>
             </div>
             <div class="sidebar-card">
-              <h2>Foundry Log</h2>
+              <h2>System Log</h2>
               <p>Recent unlocks, claims, and offline progress.</p>
               <div class="log" id="log"></div>
             </div>
@@ -589,10 +761,13 @@
     const heatBonusStat = document.getElementById("heatBonusStat");
     const heatCapStat = document.getElementById("heatCapStat");
     const heatFill = document.getElementById("heatFill");
+    const orbitLayer = document.getElementById("orbitLayer");
+    const systemStage = document.getElementById("systemStage");
     const overclockHint = document.getElementById("overclockHint");
     const overclockReward = document.getElementById("overclockReward");
     const progressBar = document.getElementById("progressBar");
     const storeNode = document.getElementById("store");
+    const coreStoreNode = document.getElementById("coreStore");
     const orderCard = document.getElementById("orderCard");
     const milestoneList = document.getElementById("milestoneList");
     const logNode = document.getElementById("log");
@@ -603,9 +778,9 @@
     const upgradeDefs = [
       {
         id: "tapRig",
-        name: "Tap Rig",
-        text: "Adds heavier striking arms to every manual pulse.",
-        tag: "Manual gain",
+        name: "Planet Seeder",
+        text: "Condense stardust into inner planets that amplify manual star pulses.",
+        tag: "Pulse gain",
         baseCost: 15,
         growth: 1.52,
         unlock() {
@@ -615,9 +790,9 @@
       },
       {
         id: "drone",
-        name: "Relay Drone",
-        text: "Autonomous collectors pull sparks from the forge throat.",
-        tag: "Idle income",
+        name: "Moonlet Drone",
+        text: "Launch small orbiters that gather stardust while the system runs.",
+        tag: "Idle orbit",
         baseCost: 30,
         growth: 1.58,
         unlock() {
@@ -627,58 +802,93 @@
       },
       {
         id: "bellows",
-        name: "Bellows Array",
-        text: "Keeps heat alive longer and adds a little idle pressure.",
-        tag: "Heat engine",
+        name: "Gravity Well",
+        text: "Bend orbital paths so solar charge lasts longer and idle flow thickens.",
+        tag: "Charge engine",
         baseCost: 120,
         growth: 1.7,
         unlock() {
           return state.lifetime >= 180 || state.upgrades.tapRig >= 3;
         },
-        lockedText: "Unlock after 180 lifetime sparks or 3 Tap Rigs."
+        lockedText: "Unlock after 180 lifetime stardust or 3 Planet Seeders."
       },
       {
         id: "refinery",
-        name: "Heat Refinery",
-        text: "Multiplies all production through cleaner conversion.",
+        name: "Nebula Condenser",
+        text: "Compress drifting nebulae into denser stardust output.",
         tag: "Global multiplier",
         baseCost: 420,
         growth: 1.82,
         unlock() {
           return state.lifetime >= 750 || state.upgrades.drone >= 4;
         },
-        lockedText: "Unlock after 750 lifetime sparks or 4 Relay Drones."
+        lockedText: "Unlock after 750 lifetime stardust or 4 Moonlet Drones."
       },
       {
         id: "archive",
-        name: "Archive Lattice",
-        text: "Stores better routing patterns for click and idle output.",
+        name: "Orbital Archive",
+        text: "Map stable orbital routes that raise both pulse and idle output.",
         tag: "Routing bonus",
         baseCost: 1600,
         growth: 1.92,
         unlock() {
           return state.ordersCompleted >= 2 || state.lifetime >= 2500;
         },
-        lockedText: "Unlock after 2 orders or 2.5k lifetime sparks."
+        lockedText: "Unlock after 2 missions or 2.5k lifetime stardust."
       },
       {
         id: "solarCrucible",
-        name: "Solar Crucible",
-        text: "Turns ember cores into a heavy late-run production engine.",
+        name: "Dyson Lattice",
+        text: "Build panels around the star that scale hard with held stellar cores.",
         tag: "Core scaling",
         baseCost: 12000,
         growth: 2.12,
         unlock() {
-          return state.cores >= 1 || state.lifetime >= 15000;
+          return state.totalCores >= 1 || state.lifetime >= 15000;
         },
-        lockedText: "Unlock after your first core or 15k lifetime sparks."
+        lockedText: "Unlock after your first core or 15k lifetime stardust."
+      }
+    ];
+
+    const coreUpgradeDefs = [
+      {
+        id: "gravityLens",
+        name: "Gravity Lens",
+        text: "Held cores are stronger. Spending cores still lowers the held-core boost.",
+        baseCost: 1,
+        growth: 2.15,
+        maxRank: 20
+      },
+      {
+        id: "stellarNursery",
+        name: "Stellar Nursery",
+        text: "Begin each reborn system with a small stardust reserve.",
+        baseCost: 2,
+        growth: 2,
+        maxRank: 18
+      },
+      {
+        id: "corePrism",
+        name: "Core Prism",
+        text: "Gain more cores when collapsing a highly developed system.",
+        baseCost: 4,
+        growth: 2.35,
+        maxRank: 12
+      },
+      {
+        id: "darkMatterDrive",
+        name: "Dark Matter Drive",
+        text: "Permanent global production boost independent of held cores.",
+        baseCost: 3,
+        growth: 2.25,
+        maxRank: 16
       }
     ];
 
     const milestoneDefs = [
       {
         id: "firstFlame",
-        name: "First Flame",
+        name: "First Orbit",
         text: "+15% all production",
         unlocked() {
           return state.lifetime >= 100;
@@ -686,7 +896,7 @@
       },
       {
         id: "hotHands",
-        name: "Hot Hands",
+        name: "Inner Worlds",
         text: "+30% click output",
         unlocked() {
           return state.upgrades.tapRig >= 8;
@@ -694,7 +904,7 @@
       },
       {
         id: "droneSwarm",
-        name: "Drone Swarm",
+        name: "Moon Swarm",
         text: "+35% idle output",
         unlocked() {
           return state.upgrades.drone >= 5;
@@ -702,15 +912,15 @@
       },
       {
         id: "stableBellows",
-        name: "Stable Bellows",
-        text: "Heat decays 25% slower",
+        name: "Stable Gravity",
+        text: "Solar charge decays 25% slower",
         unlocked() {
           return state.upgrades.bellows >= 4;
         }
       },
       {
         id: "refineryChain",
-        name: "Refinery Chain",
+        name: "Nebula Chain",
         text: "+20% global output",
         unlocked() {
           return state.upgrades.refinery >= 5;
@@ -719,15 +929,15 @@
       {
         id: "coreMemory",
         name: "Core Memory",
-        text: "Each core adds extra heat capacity",
+        text: "Each core adds extra solar-charge capacity",
         unlocked() {
-          return state.cores >= 1;
+          return state.totalCores >= 1;
         }
       },
       {
         id: "contractHeat",
-        name: "Contract Heat",
-        text: "+10% output from foundry renown",
+        name: "Mission Renown",
+        text: "+10% output from system renown",
         unlocked() {
           return state.ordersCompleted >= 3;
         }
@@ -739,10 +949,18 @@
       runTotal: 0,
       lifetime: 0,
       cores: 0,
+      totalCores: 0,
+      rebirths: 0,
       renown: 0,
       heat: 0,
       ordersCompleted: 0,
       buyQty: "1",
+      coreUpgrades: {
+        gravityLens: 0,
+        stellarNursery: 0,
+        corePrism: 0,
+        darkMatterDrive: 0
+      },
       upgrades: {
         tapRig: 0,
         drone: 0,
@@ -751,13 +969,14 @@
         archive: 0,
         solarCrucible: 0
       },
-      log: ["The forge is cold. Tap the core to begin."],
+      log: ["A bare star waits for its first orbit. Pulse it to begin."],
       lastTick: performance.now(),
       lastSaved: Date.now()
     };
 
     const storeUi = {};
     let lastRender = 0;
+    let visualSignature = "";
 
     function pushLog(text) {
       state.log.unshift(text);
@@ -770,7 +989,9 @@
     }
 
     function globalBonus() {
-      let bonus = 1 + state.cores * 0.22 + state.renown * 0.04;
+      const coreStrength = 0.18 + state.coreUpgrades.gravityLens * 0.025;
+      let bonus = 1 + state.cores * coreStrength + state.renown * 0.04;
+      bonus *= 1 + state.coreUpgrades.darkMatterDrive * 0.08;
       if (milestoneUnlocked("firstFlame")) {
         bonus *= 1.15;
       }
@@ -788,13 +1009,13 @@
     }
 
     function heatCap() {
-      return 100 + state.ordersCompleted * 4 + state.cores * (milestoneUnlocked("coreMemory") ? 10 : 5);
+      return 100 + state.ordersCompleted * 4 + state.cores * (milestoneUnlocked("coreMemory") ? 10 : 5) + state.coreUpgrades.gravityLens * 5;
     }
 
     function heatBonus() {
       const cap = heatCap();
       const heatRatio = cap > 0 ? Math.min(1, state.heat / cap) : 0;
-      return 1 + heatRatio * (0.65 + state.upgrades.bellows * 0.035 + state.cores * 0.01);
+      return 1 + heatRatio * (0.65 + state.upgrades.bellows * 0.035 + state.cores * 0.01 + state.coreUpgrades.stellarNursery * 0.01);
     }
 
     function heatDecayRate() {
@@ -816,7 +1037,7 @@
     function perSecond() {
       const drone = state.upgrades.drone * 0.8;
       const bellows = state.upgrades.bellows * 0.24;
-      const solar = state.upgrades.solarCrucible * (8 + state.cores * 2.4);
+      const solar = state.upgrades.solarCrucible * (8 + state.cores * 2.4 + state.coreUpgrades.darkMatterDrive * 0.8);
       let idle = drone + bellows + solar;
       idle *= (1 + state.upgrades.refinery * 0.17) * archiveBonus() * globalBonus() * heatBonus();
       if (milestoneUnlocked("droneSwarm")) {
@@ -885,6 +1106,32 @@
       return def.unlock();
     }
 
+    function coreUpgradeCost(def) {
+      const owned = state.coreUpgrades[def.id] || 0;
+      return Math.ceil(def.baseCost * Math.pow(def.growth, owned));
+    }
+
+    function buyCoreUpgrade(id) {
+      const def = coreUpgradeDefs.find((entry) => entry.id === id);
+      if (!def) {
+        return;
+      }
+      const owned = state.coreUpgrades[id] || 0;
+      if (owned >= def.maxRank) {
+        return;
+      }
+      const cost = coreUpgradeCost(def);
+      if (state.cores < cost) {
+        return;
+      }
+
+      state.cores -= cost;
+      state.coreUpgrades[id] = owned + 1;
+      pushLog(`${def.name} upgraded to rank ${state.coreUpgrades[id]}. Held core boost lowered until you earn more cores.`);
+      render(true);
+      save();
+    }
+
     function purchasePlan(id) {
       const def = upgradeDefs.find((entry) => entry.id === id);
       if (!def || !isUpgradeUnlocked(def)) {
@@ -912,15 +1159,22 @@
       save();
     }
 
+    function rebirthRequirement() {
+      return Math.floor(500 * Math.pow(1.85, state.rebirths));
+    }
+
     function overclockGain() {
-      if (state.runTotal < 500) {
+      const requirement = rebirthRequirement();
+      if (state.sparks < requirement) {
         return 0;
       }
-      return Math.max(1, Math.floor(Math.sqrt(state.runTotal / 500)));
+      const ratio = state.sparks / requirement;
+      const prismBonus = 1 + state.coreUpgrades.corePrism * 0.15;
+      return Math.max(1, Math.floor(Math.pow(ratio, 0.62) * prismBonus));
     }
 
     function canOverclock() {
-      return overclockGain() > 0 && state.sparks >= 250;
+      return overclockGain() > 0;
     }
 
     function overclock() {
@@ -930,6 +1184,8 @@
       }
 
       state.cores += gained;
+      state.totalCores += gained;
+      state.rebirths += 1;
       state.sparks = 0;
       state.runTotal = 0;
       state.heat = 0;
@@ -941,7 +1197,12 @@
         archive: 0,
         solarCrucible: 0
       };
-      pushLog(`The forge collapses inward and reforms with +${gained} ember core${gained === 1 ? "" : "s"}.`);
+      const nurseryDust = state.coreUpgrades.stellarNursery * 75 * Math.max(1, state.rebirths);
+      addSparks(nurseryDust, false);
+      pushLog(`The system collapses into +${gained} stellar core${gained === 1 ? "" : "s"}.`);
+      if (nurseryDust > 0) {
+        pushLog(`Stellar Nursery seeds the new system with ${formatNumber(nurseryDust)} stardust.`);
+      }
       render(true);
       save();
     }
@@ -950,10 +1211,10 @@
       const index = state.ordersCompleted;
       const fixedOrders = [
         {
-          title: "Fit The First Tools",
-          text: "Own 3 Tap Rigs.",
+          title: "Seed The First Worlds",
+          text: "Own 3 Planet Seeders.",
           progress() {
-            return `${Math.min(state.upgrades.tapRig, 3)} / 3 Tap Rigs`;
+            return `${Math.min(state.upgrades.tapRig, 3)} / 3 Planet Seeders`;
           },
           complete() {
             return state.upgrades.tapRig >= 3;
@@ -961,13 +1222,13 @@
           reward() {
             addSparks(75, false);
           },
-          rewardText: "+75 sparks"
+          rewardText: "+75 stardust"
         },
         {
-          title: "Light Automation",
-          text: "Own 4 Relay Drones.",
+          title: "Launch The Moonlets",
+          text: "Own 4 Moonlet Drones.",
           progress() {
-            return `${Math.min(state.upgrades.drone, 4)} / 4 Relay Drones`;
+            return `${Math.min(state.upgrades.drone, 4)} / 4 Moonlet Drones`;
           },
           complete() {
             return state.upgrades.drone >= 4;
@@ -976,13 +1237,13 @@
             addSparks(160, false);
             state.renown += 1;
           },
-          rewardText: "+160 sparks, +1 renown"
+          rewardText: "+160 stardust, +1 renown"
         },
         {
           title: "Hold A Bright Charge",
-          text: "Bank 1,000 current sparks.",
+          text: "Bank 1,000 current stardust.",
           progress() {
-            return `${formatNumber(Math.min(state.sparks, 1000))} / 1k sparks`;
+            return `${formatNumber(Math.min(state.sparks, 1000))} / 1k stardust`;
           },
           complete() {
             return state.sparks >= 1000;
@@ -990,13 +1251,13 @@
           reward() {
             addSparks(300, false);
           },
-          rewardText: "+300 sparks"
+          rewardText: "+300 stardust"
         },
         {
-          title: "Bellows Calibration",
-          text: "Own 3 Bellows Arrays and reach 60 heat.",
+          title: "Gravity Calibration",
+          text: "Own 3 Gravity Wells and reach 60 solar charge.",
           progress() {
-            return `${Math.min(state.upgrades.bellows, 3)} / 3 bellows, ${formatNumber(Math.min(state.heat, 60))} / 60 heat`;
+            return `${Math.min(state.upgrades.bellows, 3)} / 3 wells, ${formatNumber(Math.min(state.heat, 60))} / 60 charge`;
           },
           complete() {
             return state.upgrades.bellows >= 3 && state.heat >= 60;
@@ -1007,8 +1268,8 @@
           rewardText: "+2 renown"
         },
         {
-          title: "Refinery Proof",
-          text: "Reach 25 sparks per second.",
+          title: "Nebula Proof",
+          text: "Reach 25 stardust per second.",
           progress() {
             return `${formatNumber(Math.min(perSecond(), 25))} / 25 per second`;
           },
@@ -1019,16 +1280,16 @@
             addSparks(1000, false);
             state.renown += 1;
           },
-          rewardText: "+1k sparks, +1 renown"
+          rewardText: "+1k stardust, +1 renown"
         },
         {
           title: "Core Study",
-          text: "Perform your first overclock.",
+          text: "Perform your first stellar rebirth.",
           progress() {
-            return `${Math.min(state.cores, 1)} / 1 ember core`;
+            return `${Math.min(state.totalCores, 1)} / 1 stellar core`;
           },
           complete() {
-            return state.cores >= 1;
+            return state.totalCores >= 1;
           },
           reward() {
             state.renown += 3;
@@ -1046,9 +1307,9 @@
       const targetRate = 40 * Math.pow(1.28, cycle);
       return {
         title: `Solar Contract ${cycle}`,
-        text: `Bank ${formatNumber(targetSparks)} sparks and reach ${formatNumber(targetRate)} sparks per second.`,
+        text: `Bank ${formatNumber(targetSparks)} stardust and reach ${formatNumber(targetRate)} stardust per second.`,
         progress() {
-          return `${formatNumber(Math.min(state.sparks, targetSparks))} / ${formatNumber(targetSparks)} sparks, ${formatNumber(Math.min(perSecond(), targetRate))} / ${formatNumber(targetRate)} per second`;
+          return `${formatNumber(Math.min(state.sparks, targetSparks))} / ${formatNumber(targetSparks)} stardust, ${formatNumber(Math.min(perSecond(), targetRate))} / ${formatNumber(targetRate)} per second`;
         },
         complete() {
           return state.sparks >= targetSparks && perSecond() >= targetRate;
@@ -1057,7 +1318,7 @@
           addSparks(targetSparks * 0.28, false);
           state.renown += 1;
         },
-        rewardText: `+${formatNumber(targetSparks * 0.28)} sparks, +1 renown`
+        rewardText: `+${formatNumber(targetSparks * 0.28)} stardust, +1 renown`
       };
     }
 
@@ -1068,7 +1329,7 @@
       }
       order.reward();
       state.ordersCompleted += 1;
-      pushLog(`Order complete: ${order.title}.`);
+      pushLog(`Mission complete: ${order.title}.`);
       render(true);
       save();
     }
@@ -1124,21 +1385,21 @@
 
     function upgradeEffectText(id) {
       if (id === "tapRig") {
-        return `Click base: +${formatNumber(1.18)} per rank before multipliers.`;
+        return `Pulse base: +${formatNumber(1.18)} stardust per rank before multipliers.`;
       }
       if (id === "drone") {
-        return `Idle base: +${formatNumber(0.8)} sparks/sec per rank.`;
+        return `Idle orbit: +${formatNumber(0.8)} stardust/sec per rank.`;
       }
       if (id === "bellows") {
-        return "Adds idle pressure, heat strength, and slower heat decay.";
+        return "Adds idle pull, stronger solar charge, and slower charge decay.";
       }
       if (id === "refinery") {
         return `All production: +${formatNumber(17)}% per rank.`;
       }
       if (id === "archive") {
-        return `Click and idle routing: +${formatNumber(11)}% per rank.`;
+        return `Pulse and idle routing: +${formatNumber(11)}% per rank.`;
       }
-      return "Scales hard with ember cores for late-run idle output.";
+      return "Builds outer panels that scale with held stellar cores.";
     }
 
     function renderStore() {
@@ -1159,7 +1420,7 @@
         ui.ownedLabel.textContent = "Owned: " + owned;
         ui.costLabel.textContent = unlocked
           ? state.buyQty === "max"
-            ? plan.count > 0 ? `Max: ${plan.count} for ${formatNumber(plan.cost)}` : "Max: not enough sparks"
+            ? plan.count > 0 ? `Max: ${plan.count} for ${formatNumber(plan.cost)}` : "Max: not enough stardust"
             : `Cost x${plan.count}: ${formatNumber(plan.cost)}`
           : "Locked";
         ui.button.disabled = !unlocked || plan.count <= 0 || state.sparks < plan.cost;
@@ -1204,6 +1465,199 @@
       });
     }
 
+    function renderCoreStore() {
+      coreStoreNode.innerHTML = "";
+      coreUpgradeDefs.forEach((def) => {
+        const owned = state.coreUpgrades[def.id] || 0;
+        const maxed = owned >= def.maxRank;
+        const cost = maxed ? 0 : coreUpgradeCost(def);
+        const row = document.createElement("div");
+        row.className = "milestone-row core-upgrade-row" + (owned > 0 ? " unlocked" : "");
+
+        const copy = document.createElement("div");
+        copy.className = "core-upgrade-copy";
+        const title = document.createElement("strong");
+        title.textContent = `${def.name} ${owned}/${def.maxRank}`;
+        const text = document.createElement("span");
+        text.textContent = def.text;
+        copy.appendChild(title);
+        copy.appendChild(text);
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "button";
+        button.textContent = maxed ? "Maxed" : `Spend ${formatNumber(cost)}`;
+        button.disabled = maxed || state.cores < cost;
+        button.addEventListener("click", () => buyCoreUpgrade(def.id));
+
+        row.appendChild(copy);
+        row.appendChild(button);
+        coreStoreNode.appendChild(row);
+      });
+    }
+
+    function addOrbitBody(options) {
+      const track = document.createElement("div");
+      track.className = "orbit-track" + (options.reverse ? " reverse" : "");
+      track.style.setProperty("--orbit-size", `${Math.round(options.size)}px`);
+      track.style.setProperty("--orbit-speed", `${options.speed.toFixed(1)}s`);
+      track.style.setProperty("--orbit-angle", `${options.angle.toFixed(1)}deg`);
+      track.style.setProperty("--orbit-alpha", String(options.alpha ?? 0.2));
+
+      const body = document.createElement("div");
+      body.className = `orbit-body${options.className ? " " + options.className : ""}`;
+      body.style.setProperty("--body-size", `${Math.round(options.bodySize)}px`);
+      body.style.setProperty("--body-color", options.color);
+      body.style.setProperty("--body-glow", options.glow);
+      track.appendChild(body);
+      orbitLayer.appendChild(track);
+    }
+
+    function addAsteroidBelt(stageSize, ratio, speed, alpha) {
+      const belt = document.createElement("div");
+      belt.className = "asteroid-belt";
+      belt.style.setProperty("--belt-size", `${Math.round(stageSize * ratio)}px`);
+      belt.style.setProperty("--belt-speed", `${speed.toFixed(1)}s`);
+      belt.style.opacity = String(alpha);
+      orbitLayer.appendChild(belt);
+    }
+
+    function renderSystem() {
+      const stageSize = Math.max(320, Math.min(560, systemStage.clientWidth || 520));
+      const upgradeSignature = upgradeDefs.map((def) => state.upgrades[def.id]).join(",");
+      const coreUpgradeSignature = coreUpgradeDefs.map((def) => state.coreUpgrades[def.id] || 0).join(",");
+      const signature = [
+        Math.round(stageSize / 24),
+        upgradeSignature,
+        coreUpgradeSignature,
+        state.cores,
+        state.totalCores
+      ].join("|");
+      if (signature === visualSignature) {
+        return;
+      }
+      visualSignature = signature;
+      orbitLayer.innerHTML = "";
+
+      const planetColors = [
+        ["#7ccdff", "rgba(124, 205, 255, 0.5)"],
+        ["#ffd77c", "rgba(255, 215, 124, 0.42)"],
+        ["#9f7cff", "rgba(159, 124, 255, 0.5)"],
+        ["#8fffc2", "rgba(143, 255, 194, 0.4)"],
+        ["#ff8fb1", "rgba(255, 143, 177, 0.38)"]
+      ];
+
+      const planetCount = Math.min(8, Math.ceil(state.upgrades.tapRig / 2));
+      for (let index = 0; index < planetCount; index += 1) {
+        const [color, glow] = planetColors[index % planetColors.length];
+        addOrbitBody({
+          size: stageSize * (0.28 + index * 0.07),
+          bodySize: 13 + (index % 3) * 4 + Math.min(8, state.upgrades.tapRig * 0.35),
+          angle: (360 / Math.max(1, planetCount)) * index + index * 11,
+          speed: Math.max(12, 34 - index * 2.6 - state.upgrades.bellows * 0.35),
+          color,
+          glow,
+          alpha: 0.22 + index * 0.015
+        });
+      }
+
+      const droneCount = Math.min(16, state.upgrades.drone);
+      for (let index = 0; index < droneCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.32 + (index % 6) * 0.085),
+          bodySize: 7 + (index % 2) * 2,
+          angle: (index * 137.5) % 360,
+          speed: 9 + (index % 5) * 2.2,
+          color: "#c6f2ff",
+          glow: "rgba(124, 205, 255, 0.42)",
+          className: "satellite",
+          reverse: index % 3 === 0,
+          alpha: 0.12
+        });
+      }
+
+      const wellCount = Math.min(5, state.upgrades.bellows);
+      for (let index = 0; index < wellCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.42 + index * 0.095),
+          bodySize: 24 + index * 3,
+          angle: 46 + index * 72,
+          speed: 42 + index * 5,
+          color: index % 2 === 0 ? "#6f52ff" : "#3c8bff",
+          glow: "rgba(159, 124, 255, 0.45)",
+          className: "gas",
+          reverse: true,
+          alpha: 0.14
+        });
+      }
+
+      const beltCount = Math.min(4, Math.ceil(state.upgrades.refinery / 2));
+      for (let index = 0; index < beltCount; index += 1) {
+        addAsteroidBelt(stageSize, 0.5 + index * 0.11, 34 + index * 9, 0.42 + index * 0.08);
+      }
+
+      const archiveCount = Math.min(8, state.upgrades.archive);
+      for (let index = 0; index < archiveCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.36 + (index % 4) * 0.13),
+          bodySize: 12 + Math.min(7, state.upgrades.archive),
+          angle: 22 + index * 45,
+          speed: 22 + index * 1.8,
+          color: "#c8b5ff",
+          glow: "rgba(200, 181, 255, 0.42)",
+          className: "archive",
+          reverse: index % 2 === 1,
+          alpha: 0.13
+        });
+      }
+
+      const panelCount = Math.min(20, state.upgrades.solarCrucible * 4);
+      for (let index = 0; index < panelCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.78 + (index % 3) * 0.055),
+          bodySize: 10 + Math.min(6, state.upgrades.solarCrucible),
+          angle: (360 / Math.max(1, panelCount)) * index,
+          speed: 28 + (index % 4) * 2,
+          color: "#ffd77c",
+          glow: "rgba(255, 215, 124, 0.38)",
+          className: "panel",
+          reverse: index % 2 === 0,
+          alpha: 0.1
+        });
+      }
+
+      const heldCoreCount = Math.min(14, state.cores);
+      for (let index = 0; index < heldCoreCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.22 + (index % 7) * 0.085),
+          bodySize: 9 + (index % 4),
+          angle: 17 + index * 31,
+          speed: 13 + (index % 4) * 1.6,
+          color: "#b391ff",
+          glow: "rgba(179, 145, 255, 0.5)",
+          className: "core-shard",
+          reverse: index % 2 === 1,
+          alpha: 0.18
+        });
+      }
+
+      const permanentRankTotal = Object.values(state.coreUpgrades).reduce((sum, rank) => sum + rank, 0);
+      const relicCount = Math.min(10, Math.floor(permanentRankTotal / 2));
+      for (let index = 0; index < relicCount; index += 1) {
+        addOrbitBody({
+          size: stageSize * (0.58 + (index % 5) * 0.075),
+          bodySize: 11 + (index % 3),
+          angle: 9 + index * 53,
+          speed: 48 + index * 3,
+          color: "#fff4ba",
+          glow: "rgba(255, 244, 186, 0.36)",
+          className: index % 2 === 0 ? "panel" : "archive",
+          reverse: index % 2 === 0,
+          alpha: 0.12
+        });
+      }
+    }
+
     function renderLog() {
       logNode.innerHTML = "";
       state.log.forEach((entry) => {
@@ -1226,30 +1680,33 @@
       const bonus = globalBonus();
       const cap = heatCap();
       const heatPercent = cap > 0 ? Math.min(100, (state.heat / cap) * 100) : 0;
-      const nextCoreProgress = Math.min(1, state.runTotal / 500);
+      const requirement = rebirthRequirement();
+      const nextCoreProgress = Math.min(1, state.sparks / requirement);
       const coresToGain = overclockGain();
 
       sparksStat.textContent = formatNumber(state.sparks);
       rateStat.textContent = formatNumber(idle);
       clickStat.textContent = formatNumber(gain);
-      coreStat.textContent = String(state.cores);
+      coreStat.textContent = `${formatNumber(state.cores)} free / ${formatNumber(state.totalCores)} total`;
       heatStat.textContent = `${heatPercent.toFixed(0)}%`;
       orderStat.textContent = String(state.ordersCompleted);
-      tapGainLabel.textContent = "+" + formatNumber(gain) + " sparks";
+      tapGainLabel.textContent = "+" + formatNumber(gain) + " dust";
       bonusStat.textContent = "x" + bonus.toFixed(2) + " global";
       heatBonusStat.textContent = "x" + heatBonus().toFixed(2);
       heatCapStat.textContent = "Cap " + formatNumber(cap);
       heatFill.style.width = heatPercent.toFixed(1) + "%";
       progressBar.style.width = (nextCoreProgress * 100).toFixed(1) + "%";
       overclockButton.disabled = !canOverclock();
-      overclockReward.textContent = `Reset for +${coresToGain} core${coresToGain === 1 ? "" : "s"}`;
+      overclockReward.textContent = `Collapse for +${coresToGain} core${coresToGain === 1 ? "" : "s"}`;
       overclockHint.textContent = canOverclock()
-        ? "Ready. Larger run totals pay multiple cores at once."
-        : "Reach 500 run sparks and bank 250 current sparks to overclock.";
+        ? `Ready at ${formatNumber(requirement)} stardust. Extra stardust pays more cores.`
+        : `Need ${formatNumber(requirement)} stardust. The minimum rises after every rebirth.`;
 
       renderStore();
       renderOrder();
       renderMilestones();
+      renderCoreStore();
+      renderSystem();
       renderLog();
     }
 
@@ -1278,15 +1735,28 @@
           return;
         }
         const data = JSON.parse(raw);
-        state.sparks = Number(data.sparks) || 0;
-        state.runTotal = Number(data.runTotal ?? data.total) || 0;
-        state.lifetime = Number(data.lifetime ?? data.total) || state.runTotal;
-        state.cores = Number(data.cores) || 0;
-        state.renown = Number(data.renown) || 0;
+        state.sparks = Math.max(0, Number(data.sparks) || 0);
+        state.runTotal = Math.max(0, Number(data.runTotal ?? data.total) || 0);
+        state.lifetime = Math.max(state.runTotal, Number(data.lifetime ?? data.total) || state.runTotal);
+        state.cores = Math.max(0, Number(data.cores) || 0);
+        state.totalCores = Math.max(state.cores, Number(data.totalCores ?? data.cores) || state.cores);
+        state.rebirths = Math.max(0, Number(data.rebirths) || 0);
+        state.renown = Math.max(0, Number(data.renown) || 0);
         state.heat = Math.max(0, Number(data.heat) || 0);
-        state.ordersCompleted = Number(data.ordersCompleted) || 0;
+        state.ordersCompleted = Math.max(0, Number(data.ordersCompleted) || 0);
         state.buyQty = data.buyQty || "1";
+        if (!["1", "10", "max"].includes(state.buyQty)) {
+          state.buyQty = "1";
+        }
         state.upgrades = { ...state.upgrades, ...(data.upgrades || {}) };
+        state.coreUpgrades = { ...state.coreUpgrades, ...(data.coreUpgrades || {}) };
+        Object.keys(state.upgrades).forEach((key) => {
+          state.upgrades[key] = Math.max(0, Number(state.upgrades[key]) || 0);
+        });
+        Object.keys(state.coreUpgrades).forEach((key) => {
+          const def = coreUpgradeDefs.find((entry) => entry.id === key);
+          state.coreUpgrades[key] = Math.min(def ? def.maxRank : Infinity, Math.max(0, Number(state.coreUpgrades[key]) || 0));
+        });
         state.log = Array.isArray(data.log) && data.log.length ? data.log : state.log;
 
         const offlineSeconds = Math.min(28800, Math.max(0, (Date.now() - (Number(data.lastSaved) || Date.now())) / 1000));
@@ -1294,21 +1764,26 @@
           state.heat = 0;
           const offlineSparks = perSecond() * offlineSeconds * 0.55;
           addSparks(offlineSparks);
-          pushLog(`Offline burn gathered ${formatNumber(offlineSparks)} sparks over ${formatNumber(offlineSeconds / 60)} minutes.`);
+          pushLog(`Offline drift gathered ${formatNumber(offlineSparks)} stardust over ${formatNumber(offlineSeconds / 60)} minutes.`);
         }
       } catch (error) {
         state.log = ["Save data could not be loaded. Starting fresh."];
       }
     }
 
-    function stokeForge() {
+    function pulseStar() {
       const gain = clickPower();
       addSparks(gain);
       state.heat = Math.min(heatCap(), state.heat + 7 + state.upgrades.bellows * 0.45 + state.cores * 0.08);
+      systemStage.classList.remove("pulsing");
+      window.requestAnimationFrame(() => {
+        systemStage.classList.add("pulsing");
+        window.setTimeout(() => systemStage.classList.remove("pulsing"), 160);
+      });
       render(true);
     }
 
-    coreButton.addEventListener("click", stokeForge);
+    coreButton.addEventListener("click", pulseStar);
     overclockButton.addEventListener("click", overclock);
     qtyButtons.forEach((button) => {
       button.addEventListener("click", () => {

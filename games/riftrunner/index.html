@@ -9,15 +9,19 @@
 
     :root {
       color-scheme: dark;
-      --bg: #17161f;
-      --bg-alt: #242131;
-      --panel: rgba(33, 30, 46, 0.88);
-      --border: rgba(119, 168, 255, 0.24);
-      --text: #ece7ff;
-      --muted: #beb5de;
-      --accent: #77a8ff;
-      --accent-3: #f7d47f;
-      --shadow: rgba(0, 0, 0, 0.34);
+      --bg: #0f1720;
+      --bg-alt: #14253a;
+      --panel: rgba(15, 24, 34, 0.9);
+      --panel-2: rgba(25, 39, 53, 0.96);
+      --border: rgba(105, 201, 255, 0.26);
+      --border-strong: rgba(105, 201, 255, 0.5);
+      --text: #edf7ff;
+      --muted: #a9c4d5;
+      --accent: #69c9ff;
+      --accent-2: #ffd166;
+      --good: #9effbf;
+      --danger: #ff7a7a;
+      --shadow: rgba(0, 0, 0, 0.36);
     }
 
     * {
@@ -28,8 +32,8 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at top right, rgba(128, 0, 255, 0.18), transparent 26%),
-        radial-gradient(circle at top left, rgba(0, 112, 221, 0.14), transparent 22%),
+        radial-gradient(circle at top right, rgba(105, 201, 255, 0.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(255, 209, 102, 0.1), transparent 22%),
         linear-gradient(180deg, var(--bg-alt), var(--bg));
       color: var(--text);
       font-family: "Inter", sans-serif;
@@ -41,17 +45,23 @@
     }
 
     a:hover {
-      color: var(--accent-3);
+      color: var(--accent-2);
+    }
+
+    button {
+      font: inherit;
     }
 
     .shell {
-      width: min(980px, calc(100vw - 24px));
+      width: min(1500px, calc(100vw - 24px));
       margin: 0 auto;
-      padding: 44px 18px 72px;
+      padding: 38px 18px 72px;
     }
 
     .back-link,
-    .eyebrow {
+    .eyebrow,
+    .hud-label,
+    .control-key {
       font-family: "Fira Code", monospace;
       font-weight: 700;
       letter-spacing: 0.06em;
@@ -60,47 +70,1247 @@
 
     .back-link {
       display: inline-block;
-      margin-bottom: 18px;
-      color: var(--accent-3);
+      margin-bottom: 16px;
+      color: var(--accent-2);
       font-size: 0.92rem;
     }
 
-    .card {
-      padding: 28px;
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      background: var(--panel);
-      box-shadow: 0 24px 50px var(--shadow);
+    .hero {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .eyebrow {
-      color: var(--accent-3);
+      color: var(--accent-2);
       font-size: 0.86rem;
     }
 
     h1 {
-      margin: 10px 0 12px;
-      font-size: clamp(2.5rem, 6vw, 4.2rem);
-      line-height: 0.94;
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 0.96;
     }
 
-    p {
+    .lead {
+      max-width: 860px;
       margin: 0;
-      max-width: 760px;
       color: var(--muted);
-      line-height: 1.7;
       font-size: 1.03rem;
+      line-height: 1.65;
+    }
+
+    .game-shell {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 24px 54px var(--shadow);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid rgba(105, 201, 255, 0.14);
+      background: rgba(7, 14, 22, 0.54);
+    }
+
+    .hud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hud-pill {
+      min-width: 96px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(105, 201, 255, 0.18);
+      background: rgba(8, 13, 19, 0.58);
+    }
+
+    .hud-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+
+    .hud-pill strong {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      border: 1px solid rgba(105, 201, 255, 0.26);
+      border-radius: 999px;
+      padding: 11px 15px;
+      background: rgba(8, 13, 19, 0.72);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--border-strong);
+      background: rgba(24, 40, 55, 0.94);
+      outline: none;
+    }
+
+    .button.primary {
+      color: #16202a;
+      background: linear-gradient(135deg, var(--accent-2), #fff0a7);
+      border-color: rgba(255, 209, 102, 0.48);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      padding: 14px;
+      background:
+        radial-gradient(circle at top, rgba(105, 201, 255, 0.08), transparent 34%),
+        rgba(4, 8, 12, 0.76);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: min(70vh, 660px);
+      min-height: 420px;
+      border-radius: 18px;
+      border: 1px solid rgba(105, 201, 255, 0.2);
+      background: #7fc6ff;
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 20px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 14px;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      pointer-events: none;
+    }
+
+    .overlay.hidden {
+      display: none;
+    }
+
+    .overlay-card {
+      width: min(560px, 100%);
+      padding: 26px;
+      border: 1px solid rgba(105, 201, 255, 0.24);
+      border-radius: 22px;
+      background: rgba(9, 16, 24, 0.9);
+      text-align: center;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+      pointer-events: auto;
+    }
+
+    .overlay-card h2 {
+      margin: 8px 0 10px;
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+    }
+
+    .overlay-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .controls-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 16px 16px;
+      border-top: 1px solid rgba(105, 201, 255, 0.12);
+      background: rgba(7, 14, 22, 0.46);
+      color: var(--muted);
+    }
+
+    .control-chip {
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(8, 13, 19, 0.54);
+      line-height: 1.4;
+    }
+
+    .control-key {
+      color: var(--accent-2);
+      font-size: 0.76rem;
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: 100vw;
+        padding: 10px 6px 28px;
+      }
+
+      .lead {
+        display: none;
+      }
+
+      .game-shell,
+      canvas {
+        border-radius: 14px;
+      }
+
+      .toolbar {
+        padding: 8px;
+        gap: 8px;
+      }
+
+      .hud {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 5px;
+      }
+
+      .hud-pill {
+        min-width: 0;
+        padding: 7px 6px;
+        border-radius: 10px;
+      }
+
+      .hud-label {
+        font-size: 0.55rem;
+      }
+
+      .hud-pill strong {
+        font-size: 0.76rem;
+      }
+
+      .button {
+        min-height: 34px;
+        padding: 7px 9px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+      }
+
+      .canvas-wrap {
+        padding: 0;
+      }
+
+      canvas {
+        height: 66vh;
+        min-height: 360px;
+        border-radius: 12px;
+      }
+
+      .overlay {
+        inset: 8px;
+      }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <a class="back-link" href="/games/">← Back to Games</a>
-    <section class="card">
-      <div class="eyebrow">Reserved Slot</div>
+    <a class="back-link" href="/games/">&larr; Back to Games</a>
+
+    <section class="hero">
+      <span class="eyebrow">Side-Scroller Platformer</span>
       <h1>Rift Runner</h1>
-      <p>This name is being held for a future runner or parkour project. The survival shooter that was here has been rolled into <a href="/games/starfallsurvivor/">Starfall Survivor</a>.</p>
+      <p class="lead">Run, jump, stomp enemies, grab powerups, and clear three short handcrafted levels across a bright rift valley.</p>
+    </section>
+
+    <section class="game-shell">
+      <div class="toolbar">
+        <div class="hud">
+          <div class="hud-pill">
+            <span class="hud-label">Level</span>
+            <strong id="levelValue">1-1</strong>
+          </div>
+          <div class="hud-pill">
+            <span class="hud-label">Health</span>
+            <strong id="healthValue">3</strong>
+          </div>
+          <div class="hud-pill">
+            <span class="hud-label">Coins</span>
+            <strong id="coinValue">0</strong>
+          </div>
+          <div class="hud-pill">
+            <span class="hud-label">Score</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div class="hud-pill">
+            <span class="hud-label">Power</span>
+            <strong id="powerValue">None</strong>
+          </div>
+          <div class="hud-pill">
+            <span class="hud-label">Time</span>
+            <strong id="timeValue">0:00</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="button primary" id="startButton" type="button">Start</button>
+          <button class="button" id="restartButton" type="button">Restart Level</button>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="960" height="540" aria-label="Rift Runner platformer game"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="overlay-card">
+            <span class="eyebrow" id="overlayKicker">Rift Runner</span>
+            <h2 id="overlayTitle">Three Levels Ready</h2>
+            <p id="overlayText">Move with WASD or arrow keys, jump with Space, and shoot fireballs with X after grabbing an Ember Bloom.</p>
+            <button class="button primary" id="overlayButton" type="button">Start Run</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls-strip">
+        <div class="control-chip"><span class="control-key">Move</span> A/D or Arrow Keys</div>
+        <div class="control-chip"><span class="control-key">Jump</span> W, Up, or Space</div>
+        <div class="control-chip"><span class="control-key">Fire</span> X or J with Ember Bloom</div>
+        <div class="control-chip"><span class="control-key">Feather</span> Double jump and hold jump to glide</div>
+        <div class="control-chip"><span class="control-key">Star</span> Temporary shield on contact</div>
+      </div>
     </section>
   </main>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const levelValue = document.getElementById("levelValue");
+    const healthValue = document.getElementById("healthValue");
+    const coinValue = document.getElementById("coinValue");
+    const scoreValue = document.getElementById("scoreValue");
+    const powerValue = document.getElementById("powerValue");
+    const timeValue = document.getElementById("timeValue");
+    const startButton = document.getElementById("startButton");
+    const restartButton = document.getElementById("restartButton");
+    const overlay = document.getElementById("overlay");
+    const overlayKicker = document.getElementById("overlayKicker");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayText = document.getElementById("overlayText");
+    const overlayButton = document.getElementById("overlayButton");
+
+    const WIDTH = 960;
+    const HEIGHT = 540;
+    const GRAVITY = 2100;
+    const MOVE_SPEED = 315;
+    const JUMP_SPEED = 760;
+    const TAU = Math.PI * 2;
+    const keys = new Set();
+
+    function line(x, y, count, gap = 34) {
+      return Array.from({ length: count }, (_, index) => ({ x: x + index * gap, y }));
+    }
+
+    const levels = [
+      {
+        id: "1-1",
+        name: "Meadow Gate",
+        width: 2900,
+        spawn: { x: 90, y: 410 },
+        goal: { x: 2780, y: 360, w: 48, h: 128 },
+        platforms: [
+          { x: 0, y: 488, w: 650, h: 70, type: "grass" },
+          { x: 760, y: 488, w: 540, h: 70, type: "grass" },
+          { x: 1390, y: 488, w: 640, h: 70, type: "grass" },
+          { x: 2130, y: 488, w: 770, h: 70, type: "grass" },
+          { x: 420, y: 398, w: 170, h: 28, type: "wood" },
+          { x: 980, y: 386, w: 180, h: 28, type: "wood" },
+          { x: 1260, y: 328, w: 150, h: 28, type: "wood" },
+          { x: 1760, y: 402, w: 180, h: 28, type: "wood" },
+          { x: 2260, y: 386, w: 210, h: 28, type: "wood" }
+        ],
+        coins: [
+          ...line(250, 430, 5),
+          ...line(455, 350, 4),
+          ...line(1040, 336, 4),
+          ...line(1490, 430, 6),
+          ...line(2300, 336, 4)
+        ],
+        powerups: [
+          { type: "ember", x: 1288, y: 286 },
+          { type: "star", x: 2380, y: 348 }
+        ],
+        enemies: [
+          { type: "slime", x: 520, y: 448, minX: 360, maxX: 610 },
+          { type: "slime", x: 1120, y: 448, minX: 850, maxX: 1210 },
+          { type: "beetle", x: 1640, y: 345, minX: 1500, maxX: 1850 },
+          { type: "ram", x: 2500, y: 448, minX: 2260, maxX: 2680 }
+        ]
+      },
+      {
+        id: "1-2",
+        name: "Canopy Lift",
+        width: 3200,
+        spawn: { x: 90, y: 390 },
+        goal: { x: 3090, y: 298, w: 48, h: 180 },
+        platforms: [
+          { x: 0, y: 488, w: 520, h: 70, type: "grass" },
+          { x: 650, y: 456, w: 360, h: 102, type: "grass" },
+          { x: 1130, y: 426, w: 320, h: 132, type: "grass" },
+          { x: 1580, y: 488, w: 380, h: 70, type: "grass" },
+          { x: 2080, y: 458, w: 380, h: 100, type: "grass" },
+          { x: 2580, y: 488, w: 620, h: 70, type: "grass" },
+          { x: 460, y: 360, w: 130, h: 28, type: "wood" },
+          { x: 820, y: 322, w: 150, h: 28, type: "wood" },
+          { x: 1220, y: 292, w: 160, h: 28, type: "wood" },
+          { x: 1750, y: 376, w: 160, h: 28, type: "wood" },
+          { x: 2240, y: 328, w: 150, h: 28, type: "wood" },
+          { x: 2720, y: 392, w: 160, h: 28, type: "wood" }
+        ],
+        coins: [
+          ...line(470, 310, 4),
+          ...line(820, 272, 5),
+          ...line(1208, 242, 5),
+          ...line(1610, 438, 4),
+          ...line(2245, 278, 4),
+          ...line(2670, 438, 6)
+        ],
+        powerups: [
+          { type: "feather", x: 850, y: 276 },
+          { type: "ember", x: 1805, y: 336 }
+        ],
+        enemies: [
+          { type: "beetle", x: 700, y: 330, minX: 580, maxX: 980 },
+          { type: "slime", x: 1290, y: 386, minX: 1170, maxX: 1420 },
+          { type: "beetle", x: 1880, y: 322, minX: 1660, maxX: 2040 },
+          { type: "ram", x: 2300, y: 418, minX: 2120, maxX: 2440 },
+          { type: "slime", x: 2810, y: 448, minX: 2630, maxX: 3040 }
+        ]
+      },
+      {
+        id: "1-3",
+        name: "Rift Keep",
+        width: 3600,
+        spawn: { x: 90, y: 390 },
+        goal: { x: 3470, y: 280, w: 54, h: 208 },
+        platforms: [
+          { x: 0, y: 488, w: 460, h: 70, type: "stone" },
+          { x: 600, y: 488, w: 330, h: 70, type: "stone" },
+          { x: 1080, y: 488, w: 500, h: 70, type: "stone" },
+          { x: 1710, y: 488, w: 390, h: 70, type: "stone" },
+          { x: 2260, y: 488, w: 420, h: 70, type: "stone" },
+          { x: 2850, y: 488, w: 750, h: 70, type: "stone" },
+          { x: 420, y: 392, w: 160, h: 28, type: "brick" },
+          { x: 780, y: 336, w: 160, h: 28, type: "brick" },
+          { x: 1230, y: 376, w: 150, h: 28, type: "brick" },
+          { x: 1490, y: 318, w: 150, h: 28, type: "brick" },
+          { x: 2000, y: 388, w: 180, h: 28, type: "brick" },
+          { x: 2460, y: 332, w: 170, h: 28, type: "brick" },
+          { x: 3000, y: 394, w: 170, h: 28, type: "brick" },
+          { x: 3230, y: 338, w: 170, h: 28, type: "brick" }
+        ],
+        hazards: [
+          { x: 465, y: 520, w: 130, h: 34 },
+          { x: 945, y: 520, w: 130, h: 34 },
+          { x: 1585, y: 520, w: 120, h: 34 },
+          { x: 2115, y: 520, w: 140, h: 34 },
+          { x: 2690, y: 520, w: 150, h: 34 }
+        ],
+        coins: [
+          ...line(420, 342, 5),
+          ...line(780, 286, 5),
+          ...line(1220, 326, 5),
+          ...line(2005, 338, 5),
+          ...line(2470, 282, 5),
+          ...line(3030, 344, 5)
+        ],
+        powerups: [
+          { type: "star", x: 800, y: 292 },
+          { type: "feather", x: 2495, y: 288 },
+          { type: "ember", x: 3255, y: 294 }
+        ],
+        enemies: [
+          { type: "ram", x: 740, y: 448, minX: 630, maxX: 900 },
+          { type: "beetle", x: 1260, y: 320, minX: 1120, maxX: 1560 },
+          { type: "slime", x: 1840, y: 448, minX: 1740, maxX: 2070 },
+          { type: "ram", x: 2420, y: 448, minX: 2290, maxX: 2640 },
+          { type: "beetle", x: 3100, y: 332, minX: 2910, maxX: 3380 }
+        ]
+      }
+    ];
+
+    const enemyDefs = {
+      slime: { w: 34, h: 26, speed: 80, hp: 1, score: 120 },
+      beetle: { w: 36, h: 26, speed: 92, hp: 1, score: 150 },
+      ram: { w: 44, h: 32, speed: 70, hp: 2, score: 240 }
+    };
+
+    const state = {
+      running: false,
+      levelIndex: 0,
+      cameraX: 0,
+      coins: 0,
+      score: 0,
+      elapsed: 0,
+      lastTick: 0,
+      message: "",
+      messageTimer: 0,
+      player: null,
+      platforms: [],
+      hazards: [],
+      coinsList: [],
+      powerups: [],
+      enemies: [],
+      fireballs: [],
+      particles: []
+    };
+
+    function createPlayer(spawn) {
+      return {
+        x: spawn.x,
+        y: spawn.y,
+        w: 30,
+        h: 42,
+        vx: 0,
+        vy: 0,
+        face: 1,
+        hp: 3,
+        invuln: 0,
+        starTime: 0,
+        hasFire: false,
+        hasFeather: false,
+        onGround: false,
+        coyote: 0,
+        doubleJumpUsed: false,
+        fireCooldown: 0,
+        hurtCooldown: 0
+      };
+    }
+
+    function cloneLevel(level) {
+      state.platforms = level.platforms.map((platform) => ({ ...platform }));
+      state.hazards = (level.hazards || []).map((hazard) => ({ ...hazard }));
+      state.coinsList = level.coins.map((coin) => ({ ...coin, r: 8, taken: false }));
+      state.powerups = level.powerups.map((powerup) => ({ ...powerup, w: 28, h: 28, taken: false, bob: Math.random() * TAU }));
+      state.enemies = level.enemies.map((enemy) => {
+        const def = enemyDefs[enemy.type];
+        return {
+          ...enemy,
+          w: def.w,
+          h: def.h,
+          y: enemy.y,
+          baseY: enemy.y,
+          vx: def.speed * (Math.random() > 0.5 ? 1 : -1),
+          hp: def.hp,
+          dead: false,
+          stun: 0,
+          phase: Math.random() * TAU
+        };
+      });
+      state.fireballs = [];
+      state.particles = [];
+    }
+
+    function loadLevel(index, keepRunStats = false) {
+      const level = levels[index];
+      state.levelIndex = index;
+      state.cameraX = 0;
+      state.elapsed = keepRunStats ? state.elapsed : 0;
+      state.message = "";
+      state.messageTimer = 0;
+      state.player = createPlayer(level.spawn);
+      cloneLevel(level);
+      hideOverlay();
+      state.running = true;
+      state.lastTick = performance.now();
+      updateHud();
+    }
+
+    function startRun() {
+      const wasRunning = state.running;
+      state.coins = 0;
+      state.score = 0;
+      state.elapsed = 0;
+      loadLevel(0, true);
+      if (!wasRunning) {
+        requestAnimationFrame(loop);
+      }
+    }
+
+    function restartLevel() {
+      const wasRunning = state.running;
+      loadLevel(state.levelIndex, true);
+      if (!wasRunning) {
+        requestAnimationFrame(loop);
+      }
+    }
+
+    function showOverlay(kicker, title, text, buttonLabel = "Start Run") {
+      overlayKicker.textContent = kicker;
+      overlayTitle.textContent = title;
+      overlayText.textContent = text;
+      overlayButton.textContent = buttonLabel;
+      overlay.classList.remove("hidden");
+    }
+
+    function hideOverlay() {
+      overlay.classList.add("hidden");
+    }
+
+    function rectsOverlap(a, b) {
+      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function addParticles(x, y, color, count = 8) {
+      for (let index = 0; index < count; index += 1) {
+        state.particles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 180,
+          vy: -80 - Math.random() * 160,
+          size: 3 + Math.random() * 3,
+          color,
+          life: 0.35 + Math.random() * 0.25
+        });
+      }
+    }
+
+    function collectCoin(coin) {
+      coin.taken = true;
+      state.coins += 1;
+      state.score += 25;
+      addParticles(coin.x, coin.y, "#ffd166", 5);
+    }
+
+    function collectPowerup(powerup) {
+      powerup.taken = true;
+      state.score += 150;
+      if (powerup.type === "ember") {
+        state.player.hasFire = true;
+        state.message = "Ember Bloom: press X or J to throw fireballs.";
+      } else if (powerup.type === "feather") {
+        state.player.hasFeather = true;
+        state.message = "Glide Feather: double jump and hold jump to float.";
+      } else {
+        state.player.starTime = 8;
+        state.message = "Shield Star: contact defeats enemies for a short time.";
+      }
+      state.messageTimer = 4.2;
+      addParticles(powerup.x + 14, powerup.y + 14, powerupColor(powerup.type), 14);
+    }
+
+    function powerupColor(type) {
+      return type === "ember" ? "#ff7a45" : type === "feather" ? "#69c9ff" : "#ffd166";
+    }
+
+    function tryJump() {
+      if (!state.running || !state.player) {
+        return;
+      }
+
+      const player = state.player;
+      if (player.onGround || player.coyote > 0) {
+        player.vy = -JUMP_SPEED;
+        player.onGround = false;
+        player.coyote = 0;
+        player.doubleJumpUsed = false;
+        addParticles(player.x + player.w * 0.5, player.y + player.h, "#ffffff", 4);
+      } else if (player.hasFeather && !player.doubleJumpUsed) {
+        player.vy = -JUMP_SPEED * 0.82;
+        player.doubleJumpUsed = true;
+        addParticles(player.x + player.w * 0.5, player.y + player.h * 0.5, "#69c9ff", 8);
+      }
+    }
+
+    function shootFireball() {
+      const player = state.player;
+      if (!state.running || !player || !player.hasFire || player.fireCooldown > 0) {
+        return;
+      }
+
+      player.fireCooldown = 0.24;
+      state.fireballs.push({
+        x: player.x + (player.face > 0 ? player.w : -12),
+        y: player.y + 15,
+        w: 14,
+        h: 14,
+        vx: player.face * 520,
+        vy: -90,
+        life: 1.7
+      });
+    }
+
+    function resolvePlatformCollisions(entity, axis, previousY = entity.y) {
+      for (const platform of state.platforms) {
+        if (!rectsOverlap(entity, platform)) {
+          continue;
+        }
+
+        if (axis === "x") {
+          if (entity.vx > 0) {
+            entity.x = platform.x - entity.w;
+          } else if (entity.vx < 0) {
+            entity.x = platform.x + platform.w;
+          }
+          entity.vx = 0;
+        } else if (entity.vy > 0 && previousY + entity.h <= platform.y + 12) {
+          entity.y = platform.y - entity.h;
+          entity.vy = 0;
+          entity.onGround = true;
+          entity.coyote = 0.1;
+          entity.doubleJumpUsed = false;
+        } else if (entity.vy < 0) {
+          entity.y = platform.y + platform.h;
+          entity.vy = 0;
+        }
+      }
+    }
+
+    function updatePlayer(dt) {
+      const player = state.player;
+      const left = keys.has("ArrowLeft") || keys.has("a");
+      const right = keys.has("ArrowRight") || keys.has("d");
+      const holdingJump = keys.has(" ") || keys.has("ArrowUp") || keys.has("w");
+      const move = (right ? 1 : 0) - (left ? 1 : 0);
+
+      if (move !== 0) {
+        player.face = move;
+      }
+
+      player.vx = move * MOVE_SPEED;
+      player.fireCooldown = Math.max(0, player.fireCooldown - dt);
+      player.invuln = Math.max(0, player.invuln - dt);
+      player.starTime = Math.max(0, player.starTime - dt);
+      player.coyote = player.onGround ? 0.1 : Math.max(0, player.coyote - dt);
+      player.onGround = false;
+
+      const gravity = player.hasFeather && holdingJump && player.vy > 0 ? GRAVITY * 0.38 : GRAVITY;
+      player.vy += gravity * dt;
+      player.vy = Math.min(player.vy, player.hasFeather && holdingJump ? 420 : 980);
+
+      player.x += player.vx * dt;
+      player.x = clamp(player.x, 0, levels[state.levelIndex].width - player.w);
+      resolvePlatformCollisions(player, "x");
+
+      const previousY = player.y;
+      player.y += player.vy * dt;
+      resolvePlatformCollisions(player, "y", previousY);
+
+      if (player.y > HEIGHT + 120) {
+        hurtPlayer(99);
+      }
+
+      for (const hazard of state.hazards) {
+        if (rectsOverlap(player, hazard)) {
+          hurtPlayer(1);
+        }
+      }
+
+      for (const coin of state.coinsList) {
+        if (!coin.taken && player.x < coin.x + coin.r && player.x + player.w > coin.x - coin.r && player.y < coin.y + coin.r && player.y + player.h > coin.y - coin.r) {
+          collectCoin(coin);
+        }
+      }
+
+      for (const powerup of state.powerups) {
+        if (!powerup.taken && rectsOverlap(player, powerup)) {
+          collectPowerup(powerup);
+        }
+      }
+
+      if (rectsOverlap(player, levels[state.levelIndex].goal)) {
+        finishLevel();
+      }
+    }
+
+    function hurtPlayer(amount) {
+      const player = state.player;
+      if (player.invuln > 0 || player.starTime > 0) {
+        return;
+      }
+
+      player.hp -= amount;
+      player.invuln = 1.1;
+      player.vy = -420;
+      player.vx = -player.face * 220;
+      addParticles(player.x + player.w * 0.5, player.y + player.h * 0.5, "#ff7a7a", 12);
+
+      if (amount >= 99 || player.hp <= 0) {
+        state.running = false;
+        showOverlay("Try Again", "Rift Closed", "You took one hit too many. Restart the level and push farther.", "Restart Level");
+      }
+    }
+
+    function damageEnemy(enemy, amount = 1) {
+      enemy.hp -= amount;
+      enemy.stun = 0.14;
+      addParticles(enemy.x + enemy.w * 0.5, enemy.y + enemy.h * 0.5, "#ffd166", 8);
+      if (enemy.hp <= 0) {
+        enemy.dead = true;
+        state.score += enemyDefs[enemy.type].score;
+      }
+    }
+
+    function updateEnemies(dt) {
+      const player = state.player;
+      for (const enemy of state.enemies) {
+        if (enemy.dead) {
+          continue;
+        }
+
+        enemy.stun = Math.max(0, enemy.stun - dt);
+        if (enemy.type === "beetle") {
+          enemy.x += enemy.vx * dt;
+          enemy.phase += dt * 4;
+          enemy.y = enemy.baseY + Math.sin(enemy.phase) * 24;
+          if (enemy.x < enemy.minX || enemy.x > enemy.maxX) {
+            enemy.vx *= -1;
+            enemy.x = clamp(enemy.x, enemy.minX, enemy.maxX);
+          }
+        } else {
+          if (enemy.type === "ram" && Math.abs(player.x - enemy.x) < 280 && Math.abs(player.y - enemy.y) < 80) {
+            enemy.vx = Math.sign(player.x - enemy.x || enemy.vx) * 210;
+          } else if (Math.abs(enemy.vx) > enemyDefs[enemy.type].speed) {
+            enemy.vx += (enemy.vx > 0 ? -240 : 240) * dt;
+          }
+          enemy.x += enemy.vx * dt;
+          if (enemy.x < enemy.minX || enemy.x > enemy.maxX) {
+            enemy.vx *= -1;
+            enemy.x = clamp(enemy.x, enemy.minX, enemy.maxX);
+          }
+        }
+
+        if (!rectsOverlap(player, enemy)) {
+          continue;
+        }
+
+        const playerBottom = player.y + player.h;
+        const stomp = player.vy > 0 && playerBottom - player.vy * dt <= enemy.y + 12;
+        if (player.starTime > 0) {
+          damageEnemy(enemy, 99);
+        } else if (stomp) {
+          damageEnemy(enemy, 1);
+          player.vy = -520;
+          player.doubleJumpUsed = false;
+        } else {
+          hurtPlayer(1);
+        }
+      }
+
+      state.enemies = state.enemies.filter((enemy) => !enemy.dead);
+    }
+
+    function updateFireballs(dt) {
+      for (const fireball of state.fireballs) {
+        fireball.life -= dt;
+        fireball.vy += GRAVITY * 0.38 * dt;
+        fireball.x += fireball.vx * dt;
+        fireball.y += fireball.vy * dt;
+
+        for (const platform of state.platforms) {
+          if (rectsOverlap(fireball, platform)) {
+            fireball.life = 0;
+            addParticles(fireball.x, fireball.y, "#ff7a45", 6);
+            break;
+          }
+        }
+
+        for (const enemy of state.enemies) {
+          if (!enemy.dead && rectsOverlap(fireball, enemy)) {
+            damageEnemy(enemy, 1);
+            fireball.life = 0;
+            break;
+          }
+        }
+      }
+
+      state.fireballs = state.fireballs.filter((fireball) => fireball.life > 0);
+    }
+
+    function updateParticles(dt) {
+      for (const particle of state.particles) {
+        particle.life -= dt;
+        particle.vy += 540 * dt;
+        particle.x += particle.vx * dt;
+        particle.y += particle.vy * dt;
+      }
+      state.particles = state.particles.filter((particle) => particle.life > 0);
+    }
+
+    function finishLevel() {
+      state.score += 800 + state.player.hp * 100;
+      state.running = false;
+      if (state.levelIndex >= levels.length - 1) {
+        showOverlay("Run Complete", "Rift Valley Cleared", "You cleared all three starter levels. More worlds can build from here.", "Play Again");
+      } else {
+        showOverlay("Level Clear", levels[state.levelIndex].name + " Cleared", "Nice run. Start the next level when ready.", "Next Level");
+      }
+    }
+
+    function updateCamera() {
+      const level = levels[state.levelIndex];
+      const target = state.player.x + state.player.w * 0.5 - WIDTH * 0.42;
+      state.cameraX += (target - state.cameraX) * 0.12;
+      state.cameraX = clamp(state.cameraX, 0, Math.max(0, level.width - WIDTH));
+    }
+
+    function formatTime(seconds) {
+      const whole = Math.floor(seconds);
+      return Math.floor(whole / 60) + ":" + String(whole % 60).padStart(2, "0");
+    }
+
+    function powerText() {
+      const parts = [];
+      if (state.player.hasFire) {
+        parts.push("Fire");
+      }
+      if (state.player.hasFeather) {
+        parts.push("Feather");
+      }
+      if (state.player.starTime > 0) {
+        parts.push("Star " + state.player.starTime.toFixed(0));
+      }
+      return parts.length ? parts.join(" + ") : "None";
+    }
+
+    function updateHud() {
+      const level = levels[state.levelIndex];
+      levelValue.textContent = level.id;
+      healthValue.textContent = String(Math.max(0, state.player ? state.player.hp : 3));
+      coinValue.textContent = String(state.coins);
+      scoreValue.textContent = String(state.score);
+      powerValue.textContent = state.player ? powerText() : "None";
+      timeValue.textContent = formatTime(state.elapsed);
+      startButton.textContent = state.running ? "Running" : "Start";
+      startButton.disabled = state.running;
+    }
+
+    function drawBackground(level) {
+      const gradient = ctx.createLinearGradient(0, 0, 0, HEIGHT);
+      gradient.addColorStop(0, "#7fc6ff");
+      gradient.addColorStop(0.62, "#b9e7ff");
+      gradient.addColorStop(1, "#dff6ff");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+      const sunX = 130 - state.cameraX * 0.08;
+      ctx.fillStyle = "rgba(255, 224, 132, 0.95)";
+      ctx.beginPath();
+      ctx.arc(sunX, 94, 38, 0, TAU);
+      ctx.fill();
+
+      drawHills(0.18, "#79c785", 340);
+      drawHills(0.34, "#4c9f73", 410);
+      if (level.id === "1-3") {
+        drawKeepSilhouette();
+      }
+    }
+
+    function drawHills(speed, color, baseY) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(-40, HEIGHT);
+      for (let x = -80; x <= WIDTH + 120; x += 160) {
+        const worldX = x + (state.cameraX * speed) % 160;
+        ctx.quadraticCurveTo(worldX + 70, baseY - 100, worldX + 160, baseY);
+      }
+      ctx.lineTo(WIDTH + 80, HEIGHT);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawKeepSilhouette() {
+      ctx.fillStyle = "rgba(45, 54, 74, 0.42)";
+      for (let index = 0; index < 5; index += 1) {
+        const x = 420 + index * 190 - state.cameraX * 0.22;
+        ctx.fillRect(x, 188 - index * 10, 80, 250);
+        ctx.fillRect(x - 12, 170 - index * 10, 104, 28);
+      }
+    }
+
+    function drawPlatform(platform) {
+      const x = Math.round(platform.x - state.cameraX);
+      if (x + platform.w < -80 || x > WIDTH + 80) {
+        return;
+      }
+
+      const isStone = platform.type === "stone" || platform.type === "brick";
+      ctx.fillStyle = isStone ? "#667086" : "#6cbd67";
+      ctx.fillRect(x, platform.y, platform.w, platform.h);
+      ctx.fillStyle = isStone ? "#465064" : "#3d8f4b";
+      ctx.fillRect(x, platform.y + 12, platform.w, platform.h - 12);
+
+      ctx.fillStyle = isStone ? "rgba(255,255,255,0.08)" : "#a4de73";
+      ctx.fillRect(x, platform.y, platform.w, 8);
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.18)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, platform.y, platform.w, platform.h);
+    }
+
+    function drawCoin(coin) {
+      if (coin.taken) {
+        return;
+      }
+      const x = coin.x - state.cameraX;
+      if (x < -40 || x > WIDTH + 40) {
+        return;
+      }
+      const wobble = Math.sin(state.elapsed * 7 + coin.x) * 0.18;
+      ctx.save();
+      ctx.translate(x, coin.y);
+      ctx.scale(Math.cos(wobble) * 0.55 + 0.45, 1);
+      ctx.fillStyle = "#ffd166";
+      ctx.beginPath();
+      ctx.arc(0, 0, coin.r, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "#fff2a6";
+      ctx.fillRect(-2, -5, 4, 10);
+      ctx.restore();
+    }
+
+    function drawPowerup(powerup) {
+      if (powerup.taken) {
+        return;
+      }
+      const x = powerup.x - state.cameraX;
+      if (x < -40 || x > WIDTH + 40) {
+        return;
+      }
+      const y = powerup.y + Math.sin(state.elapsed * 4 + powerup.bob) * 4;
+      ctx.fillStyle = powerupColor(powerup.type);
+      ctx.beginPath();
+      ctx.roundRect(x, y, powerup.w, powerup.h, 8);
+      ctx.fill();
+      ctx.fillStyle = "#15212b";
+      ctx.font = "700 16px Inter";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(powerup.type === "ember" ? "F" : powerup.type === "feather" ? "J" : "*", x + powerup.w / 2, y + powerup.h / 2 + 1);
+    }
+
+    function drawEnemy(enemy) {
+      const x = enemy.x - state.cameraX;
+      if (x + enemy.w < -40 || x > WIDTH + 40) {
+        return;
+      }
+
+      ctx.save();
+      ctx.translate(x, enemy.y);
+      if (enemy.type === "slime") {
+        ctx.fillStyle = "#7bd66f";
+        ctx.beginPath();
+        ctx.ellipse(enemy.w / 2, enemy.h * 0.66, enemy.w / 2, enemy.h * 0.45, 0, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#183621";
+        ctx.fillRect(10, 13, 4, 4);
+        ctx.fillRect(22, 13, 4, 4);
+      } else if (enemy.type === "beetle") {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.56)";
+        ctx.beginPath();
+        ctx.ellipse(6, 9, 10, 7, -0.5, 0, TAU);
+        ctx.ellipse(30, 9, 10, 7, 0.5, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#ae6fff";
+        ctx.beginPath();
+        ctx.ellipse(enemy.w / 2, enemy.h / 2 + 3, enemy.w * 0.42, enemy.h * 0.42, 0, 0, TAU);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = "#d46a54";
+        ctx.fillRect(4, 8, enemy.w - 8, enemy.h - 8);
+        ctx.fillStyle = "#74342b";
+        ctx.beginPath();
+        ctx.moveTo(enemy.vx > 0 ? enemy.w : 0, 13);
+        ctx.lineTo(enemy.vx > 0 ? enemy.w + 12 : -12, 19);
+        ctx.lineTo(enemy.vx > 0 ? enemy.w : 26, 25);
+        ctx.fill();
+        ctx.fillStyle = "#fff1bc";
+        ctx.fillRect(10, 14, 6, 6);
+      }
+      ctx.restore();
+    }
+
+    function drawPlayer() {
+      const player = state.player;
+      const x = player.x - state.cameraX;
+      const flicker = player.invuln > 0 && Math.floor(state.elapsed * 18) % 2 === 0;
+      if (flicker) {
+        return;
+      }
+
+      if (player.starTime > 0) {
+        ctx.strokeStyle = "rgba(255, 209, 102, 0.76)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(x + player.w / 2, player.y + player.h / 2, 31 + Math.sin(state.elapsed * 12) * 3, 0, TAU);
+        ctx.stroke();
+      }
+
+      ctx.save();
+      ctx.translate(x + player.w / 2, player.y + player.h / 2);
+      ctx.scale(player.face, 1);
+
+      ctx.fillStyle = player.hasFire ? "#ff7a45" : "#2778c6";
+      ctx.fillRect(-13, -7, 26, 24);
+      ctx.fillStyle = "#ffd2a1";
+      ctx.beginPath();
+      ctx.arc(0, -17, 12, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = player.hasFeather ? "#69c9ff" : "#ffe066";
+      ctx.fillRect(-10, -31, 20, 7);
+      ctx.fillStyle = "#142033";
+      ctx.fillRect(4, -19, 4, 4);
+      ctx.fillStyle = "#24314a";
+      ctx.fillRect(-11, 17, 9, 13);
+      ctx.fillRect(3, 17, 9, 13);
+      ctx.restore();
+    }
+
+    function drawFireball(fireball) {
+      const x = fireball.x - state.cameraX;
+      ctx.fillStyle = "#ff7a45";
+      ctx.beginPath();
+      ctx.arc(x + fireball.w / 2, fireball.y + fireball.h / 2, 8, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = "#fff0a7";
+      ctx.beginPath();
+      ctx.arc(x + fireball.w / 2 + 2, fireball.y + fireball.h / 2 - 2, 3, 0, TAU);
+      ctx.fill();
+    }
+
+    function drawHazard(hazard) {
+      const x = hazard.x - state.cameraX;
+      ctx.fillStyle = "#ff6b45";
+      ctx.beginPath();
+      for (let spike = 0; spike < hazard.w; spike += 20) {
+        ctx.moveTo(x + spike, hazard.y + hazard.h);
+        ctx.lineTo(x + spike + 10, hazard.y);
+        ctx.lineTo(x + spike + 20, hazard.y + hazard.h);
+      }
+      ctx.fill();
+    }
+
+    function drawGoal(goal) {
+      const x = goal.x - state.cameraX;
+      ctx.fillStyle = "#f7f2d0";
+      ctx.fillRect(x + 9, goal.y, 6, goal.h);
+      ctx.fillStyle = "#69c9ff";
+      ctx.beginPath();
+      ctx.moveTo(x + 15, goal.y + 8);
+      ctx.lineTo(x + 55, goal.y + 24);
+      ctx.lineTo(x + 15, goal.y + 42);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawParticles() {
+      for (const particle of state.particles) {
+        ctx.globalAlpha = Math.max(0, particle.life / 0.55);
+        ctx.fillStyle = particle.color;
+        ctx.beginPath();
+        ctx.arc(particle.x - state.cameraX, particle.y, particle.size, 0, TAU);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function draw() {
+      const level = levels[state.levelIndex];
+      drawBackground(level);
+      level.platforms.forEach(drawPlatform);
+      state.hazards.forEach(drawHazard);
+      drawGoal(level.goal);
+      state.coinsList.forEach(drawCoin);
+      state.powerups.forEach(drawPowerup);
+      state.fireballs.forEach(drawFireball);
+      state.enemies.forEach(drawEnemy);
+      drawPlayer();
+      drawParticles();
+
+      if (state.message) {
+        ctx.fillStyle = "rgba(9, 16, 24, 0.72)";
+        ctx.fillRect(20, 20, Math.min(560, 40 + state.message.length * 8), 42);
+        ctx.fillStyle = "#edf7ff";
+        ctx.font = "700 16px Inter";
+        ctx.textBaseline = "middle";
+        ctx.fillText(state.message, 36, 42);
+      }
+    }
+
+    function update(dt) {
+      if (!state.running) {
+        return;
+      }
+      state.elapsed += dt;
+      state.messageTimer = Math.max(0, state.messageTimer - dt);
+      if (state.messageTimer <= 0) {
+        state.message = "";
+      }
+      updatePlayer(dt);
+      updateEnemies(dt);
+      updateFireballs(dt);
+      updateParticles(dt);
+      updateCamera();
+      updateHud();
+    }
+
+    function loop(now) {
+      const dt = Math.min(0.033, (now - state.lastTick) / 1000 || 0);
+      state.lastTick = now;
+      update(dt);
+      draw();
+      if (state.running) {
+        requestAnimationFrame(loop);
+      }
+    }
+
+    function handleOverlayAction() {
+      if (state.levelIndex >= levels.length - 1 && !state.running && overlayTitle.textContent.includes("Cleared")) {
+        startRun();
+      } else if (!state.running && overlayKicker.textContent === "Level Clear") {
+        loadLevel(state.levelIndex + 1, true);
+        requestAnimationFrame(loop);
+      } else if (!state.running && overlayKicker.textContent === "Try Again") {
+        restartLevel();
+      } else {
+        startRun();
+      }
+    }
+
+    window.addEventListener("keydown", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (["ArrowLeft", "ArrowRight", "ArrowUp", " ", "a", "d", "w", "x", "j"].includes(key)) {
+        event.preventDefault();
+      }
+      if (!keys.has(key) && ["ArrowUp", " ", "w"].includes(key)) {
+        tryJump();
+      }
+      if (!keys.has(key) && ["x", "j"].includes(key)) {
+        shootFireball();
+      }
+      keys.add(key);
+    });
+
+    window.addEventListener("keyup", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      keys.delete(key);
+    });
+
+    startButton.addEventListener("click", startRun);
+    restartButton.addEventListener("click", restartLevel);
+    overlayButton.addEventListener("click", handleOverlayAction);
+
+    loadLevel(0, false);
+    state.running = false;
+    updateHud();
+    showOverlay("Rift Runner", "Three Levels Ready", "Move with WASD or arrow keys, jump with Space, and shoot fireballs with X after grabbing an Ember Bloom.", "Start Run");
+    draw();
+  </script>
 </body>
 </html>
