@@ -124,6 +124,13 @@
       background: rgba(12, 12, 22, 0.38);
     }
 
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
     .stats {
       display: flex;
       flex-wrap: wrap;
@@ -164,6 +171,12 @@
     .button:focus-visible {
       border-color: var(--border-strong);
       outline: none;
+    }
+
+    .button:disabled,
+    .shop-button:disabled {
+      opacity: 0.46;
+      cursor: not-allowed;
     }
 
     .canvas-wrap {
@@ -243,6 +256,104 @@
       padding-left: 18px;
     }
 
+    .class-grid,
+    .shop-list,
+    .quest-list,
+    .sheet-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .class-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-bottom: 12px;
+    }
+
+    .class-button,
+    .shop-button,
+    .quest-item {
+      border: 1px solid rgba(156, 128, 255, 0.18);
+      border-radius: 12px;
+      background: rgba(10, 10, 18, 0.48);
+      color: var(--text);
+    }
+
+    .class-button,
+    .shop-button {
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .class-button {
+      min-height: 62px;
+      padding: 9px 7px;
+    }
+
+    .class-button.is-active {
+      border-color: var(--border-strong);
+      box-shadow: 0 0 0 1px rgba(247, 204, 120, 0.22), 0 0 24px rgba(247, 204, 120, 0.12);
+    }
+
+    .class-button small,
+    .shop-button small,
+    .quest-item small,
+    .sheet-grid small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .shop-list,
+    .quest-list,
+    .sheet-grid {
+      margin-top: 12px;
+    }
+
+    .shop-button {
+      width: 100%;
+      padding: 11px 12px;
+      text-align: left;
+    }
+
+    .quest-claim {
+      margin-top: 10px;
+      border: 1px solid rgba(99, 240, 196, 0.36);
+      border-radius: 999px;
+      padding: 7px 10px;
+      color: var(--text);
+      background: rgba(99, 240, 196, 0.12);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .quest-item {
+      padding: 11px 12px;
+    }
+
+    .quest-item.is-complete {
+      border-color: rgba(99, 240, 196, 0.42);
+      background: rgba(99, 240, 196, 0.08);
+    }
+
+    .sheet-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sheet-stat {
+      padding: 10px;
+      border: 1px solid rgba(156, 128, 255, 0.14);
+      border-radius: 12px;
+      background: rgba(10, 10, 18, 0.34);
+    }
+
+    .sheet-stat strong {
+      display: block;
+      font-size: 1rem;
+    }
+
     @media (max-width: 980px) {
       .layout {
         grid-template-columns: 1fr;
@@ -318,8 +429,23 @@
               <span class="stat-label">Gold</span>
               <strong id="goldStat">0</strong>
             </div>
+            <div class="stat">
+              <span class="stat-label">Class</span>
+              <strong id="classStat">Warrior</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Layer</span>
+              <strong id="floorStat">1</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">STR / INT / AGI</span>
+              <strong id="coreStat">0 / 0 / 0</strong>
+            </div>
           </div>
-          <button class="button" id="resetButton" type="button">Reset Rift</button>
+          <div class="topbar-actions">
+            <button class="button" id="nextFloorButton" type="button" disabled>Next Layer</button>
+            <button class="button" id="resetButton" type="button">Reset Rift</button>
+          </div>
         </div>
 
         <div class="canvas-wrap">
@@ -329,7 +455,7 @@
         <div class="skillbar">
           <div class="skill">
             <span class="skill-key">Mouse</span>
-            <strong>Arc Bolt</strong>
+            <strong id="attackStat">Arc Bolt</strong>
           </div>
           <div class="skill">
             <span class="skill-key">Q</span>
@@ -344,8 +470,47 @@
 
       <aside class="side">
         <section class="side-card">
+          <h2>Warden Class</h2>
+          <div class="class-grid" id="classButtons">
+            <button class="class-button" type="button" data-class="warrior">Warrior<small>Strength, armor, cleaves</small></button>
+            <button class="class-button" type="button" data-class="mage">Mage<small>Intelligence, mana, elements</small></button>
+            <button class="class-button" type="button" data-class="archer">Archer<small>Agility, range, speed</small></button>
+          </div>
+          <p id="classSummary">Warriors survive close quarters and hit hard with physical rift steel.</p>
+        </section>
+        <section class="side-card">
           <h2>Rift Objective</h2>
           <p id="objectiveText">Clear the rift anchors and survive the patrols. This is a foundation build, so the core camera and combat loops are the focus.</p>
+        </section>
+        <section class="side-card">
+          <h2>Rift Market</h2>
+          <p id="shopText">Return to the glowing market circle near the gate to buy supplies and training.</p>
+          <div class="shop-list" id="shopList"></div>
+        </section>
+        <section class="side-card">
+          <h2>Quests</h2>
+          <div class="quest-list" id="questList"></div>
+        </section>
+        <section class="side-card">
+          <h2>Warden Sheet</h2>
+          <div class="sheet-grid">
+            <div class="sheet-stat">
+              <strong id="damageStat">0</strong>
+              <small>Weapon Damage</small>
+            </div>
+            <div class="sheet-stat">
+              <strong id="spellStat">0</strong>
+              <small>Skill Damage</small>
+            </div>
+            <div class="sheet-stat">
+              <strong id="speedStat">0</strong>
+              <small>Move Speed</small>
+            </div>
+            <div class="sheet-stat">
+              <strong id="resistStat">0%</strong>
+              <small>Class Guard</small>
+            </div>
+          </div>
         </section>
         <section class="side-card">
           <h2>Controls</h2>
@@ -353,7 +518,7 @@
             <li><strong>Move:</strong> WASD or Arrow Keys</li>
             <li><strong>Aim:</strong> Mouse</li>
             <li><strong>Attack:</strong> Hold left mouse</li>
-            <li><strong>Skill:</strong> Q for Rift Cleave</li>
+            <li><strong>Skill:</strong> Q for class skill</li>
             <li><strong>Dash:</strong> Space</li>
           </ul>
         </section>
@@ -364,7 +529,7 @@
             <li>Tile walls and collision</li>
             <li>Enemy chase and contact damage</li>
             <li>Projectiles, skill hitboxes, pickups</li>
-            <li>XP, leveling, gold, health and mana</li>
+            <li>Classes, stats, shops, quests, floors, and elemental defenses</li>
           </ul>
         </section>
       </aside>
@@ -378,9 +543,23 @@
     const manaStat = document.getElementById("manaStat");
     const levelStat = document.getElementById("levelStat");
     const goldStat = document.getElementById("goldStat");
+    const classStat = document.getElementById("classStat");
+    const floorStat = document.getElementById("floorStat");
+    const coreStat = document.getElementById("coreStat");
+    const attackStat = document.getElementById("attackStat");
     const skillStat = document.getElementById("skillStat");
     const dashStat = document.getElementById("dashStat");
     const objectiveText = document.getElementById("objectiveText");
+    const classSummary = document.getElementById("classSummary");
+    const classButtons = Array.from(document.querySelectorAll("[data-class]"));
+    const shopText = document.getElementById("shopText");
+    const shopList = document.getElementById("shopList");
+    const questList = document.getElementById("questList");
+    const damageStat = document.getElementById("damageStat");
+    const spellStat = document.getElementById("spellStat");
+    const speedStat = document.getElementById("speedStat");
+    const resistStat = document.getElementById("resistStat");
+    const nextFloorButton = document.getElementById("nextFloorButton");
     const resetButton = document.getElementById("resetButton");
 
     const TILE = 64;
@@ -390,14 +569,244 @@
     const WORLD_H = MAP_ROWS * TILE;
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const TAU = Math.PI * 2;
+    const SHOP_ZONE = { x: TILE * 4.5, y: TILE * 4.5, radius: 118 };
+
+    const ELEMENT_COLORS = {
+      physical: "#f0ebff",
+      fire: "#ff8b4a",
+      water: "#4bd9ff",
+      holy: "#f7f0a8",
+      dark: "#9c80ff",
+      nature: "#63f0c4",
+      arcane: "#c482ff"
+    };
+
+    const CLASS_DEFS = {
+      warrior: {
+        name: "Warrior",
+        summary: "Warriors survive close quarters, scale hardest with Strength, and carve packs with a physical rift cleave.",
+        stats: { strength: 9, intelligence: 2, agility: 4 },
+        baseHp: 146,
+        baseMana: 52,
+        baseSpeed: 202,
+        attackElement: "physical",
+        skillElement: "physical",
+        attackName: "Rift Steel",
+        skillName: "Rift Cleave",
+        guardElement: "physical",
+        guard: 0.12
+      },
+      mage: {
+        name: "Mage",
+        summary: "Mages turn Intelligence into heavy elemental damage and use fire bolts with an arcane burst.",
+        stats: { strength: 2, intelligence: 10, agility: 3 },
+        baseHp: 98,
+        baseMana: 116,
+        baseSpeed: 196,
+        attackElement: "fire",
+        skillElement: "arcane",
+        attackName: "Ember Bolt",
+        skillName: "Arcane Nova",
+        guardElement: "fire",
+        guard: 0.1
+      },
+      archer: {
+        name: "Archer",
+        summary: "Archers scale with Agility, fire quickly from range, and pierce enemies with nature-touched shots.",
+        stats: { strength: 4, intelligence: 3, agility: 9 },
+        baseHp: 112,
+        baseMana: 68,
+        baseSpeed: 228,
+        attackElement: "nature",
+        skillElement: "physical",
+        attackName: "Warden Arrow",
+        skillName: "Piercing Volley",
+        guardElement: "nature",
+        guard: 0.1
+      }
+    };
+
+    const ENEMY_DEFS = {
+      husk: {
+        name: "Rift Husk",
+        family: "dark",
+        radius: 15,
+        hp: 34,
+        speed: 118,
+        damage: 8,
+        xp: 9,
+        gold: 5,
+        color: "#9c80ff",
+        resists: { dark: 0.55, holy: 1.55, fire: 1.12 }
+      },
+      brute: {
+        name: "Bone Brute",
+        family: "undead",
+        radius: 21,
+        hp: 84,
+        speed: 82,
+        damage: 14,
+        xp: 22,
+        gold: 12,
+        color: "#ff668a",
+        resists: { physical: 0.82, dark: 0.7, holy: 1.65 }
+      },
+      emberling: {
+        name: "Emberling",
+        family: "fire",
+        radius: 16,
+        hp: 48,
+        speed: 126,
+        damage: 10,
+        xp: 13,
+        gold: 8,
+        color: "#ff8b4a",
+        resists: { fire: 0.38, water: 1.8, nature: 1.12 }
+      },
+      shade: {
+        name: "Grave Shade",
+        family: "dark",
+        radius: 18,
+        hp: 64,
+        speed: 108,
+        damage: 12,
+        xp: 18,
+        gold: 10,
+        color: "#6c42d9",
+        resists: { dark: 0.35, physical: 0.9, holy: 1.85 }
+      },
+      tidecaller: {
+        name: "Tidecaller",
+        family: "water",
+        radius: 19,
+        hp: 72,
+        speed: 102,
+        damage: 13,
+        xp: 20,
+        gold: 11,
+        color: "#4bd9ff",
+        resists: { water: 0.45, fire: 1.5, nature: 0.82, arcane: 1.18 }
+      }
+    };
+
+    const FLOOR_DEFS = [
+      {
+        name: "Gloam Gate",
+        anchorHp: 130,
+        enemyCap: 26,
+        spawnEvery: 4.8,
+        anchorTypes: ["husk", "husk", "brute"],
+        startEnemies: [
+          ["husk", 9, 5], ["husk", 14, 13], ["brute", 28, 9], ["husk", 36, 27]
+        ],
+        anchors: [[18, 9], [33, 18], [21, 29]]
+      },
+      {
+        name: "Cinder Hollows",
+        anchorHp: 180,
+        enemyCap: 30,
+        spawnEvery: 4.2,
+        anchorTypes: ["emberling", "husk", "brute"],
+        startEnemies: [
+          ["emberling", 11, 6], ["emberling", 31, 11], ["brute", 17, 22], ["husk", 36, 25], ["emberling", 27, 28]
+        ],
+        anchors: [[16, 8], [34, 15], [19, 27], [35, 26]]
+      },
+      {
+        name: "Bone Chapel",
+        anchorHp: 235,
+        enemyCap: 34,
+        spawnEvery: 3.8,
+        anchorTypes: ["shade", "brute", "husk", "tidecaller"],
+        startEnemies: [
+          ["shade", 9, 9], ["brute", 14, 17], ["shade", 28, 8], ["tidecaller", 33, 20], ["brute", 24, 29], ["shade", 38, 27]
+        ],
+        anchors: [[14, 11], [29, 9], [35, 19], [20, 28], [36, 28]]
+      }
+    ];
+
+    const SHOP_ITEMS = [
+      {
+        id: "health",
+        label: "Health Tonic",
+        cost: 22,
+        detail: "Restore 55 health.",
+        buy() {
+          state.player.hp = Math.min(state.player.maxHp, state.player.hp + 55);
+          addEffect(state.player.x, state.player.y - 26, "+55 HP", "#ff668a");
+        }
+      },
+      {
+        id: "mana",
+        label: "Mana Tonic",
+        cost: 18,
+        detail: "Restore 60 mana.",
+        buy() {
+          state.player.mana = Math.min(state.player.maxMana, state.player.mana + 60);
+          addEffect(state.player.x, state.player.y - 26, "+60 Mana", "#63f0c4");
+        }
+      },
+      {
+        id: "training",
+        label: "Class Training",
+        cost: 48,
+        detail: "Raise your class primary stat by 1.",
+        buy() {
+          const stat = getPrimaryStatKey();
+          state.player.stats[stat] += 1;
+          recalculatePlayerStats(false);
+          addEffect(state.player.x, state.player.y - 26, `+1 ${stat.toUpperCase()}`, "#f7cc78");
+        }
+      }
+    ];
+
+    const QUEST_DEFS = [
+      {
+        id: "anchors",
+        name: "Seal the First Tears",
+        target: 3,
+        detail: "Clear 3 rift anchors.",
+        reward: "45 gold, 35 XP, +1 primary stat",
+        progress() {
+          return state.quests.anchorsCleared;
+        },
+        claim() {
+          state.gold += 45;
+          gainXp(35);
+          state.player.stats[getPrimaryStatKey()] += 1;
+          recalculatePlayerStats(false);
+        }
+      },
+      {
+        id: "samples",
+        name: "Bring Back Rift Spoils",
+        target: 12,
+        detail: "Defeat 12 enemies for the market scout.",
+        reward: "32 gold, 40 XP, +1 Agility",
+        progress() {
+          return state.quests.kills;
+        },
+        claim() {
+          state.gold += 32;
+          gainXp(40);
+          state.player.stats.agility += 1;
+          recalculatePlayerStats(false);
+        }
+      }
+    ];
 
     const keys = new Set();
     const mouse = { x: 0, y: 0, down: false };
     const blocked = new Set();
     let lastTick = 0;
+    let lastShopMarkup = "";
+    let lastQuestMarkup = "";
 
     const state = {
       running: true,
+      classKey: "warrior",
+      floor: 1,
+      floorClear: false,
       camera: { x: 0, y: 0 },
       player: null,
       enemies: [],
@@ -407,7 +816,14 @@
       anchors: [],
       gold: 0,
       xp: 0,
-      xpToNext: 30
+      xpToNext: 30,
+      nearShop: true,
+      quests: {
+        kills: 0,
+        anchorsCleared: 0,
+        claimed: {}
+      },
+      shopPurchases: 0
     };
 
     function clamp(value, min, max) {
@@ -451,6 +867,12 @@
         [24, 26, 11, 2],
         [36, 23, 2, 6]
       ];
+      if (state.floor >= 2) {
+        rooms.push([6, 15, 7, 2], [29, 20, 2, 7]);
+      }
+      if (state.floor >= 3) {
+        rooms.push([17, 13, 8, 2], [39, 7, 2, 10]);
+      }
 
       for (const [startCol, startRow, width, height] of rooms) {
         for (let col = startCol; col < startCol + width; col += 1) {
@@ -461,7 +883,8 @@
       }
 
       const doorTiles = [
-        [12, 7], [24, 8], [33, 13], [12, 24], [29, 26], [36, 25]
+        [12, 7], [24, 8], [33, 13], [12, 24], [29, 26], [36, 25],
+        [9, 15], [29, 23], [20, 13], [39, 12]
       ];
       doorTiles.forEach(([col, row]) => blocked.delete(tileKey(col, row)));
     }
@@ -522,69 +945,193 @@
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
 
-    function spawnEnemy(x, y, type = "husk") {
-      const brute = type === "brute";
-      state.enemies.push({
-        type,
-        x,
-        y,
-        radius: brute ? 21 : 15,
-        hp: brute ? 82 : 34,
-        maxHp: brute ? 82 : 34,
-        speed: brute ? 82 : 118,
-        damage: brute ? 14 : 8,
-        hitTimer: 0,
-        xp: brute ? 22 : 9,
-        gold: brute ? 12 : 5,
-        color: brute ? "#ff668a" : "#9c80ff"
-      });
+    function getClassDef() {
+      return CLASS_DEFS[state.classKey] || CLASS_DEFS.warrior;
     }
 
-    function spawnAnchor(x, y) {
-      state.anchors.push({
-        x,
-        y,
-        radius: 28,
-        hp: 130,
-        maxHp: 130,
-        spawnTimer: 1.8
-      });
+    function getFloorDef() {
+      return FLOOR_DEFS[Math.min(state.floor - 1, FLOOR_DEFS.length - 1)];
     }
 
-    function resetGame() {
-      buildMap();
-      state.player = {
-        x: TILE * 4.5,
-        y: TILE * 4.5,
+    function getPrimaryStatKey() {
+      if (state.classKey === "mage") return "intelligence";
+      if (state.classKey === "archer") return "agility";
+      return "strength";
+    }
+
+    function getDerivedStats() {
+      const classDef = getClassDef();
+      const stats = state.player?.stats || classDef.stats;
+      const level = state.player?.level || 1;
+      return {
+        maxHp: Math.round(classDef.baseHp + stats.strength * 9 + level * 8),
+        maxMana: Math.round(classDef.baseMana + stats.intelligence * 8 + level * 5),
+        speed: Math.round(classDef.baseSpeed + stats.agility * 5 + level * 1.5),
+        weaponDamage: Math.round(9 + stats.strength * 1.65 + stats.agility * 0.85 + level * 1.35),
+        spellDamage: Math.round(12 + stats.intelligence * 2.25 + stats.agility * 0.45 + level * 1.55),
+        attackCooldown: Math.max(0.16, 0.38 - stats.agility * 0.012 - level * 0.002),
+        manaRegen: 5.2 + stats.intelligence * 0.38,
+        dashCooldown: Math.max(1.4, 2.8 - stats.agility * 0.035)
+      };
+    }
+
+    function recalculatePlayerStats(refill = false) {
+      const player = state.player;
+      if (!player) {
+        return;
+      }
+      const oldMaxHp = player.maxHp || 1;
+      const oldMaxMana = player.maxMana || 1;
+      const derived = getDerivedStats();
+      player.maxHp = derived.maxHp;
+      player.maxMana = derived.maxMana;
+      player.speed = derived.speed;
+      player.damage = derived.weaponDamage;
+      player.skillDamage = derived.spellDamage;
+      if (refill) {
+        player.hp = player.maxHp;
+        player.mana = player.maxMana;
+      } else {
+        player.hp = Math.min(player.maxHp, Math.max(1, Math.round(player.hp * (player.maxHp / oldMaxHp))));
+        player.mana = Math.min(player.maxMana, Math.round(player.mana * (player.maxMana / oldMaxMana)));
+      }
+    }
+
+    function createPlayer() {
+      const classDef = getClassDef();
+      const player = {
+        x: SHOP_ZONE.x,
+        y: SHOP_ZONE.y,
         radius: 16,
-        hp: 120,
-        maxHp: 120,
-        mana: 70,
-        maxMana: 70,
+        hp: 1,
+        maxHp: 1,
+        mana: 1,
+        maxMana: 1,
         level: 1,
-        damage: 15,
-        speed: 210,
+        stats: { ...classDef.stats },
+        damage: 1,
+        skillDamage: 1,
+        speed: 1,
         attackTimer: 0,
         skillTimer: 0,
         dashTimer: 0,
         dashCooldown: 0
       };
+      state.player = player;
+      recalculatePlayerStats(true);
+    }
+
+    function getElementMultiplier(target, element) {
+      return target.resists?.[element] ?? 1;
+    }
+
+    function applyDamage(target, amount, element = "physical") {
+      const multiplier = getElementMultiplier(target, element);
+      const finalDamage = amount * multiplier;
+      target.hp -= finalDamage;
+      if (target.hitTimer !== undefined) {
+        target.hitTimer = 0.1;
+      }
+      if (multiplier >= 1.45) {
+        addEffect(target.x, target.y - target.radius - 12, "Weak", ELEMENT_COLORS[element] || "#f7cc78");
+      } else if (multiplier <= 0.65) {
+        addEffect(target.x, target.y - target.radius - 12, "Resist", "#c2b8d8");
+      }
+      return finalDamage;
+    }
+
+    function spawnEnemy(x, y, type = "husk") {
+      const def = ENEMY_DEFS[type] || ENEMY_DEFS.husk;
+      const floorScale = 1 + (state.floor - 1) * 0.28;
+      state.enemies.push({
+        type,
+        name: def.name,
+        family: def.family,
+        x,
+        y,
+        radius: def.radius,
+        hp: Math.round(def.hp * floorScale),
+        maxHp: Math.round(def.hp * floorScale),
+        speed: def.speed + (state.floor - 1) * 8,
+        damage: Math.round(def.damage * (1 + (state.floor - 1) * 0.18)),
+        hitTimer: 0,
+        xp: Math.round(def.xp * floorScale),
+        gold: Math.round(def.gold * floorScale),
+        color: def.color,
+        resists: { ...def.resists }
+      });
+    }
+
+    function spawnAnchor(x, y) {
+      const floorDef = getFloorDef();
+      const hp = Math.round(floorDef.anchorHp * (1 + Math.max(0, state.floor - FLOOR_DEFS.length) * 0.18));
+      state.anchors.push({
+        x,
+        y,
+        radius: 28,
+        hp,
+        maxHp: hp,
+        spawnTimer: 1.8,
+        element: "dark",
+        resists: { dark: 0.45, holy: 1.7, arcane: 1.25 }
+      });
+    }
+
+    function startFloor(floorNumber) {
+      state.floor = floorNumber;
+      state.floorClear = false;
+      buildMap();
+      const floorDef = getFloorDef();
+      if (!state.player) {
+        createPlayer();
+      }
+      state.player.x = SHOP_ZONE.x;
+      state.player.y = SHOP_ZONE.y;
+      state.player.hp = state.player.maxHp;
+      state.player.mana = state.player.maxMana;
+      state.player.attackTimer = 0;
+      state.player.skillTimer = 0;
+      state.player.dashTimer = 0;
+      state.player.dashCooldown = 0;
       state.enemies = [];
       state.projectiles = [];
       state.pickups = [];
       state.effects = [];
       state.anchors = [];
+      state.nearShop = true;
+      for (const [col, row] of floorDef.anchors) {
+        spawnAnchor(TILE * col, TILE * row);
+      }
+      for (const [type, col, row] of floorDef.startEnemies) {
+        spawnEnemy(TILE * col, TILE * row, type);
+      }
+      addEffect(state.player.x, state.player.y - 30, floorDef.name, "#f7cc78");
+      lastTick = 0;
+    }
+
+    function resetGame() {
+      createPlayer();
+      state.floor = 1;
+      state.floorClear = false;
       state.gold = 0;
       state.xp = 0;
       state.xpToNext = 30;
-      spawnAnchor(TILE * 18, TILE * 9);
-      spawnAnchor(TILE * 33, TILE * 18);
-      spawnAnchor(TILE * 21, TILE * 29);
-      spawnEnemy(TILE * 9, TILE * 5);
-      spawnEnemy(TILE * 14, TILE * 13);
-      spawnEnemy(TILE * 28, TILE * 9, "brute");
-      spawnEnemy(TILE * 36, TILE * 27);
-      lastTick = 0;
+      state.shopPurchases = 0;
+      state.quests = {
+        kills: 0,
+        anchorsCleared: 0,
+        claimed: {}
+      };
+      lastShopMarkup = "";
+      lastQuestMarkup = "";
+      startFloor(1);
+    }
+
+    function nextFloor() {
+      if (!state.floorClear) {
+        return;
+      }
+      startFloor(state.floor + 1);
     }
 
     function gainXp(amount) {
@@ -593,11 +1140,13 @@
         state.xp -= state.xpToNext;
         state.xpToNext = Math.round(state.xpToNext * 1.22 + 12);
         state.player.level += 1;
-        state.player.maxHp += 14;
-        state.player.maxMana += 8;
-        state.player.damage += 3;
-        state.player.hp = state.player.maxHp;
-        state.player.mana = state.player.maxMana;
+        state.player.stats[getPrimaryStatKey()] += 1;
+        if (state.player.level % 3 === 0) {
+          state.player.stats.strength += 1;
+          state.player.stats.intelligence += 1;
+          state.player.stats.agility += 1;
+        }
+        recalculatePlayerStats(true);
         addEffect(state.player.x, state.player.y - 22, "Level Up", "#f7cc78");
       }
     }
@@ -616,38 +1165,120 @@
       }
     }
 
+    function renderClassButtons() {
+      const classDef = getClassDef();
+      classStat.textContent = classDef.name;
+      classSummary.textContent = classDef.summary;
+      for (const button of classButtons) {
+        button.classList.toggle("is-active", button.dataset.class === state.classKey);
+      }
+    }
+
+    function renderShop() {
+      shopText.textContent = state.nearShop
+        ? "Rift Market is open. Spend gold on supplies or permanent class training."
+        : "Return to the glowing market circle near the gate to buy supplies and training.";
+      const markup = SHOP_ITEMS.map((item) => {
+        const affordable = state.gold >= item.cost;
+        const disabled = !state.nearShop || !affordable ? " disabled" : "";
+        return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${item.detail}</small></button>`;
+      }).join("");
+      if (markup !== lastShopMarkup) {
+        shopList.innerHTML = markup;
+        lastShopMarkup = markup;
+      }
+    }
+
+    function renderQuests() {
+      const markup = QUEST_DEFS.map((quest) => {
+        const progress = Math.min(quest.target, quest.progress());
+        const claimed = Boolean(state.quests.claimed[quest.id]);
+        const complete = progress >= quest.target;
+        const claimButton = complete && !claimed
+          ? `<button class="quest-claim" type="button" data-quest="${quest.id}">Claim</button>`
+          : "";
+        const status = claimed ? "Complete" : `${progress} / ${quest.target}`;
+        return `<div class="quest-item${complete ? " is-complete" : ""}"><strong>${quest.name}</strong><small>${quest.detail}<br>Progress: ${status}<br>Reward: ${quest.reward}</small>${claimButton}</div>`;
+      }).join("");
+      if (markup !== lastQuestMarkup) {
+        questList.innerHTML = markup;
+        lastQuestMarkup = markup;
+      }
+    }
+
+    function buyShopItem(itemId) {
+      const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
+      if (!item || !state.nearShop || state.gold < item.cost) {
+        return;
+      }
+      state.gold -= item.cost;
+      state.shopPurchases += 1;
+      item.buy();
+      lastShopMarkup = "";
+    }
+
+    function claimQuest(questId) {
+      const quest = QUEST_DEFS.find((entry) => entry.id === questId);
+      if (!quest || state.quests.claimed[quest.id] || quest.progress() < quest.target) {
+        return;
+      }
+      state.quests.claimed[quest.id] = true;
+      quest.claim();
+      addEffect(state.player.x, state.player.y - 36, "Quest Complete", "#63f0c4");
+      lastQuestMarkup = "";
+      lastShopMarkup = "";
+    }
+
+    function setClass(classKey) {
+      if (!CLASS_DEFS[classKey] || state.classKey === classKey) {
+        return;
+      }
+      state.classKey = classKey;
+      lastShopMarkup = "";
+      lastQuestMarkup = "";
+      resetGame();
+    }
+
     function fireBolt() {
       const player = state.player;
       if (player.attackTimer > 0) {
         return;
       }
+      const classDef = getClassDef();
+      const derived = getDerivedStats();
       const target = screenToWorld(mouse.x, mouse.y);
       const angle = Math.atan2(target.y - player.y, target.x - player.x);
-      const speed = 560;
+      const speed = state.classKey === "archer" ? 650 : 560;
+      const damage = state.classKey === "mage" ? derived.spellDamage * 0.82 : derived.weaponDamage;
       state.projectiles.push({
         x: player.x + Math.cos(angle) * 20,
         y: player.y + Math.sin(angle) * 20,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        radius: 5,
-        damage: player.damage,
-        life: 0.95,
-        color: "#63f0c4"
+        radius: state.classKey === "mage" ? 6 : 5,
+        damage,
+        element: classDef.attackElement,
+        life: state.classKey === "archer" ? 1.15 : 0.95,
+        color: ELEMENT_COLORS[classDef.attackElement] || "#63f0c4"
       });
-      player.attackTimer = Math.max(0.18, 0.34 - player.level * 0.006);
+      player.attackTimer = derived.attackCooldown;
     }
 
     function castCleave() {
       const player = state.player;
-      if (player.skillTimer > 0 || player.mana < 18) {
+      const classDef = getClassDef();
+      const derived = getDerivedStats();
+      const manaCost = state.classKey === "mage" ? 28 : state.classKey === "archer" ? 20 : 18;
+      if (player.skillTimer > 0 || player.mana < manaCost) {
         return;
       }
-      player.mana -= 18;
-      player.skillTimer = 4.2;
+      player.mana -= manaCost;
+      player.skillTimer = state.classKey === "mage" ? 4.8 : state.classKey === "archer" ? 3.4 : 4.2;
       const target = screenToWorld(mouse.x, mouse.y);
       const angle = Math.atan2(target.y - player.y, target.x - player.x);
-      const range = 128;
-      const width = 1.45;
+      const range = state.classKey === "archer" ? 270 : state.classKey === "mage" ? 154 : 132;
+      const width = state.classKey === "archer" ? 0.58 : 1.45;
+      const skillDamage = state.classKey === "warrior" ? derived.weaponDamage * 2.55 : derived.spellDamage * 2.05;
       let hitCount = 0;
 
       for (const enemy of state.enemies) {
@@ -657,16 +1288,21 @@
         if (distance > range + enemy.radius) {
           continue;
         }
-        const enemyAngle = Math.atan2(dy, dx);
-        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
-        if (Math.abs(delta) <= width * 0.5) {
-          enemy.hp -= player.damage * 2.35;
+        if (state.classKey === "mage") {
+          applyDamage(enemy, skillDamage, classDef.skillElement);
           hitCount += 1;
+        } else {
+          const enemyAngle = Math.atan2(dy, dx);
+          const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
+          if (Math.abs(delta) <= width * 0.5) {
+            applyDamage(enemy, skillDamage, classDef.skillElement);
+            hitCount += 1;
+          }
         }
       }
 
       state.effects.push({
-        kind: "cleave",
+        kind: state.classKey === "mage" ? "nova" : "cleave",
         x: player.x,
         y: player.y,
         angle,
@@ -674,10 +1310,10 @@
         width,
         life: 0.18,
         maxLife: 0.18,
-        color: "rgba(99, 240, 196, 0.34)"
+        color: state.classKey === "mage" ? "rgba(196, 130, 255, 0.32)" : "rgba(99, 240, 196, 0.34)"
       });
       if (hitCount) {
-        addEffect(player.x, player.y - 34, `${hitCount} hit`, "#63f0c4");
+        addEffect(player.x, player.y - 34, `${hitCount} hit`, ELEMENT_COLORS[classDef.skillElement] || "#63f0c4");
       }
     }
 
@@ -687,11 +1323,12 @@
         return;
       }
       player.dashTimer = 0.16;
-      player.dashCooldown = 2.6;
+      player.dashCooldown = getDerivedStats().dashCooldown;
     }
 
     function updatePlayer(dt) {
       const player = state.player;
+      const derived = getDerivedStats();
       let mx = 0;
       let my = 0;
       if (keys.has("w") || keys.has("ArrowUp")) my -= 1;
@@ -710,7 +1347,8 @@
       player.skillTimer = Math.max(0, player.skillTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
-      player.mana = Math.min(player.maxMana, player.mana + 6 * dt);
+      player.mana = Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
+      state.nearShop = distanceSquared(player.x, player.y, SHOP_ZONE.x, SHOP_ZONE.y) <= (SHOP_ZONE.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
     }
@@ -730,8 +1368,7 @@
         let hit = false;
         for (const enemy of state.enemies) {
           if (distanceSquared(projectile.x, projectile.y, enemy.x, enemy.y) <= (projectile.radius + enemy.radius) ** 2) {
-            enemy.hp -= projectile.damage;
-            enemy.hitTimer = 0.1;
+            applyDamage(enemy, projectile.damage, projectile.element);
             hit = true;
             break;
           }
@@ -745,15 +1382,17 @@
     function updateAnchors(dt) {
       for (let index = state.anchors.length - 1; index >= 0; index -= 1) {
         const anchor = state.anchors[index];
+        const floorDef = getFloorDef();
         anchor.spawnTimer -= dt;
-        if (anchor.spawnTimer <= 0 && state.enemies.length < 26) {
-          anchor.spawnTimer = 4.8;
-          spawnEnemy(anchor.x + (Math.random() - 0.5) * 80, anchor.y + (Math.random() - 0.5) * 80, Math.random() < 0.2 ? "brute" : "husk");
+        if (anchor.spawnTimer <= 0 && state.enemies.length < floorDef.enemyCap) {
+          anchor.spawnTimer = floorDef.spawnEvery;
+          const type = floorDef.anchorTypes[Math.floor(Math.random() * floorDef.anchorTypes.length)];
+          spawnEnemy(anchor.x + (Math.random() - 0.5) * 80, anchor.y + (Math.random() - 0.5) * 80, type);
         }
 
         for (const projectile of state.projectiles) {
           if (distanceSquared(projectile.x, projectile.y, anchor.x, anchor.y) <= (projectile.radius + anchor.radius) ** 2) {
-            anchor.hp -= projectile.damage;
+            applyDamage(anchor, projectile.damage, projectile.element);
             projectile.life = 0;
           }
         }
@@ -761,7 +1400,12 @@
           addEffect(anchor.x, anchor.y - 36, "Anchor Cleared", "#f7cc78");
           state.pickups.push({ type: "gold", x: anchor.x, y: anchor.y, radius: 10, value: 35, color: "#f7cc78" });
           state.anchors.splice(index, 1);
+          state.quests.anchorsCleared += 1;
         }
+      }
+      if (!state.floorClear && state.anchors.length === 0) {
+        state.floorClear = true;
+        addEffect(state.player.x, state.player.y - 34, "Layer Cleared", "#63f0c4");
       }
     }
 
@@ -779,7 +1423,9 @@
         enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
 
         if (distance < player.radius + enemy.radius + 3) {
-          player.hp -= enemy.damage * dt;
+          const classDef = getClassDef();
+          const guarded = classDef.guardElement === enemy.family;
+          player.hp -= enemy.damage * (guarded ? 1 - classDef.guard : 1) * dt;
           if (player.hp <= 0) {
             player.hp = player.maxHp;
             player.x = TILE * 4.5;
@@ -790,6 +1436,7 @@
         }
 
         if (enemy.hp <= 0) {
+          state.quests.kills += 1;
           gainXp(enemy.xp);
           dropLoot(enemy.x, enemy.y, enemy);
           state.enemies.splice(index, 1);
@@ -893,6 +1540,19 @@
     function drawWorld() {
       drawTiles();
 
+      const shopPoint = worldToScreen(SHOP_ZONE.x, SHOP_ZONE.y);
+      ctx.fillStyle = state.nearShop ? "rgba(247, 204, 120, 0.16)" : "rgba(247, 204, 120, 0.08)";
+      ctx.beginPath();
+      ctx.arc(shopPoint.x, shopPoint.y, SHOP_ZONE.radius, 0, TAU);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(247, 204, 120, 0.32)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = "#f7cc78";
+      ctx.font = "800 13px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("Rift Market", shopPoint.x, shopPoint.y - SHOP_ZONE.radius - 10);
+
       for (const pickup of state.pickups) {
         drawCircleEntity(pickup, pickup.color, "rgba(255, 255, 255, 0.18)");
       }
@@ -927,6 +1587,13 @@
           ctx.arc(point.x, point.y, effect.range, effect.angle - effect.width * 0.5, effect.angle + effect.width * 0.5);
           ctx.closePath();
           ctx.fill();
+        } else if (effect.kind === "nova") {
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = effect.color;
+          ctx.lineWidth = 18 * alpha;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.25), 0, TAU);
+          ctx.stroke();
         } else {
           ctx.globalAlpha = alpha;
           ctx.fillStyle = effect.color;
@@ -957,15 +1624,29 @@
 
     function updateHud() {
       const player = state.player;
+      const classDef = getClassDef();
+      const derived = getDerivedStats();
+      const floorDef = getFloorDef();
       hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
       manaStat.textContent = `${Math.floor(player.mana)} / ${player.maxMana}`;
       levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
       goldStat.textContent = String(state.gold);
-      skillStat.textContent = player.skillTimer <= 0 ? "Rift Cleave" : `${player.skillTimer.toFixed(1)}s`;
+      floorStat.textContent = `${state.floor}: ${floorDef.name}`;
+      coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
+      damageStat.textContent = String(derived.weaponDamage);
+      spellStat.textContent = String(derived.spellDamage);
+      speedStat.textContent = String(derived.speed);
+      resistStat.textContent = `${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
+      attackStat.textContent = classDef.attackName;
+      skillStat.textContent = player.skillTimer <= 0 ? classDef.skillName : `${player.skillTimer.toFixed(1)}s`;
       dashStat.textContent = player.dashCooldown <= 0 ? "Blink Dash" : `${player.dashCooldown.toFixed(1)}s`;
+      nextFloorButton.disabled = !state.floorClear;
       objectiveText.textContent = state.anchors.length
-        ? `Clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
-        : "Rift stabilized. The next layer is ready for quests, gear, vendors, and boss rooms.";
+        ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
+        : `${floorDef.name} stabilized. Use the market, claim quests, then descend to the next layer.`;
+      renderClassButtons();
+      renderShop();
+      renderQuests();
     }
 
     function loop(timestamp) {
@@ -1018,7 +1699,23 @@
     });
 
     window.addEventListener("resize", resizeCanvas);
+    nextFloorButton.addEventListener("click", nextFloor);
     resetButton.addEventListener("click", resetGame);
+    for (const button of classButtons) {
+      button.addEventListener("click", () => setClass(button.dataset.class));
+    }
+    shopList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-shop]");
+      if (button) {
+        buyShopItem(button.dataset.shop);
+      }
+    });
+    questList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-quest]");
+      if (button) {
+        claimQuest(button.dataset.quest);
+      }
+    });
 
     resizeCanvas();
     resetGame();
