@@ -174,7 +174,8 @@
     }
 
     .button:disabled,
-    .shop-button:disabled {
+    .shop-button:disabled,
+    .stat-button:disabled {
       opacity: 0.46;
       cursor: not-allowed;
     }
@@ -259,7 +260,8 @@
     .class-grid,
     .shop-list,
     .quest-list,
-    .sheet-grid {
+    .sheet-grid,
+    .stat-spend {
       display: grid;
       gap: 9px;
     }
@@ -271,6 +273,7 @@
 
     .class-button,
     .shop-button,
+    .stat-button,
     .quest-item {
       border: 1px solid rgba(156, 128, 255, 0.18);
       border-radius: 12px;
@@ -279,7 +282,8 @@
     }
 
     .class-button,
-    .shop-button {
+    .shop-button,
+    .stat-button {
       cursor: pointer;
       font-weight: 800;
     }
@@ -308,7 +312,8 @@
 
     .shop-list,
     .quest-list,
-    .sheet-grid {
+    .sheet-grid,
+    .stat-spend {
       margin-top: 12px;
     }
 
@@ -316,6 +321,16 @@
       width: 100%;
       padding: 11px 12px;
       text-align: left;
+    }
+
+    .stat-spend {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat-button {
+      min-height: 44px;
+      padding: 8px;
+      color: var(--text);
     }
 
     .quest-claim {
@@ -493,6 +508,7 @@
         </section>
         <section class="side-card">
           <h2>Warden Sheet</h2>
+          <p id="statPointText">Spend stat points earned from leveling.</p>
           <div class="sheet-grid">
             <div class="sheet-stat">
               <strong id="damageStat">0</strong>
@@ -510,6 +526,11 @@
               <strong id="resistStat">0%</strong>
               <small>Class Guard</small>
             </div>
+          </div>
+          <div class="stat-spend" id="statSpend">
+            <button class="stat-button" type="button" data-stat="strength">+ STR</button>
+            <button class="stat-button" type="button" data-stat="intelligence">+ INT</button>
+            <button class="stat-button" type="button" data-stat="agility">+ AGI</button>
           </div>
         </section>
         <section class="side-card">
@@ -555,6 +576,8 @@
     const shopText = document.getElementById("shopText");
     const shopList = document.getElementById("shopList");
     const questList = document.getElementById("questList");
+    const statPointText = document.getElementById("statPointText");
+    const statButtons = Array.from(document.querySelectorAll("[data-stat]"));
     const damageStat = document.getElementById("damageStat");
     const spellStat = document.getElementById("spellStat");
     const speedStat = document.getElementById("speedStat");
@@ -591,8 +614,9 @@
         baseSpeed: 202,
         attackElement: "physical",
         skillElement: "physical",
-        attackName: "Rift Steel",
+        attackName: "Throwing Axe",
         skillName: "Rift Cleave",
+        mobilityName: "Shield Charge",
         guardElement: "physical",
         guard: 0.12
       },
@@ -607,6 +631,7 @@
         skillElement: "arcane",
         attackName: "Ember Bolt",
         skillName: "Arcane Nova",
+        mobilityName: "Blink",
         guardElement: "fire",
         guard: 0.1
       },
@@ -621,105 +646,124 @@
         skillElement: "physical",
         attackName: "Warden Arrow",
         skillName: "Piercing Volley",
-        guardElement: "nature",
-        guard: 0.1
+        mobilityName: "Disengage",
+        guardElement: "physical",
+        guard: 0.08
       }
     };
 
     const ENEMY_DEFS = {
-      husk: {
-        name: "Rift Husk",
-        family: "dark",
-        radius: 15,
-        hp: 34,
-        speed: 118,
-        damage: 8,
-        xp: 9,
-        gold: 5,
-        color: "#9c80ff",
-        resists: { dark: 0.55, holy: 1.55, fire: 1.12 }
+      goblin: {
+        name: "Goblin Cutpurse",
+        family: "humanoid",
+        radius: 14,
+        hp: 32,
+        speed: 132,
+        damage: 7,
+        damageElement: "physical",
+        xp: 8,
+        gold: 6,
+        color: "#63f0c4",
+        resists: { nature: 0.78, fire: 1.25, physical: 1.05 }
       },
-      brute: {
-        name: "Bone Brute",
-        family: "undead",
+      orc: {
+        name: "Orc Breaker",
+        family: "humanoid",
         radius: 21,
-        hp: 84,
-        speed: 82,
-        damage: 14,
+        hp: 92,
+        speed: 88,
+        damage: 15,
+        damageElement: "physical",
         xp: 22,
-        gold: 12,
-        color: "#ff668a",
-        resists: { physical: 0.82, dark: 0.7, holy: 1.65 }
+        gold: 14,
+        color: "#5aa66d",
+        resists: { physical: 0.82, arcane: 1.3, fire: 1.12 }
       },
-      emberling: {
-        name: "Emberling",
-        family: "fire",
+      zombie: {
+        name: "Bog Zombie",
+        family: "undead",
         radius: 16,
-        hp: 48,
-        speed: 126,
+        hp: 54,
+        speed: 76,
         damage: 10,
-        xp: 13,
+        damageElement: "dark",
+        xp: 14,
         gold: 8,
-        color: "#ff8b4a",
-        resists: { fire: 0.38, water: 1.8, nature: 1.12 }
+        color: "#7b8f5a",
+        resists: { dark: 0.5, nature: 0.75, holy: 1.7, fire: 1.35 }
       },
-      shade: {
-        name: "Grave Shade",
-        family: "dark",
+      skeleton: {
+        name: "Bone Archer",
+        family: "undead",
         radius: 18,
-        hp: 64,
-        speed: 108,
+        hp: 62,
+        speed: 104,
         damage: 12,
+        damageElement: "physical",
         xp: 18,
-        gold: 10,
-        color: "#6c42d9",
-        resists: { dark: 0.35, physical: 0.9, holy: 1.85 }
+        gold: 11,
+        color: "#d9d3c2",
+        resists: { physical: 0.9, dark: 0.62, holy: 1.85, fire: 1.1 }
       },
-      tidecaller: {
-        name: "Tidecaller",
-        family: "water",
+      fireImp: {
+        name: "Cinder Imp",
+        family: "fire",
+        radius: 15,
+        hp: 50,
+        speed: 132,
+        damage: 11,
+        damageElement: "fire",
+        xp: 15,
+        gold: 9,
+        color: "#ff8b4a",
+        resists: { fire: 0.35, water: 1.8, nature: 1.1 }
+      },
+      cultist: {
+        name: "Dark Cultist",
+        family: "dark",
         radius: 19,
         hp: 72,
-        speed: 102,
+        speed: 106,
         damage: 13,
+        damageElement: "dark",
         xp: 20,
-        gold: 11,
-        color: "#4bd9ff",
-        resists: { water: 0.45, fire: 1.5, nature: 0.82, arcane: 1.18 }
+        gold: 13,
+        color: "#8e5cff",
+        resists: { dark: 0.35, arcane: 0.82, holy: 1.9, physical: 1.05 }
       }
     };
 
     const FLOOR_DEFS = [
       {
-        name: "Gloam Gate",
+        name: "Goblin Warrens",
         anchorHp: 130,
         enemyCap: 26,
         spawnEvery: 4.8,
-        anchorTypes: ["husk", "husk", "brute"],
+        anchorTypes: ["goblin", "goblin", "orc"],
         startEnemies: [
-          ["husk", 9, 5], ["husk", 14, 13], ["brute", 28, 9], ["husk", 36, 27]
+          ["goblin", 9, 5], ["goblin", 14, 13], ["orc", 28, 9], ["goblin", 36, 27]
         ],
         anchors: [[18, 9], [33, 18], [21, 29]]
       },
       {
-        name: "Cinder Hollows",
+        name: "Bonefield Crypt",
         anchorHp: 180,
         enemyCap: 30,
         spawnEvery: 4.2,
-        anchorTypes: ["emberling", "husk", "brute"],
+        anchorTypes: ["zombie", "skeleton", "skeleton"],
         startEnemies: [
-          ["emberling", 11, 6], ["emberling", 31, 11], ["brute", 17, 22], ["husk", 36, 25], ["emberling", 27, 28]
+          ["zombie", 11, 6], ["skeleton", 31, 11], ["zombie", 17, 22], ["skeleton", 36, 25], ["zombie", 27, 28]
         ],
         anchors: [[16, 8], [34, 15], [19, 27], [35, 26]]
       },
       {
-        name: "Bone Chapel",
+        name: "Cinder Sanctum",
         anchorHp: 235,
         enemyCap: 34,
         spawnEvery: 3.8,
-        anchorTypes: ["shade", "brute", "husk", "tidecaller"],
+        anchorTypes: ["fireImp", "cultist", "orc", "fireImp"],
         startEnemies: [
-          ["shade", 9, 9], ["brute", 14, 17], ["shade", 28, 8], ["tidecaller", 33, 20], ["brute", 24, 29], ["shade", 38, 27]
+          ["fireImp", 9, 9], ["orc", 14, 17], ["cultist", 28, 8], ["fireImp", 33, 20], ["orc", 24, 29], ["cultist", 38, 27]
         ],
         anchors: [[14, 11], [29, 9], [35, 19], [20, 28], [36, 28]]
       }
@@ -748,14 +792,12 @@
       },
       {
         id: "training",
-        label: "Class Training",
+        label: "Training Manual",
         cost: 48,
-        detail: "Raise your class primary stat by 1.",
+        detail: "Gain 1 spendable stat point.",
         buy() {
-          const stat = getPrimaryStatKey();
-          state.player.stats[stat] += 1;
-          recalculatePlayerStats(false);
-          addEffect(state.player.x, state.player.y - 26, `+1 ${stat.toUpperCase()}`, "#f7cc78");
+          state.player.statPoints += 1;
+          addEffect(state.player.x, state.player.y - 26, "+1 Stat Point", "#f7cc78");
         }
       }
     ];
@@ -766,15 +808,14 @@
         name: "Seal the First Tears",
         target: 3,
         detail: "Clear 3 rift anchors.",
-        reward: "45 gold, 35 XP, +1 primary stat",
+        reward: "45 gold, 35 XP, +1 stat point",
         progress() {
           return state.quests.anchorsCleared;
         },
         claim() {
           state.gold += 45;
           gainXp(35);
-          state.player.stats[getPrimaryStatKey()] += 1;
-          recalculatePlayerStats(false);
+          state.player.statPoints += 1;
         }
       },
       {
@@ -782,15 +823,14 @@
         name: "Bring Back Rift Spoils",
         target: 12,
         detail: "Defeat 12 enemies for the market scout.",
-        reward: "32 gold, 40 XP, +1 Agility",
+        reward: "32 gold, 40 XP, +1 stat point",
         progress() {
           return state.quests.kills;
         },
         claim() {
           state.gold += 32;
           gainXp(40);
-          state.player.stats.agility += 1;
-          recalculatePlayerStats(false);
+          state.player.statPoints += 1;
         }
       }
     ];
@@ -953,12 +993,6 @@
       return FLOOR_DEFS[Math.min(state.floor - 1, FLOOR_DEFS.length - 1)];
     }
 
-    function getPrimaryStatKey() {
-      if (state.classKey === "mage") return "intelligence";
-      if (state.classKey === "archer") return "agility";
-      return "strength";
-    }
-
     function getDerivedStats() {
       const classDef = getClassDef();
       const stats = state.player?.stats || classDef.stats;
@@ -1008,6 +1042,7 @@
         mana: 1,
         maxMana: 1,
         level: 1,
+        statPoints: 0,
         stats: { ...classDef.stats },
         damage: 1,
         skillDamage: 1,
@@ -1015,7 +1050,10 @@
         attackTimer: 0,
         skillTimer: 0,
         dashTimer: 0,
-        dashCooldown: 0
+        dashCooldown: 0,
+        dashVx: 0,
+        dashVy: 0,
+        dashHits: new Set()
       };
       state.player = player;
       recalculatePlayerStats(true);
@@ -1040,8 +1078,8 @@
       return finalDamage;
     }
 
-    function spawnEnemy(x, y, type = "husk") {
-      const def = ENEMY_DEFS[type] || ENEMY_DEFS.husk;
+    function spawnEnemy(x, y, type = "goblin") {
+      const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
       const floorScale = 1 + (state.floor - 1) * 0.28;
       state.enemies.push({
         type,
@@ -1054,6 +1092,7 @@
         maxHp: Math.round(def.hp * floorScale),
         speed: def.speed + (state.floor - 1) * 8,
         damage: Math.round(def.damage * (1 + (state.floor - 1) * 0.18)),
+        damageElement: def.damageElement,
         hitTimer: 0,
         xp: Math.round(def.xp * floorScale),
         gold: Math.round(def.gold * floorScale),
@@ -1093,6 +1132,9 @@
       state.player.skillTimer = 0;
       state.player.dashTimer = 0;
       state.player.dashCooldown = 0;
+      state.player.dashVx = 0;
+      state.player.dashVy = 0;
+      state.player.dashHits.clear();
       state.enemies = [];
       state.projectiles = [];
       state.pickups = [];
@@ -1140,14 +1182,9 @@
         state.xp -= state.xpToNext;
         state.xpToNext = Math.round(state.xpToNext * 1.22 + 12);
         state.player.level += 1;
-        state.player.stats[getPrimaryStatKey()] += 1;
-        if (state.player.level % 3 === 0) {
-          state.player.stats.strength += 1;
-          state.player.stats.intelligence += 1;
-          state.player.stats.agility += 1;
-        }
+        state.player.statPoints += 1;
         recalculatePlayerStats(true);
-        addEffect(state.player.x, state.player.y - 22, "Level Up", "#f7cc78");
+        addEffect(state.player.x, state.player.y - 22, "+1 Stat Point", "#f7cc78");
       }
     }
 
@@ -1229,6 +1266,16 @@
       lastShopMarkup = "";
     }
 
+    function assignStat(stat) {
+      if (!["strength", "intelligence", "agility"].includes(stat) || state.player.statPoints <= 0) {
+        return;
+      }
+      state.player.statPoints -= 1;
+      state.player.stats[stat] += 1;
+      recalculatePlayerStats(false);
+      addEffect(state.player.x, state.player.y - 28, `+1 ${stat.toUpperCase()}`, "#f7cc78");
+    }
+
     function setClass(classKey) {
       if (!CLASS_DEFS[classKey] || state.classKey === classKey) {
         return;
@@ -1239,6 +1286,27 @@
       resetGame();
     }
 
+    function getAimAngle() {
+      const target = screenToWorld(mouse.x, mouse.y);
+      return Math.atan2(target.y - state.player.y, target.x - state.player.x);
+    }
+
+    function findBlinkDestination(angle, range) {
+      const player = state.player;
+      let bestX = player.x;
+      let bestY = player.y;
+      for (let step = 24; step <= range; step += 16) {
+        const x = clamp(player.x + Math.cos(angle) * step, player.radius, WORLD_W - player.radius);
+        const y = clamp(player.y + Math.sin(angle) * step, player.radius, WORLD_H - player.radius);
+        if (circleBlocked(x, y, player.radius)) {
+          break;
+        }
+        bestX = x;
+        bestY = y;
+      }
+      return { x: bestX, y: bestY };
+    }
+
     function fireBolt() {
       const player = state.player;
       if (player.attackTimer > 0) {
@@ -1246,8 +1314,7 @@
       }
       const classDef = getClassDef();
       const derived = getDerivedStats();
-      const target = screenToWorld(mouse.x, mouse.y);
-      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      const angle = getAimAngle();
       const speed = state.classKey === "archer" ? 650 : 560;
       const damage = state.classKey === "mage" ? derived.spellDamage * 0.82 : derived.weaponDamage;
       state.projectiles.push({
@@ -1258,6 +1325,9 @@
         radius: state.classKey === "mage" ? 6 : 5,
         damage,
         element: classDef.attackElement,
+        kind: state.classKey === "warrior" ? "axe" : state.classKey === "archer" ? "arrow" : "fireball",
+        angle,
+        spin: Math.random() * TAU,
         life: state.classKey === "archer" ? 1.15 : 0.95,
         color: ELEMENT_COLORS[classDef.attackElement] || "#63f0c4"
       });
@@ -1273,9 +1343,8 @@
         return;
       }
       player.mana -= manaCost;
-      player.skillTimer = state.classKey === "mage" ? 4.8 : state.classKey === "archer" ? 3.4 : 4.2;
-      const target = screenToWorld(mouse.x, mouse.y);
-      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      player.skillTimer = state.classKey === "mage" ? 3.7 : state.classKey === "archer" ? 3.4 : 4.2;
+      const angle = getAimAngle();
       const range = state.classKey === "archer" ? 270 : state.classKey === "mage" ? 154 : 132;
       const width = state.classKey === "archer" ? 0.58 : 1.45;
       const skillDamage = state.classKey === "warrior" ? derived.weaponDamage * 2.55 : derived.spellDamage * 2.05;
@@ -1322,8 +1391,28 @@
       if (player.dashCooldown > 0) {
         return;
       }
-      player.dashTimer = 0.16;
-      player.dashCooldown = getDerivedStats().dashCooldown;
+      const angle = getAimAngle();
+      const derived = getDerivedStats();
+      player.dashHits.clear();
+      if (state.classKey === "mage") {
+        const fromX = player.x;
+        const fromY = player.y;
+        const destination = findBlinkDestination(angle, 330 + player.stats.intelligence * 6);
+        player.x = destination.x;
+        player.y = destination.y;
+        player.dashTimer = 0.08;
+        player.dashCooldown = Math.max(1.7, derived.dashCooldown + 0.25);
+        addEffect(fromX, fromY - 20, "Blink", "#c482ff");
+        addEffect(player.x, player.y - 20, "Blink", "#c482ff");
+        return;
+      }
+      const backward = state.classKey === "archer";
+      const moveAngle = backward ? angle + Math.PI : angle;
+      player.dashTimer = backward ? 0.2 : 0.28;
+      player.dashVx = Math.cos(moveAngle) * (backward ? 680 : 610);
+      player.dashVy = Math.sin(moveAngle) * (backward ? 680 : 610);
+      player.dashCooldown = backward ? Math.max(1.25, derived.dashCooldown - 0.15) : Math.max(1.9, derived.dashCooldown + 0.15);
+      addEffect(player.x, player.y - 26, backward ? "Disengage" : "Charge", backward ? "#63f0c4" : "#f7cc78");
     }
 
     function updatePlayer(dt) {
@@ -1336,9 +1425,21 @@
       if (keys.has("a") || keys.has("ArrowLeft")) mx -= 1;
       if (keys.has("d") || keys.has("ArrowRight")) mx += 1;
       const length = Math.hypot(mx, my) || 1;
-      const dashBoost = player.dashTimer > 0 ? 2.7 : 1;
-      if (mx || my) {
-        moveWithCollision(player, (mx / length) * player.speed * dashBoost * dt, (my / length) * player.speed * dashBoost * dt);
+      if (player.dashTimer > 0 && state.classKey !== "mage") {
+        moveWithCollision(player, player.dashVx * dt, player.dashVy * dt);
+        if (state.classKey === "warrior") {
+          for (const enemy of state.enemies) {
+            if (player.dashHits.has(enemy)) {
+              continue;
+            }
+            if (distanceSquared(player.x, player.y, enemy.x, enemy.y) <= (player.radius + enemy.radius + 8) ** 2) {
+              applyDamage(enemy, derived.weaponDamage * 2.7, "physical");
+              player.dashHits.add(enemy);
+            }
+          }
+        }
+      } else if (mx || my) {
+        moveWithCollision(player, (mx / length) * player.speed * dt, (my / length) * player.speed * dt);
       }
       if (mouse.down) {
         fireBolt();
@@ -1347,6 +1448,10 @@
       player.skillTimer = Math.max(0, player.skillTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
+      if (player.dashTimer <= 0) {
+        player.dashVx = 0;
+        player.dashVy = 0;
+      }
       player.mana = Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
       state.nearShop = distanceSquared(player.x, player.y, SHOP_ZONE.x, SHOP_ZONE.y) <= (SHOP_ZONE.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
@@ -1358,6 +1463,7 @@
         const projectile = state.projectiles[index];
         projectile.x += projectile.vx * dt;
         projectile.y += projectile.vy * dt;
+        projectile.spin = (projectile.spin || 0) + 12 * dt;
         projectile.life -= dt;
 
         if (projectile.life <= 0 || circleBlocked(projectile.x, projectile.y, projectile.radius)) {
@@ -1424,7 +1530,7 @@
 
         if (distance < player.radius + enemy.radius + 3) {
           const classDef = getClassDef();
-          const guarded = classDef.guardElement === enemy.family;
+          const guarded = classDef.guardElement === enemy.damageElement;
           player.hp -= enemy.damage * (guarded ? 1 - classDef.guard : 1) * dt;
           if (player.hp <= 0) {
             player.hp = player.maxHp;
@@ -1537,6 +1643,199 @@
       ctx.fillRect(point.x - width * 0.5, point.y - entity.radius - 12, width * pct, 5);
     }
 
+    function drawProjectile(projectile) {
+      const point = worldToScreen(projectile.x, projectile.y);
+      ctx.save();
+      ctx.translate(point.x, point.y);
+      if (projectile.kind === "arrow") {
+        ctx.rotate(projectile.angle);
+        ctx.strokeStyle = "#d9c48f";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-13, 0);
+        ctx.lineTo(12, 0);
+        ctx.stroke();
+        ctx.fillStyle = "#f0ebff";
+        ctx.beginPath();
+        ctx.moveTo(17, 0);
+        ctx.lineTo(8, -5);
+        ctx.lineTo(10, 0);
+        ctx.lineTo(8, 5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#63f0c4";
+        ctx.fillRect(-16, -5, 7, 3);
+        ctx.fillRect(-16, 2, 7, 3);
+      } else if (projectile.kind === "axe") {
+        ctx.rotate(projectile.spin);
+        ctx.strokeStyle = "#b88f5a";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(-12, 0);
+        ctx.lineTo(12, 0);
+        ctx.stroke();
+        ctx.fillStyle = "#d9d3c2";
+        ctx.beginPath();
+        ctx.arc(10, -4, 8, -0.9, 1.6);
+        ctx.arc(10, 4, 8, -1.6, 0.9);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        const pulse = 0.72 + Math.sin((projectile.spin || 0) * 1.6) * 0.18;
+        ctx.globalAlpha = 0.42;
+        ctx.fillStyle = "#ff8b4a";
+        ctx.beginPath();
+        ctx.arc(0, 0, 15 * pulse, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#ffd36c";
+        ctx.beginPath();
+        ctx.arc(0, 0, 7, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#ff5d3d";
+        ctx.beginPath();
+        ctx.arc(-4, -2, 5, 0, TAU);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    function drawPlayerSprite(player, angle) {
+      const point = worldToScreen(player.x, player.y);
+      ctx.save();
+      ctx.translate(point.x, point.y);
+      ctx.rotate(angle);
+      if (state.classKey === "warrior") {
+        ctx.fillStyle = player.dashTimer > 0 ? "#f7cc78" : "#4f6f92";
+        ctx.beginPath();
+        ctx.roundRect(-13, -14, 24, 28, 6);
+        ctx.fill();
+        ctx.fillStyle = "#d9d3c2";
+        ctx.beginPath();
+        ctx.arc(5, 0, 13, -1.2, 1.2);
+        ctx.lineTo(1, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "#b88f5a";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(0, 12);
+        ctx.lineTo(18, 18);
+        ctx.stroke();
+      } else if (state.classKey === "mage") {
+        ctx.fillStyle = "#4b3474";
+        ctx.beginPath();
+        ctx.moveTo(15, 0);
+        ctx.lineTo(-12, -13);
+        ctx.lineTo(-8, 0);
+        ctx.lineTo(-12, 13);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#c482ff";
+        ctx.beginPath();
+        ctx.arc(2, 0, 8, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#ff8b4a";
+        ctx.beginPath();
+        ctx.arc(17, 0, 4, 0, TAU);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = "#315c4b";
+        ctx.beginPath();
+        ctx.moveTo(18, 0);
+        ctx.lineTo(-11, -12);
+        ctx.lineTo(-5, 0);
+        ctx.lineTo(-11, 12);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "#d9c48f";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(5, 0, 16, -0.9, 0.9);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawEnemySprite(enemy) {
+      const point = worldToScreen(enemy.x, enemy.y);
+      ctx.save();
+      ctx.translate(point.x, point.y);
+      const flash = enemy.hitTimer > 0;
+      if (flash) {
+        ctx.globalAlpha = 0.9;
+      }
+      if (enemy.type === "goblin") {
+        ctx.fillStyle = flash ? "#f0ebff" : "#63f0c4";
+        ctx.beginPath();
+        ctx.arc(0, 2, enemy.radius, 0, TAU);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(-9, -8);
+        ctx.lineTo(-22, -13);
+        ctx.lineTo(-11, 0);
+        ctx.moveTo(9, -8);
+        ctx.lineTo(22, -13);
+        ctx.lineTo(11, 0);
+        ctx.fill();
+      } else if (enemy.type === "orc") {
+        ctx.fillStyle = flash ? "#f0ebff" : "#5aa66d";
+        ctx.beginPath();
+        ctx.roundRect(-enemy.radius, -enemy.radius * 0.85, enemy.radius * 2, enemy.radius * 1.8, 8);
+        ctx.fill();
+        ctx.fillStyle = "#f0ebff";
+        ctx.fillRect(-12, 10, 6, 8);
+        ctx.fillRect(6, 10, 6, 8);
+      } else if (enemy.type === "zombie") {
+        ctx.fillStyle = flash ? "#f0ebff" : "#7b8f5a";
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#4d5e45";
+        ctx.fillRect(-13, 3, 26, 9);
+      } else if (enemy.type === "skeleton") {
+        ctx.strokeStyle = flash ? "#f0ebff" : "#d9d3c2";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(0, -7, 7, 0, TAU);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, 15);
+        ctx.moveTo(-12, 5);
+        ctx.lineTo(12, 5);
+        ctx.moveTo(-8, 24);
+        ctx.lineTo(0, 15);
+        ctx.lineTo(8, 24);
+        ctx.stroke();
+      } else if (enemy.type === "fireImp") {
+        ctx.fillStyle = flash ? "#f0ebff" : "#ff8b4a";
+        ctx.beginPath();
+        ctx.moveTo(0, -enemy.radius - 8);
+        ctx.lineTo(enemy.radius, enemy.radius);
+        ctx.lineTo(0, enemy.radius * 0.55);
+        ctx.lineTo(-enemy.radius, enemy.radius);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#ffd36c";
+        ctx.beginPath();
+        ctx.arc(0, 2, 6, 0, TAU);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = flash ? "#f0ebff" : "#8e5cff";
+        ctx.beginPath();
+        ctx.moveTo(0, -enemy.radius - 8);
+        ctx.lineTo(enemy.radius, enemy.radius);
+        ctx.lineTo(-enemy.radius, enemy.radius);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#120d1f";
+        ctx.beginPath();
+        ctx.arc(0, -2, 7, 0, TAU);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
     function drawWorld() {
       drawTiles();
 
@@ -1568,11 +1867,11 @@
       }
 
       for (const projectile of state.projectiles) {
-        drawCircleEntity(projectile, projectile.color);
+        drawProjectile(projectile);
       }
 
       for (const enemy of state.enemies) {
-        drawCircleEntity(enemy, enemy.hitTimer > 0 ? "#f0ebff" : enemy.color, "rgba(0, 0, 0, 0.35)");
+        drawEnemySprite(enemy);
         drawHealthBar(enemy);
       }
 
@@ -1605,21 +1904,9 @@
       ctx.globalAlpha = 1;
 
       const player = state.player;
-      const playerPoint = worldToScreen(player.x, player.y);
       const target = screenToWorld(mouse.x, mouse.y);
       const angle = Math.atan2(target.y - player.y, target.x - player.x);
-      ctx.save();
-      ctx.translate(playerPoint.x, playerPoint.y);
-      ctx.rotate(angle);
-      ctx.fillStyle = player.dashTimer > 0 ? "#f7cc78" : "#63f0c4";
-      ctx.beginPath();
-      ctx.moveTo(20, 0);
-      ctx.lineTo(-13, -13);
-      ctx.lineTo(-7, 0);
-      ctx.lineTo(-13, 13);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
+      drawPlayerSprite(player, angle);
     }
 
     function updateHud() {
@@ -1637,9 +1924,15 @@
       spellStat.textContent = String(derived.spellDamage);
       speedStat.textContent = String(derived.speed);
       resistStat.textContent = `${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
+      statPointText.textContent = player.statPoints
+        ? `Unspent stat points: ${player.statPoints}`
+        : "Level up, quest, or buy training to earn stat points.";
+      for (const button of statButtons) {
+        button.disabled = player.statPoints <= 0;
+      }
       attackStat.textContent = classDef.attackName;
       skillStat.textContent = player.skillTimer <= 0 ? classDef.skillName : `${player.skillTimer.toFixed(1)}s`;
-      dashStat.textContent = player.dashCooldown <= 0 ? "Blink Dash" : `${player.dashCooldown.toFixed(1)}s`;
+      dashStat.textContent = player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
       nextFloorButton.disabled = !state.floorClear;
       objectiveText.textContent = state.anchors.length
         ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
@@ -1703,6 +1996,9 @@
     resetButton.addEventListener("click", resetGame);
     for (const button of classButtons) {
       button.addEventListener("click", () => setClass(button.dataset.class));
+    }
+    for (const button of statButtons) {
+      button.addEventListener("click", () => assignStat(button.dataset.stat));
     }
     shopList.addEventListener("click", (event) => {
       const button = event.target.closest("[data-shop]");
