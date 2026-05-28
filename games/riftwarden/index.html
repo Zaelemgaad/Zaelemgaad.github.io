@@ -1237,7 +1237,8 @@
         dashVy: 0,
         dashHits: new Set(),
         wards: {},
-        shell: 0
+        shell: 0,
+        bodyShield: 0
       };
       state.player = player;
       recalculatePlayerStats(true);
@@ -1328,6 +1329,7 @@
       state.player.dashHits.clear();
       state.player.wards = {};
       state.player.shell = 0;
+      state.player.bodyShield = 0;
       state.enemies = [];
       state.projectiles = [];
       state.pickups = [];
@@ -1561,21 +1563,11 @@
     function transformSageQueue(currentQueue, element) {
       const queue = [...currentQueue];
 
-      if (element === "shield" && queue.includes("shield")) {
-        return removeAndReport(queue, "shield", "Shield removed.");
-      }
-      if (queue.includes(element)) {
-        return removeAndReport(queue, element, `${elementLabel(element)} removed.`);
-      }
-
       if (queue.includes("poison")) {
         if (element === "life") {
           return splitCombinedElement(queue, "poison", "water", "Life purged Arcane from Poison, leaving Water.");
         }
-        if (element === "arcane") {
-          return splitCombinedElement(queue, "poison", "water", "Arcane removed from Poison, leaving Water.");
-        }
-        if (element === "water" || element === "lightning") {
+        if (element === "lightning") {
           return splitCombinedElement(queue, "poison", "arcane", `${elementLabel(element)} stripped Water from Poison, leaving Arcane.`);
         }
       }
@@ -1584,22 +1576,14 @@
         if (element === "cold") {
           return splitCombinedElement(queue, "steam", "water", "Cold cancelled Fire in Steam, leaving Water.");
         }
-        if (element === "fire") {
-          return splitCombinedElement(queue, "steam", "water", "Fire removed from Steam, leaving Water.");
-        }
-        if (element === "water") {
-          return splitCombinedElement(queue, "steam", "fire", "Water removed from Steam, leaving Fire.");
-        }
+        if (element === "lightning") return splitCombinedElement(queue, "steam", "fire", "Lightning stripped Water from Steam, leaving Fire.");
       }
 
       if (queue.includes("ice")) {
         if (element === "fire") {
           return splitCombinedElement(queue, "ice", "water", "Fire cancelled Cold in Ice, leaving Water.");
         }
-        if (element === "cold") {
-          return splitCombinedElement(queue, "ice", "water", "Cold removed from Ice, leaving Water.");
-        }
-        if (element === "water" || element === "lightning") {
+        if (element === "lightning") {
           return splitCombinedElement(queue, "ice", "cold", `${elementLabel(element)} stripped Water from Ice, leaving Cold.`);
         }
       }
@@ -1738,8 +1722,20 @@
       return derived.spellDamage * (0.62 + queue.length * 0.24);
     }
 
+    function countElement(queue, element) {
+      return queue.filter((entry) => entry === element).length;
+    }
+
+    function countAny(queue, elements) {
+      return elements.reduce((total, element) => total + countElement(queue, element), 0);
+    }
+
+    function hasAny(queue, elements) {
+      return elements.some((element) => queue.includes(element));
+    }
+
     function getSageRadius(queue, base = 86) {
-      return base + queue.length * 18 + (queue.includes("earth") ? 14 : 0) + (queue.includes("shield") ? 18 : 0);
+      return base + queue.length * 18 + countAny(queue, ["earth", "ice"]) * 22 + countElement(queue, "shield") * 18;
     }
 
     function pushEnemiesFrom(x, y, radius, force) {
@@ -1787,6 +1783,28 @@
           applyDamage(enemy, damage, element);
           if (push) {
             moveWithCollision(enemy, ax * push, ay * push);
+          }
+          hits += 1;
+        }
+      }
+      return hits;
+    }
+
+    function damageEnemiesInCone(x, y, angle, range, width, damage, element, push = 0) {
+      let hits = 0;
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - x;
+        const dy = enemy.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance > range + enemy.radius) {
+          continue;
+        }
+        const enemyAngle = Math.atan2(dy, dx);
+        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
+        if (Math.abs(delta) <= width * 0.5) {
+          applyDamage(enemy, damage, element);
+          if (push) {
+            moveWithCollision(enemy, Math.cos(angle) * push, Math.sin(angle) * push);
           }
           hits += 1;
         }
@@ -1856,37 +1874,75 @@
       const player = state.player;
       const color = getSageColor(queue);
       const element = getSageDamageElement(queue);
+      const hasProjectile = hasAny(queue, ["earth", "ice"]);
+      const hasBeamOrSpray = hasAny(queue, ["life", "arcane", "fire", "water", "cold", "steam", "lightning", "poison"]);
       if (method === "self") {
-        if (queue.includes("earth")) {
-          player.shell += Math.round(70 + power * 1.15);
+        if (hasProjectile) {
+          player.shell += Math.round(70 + power * 1.15 + countAny(queue, ["earth", "ice"]) * 28);
+          player.bodyShield = Math.max(player.bodyShield, 7 + countAny(queue, ["earth", "ice"]) * 1.2);
+          addEffect(player.x, player.y - 34, "Body Shield", color);
+        } else {
+          player.shell += Math.round(36 + power * 0.45 + countElement(queue, "shield") * 18);
         }
-        if (queue.includes("arcane") || queue.includes("poison")) player.wards.dark = Math.max(player.wards.dark || 0, 8);
-        if (queue.includes("life")) player.wards.holy = Math.max(player.wards.holy || 0, 8);
-        if (queue.includes("fire") || queue.includes("steam")) player.wards.fire = Math.max(player.wards.fire || 0, 8);
-        if (queue.includes("water") || queue.includes("cold") || queue.includes("ice")) player.wards.water = Math.max(player.wards.water || 0, 8);
-        if (queue.includes("lightning")) player.wards.arcane = Math.max(player.wards.arcane || 0, 8);
-        player.shell += queue.length <= 1 ? Math.round(36 + power * 0.55) : 0;
-        addEffect(player.x, player.y - 34, "Ward", color);
+        if (hasBeamOrSpray) {
+          if (queue.includes("arcane") || queue.includes("poison")) player.wards.dark = Math.max(player.wards.dark || 0, 8);
+          if (queue.includes("life")) player.wards.holy = Math.max(player.wards.holy || 0, 8);
+          if (queue.includes("fire") || queue.includes("steam")) player.wards.fire = Math.max(player.wards.fire || 0, 8);
+          if (queue.includes("water") || queue.includes("cold") || queue.includes("ice")) player.wards.water = Math.max(player.wards.water || 0, 8);
+          if (queue.includes("lightning")) player.wards.lightning = Math.max(player.wards.lightning || 0, 8);
+        }
+        if (!hasProjectile) {
+          addEffect(player.x, player.y - 34, "Ward", color);
+        }
         return;
       }
-      const target = method === "area" ? { x: player.x, y: player.y } : screenToWorld(mouse.x, mouse.y);
-      const mines = method === "direct" ? 2 + Math.min(3, queue.length) : 1;
-      for (let index = 0; index < mines; index += 1) {
-        const spread = (index - (mines - 1) * 0.5) * 34;
+      if (method === "area") {
+        const radius = getSageRadius(queue, 128);
+        addHazard({ x: player.x, y: player.y, radius, damage: hasBeamOrSpray ? power * 0.28 : 0, element, color, kind: "barrierRing", life: 6, tickRate: 0.24, push: 42 });
+        state.effects.push({ kind: "nova", x: player.x, y: player.y, range: radius, life: 0.24, maxLife: 0.24, color: getSageEffectColor(queue, 0.2) });
+        return;
+      }
+      if (method === "rune") {
+        const target = screenToWorld(mouse.x, mouse.y);
+        const mines = 2 + Math.min(3, countElement(queue, "shield") + Math.floor(queue.length * 0.4));
+        for (let index = 0; index < mines; index += 1) {
+          const spread = (index - (mines - 1) * 0.5) * 36;
+          addHazard({
+            x: target.x + Math.cos(index * 2.4) * spread,
+            y: target.y + Math.sin(index * 2.4) * spread,
+            radius: getSageRadius(queue, 54),
+            damage: power * 1.05,
+            element,
+            color,
+            kind: "mine",
+            life: 14,
+            tickRate: 0.2,
+            push: hasProjectile ? 42 : 22
+          });
+        }
+        addEffect(target.x, target.y - 24, "Runic Mine", color);
+        return;
+      }
+      const angle = getAimAngle();
+      const center = screenToWorld(mouse.x, mouse.y);
+      const wallCount = 5 + Math.min(4, countElement(queue, "shield"));
+      for (let index = 0; index < wallCount; index += 1) {
+        const offset = index - (wallCount - 1) * 0.5;
+        const wallAngle = angle + Math.PI * 0.5;
         addHazard({
-          x: target.x + Math.cos(index * 2.4) * spread,
-          y: target.y + Math.sin(index * 2.4) * spread,
-          radius: getSageRadius(queue, 58),
-          damage: power * 1.05,
+          x: center.x + Math.cos(wallAngle) * offset * 36,
+          y: center.y + Math.sin(wallAngle) * offset * 36,
+          radius: 38 + countElement(queue, "shield") * 5,
+          damage: hasBeamOrSpray ? power * 0.2 : 0,
           element,
           color,
-          kind: "mine",
-          life: 14,
-          tickRate: 0.2,
-          push: queue.includes("earth") ? 36 : 18
+          kind: "barrier",
+          life: 6,
+          tickRate: 0.26,
+          push: hasProjectile ? 46 : 32
         });
       }
-      addEffect(target.x, target.y - 24, "Runic Mine", color);
+      addEffect(center.x, center.y - 24, "Barrier", color);
     }
 
     function castSageProjectileSpell(method, queue, power) {
@@ -1896,18 +1952,36 @@
       const element = getSageDamageElement(queue);
       if (method === "self") {
         player.shell += Math.round(44 + power * (queue.includes("earth") ? 0.9 : 0.45));
+        player.bodyShield = Math.max(player.bodyShield, 4 + countAny(queue, ["earth", "ice"]));
         if (queue.includes("ice")) player.wards.water = Math.max(player.wards.water || 0, 6);
         addEffect(player.x, player.y - 34, queue.includes("earth") ? "Stone Shell" : "Ice Guard", color);
       } else if (method === "area") {
-        const count = queue.includes("ice") && queue.includes("earth") ? 8 : 6;
-        for (let index = 0; index < count; index += 1) {
-          createSageProjectile(index / count * TAU, queue, power * 0.72, 410, queue.includes("earth") ? 11 : 8, { kind: "sageShard", color, pierce: 1, splashRadius: queue.includes("earth") ? 28 : 14, push: 22 });
+        const maxRadius = Math.min(canvas.width / DPR, canvas.height / DPR) * 0.48;
+        const radius = Math.min(maxRadius, getSageRadius(queue, 126) + countAny(queue, ["earth", "ice"]) * 34);
+        const hits = damageEnemiesInCircle(player.x, player.y, radius, power * 0.95, "physical", 58);
+        const sprayCount = countAny(queue, ["fire", "water", "cold", "steam", "poison"]);
+        if (sprayCount) {
+          damageEnemiesInCircle(player.x, player.y, radius * 0.92, power * 0.24 * sprayCount, getSageDamageElement(queue), 8);
         }
+        state.effects.push({ kind: "nova", x: player.x, y: player.y, range: radius, life: 0.26, maxLife: 0.26, color: getSageEffectColor(queue, 0.24) });
+        addEffect(player.x, player.y - 34, `${hits} quaked`, color);
       } else if (method === "rune") {
         const target = screenToWorld(mouse.x, mouse.y);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 70), damage: power * 0.9, element, color, kind: "rune", life: 7, tickRate: 0.65, push: queue.includes("earth") ? 34 : 18 });
       } else {
-        createSageProjectile(angle, queue, power * 1.25, queue.includes("earth") ? 390 : 500, queue.includes("earth") ? 13 : 9, { kind: "sageShard", color, pierce: 2, splashRadius: queue.includes("earth") ? 44 : 26, push: queue.includes("earth") ? 42 : 24 });
+        if (queue.includes("earth")) {
+          const bursts = 5 + Math.min(5, countAny(queue, ["earth", "ice"]));
+          for (let index = 1; index <= bursts; index += 1) {
+            const x = player.x + Math.cos(angle) * index * 64;
+            const y = player.y + Math.sin(angle) * index * 64;
+            const radius = 34 + countAny(queue, ["earth", "ice"]) * 5;
+            damageEnemiesInCircle(x, y, radius, power * 0.42, "physical", queue.includes("water") || queue.includes("arcane") ? 52 : 34);
+            state.effects.push({ kind: "nova", x, y, range: radius, life: 0.16, maxLife: 0.16, color: getSageEffectColor(queue, 0.2) });
+          }
+          addEffect(player.x + Math.cos(angle) * 130, player.y + Math.sin(angle) * 130, "Fissure", color);
+        } else {
+          createSageProjectile(angle, queue, power * 1.25, 500, queue.includes("ice") ? 10 : 9, { kind: "sageShard", color, pierce: 2, splashRadius: queue.includes("ice") ? 34 : 26, push: 28 });
+        }
       }
     }
 
@@ -1918,8 +1992,12 @@
       const element = getSageDamageElement(queue);
       if (method === "self") {
         if (queue.includes("life")) {
-          player.hp = Math.min(player.maxHp, player.hp + Math.round(45 + power));
-          addEffect(player.x, player.y - 34, "Mend", ELEMENT_COLORS.life);
+          if (player.bodyShield > 0) {
+            addEffect(player.x, player.y - 34, "Shell Blocks Healing", "#ff668a");
+          } else {
+            player.hp = Math.min(player.maxHp, player.hp + Math.round(45 + power));
+            addEffect(player.x, player.y - 34, "Mend", ELEMENT_COLORS.life);
+          }
         } else {
           player.wards.dark = Math.max(player.wards.dark || 0, 8);
           addEffect(player.x, player.y - 34, "Dark Ward", ELEMENT_COLORS.arcane);
@@ -1946,7 +2024,8 @@
       const angle = getAimAngle();
       const color = getSageColor(queue);
       const element = getSageDamageElement(queue);
-      const push = queue.includes("water") || queue.includes("steam") ? 26 : 8;
+      const dominantCount = Math.max(1, countElement(queue, queue[0]));
+      const push = queue.includes("water") || queue.includes("steam") ? 18 + dominantCount * 8 : 8;
       if (method === "self") {
         player.wards[element] = Math.max(player.wards[element] || 0, 6);
         if (queue.includes("fire")) player.mana = Math.min(player.maxMana, player.mana + 18);
@@ -1959,14 +2038,15 @@
         const target = screenToWorld(mouse.x, mouse.y);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 82), damage: power * 0.42, element, color, kind: "field", life: 5.5, tickRate: 0.32, push });
       } else if (queue.includes("lightning")) {
-        state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range: 410, width: 8, life: 0.1, maxLife: 0.1, color: ELEMENT_COLORS.lightning });
-        damageEnemiesInLine(player.x, player.y, angle, 410, 24, power * 0.8, element, 10);
+        const range = 410 + dominantCount * 34;
+        state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: 8 + dominantCount, life: 0.1, maxLife: 0.1, color: ELEMENT_COLORS.lightning });
+        damageEnemiesInLine(player.x, player.y, angle, range, 24 + dominantCount * 3, power * (0.8 + dominantCount * 0.12), element, 10);
       } else {
-        const count = 4 + Math.min(4, queue.length);
-        for (let index = 0; index < count; index += 1) {
-          const spread = (index - (count - 1) * 0.5) * 0.12;
-          createSageProjectile(angle + spread, queue, power * 0.45, 470, 6, { kind: "sageSpray", color, life: 0.62, splashRadius: 12, push });
-        }
+        const range = 170 + queue.length * 24 + dominantCount * 34;
+        const width = 0.72 + Math.min(0.75, queue.length * 0.08);
+        const hits = damageEnemiesInCone(player.x, player.y, angle, range, width, power * (0.54 + dominantCount * 0.14), element, push);
+        state.effects.push({ kind: "cone", x: player.x, y: player.y, angle, range, width, life: 0.14, maxLife: 0.14, color: getSageEffectColor(queue, 0.28) });
+        addEffect(player.x + Math.cos(angle) * 70, player.y + Math.sin(angle) * 70, `${hits} sprayed`, color);
       }
     }
 
@@ -1976,25 +2056,12 @@
       }
       const player = state.player;
       const queue = [...state.sageQueue];
-      const direct = method === "direct";
-      const cooldown = direct ? Math.max(0.28, 0.72 - player.stats.agility * 0.018) : Math.max(0.48, 1.12 - player.stats.agility * 0.012);
-      if (direct && player.attackTimer > 0) {
-        return true;
-      }
-      if (!direct && player.skillTimer > 0) {
-        return true;
-      }
       const manaCost = queue.length ? 7 + queue.length * 5 + (method === "rune" ? 4 : 0) : 0;
       if (player.mana < manaCost) {
         state.sageMessage = "Not enough mana.";
         return true;
       }
       player.mana -= manaCost;
-      if (direct) {
-        player.attackTimer = cooldown;
-      } else {
-        player.skillTimer = cooldown;
-      }
       if (!queue.length) {
         castSageWind(method);
       } else {
@@ -2101,24 +2168,26 @@
 
     function dash() {
       const player = state.player;
-      if (player.dashCooldown > 0) {
-        return;
-      }
-      const angle = getAimAngle();
-      const derived = getDerivedStats();
-      player.dashHits.clear();
       if (state.classKey === "sage") {
+        const angle = getAimAngle();
+        player.dashHits.clear();
         const fromX = player.x;
         const fromY = player.y;
         const destination = findBlinkDestination(angle, 230 + player.stats.intelligence * 4);
         player.x = destination.x;
         player.y = destination.y;
         player.dashTimer = 0.08;
-        player.dashCooldown = Math.max(2.2, derived.dashCooldown + 0.75);
+        player.dashCooldown = 0;
         addEffect(fromX, fromY - 20, "Focus", ELEMENT_COLORS.arcane);
         addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
         return;
       }
+      if (player.dashCooldown > 0) {
+        return;
+      }
+      const angle = getAimAngle();
+      const derived = getDerivedStats();
+      player.dashHits.clear();
       if (state.classKey === "mage") {
         const fromX = player.x;
         const fromY = player.y;
@@ -2164,7 +2233,8 @@
           }
         }
       } else if (mx || my) {
-        moveWithCollision(player, (mx / length) * player.speed * dt, (my / length) * player.speed * dt);
+        const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
+        moveWithCollision(player, (mx / length) * player.speed * bodyShieldSlow * dt, (my / length) * player.speed * bodyShieldSlow * dt);
       }
       if (mouse.down) {
         fireBolt();
@@ -2177,6 +2247,7 @@
         player.dashVx = 0;
         player.dashVy = 0;
       }
+      player.bodyShield = Math.max(0, player.bodyShield - dt);
       for (const element of Object.keys(player.wards)) {
         player.wards[element] = Math.max(0, player.wards[element] - dt);
         if (player.wards[element] <= 0) {
@@ -2282,7 +2353,10 @@
           if (player.wards[enemy.damageElement]) {
             incoming *= 0.45;
           }
-          if (player.shell > 0) {
+          if (player.bodyShield > 0 && enemy.damageElement === "physical") {
+            incoming *= 0.55;
+          }
+          if (player.shell > 0 && enemy.damageElement === "physical") {
             const absorbed = Math.min(player.shell, incoming);
             player.shell -= absorbed;
             incoming -= absorbed;
@@ -2321,7 +2395,11 @@
           if (pickup.type === "gold") {
             state.gold += pickup.value;
           } else if (pickup.type === "health") {
-            player.hp = Math.min(player.maxHp, player.hp + pickup.value);
+            if (player.bodyShield > 0) {
+              addEffect(player.x, player.y - 30, "Body Shield Blocks Healing", "#ff668a");
+            } else {
+              player.hp = Math.min(player.maxHp, player.hp + pickup.value);
+            }
           } else if (pickup.type === "mana") {
             player.mana = Math.min(player.maxMana, player.mana + pickup.value);
           }
@@ -2738,6 +2816,14 @@
           ctx.arc(point.x, point.y, effect.range, effect.angle - effect.width * 0.5, effect.angle + effect.width * 0.5);
           ctx.closePath();
           ctx.fill();
+        } else if (effect.kind === "cone") {
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = effect.color;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.arc(point.x, point.y, effect.range, effect.angle - effect.width * 0.5, effect.angle + effect.width * 0.5);
+          ctx.closePath();
+          ctx.fill();
         } else if (effect.kind === "nova") {
           ctx.globalAlpha = alpha;
           ctx.strokeStyle = effect.color;
@@ -2769,9 +2855,9 @@
       drawPlayerSprite(player, angle);
       const playerPoint = worldToScreen(player.x, player.y);
       if (player.shell > 0 || Object.keys(player.wards).length) {
-        ctx.globalAlpha = player.shell > 0 ? 0.34 : 0.2;
-        ctx.strokeStyle = player.shell > 0 ? ELEMENT_COLORS.earth : ELEMENT_COLORS.arcane;
-        ctx.lineWidth = player.shell > 0 ? 4 : 2;
+        ctx.globalAlpha = player.bodyShield > 0 ? 0.42 : player.shell > 0 ? 0.34 : 0.2;
+        ctx.strokeStyle = player.bodyShield > 0 ? ELEMENT_COLORS.earth : player.shell > 0 ? ELEMENT_COLORS.earth : ELEMENT_COLORS.arcane;
+        ctx.lineWidth = player.bodyShield > 0 ? 6 : player.shell > 0 ? 4 : 2;
         ctx.beginPath();
         ctx.arc(playerPoint.x, playerPoint.y, player.radius + 9 + Math.sin(performance.now() * 0.006) * 2, 0, TAU);
         ctx.stroke();
@@ -2802,7 +2888,7 @@
       }
       attackStat.textContent = classDef.attackName;
       skillStat.textContent = player.skillTimer <= 0 ? classDef.skillName : `${player.skillTimer.toFixed(1)}s`;
-      dashStat.textContent = player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
+      dashStat.textContent = isSage() || player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
       nextFloorButton.disabled = !state.floorClear;
       objectiveText.textContent = state.anchors.length
         ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
