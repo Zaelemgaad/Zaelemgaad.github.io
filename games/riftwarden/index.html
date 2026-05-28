@@ -591,7 +591,7 @@
               <button class="sage-button" type="button" data-sage-cast="self">Self<small>Middle / G</small></button>
               <button class="sage-button" type="button" data-sage-cast="rune">Rune<small>T</small></button>
             </div>
-          <small class="sage-message" id="sageMessage">Backspace clears the queue. Hold beams and sprays. Shift+Left casts Fissure.</small>
+          <small class="sage-message" id="sageMessage">Backspace clears the queue. Hold beams, lightning, and sprays. Shift+Left casts Fissure.</small>
           </div>
         </section>
         <section class="side-card">
@@ -641,7 +641,7 @@
             <li><strong>Aim:</strong> Mouse</li>
             <li><strong>Attack:</strong> Hold left mouse</li>
             <li><strong>Skill:</strong> Q for class skill</li>
-            <li><strong>Dash:</strong> Space</li>
+            <li><strong>Mobility:</strong> Space</li>
             <li><strong>Sage:</strong> Q/E/R/F/Z/X/C/V elements, Left/Right/Middle cast, Shift+Left fissure, T rune, Backspace clear</li>
           </ul>
         </section>
@@ -806,16 +806,16 @@
       },
       sage: {
         name: "Sage",
-        summary: "Sages are fragile secret casters who survive by building spell queues and choosing the right manifestation under pressure.",
+        summary: "Sages are fragile secret casters with no mana, XP, or levels; survival comes from spellcraft, not progression.",
         stats: { strength: 1, intelligence: 8, agility: 5 },
         baseHp: 68,
-        baseMana: 150,
+        baseMana: 0,
         baseSpeed: 204,
         attackElement: "arcane",
         skillElement: "arcane",
         attackName: "Direct Cast",
         skillName: "Area Cast",
-        mobilityName: "Focus Blink",
+        mobilityName: "Haste",
         guardElement: "dark",
         guard: 0.04,
         secret: true
@@ -966,8 +966,9 @@
         cost: 48,
         detail: "Gain 1 spendable stat point.",
         buy() {
-          state.player.statPoints += 1;
-          addEffect(state.player.x, state.player.y - 26, "+1 Stat Point", "#f7cc78");
+          if (grantStatPoint()) {
+            addEffect(state.player.x, state.player.y - 26, "+1 Stat Point", "#f7cc78");
+          }
         }
       }
     ];
@@ -985,7 +986,7 @@
         claim() {
           state.gold += 45;
           gainXp(35);
-          state.player.statPoints += 1;
+          grantStatPoint();
         }
       },
       {
@@ -1000,7 +1001,7 @@
         claim() {
           state.gold += 32;
           gainXp(40);
-          state.player.statPoints += 1;
+          grantStatPoint();
         }
       }
     ];
@@ -1188,14 +1189,15 @@
       const classDef = getClassDef();
       const stats = state.player?.stats || classDef.stats;
       const level = state.player?.level || 1;
+      const sage = state.classKey === "sage";
       return {
         maxHp: Math.round(classDef.baseHp + stats.strength * 9 + level * 8),
-        maxMana: Math.round(classDef.baseMana + stats.intelligence * 8 + level * 5),
+        maxMana: sage ? 0 : Math.round(classDef.baseMana + stats.intelligence * 8 + level * 5),
         speed: Math.round(classDef.baseSpeed + stats.agility * 5 + level * 1.5),
         weaponDamage: Math.round(9 + stats.strength * 1.65 + stats.agility * 0.85 + level * 1.35),
         spellDamage: Math.round(12 + stats.intelligence * 2.25 + stats.agility * 0.45 + level * 1.55),
         attackCooldown: Math.max(0.16, 0.38 - stats.agility * 0.012 - level * 0.002),
-        manaRegen: 5.2 + stats.intelligence * 0.38,
+        manaRegen: sage ? 0 : 5.2 + stats.intelligence * 0.38,
         dashCooldown: Math.max(1.4, 2.8 - stats.agility * 0.035)
       };
     }
@@ -1218,7 +1220,7 @@
         player.mana = player.maxMana;
       } else {
         player.hp = Math.min(player.maxHp, Math.max(1, Math.round(player.hp * (player.maxHp / oldMaxHp))));
-        player.mana = Math.min(player.maxMana, Math.round(player.mana * (player.maxMana / oldMaxMana)));
+        player.mana = player.maxMana === 0 ? 0 : Math.min(player.maxMana, Math.round(player.mana * (player.maxMana / oldMaxMana)));
       }
     }
 
@@ -1241,6 +1243,7 @@
         attackTimer: 0,
         skillTimer: 0,
         windTimer: 0,
+        hasteTimer: 0,
         dashTimer: 0,
         dashCooldown: 0,
         dashVx: 0,
@@ -1284,6 +1287,7 @@
       const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
       const floorScale = 1 + (state.floor - 1) * 0.28;
       state.enemies.push({
+        kind: "enemy",
         type,
         name: def.name,
         family: def.family,
@@ -1307,6 +1311,7 @@
       const floorDef = getFloorDef();
       const hp = Math.round(floorDef.anchorHp * (1 + Math.max(0, state.floor - FLOOR_DEFS.length) * 0.18));
       state.anchors.push({
+        kind: "anchor",
         x,
         y,
         radius: 28,
@@ -1333,6 +1338,7 @@
       state.player.attackTimer = 0;
       state.player.skillTimer = 0;
       state.player.windTimer = 0;
+      state.player.hasteTimer = 0;
       state.player.dashTimer = 0;
       state.player.dashCooldown = 0;
       state.player.dashVx = 0;
@@ -1387,15 +1393,26 @@
     }
 
     function gainXp(amount) {
+      if (isSage()) {
+        return;
+      }
       state.xp += amount;
       while (state.xp >= state.xpToNext) {
         state.xp -= state.xpToNext;
         state.xpToNext = Math.round(state.xpToNext * 1.22 + 12);
         state.player.level += 1;
-        state.player.statPoints += 1;
+        grantStatPoint();
         recalculatePlayerStats(true);
         addEffect(state.player.x, state.player.y - 22, "+1 Stat Point", "#f7cc78");
       }
+    }
+
+    function grantStatPoint() {
+      if (isSage()) {
+        return false;
+      }
+      state.player.statPoints += 1;
+      return true;
     }
 
     function addEffect(x, y, text, color = "#f0ebff") {
@@ -1408,7 +1425,9 @@
         state.pickups.push({ type: "health", x: x + 12, y: y - 6, radius: 7, value: 18, color: "#ff668a" });
       }
       if (Math.random() < 0.26) {
-        state.pickups.push({ type: "mana", x: x - 10, y: y + 8, radius: 7, value: 16, color: "#63f0c4" });
+        if (!isSage()) {
+          state.pickups.push({ type: "mana", x: x - 10, y: y + 8, radius: 7, value: 16, color: "#63f0c4" });
+        }
       }
     }
 
@@ -1445,7 +1464,7 @@
       sageCodeInput.disabled = state.sageUnlocked;
       sageUnlockButton.disabled = state.sageUnlocked;
       sageQueueText.textContent = getSageQueueLabel();
-      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Beams and sprays channel while held.";
+      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Beams, lightning, and sprays channel while held.";
       for (const button of sageElementButtons) {
         button.disabled = !isSage();
       }
@@ -1472,8 +1491,10 @@
         : "Return to the glowing market circle near the gate to buy supplies and training.";
       const markup = SHOP_ITEMS.map((item) => {
         const affordable = state.gold >= item.cost;
-        const disabled = !state.nearShop || !affordable ? " disabled" : "";
-        return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${item.detail}</small></button>`;
+        const unavailable = isSage() && (item.id === "mana" || item.id === "training");
+        const disabled = !state.nearShop || !affordable || unavailable ? " disabled" : "";
+        const detail = unavailable ? "Sage does not use mana or levels." : item.detail;
+        return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${detail}</small></button>`;
       }).join("");
       if (markup !== lastShopMarkup) {
         shopList.innerHTML = markup;
@@ -1490,7 +1511,8 @@
           ? `<button class="quest-claim" type="button" data-quest="${quest.id}">Claim</button>`
           : "";
         const status = claimed ? "Complete" : `${progress} / ${quest.target}`;
-        return `<div class="quest-item${complete ? " is-complete" : ""}"><strong>${quest.name}</strong><small>${quest.detail}<br>Progress: ${status}<br>Reward: ${quest.reward}</small>${claimButton}</div>`;
+        const reward = isSage() ? quest.reward.replace(/,? ?\d+ XP/g, "").replace(/,? ?\+1 stat point/g, "") : quest.reward;
+        return `<div class="quest-item${complete ? " is-complete" : ""}"><strong>${quest.name}</strong><small>${quest.detail}<br>Progress: ${status}<br>Reward: ${reward}</small>${claimButton}</div>`;
       }).join("");
       if (markup !== lastQuestMarkup) {
         questList.innerHTML = markup;
@@ -1500,7 +1522,7 @@
 
     function buyShopItem(itemId) {
       const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
-      if (!item || !state.nearShop || state.gold < item.cost) {
+      if (!item || !state.nearShop || state.gold < item.cost || (isSage() && (item.id === "mana" || item.id === "training"))) {
         return;
       }
       state.gold -= item.cost;
@@ -1522,6 +1544,10 @@
     }
 
     function assignStat(stat) {
+      if (isSage()) {
+        state.sageMessage = "The Sage does not level or allocate stat points.";
+        return;
+      }
       if (!["strength", "intelligence", "agility"].includes(stat) || state.player.statPoints <= 0) {
         return;
       }
@@ -1579,24 +1605,17 @@
         if (element === "life") {
           return splitCombinedElement(queue, "poison", "water", "Life purged Arcane from Poison, leaving Water.");
         }
-        if (element === "lightning") {
-          return splitCombinedElement(queue, "poison", "arcane", `${elementLabel(element)} stripped Water from Poison, leaving Arcane.`);
-        }
       }
 
       if (queue.includes("steam")) {
         if (element === "cold") {
           return splitCombinedElement(queue, "steam", "water", "Cold cancelled Fire in Steam, leaving Water.");
         }
-        if (element === "lightning") return splitCombinedElement(queue, "steam", "fire", "Lightning stripped Water from Steam, leaving Fire.");
       }
 
       if (queue.includes("ice")) {
         if (element === "fire") {
           return splitCombinedElement(queue, "ice", "water", "Fire cancelled Cold in Ice, leaving Water.");
-        }
-        if (element === "lightning") {
-          return splitCombinedElement(queue, "ice", "cold", `${elementLabel(element)} stripped Water from Ice, leaving Cold.`);
         }
       }
 
@@ -1724,6 +1743,7 @@
       if (!queue.length) return "wind";
       if (queue.includes("shield")) return "shield";
       if (queue.includes("earth") || queue.includes("ice")) return "projectile";
+      if (isPureLightningQueue(queue)) return "lightning";
       if (queue.includes("poison")) return "spray";
       if (queue.includes("life") || queue.includes("arcane")) return "beam";
       return "spray";
@@ -1746,8 +1766,20 @@
       return elements.some((element) => queue.includes(element));
     }
 
+    function isPureLightningQueue(queue) {
+      return queue.length > 0 && queue.every((element) => element === "lightning");
+    }
+
     function getSageRadius(queue, base = 86) {
       return base + queue.length * 18 + countAny(queue, ["earth", "ice"]) * 22 + countElement(queue, "shield") * 18;
+    }
+
+    function getDamageableTargets() {
+      return [...state.enemies, ...state.anchors];
+    }
+
+    function canBePushed(target) {
+      return target.kind !== "anchor";
     }
 
     function pushEnemiesFrom(x, y, radius, force) {
@@ -1764,14 +1796,14 @@
 
     function damageEnemiesInCircle(x, y, radius, damage, element, push = 0) {
       let hits = 0;
-      for (const enemy of state.enemies) {
-        const dx = enemy.x - x;
-        const dy = enemy.y - y;
+      for (const target of getDamageableTargets()) {
+        const dx = target.x - x;
+        const dy = target.y - y;
         const distance = Math.hypot(dx, dy) || 1;
-        if (distance <= radius + enemy.radius) {
-          applyDamage(enemy, damage, element);
-          if (push) {
-            moveWithCollision(enemy, (dx / distance) * push, (dy / distance) * push);
+        if (distance <= radius + target.radius) {
+          applyDamage(target, damage, element);
+          if (push && canBePushed(target)) {
+            moveWithCollision(target, (dx / distance) * push, (dy / distance) * push);
           }
           hits += 1;
         }
@@ -1783,18 +1815,18 @@
       let hits = 0;
       const ax = Math.cos(angle);
       const ay = Math.sin(angle);
-      for (const enemy of state.enemies) {
-        const dx = enemy.x - x;
-        const dy = enemy.y - y;
+      for (const target of getDamageableTargets()) {
+        const dx = target.x - x;
+        const dy = target.y - y;
         const along = dx * ax + dy * ay;
-        if (along < -enemy.radius || along > range + enemy.radius) {
+        if (along < -target.radius || along > range + target.radius) {
           continue;
         }
         const perpendicular = Math.abs(dx * ay - dy * ax);
-        if (perpendicular <= width + enemy.radius) {
-          applyDamage(enemy, damage, element);
-          if (push) {
-            moveWithCollision(enemy, ax * push, ay * push);
+        if (perpendicular <= width + target.radius) {
+          applyDamage(target, damage, element);
+          if (push && canBePushed(target)) {
+            moveWithCollision(target, ax * push, ay * push);
           }
           hits += 1;
         }
@@ -1804,7 +1836,29 @@
 
     function damageEnemiesInCone(x, y, angle, range, width, damage, element, push = 0) {
       let hits = 0;
-      for (const enemy of state.enemies) {
+      for (const target of getDamageableTargets()) {
+        const dx = target.x - x;
+        const dy = target.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance > range + target.radius) {
+          continue;
+        }
+        const enemyAngle = Math.atan2(dy, dx);
+        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
+        if (Math.abs(delta) <= width * 0.5) {
+          applyDamage(target, damage, element);
+          if (push && canBePushed(target)) {
+            moveWithCollision(target, Math.cos(angle) * push, Math.sin(angle) * push);
+          }
+          hits += 1;
+        }
+      }
+      return hits;
+    }
+
+    function damageEnemiesInLightningArc(x, y, angle, range, width, damage, maxTargets, push = 0) {
+      const candidates = [];
+      for (const enemy of getDamageableTargets()) {
         const dx = enemy.x - x;
         const dy = enemy.y - y;
         const distance = Math.hypot(dx, dy) || 1;
@@ -1812,16 +1866,49 @@
           continue;
         }
         const enemyAngle = Math.atan2(dy, dx);
-        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
-        if (Math.abs(delta) <= width * 0.5) {
-          applyDamage(enemy, damage, element);
-          if (push) {
-            moveWithCollision(enemy, Math.cos(angle) * push, Math.sin(angle) * push);
-          }
-          hits += 1;
+        const delta = Math.abs(Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle)));
+        if (delta <= width * 0.5) {
+          candidates.push({ enemy, distance, delta });
         }
       }
-      return hits;
+      candidates.sort((a, b) => a.distance - b.distance || a.delta - b.delta);
+      const targets = [];
+      const selected = new Set();
+      if (candidates.length) {
+        targets.push(candidates[0].enemy);
+        selected.add(candidates[0].enemy);
+      }
+      while (targets.length && targets.length < maxTargets) {
+        const last = targets[targets.length - 1];
+        let next = null;
+        let bestDistance = Infinity;
+        for (const enemy of getDamageableTargets()) {
+          if (selected.has(enemy)) {
+            continue;
+          }
+          const fromLast = Math.hypot(enemy.x - last.x, enemy.y - last.y);
+          const fromCaster = Math.hypot(enemy.x - x, enemy.y - y);
+          if (fromLast <= 132 && fromCaster <= range + 156 && fromLast < bestDistance) {
+            next = enemy;
+            bestDistance = fromLast;
+          }
+        }
+        if (!next) {
+          break;
+        }
+        targets.push(next);
+        selected.add(next);
+      }
+      for (const enemy of targets) {
+        applyDamage(enemy, damage, "lightning");
+        if (push && canBePushed(enemy)) {
+          const dx = enemy.x - x;
+          const dy = enemy.y - y;
+          const distance = Math.hypot(dx, dy) || 1;
+          moveWithCollision(enemy, (dx / distance) * push, (dy / distance) * push);
+        }
+      }
+      return { hits: targets.length, targets };
     }
 
     function addHazard(config) {
@@ -2043,7 +2130,6 @@
       const push = queue.includes("water") || queue.includes("steam") ? 18 + dominantCount * 8 : 8;
       if (method === "self") {
         player.wards[element] = Math.max(player.wards[element] || 0, 6);
-        if (queue.includes("fire")) player.mana = Math.min(player.maxMana, player.mana + 18);
         addEffect(player.x, player.y - 34, `${SAGE_ELEMENT_DEFS[queue[0]]?.label || "Element"} Ward`, color);
       } else if (method === "area") {
         const hits = damageEnemiesInCircle(player.x, player.y, getSageRadius(queue, 130), power * 0.7, element, push);
@@ -2052,10 +2138,15 @@
       } else if (method === "rune") {
         const target = screenToWorld(mouse.x, mouse.y);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 82), damage: power * 0.42, element, color, kind: "field", life: 5.5, tickRate: 0.32, push });
-      } else if (queue.includes("lightning")) {
-        const range = 410 + dominantCount * 34;
-        state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: 8 + dominantCount, life: 0.1, maxLife: 0.1, color: ELEMENT_COLORS.lightning });
-        damageEnemiesInLine(player.x, player.y, angle, range, 24 + dominantCount * 3, power * (0.8 + dominantCount * 0.12), element, 10);
+      } else if (isPureLightningQueue(queue)) {
+        const range = 360 + dominantCount * 42;
+        const width = 0.38 + Math.min(0.2, dominantCount * 0.035);
+        const result = damageEnemiesInLightningArc(player.x, player.y, angle, range, width, power * (0.42 + dominantCount * 0.08), 2 + dominantCount, 6);
+        if (result.targets.length) {
+          state.effects.push({ kind: "lightningArc", x: player.x, y: player.y, points: [{ x: player.x, y: player.y }, ...result.targets.map((target) => ({ x: target.x, y: target.y }))], life: 0.12, maxLife: 0.12, color: ELEMENT_COLORS.lightning, width: 3 + dominantCount * 0.4 });
+        } else {
+          state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: 5 + dominantCount, life: 0.08, maxLife: 0.08, color: ELEMENT_COLORS.lightning });
+        }
       } else {
         const range = 170 + queue.length * 24 + dominantCount * 34;
         const width = 0.72 + Math.min(0.75, queue.length * 0.08);
@@ -2070,7 +2161,7 @@
         return false;
       }
       const manifestation = getSageManifestation(queue);
-      return manifestation === "beam" || manifestation === "spray";
+      return manifestation === "beam" || manifestation === "spray" || manifestation === "lightning";
     }
 
     function startSageChannel(queue) {
@@ -2079,9 +2170,10 @@
         queue: [...queue],
         manifestation,
         life: 0,
+        tickTimer: 0,
         effectTimer: 0
       };
-      clearSageQueue(`${manifestation === "beam" ? "Beam" : "Spray"} channeling.`);
+      clearSageQueue(`${manifestation === "lightning" ? "Lightning" : manifestation === "beam" ? "Beam" : "Spray"} channeling.`);
     }
 
     function stopSageChannel() {
@@ -2099,15 +2191,9 @@
       }
       const player = state.player;
       const queue = channel.queue;
-      const drain = (5 + queue.length * 2.4) * dt;
-      if (player.mana < drain) {
-        stopSageChannel();
-        state.sageMessage = "Channel ended: not enough mana.";
-        return;
-      }
-      player.mana -= drain;
       channel.life += dt;
       channel.effectTimer -= dt;
+      channel.tickTimer -= dt;
       const angle = getAimAngle();
       const power = getSagePower(queue);
       const element = getSageDamageElement(queue);
@@ -2122,6 +2208,21 @@
         if (channel.effectTimer <= 0) {
           channel.effectTimer = 0.045;
           state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: Math.max(8, width * 0.42), life: 0.08, maxLife: 0.08, color });
+        }
+      } else if (channel.manifestation === "lightning") {
+        const lightningCount = Math.max(1, countElement(queue, "lightning"));
+        const range = 380 + lightningCount * 46;
+        const width = 0.36 + Math.min(0.2, lightningCount * 0.035);
+        if (channel.tickTimer <= 0) {
+          channel.tickTimer = 0.18;
+          const result = damageEnemiesInLightningArc(player.x, player.y, angle, range, width, power * (0.38 + lightningCount * 0.075), 2 + lightningCount, 5);
+          if (result.targets.length) {
+            state.effects.push({ kind: "lightningArc", x: player.x, y: player.y, points: [{ x: player.x, y: player.y }, ...result.targets.map((target) => ({ x: target.x, y: target.y }))], life: 0.12, maxLife: 0.12, color: ELEMENT_COLORS.lightning, width: 2.8 + lightningCount * 0.35 });
+          }
+        }
+        if (channel.effectTimer <= 0) {
+          channel.effectTimer = 0.05;
+          state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: 4 + lightningCount * 0.8, life: 0.07, maxLife: 0.07, color: ELEMENT_COLORS.lightning });
         }
       } else {
         const dominantCount = Math.max(1, countElement(queue, queue[0]));
@@ -2174,12 +2275,6 @@
         }
         player.windTimer = 0.55;
       }
-      const manaCost = queue.length ? 7 + queue.length * 5 + (method === "rune" ? 4 : 0) : 0;
-      if (player.mana < manaCost) {
-        state.sageMessage = "Not enough mana.";
-        return true;
-      }
-      player.mana -= manaCost;
       if (!queue.length) {
         castSageWind(method);
       } else {
@@ -2287,17 +2382,12 @@
     function dash() {
       const player = state.player;
       if (state.classKey === "sage") {
-        const angle = getAimAngle();
-        player.dashHits.clear();
-        const fromX = player.x;
-        const fromY = player.y;
-        const destination = findBlinkDestination(angle, 230 + player.stats.intelligence * 4);
-        player.x = destination.x;
-        player.y = destination.y;
-        player.dashTimer = 0.08;
+        const wasHasted = player.hasteTimer > 0;
+        player.hasteTimer = 8;
         player.dashCooldown = 0;
-        addEffect(fromX, fromY - 20, "Focus", ELEMENT_COLORS.arcane);
-        addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
+        if (!wasHasted) {
+          addEffect(player.x, player.y - 24, "Haste", ELEMENT_COLORS.lightning);
+        }
         return;
       }
       if (player.dashCooldown > 0) {
@@ -2352,7 +2442,8 @@
         }
       } else if (mx || my) {
         const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
-        moveWithCollision(player, (mx / length) * player.speed * bodyShieldSlow * dt, (my / length) * player.speed * bodyShieldSlow * dt);
+        const hasteBoost = isSage() && player.hasteTimer > 0 ? 1.35 : 1;
+        moveWithCollision(player, (mx / length) * player.speed * bodyShieldSlow * hasteBoost * dt, (my / length) * player.speed * bodyShieldSlow * hasteBoost * dt);
       }
       if (isSage()) {
         updateSageMouseCasting(dt);
@@ -2362,6 +2453,7 @@
       player.attackTimer = Math.max(0, player.attackTimer - dt);
       player.skillTimer = Math.max(0, player.skillTimer - dt);
       player.windTimer = Math.max(0, player.windTimer - dt);
+      player.hasteTimer = Math.max(0, player.hasteTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
       if (player.dashTimer <= 0) {
@@ -2375,7 +2467,7 @@
           delete player.wards[element];
         }
       }
-      player.mana = Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
+      player.mana = isSage() ? 0 : Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
       state.nearShop = distanceSquared(player.x, player.y, SHOP_ZONE.x, SHOP_ZONE.y) <= (SHOP_ZONE.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
@@ -2424,9 +2516,20 @@
       }
     }
 
+    function clearAnchor(index, anchor) {
+      addEffect(anchor.x, anchor.y - 36, "Anchor Cleared", "#f7cc78");
+      state.pickups.push({ type: "gold", x: anchor.x, y: anchor.y, radius: 10, value: 35, color: "#f7cc78" });
+      state.anchors.splice(index, 1);
+      state.quests.anchorsCleared += 1;
+    }
+
     function updateAnchors(dt) {
       for (let index = state.anchors.length - 1; index >= 0; index -= 1) {
         const anchor = state.anchors[index];
+        if (anchor.hp <= 0) {
+          clearAnchor(index, anchor);
+          continue;
+        }
         const floorDef = getFloorDef();
         anchor.spawnTimer -= dt;
         if (anchor.spawnTimer <= 0 && state.enemies.length < floorDef.enemyCap) {
@@ -2442,10 +2545,7 @@
           }
         }
         if (anchor.hp <= 0) {
-          addEffect(anchor.x, anchor.y - 36, "Anchor Cleared", "#f7cc78");
-          state.pickups.push({ type: "gold", x: anchor.x, y: anchor.y, radius: 10, value: 35, color: "#f7cc78" });
-          state.anchors.splice(index, 1);
-          state.quests.anchorsCleared += 1;
+          clearAnchor(index, anchor);
         }
       }
       if (!state.floorClear && state.anchors.length === 0) {
@@ -2522,7 +2622,9 @@
               player.hp = Math.min(player.maxHp, player.hp + pickup.value);
             }
           } else if (pickup.type === "mana") {
-            player.mana = Math.min(player.maxMana, player.mana + pickup.value);
+            if (!isSage()) {
+              player.mana = Math.min(player.maxMana, player.mana + pickup.value);
+            }
           }
           state.pickups.splice(index, 1);
         }
@@ -2534,7 +2636,7 @@
         const hazard = state.hazards[index];
         hazard.life -= dt;
         if (hazard.kind === "mine") {
-          const triggered = state.enemies.some((enemy) => distanceSquared(hazard.x, hazard.y, enemy.x, enemy.y) <= (hazard.radius + enemy.radius) ** 2);
+          const triggered = getDamageableTargets().some((target) => distanceSquared(hazard.x, hazard.y, target.x, target.y) <= (hazard.radius + target.radius) ** 2);
           if (triggered || hazard.life <= 0) {
             damageEnemiesInCircle(hazard.x, hazard.y, hazard.radius + 18, hazard.damage, hazard.element, hazard.push + 20);
             state.effects.push({ kind: "nova", x: hazard.x, y: hazard.y, range: hazard.radius + 18, life: 0.18, maxLife: 0.18, color: "rgba(247, 204, 120, 0.25)" });
@@ -2961,6 +3063,21 @@
           ctx.moveTo(point.x, point.y);
           ctx.lineTo(point.x + Math.cos(effect.angle) * effect.range, point.y + Math.sin(effect.angle) * effect.range);
           ctx.stroke();
+        } else if (effect.kind === "lightningArc") {
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = effect.color;
+          ctx.lineWidth = effect.width || 3;
+          ctx.beginPath();
+          for (const [index, arcPoint] of effect.points.entries()) {
+            const screenPoint = worldToScreen(arcPoint.x, arcPoint.y);
+            const jitter = Math.sin(performance.now() * 0.03 + index * 1.7) * 4;
+            if (index === 0) {
+              ctx.moveTo(screenPoint.x, screenPoint.y);
+            } else {
+              ctx.lineTo(screenPoint.x + jitter, screenPoint.y - jitter);
+            }
+          }
+          ctx.stroke();
         } else {
           ctx.globalAlpha = alpha;
           ctx.fillStyle = effect.color;
@@ -2985,6 +3102,15 @@
         ctx.stroke();
         ctx.globalAlpha = 1;
       }
+      if (player.hasteTimer > 0) {
+        ctx.globalAlpha = 0.28;
+        ctx.strokeStyle = ELEMENT_COLORS.lightning;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, player.radius + 15 + Math.sin(performance.now() * 0.01) * 3, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
     }
 
     function updateHud() {
@@ -2993,24 +3119,28 @@
       const derived = getDerivedStats();
       const floorDef = getFloorDef();
       hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
-      manaStat.textContent = `${Math.floor(player.mana)} / ${player.maxMana}`;
-      levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
+      manaStat.textContent = isSage() ? "None" : `${Math.floor(player.mana)} / ${player.maxMana}`;
+      levelStat.textContent = isSage() ? "None" : `${player.level} (${state.xp}/${state.xpToNext})`;
       goldStat.textContent = String(state.gold);
       floorStat.textContent = `${state.floor}: ${floorDef.name}`;
       coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
       damageStat.textContent = String(derived.weaponDamage);
       spellStat.textContent = String(derived.spellDamage);
-      speedStat.textContent = String(derived.speed);
+      speedStat.textContent = String(Math.round(derived.speed * (isSage() && player.hasteTimer > 0 ? 1.35 : 1)));
       resistStat.textContent = `${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
-      statPointText.textContent = player.statPoints
-        ? `Unspent stat points: ${player.statPoints}`
-        : "Level up, quest, or buy training to earn stat points.";
+      statPointText.textContent = isSage()
+        ? "The Sage does not gain XP, mana, levels, or stat points."
+        : player.statPoints
+          ? `Unspent stat points: ${player.statPoints}`
+          : "Level up, quest, or buy training to earn stat points.";
       for (const button of statButtons) {
-        button.disabled = player.statPoints <= 0;
+        button.disabled = isSage() || player.statPoints <= 0;
       }
       attackStat.textContent = classDef.attackName;
       skillStat.textContent = player.skillTimer <= 0 ? classDef.skillName : `${player.skillTimer.toFixed(1)}s`;
-      dashStat.textContent = isSage() || player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
+      dashStat.textContent = isSage()
+        ? player.hasteTimer > 0 ? `Haste ${player.hasteTimer.toFixed(1)}s` : classDef.mobilityName
+        : player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
       nextFloorButton.disabled = !state.floorClear;
       objectiveText.textContent = state.anchors.length
         ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
