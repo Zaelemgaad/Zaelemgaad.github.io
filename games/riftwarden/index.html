@@ -506,11 +506,7 @@
               <span class="stat-label">Health</span>
               <strong id="hpStat">0 / 0</strong>
             </div>
-            <div class="stat">
-              <span class="stat-label">Mana</span>
-              <strong id="manaStat">0 / 0</strong>
-            </div>
-            <div class="stat">
+            <div class="stat" id="levelStatCard">
               <span class="stat-label">Level</span>
               <strong id="levelStat">1</strong>
             </div>
@@ -526,7 +522,7 @@
               <span class="stat-label">Layer</span>
               <strong id="floorStat">1</strong>
             </div>
-            <div class="stat">
+            <div class="stat" id="coreStatCard">
               <span class="stat-label">STR / INT / AGI</span>
               <strong id="coreStat">0 / 0 / 0</strong>
             </div>
@@ -562,7 +558,7 @@
           <h2>Warden Class</h2>
           <div class="class-grid" id="classButtons">
             <button class="class-button" type="button" data-class="warrior">Warrior<small>Strength, armor, cleaves</small></button>
-            <button class="class-button" type="button" data-class="mage">Mage<small>Intelligence, mana, elements</small></button>
+            <button class="class-button" type="button" data-class="mage">Mage<small>Intelligence, elements</small></button>
             <button class="class-button" type="button" data-class="archer">Archer<small>Agility, range, speed</small></button>
             <button class="class-button" type="button" data-class="sage" data-secret="true" hidden>Sage<small>Queued spellcraft</small></button>
           </div>
@@ -607,17 +603,17 @@
           <h2>Quests</h2>
           <div class="quest-list" id="questList"></div>
         </section>
-        <section class="side-card">
+        <section class="side-card" id="sheetCard">
           <h2>Warden Sheet</h2>
           <p id="statPointText">Spend stat points earned from leveling.</p>
           <div class="sheet-grid">
             <div class="sheet-stat">
               <strong id="damageStat">0</strong>
-              <small>Weapon Damage</small>
+              <small>Attack Damage</small>
             </div>
             <div class="sheet-stat">
               <strong id="spellStat">0</strong>
-              <small>Skill Damage</small>
+              <small>Technique Damage</small>
             </div>
             <div class="sheet-stat">
               <strong id="speedStat">0</strong>
@@ -625,7 +621,11 @@
             </div>
             <div class="sheet-stat">
               <strong id="resistStat">0%</strong>
-              <small>Class Guard</small>
+              <small>Defense</small>
+            </div>
+            <div class="sheet-stat">
+              <strong id="dropStat">0%</strong>
+              <small>Loot Bonus</small>
             </div>
           </div>
           <div class="stat-spend" id="statSpend">
@@ -663,7 +663,6 @@
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d", { alpha: false });
     const hpStat = document.getElementById("hpStat");
-    const manaStat = document.getElementById("manaStat");
     const levelStat = document.getElementById("levelStat");
     const goldStat = document.getElementById("goldStat");
     const classStat = document.getElementById("classStat");
@@ -688,10 +687,14 @@
     const questList = document.getElementById("questList");
     const statPointText = document.getElementById("statPointText");
     const statButtons = Array.from(document.querySelectorAll("[data-stat]"));
+    const levelStatCard = document.getElementById("levelStatCard");
+    const coreStatCard = document.getElementById("coreStatCard");
+    const sheetCard = document.getElementById("sheetCard");
     const damageStat = document.getElementById("damageStat");
     const spellStat = document.getElementById("spellStat");
     const speedStat = document.getElementById("speedStat");
     const resistStat = document.getElementById("resistStat");
+    const dropStat = document.getElementById("dropStat");
     const nextFloorButton = document.getElementById("nextFloorButton");
     const resetButton = document.getElementById("resetButton");
 
@@ -766,7 +769,6 @@
         summary: "Warriors survive close quarters, scale hardest with Strength, and carve packs with a physical rift cleave.",
         stats: { strength: 9, intelligence: 2, agility: 4 },
         baseHp: 146,
-        baseMana: 52,
         baseSpeed: 202,
         attackElement: "physical",
         skillElement: "physical",
@@ -781,7 +783,6 @@
         summary: "Mages turn Intelligence into heavy elemental damage and use fire bolts with an arcane burst.",
         stats: { strength: 2, intelligence: 10, agility: 3 },
         baseHp: 98,
-        baseMana: 116,
         baseSpeed: 196,
         attackElement: "fire",
         skillElement: "arcane",
@@ -796,7 +797,6 @@
         summary: "Archers scale with Agility, fire quickly from range, and pierce enemies with nature-touched shots.",
         stats: { strength: 4, intelligence: 3, agility: 9 },
         baseHp: 112,
-        baseMana: 68,
         baseSpeed: 228,
         attackElement: "nature",
         skillElement: "physical",
@@ -808,10 +808,9 @@
       },
       sage: {
         name: "Sage",
-        summary: "Sages are fragile secret casters with no mana, XP, or levels; survival comes from spellcraft, not progression.",
+        summary: "Sages are fragile secret casters with no XP or levels; survival comes from spellcraft, not progression.",
         stats: { strength: 1, intelligence: 8, agility: 5 },
         baseHp: 68,
-        baseMana: 0,
         baseSpeed: 204,
         attackElement: "arcane",
         skillElement: "arcane",
@@ -953,16 +952,6 @@
         }
       },
       {
-        id: "mana",
-        label: "Mana Tonic",
-        cost: 18,
-        detail: "Restore 60 mana.",
-        buy() {
-          state.player.mana = Math.min(state.player.maxMana, state.player.mana + 60);
-          addEffect(state.player.x, state.player.y - 26, "+60 Mana", "#63f0c4");
-        }
-      },
-      {
         id: "training",
         label: "Training Manual",
         cost: 48,
@@ -1020,6 +1009,7 @@
       classKey: "warrior",
       floor: 1,
       floorClear: false,
+      elapsed: 0,
       camera: { x: 0, y: 0 },
       player: null,
       enemies: [],
@@ -1158,6 +1148,40 @@
       }
     }
 
+    function findOpenSpawnPoint(x, y, radius, minDistance = 0, maxDistance = 0) {
+      const centerX = clamp(x, radius, WORLD_W - radius);
+      const centerY = clamp(y, radius, WORLD_H - radius);
+      if (minDistance <= 0 && maxDistance <= 0 && !circleBlocked(centerX, centerY, radius)) {
+        return { x: centerX, y: centerY };
+      }
+      const player = state.player;
+      for (let attempt = 0; attempt < 72; attempt += 1) {
+        const angle = Math.random() * TAU;
+        const distance = minDistance + Math.random() * Math.max(0, maxDistance - minDistance);
+        const candidateX = clamp(centerX + Math.cos(angle) * distance, radius, WORLD_W - radius);
+        const candidateY = clamp(centerY + Math.sin(angle) * distance, radius, WORLD_H - radius);
+        if (circleBlocked(candidateX, candidateY, radius)) {
+          continue;
+        }
+        if (player && distanceSquared(candidateX, candidateY, player.x, player.y) < (player.radius + radius + 34) ** 2) {
+          continue;
+        }
+        return { x: candidateX, y: candidateY };
+      }
+      for (let ring = 1; ring <= 8; ring += 1) {
+        const distance = Math.max(24, maxDistance || 48) + ring * 22;
+        for (let step = 0; step < 16; step += 1) {
+          const angle = (step / 16) * TAU;
+          const candidateX = clamp(centerX + Math.cos(angle) * distance, radius, WORLD_W - radius);
+          const candidateY = clamp(centerY + Math.sin(angle) * distance, radius, WORLD_H - radius);
+          if (!circleBlocked(candidateX, candidateY, radius)) {
+            return { x: candidateX, y: candidateY };
+          }
+        }
+      }
+      return null;
+    }
+
     function screenToWorld(x, y) {
       return {
         x: state.camera.x + x,
@@ -1192,15 +1216,32 @@
       const stats = state.player?.stats || classDef.stats;
       const level = state.player?.level || 1;
       const sage = state.classKey === "sage";
+      const levelBonus = sage ? 0 : level;
+      const classKey = state.classKey;
+      let attackDamage;
+      let techniqueDamage;
+      if (classKey === "warrior") {
+        attackDamage = 11 + stats.strength * 2.75 + stats.agility * 0.32 + levelBonus * 1.35;
+        techniqueDamage = 14 + stats.strength * 3.1 + stats.agility * 0.25 + levelBonus * 1.5;
+      } else if (classKey === "mage") {
+        attackDamage = 8 + stats.intelligence * 2.55 + stats.agility * 0.25 + levelBonus * 1.25;
+        techniqueDamage = 14 + stats.intelligence * 3.25 + stats.agility * 0.2 + levelBonus * 1.65;
+      } else if (classKey === "archer") {
+        attackDamage = 9 + stats.agility * 2.45 + stats.strength * 0.25 + levelBonus * 1.25;
+        techniqueDamage = 12 + stats.agility * 2.95 + stats.strength * 0.2 + levelBonus * 1.45;
+      } else {
+        attackDamage = 8 + stats.intelligence * 1.8 + stats.agility * 0.45;
+        techniqueDamage = 13 + stats.intelligence * 2.55 + stats.agility * 0.35;
+      }
       return {
-        maxHp: Math.round(classDef.baseHp + stats.strength * 9 + level * 8),
-        maxMana: sage ? 0 : Math.round(classDef.baseMana + stats.intelligence * 8 + level * 5),
-        speed: Math.round(classDef.baseSpeed + stats.agility * 5 + level * 1.5),
-        weaponDamage: Math.round(9 + stats.strength * 1.65 + stats.agility * 0.85 + level * 1.35),
-        spellDamage: Math.round(12 + stats.intelligence * 2.25 + stats.agility * 0.45 + level * 1.55),
-        attackCooldown: Math.max(0.16, 0.38 - stats.agility * 0.012 - level * 0.002),
-        manaRegen: sage ? 0 : 5.2 + stats.intelligence * 0.38,
-        dashCooldown: Math.max(1.4, 2.8 - stats.agility * 0.035)
+        maxHp: Math.round(classDef.baseHp + stats.strength * 10 + levelBonus * 8),
+        speed: Math.round(classDef.baseSpeed + stats.agility * 5.5 + levelBonus * 1.35),
+        weaponDamage: Math.round(attackDamage),
+        spellDamage: Math.round(techniqueDamage),
+        attackCooldown: Math.max(0.14, 0.4 - stats.agility * 0.014 - levelBonus * 0.002),
+        defenseReduction: clamp(stats.strength * 0.018 + levelBonus * 0.0025, 0, 0.58),
+        dropBonus: clamp(stats.intelligence * 0.025 + levelBonus * 0.002, 0, 0.75),
+        dashCooldown: Math.max(1.25, 2.8 - stats.agility * 0.035)
       };
     }
 
@@ -1210,19 +1251,15 @@
         return;
       }
       const oldMaxHp = player.maxHp || 1;
-      const oldMaxMana = player.maxMana || 1;
       const derived = getDerivedStats();
       player.maxHp = derived.maxHp;
-      player.maxMana = derived.maxMana;
       player.speed = derived.speed;
       player.damage = derived.weaponDamage;
       player.skillDamage = derived.spellDamage;
       if (refill) {
         player.hp = player.maxHp;
-        player.mana = player.maxMana;
       } else {
         player.hp = Math.min(player.maxHp, Math.max(1, Math.round(player.hp * (player.maxHp / oldMaxHp))));
-        player.mana = player.maxMana === 0 ? 0 : Math.min(player.maxMana, Math.round(player.mana * (player.maxMana / oldMaxMana)));
       }
     }
 
@@ -1234,8 +1271,6 @@
         radius: 16,
         hp: 1,
         maxHp: 1,
-        mana: 1,
-        maxMana: 1,
         level: 1,
         statPoints: 0,
         stats: { ...classDef.stats },
@@ -1276,7 +1311,7 @@
         if (healing > 0) {
           target.hp += healing;
           target.hitTimer = 0.12;
-          addEffect(target.x, target.y - target.radius - 12, "Healed", ELEMENT_COLORS.life);
+          addTargetEffect(target, "healed", "Healed", ELEMENT_COLORS.life);
         }
         return -healing;
       }
@@ -1287,9 +1322,9 @@
         target.hitTimer = 0.1;
       }
       if (multiplier >= 1.45) {
-        addEffect(target.x, target.y - target.radius - 12, "Weak", ELEMENT_COLORS[element] || ELEMENT_COLORS[damageElement] || "#f7cc78");
+        addTargetEffect(target, "weak", "Weak", ELEMENT_COLORS[element] || ELEMENT_COLORS[damageElement] || "#f7cc78");
       } else if (multiplier <= 0.65) {
-        addEffect(target.x, target.y - target.radius - 12, "Resist", "#c2b8d8");
+        addTargetEffect(target, "resist", "Resist", "#c2b8d8");
       }
       return finalDamage;
     }
@@ -1297,13 +1332,14 @@
     function spawnEnemy(x, y, type = "goblin") {
       const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
       const floorScale = 1 + (state.floor - 1) * 0.28;
+      const point = findOpenSpawnPoint(x, y, def.radius) || { x, y };
       state.enemies.push({
         kind: "enemy",
         type,
         name: def.name,
         family: def.family,
-        x,
-        y,
+        x: point.x,
+        y: point.y,
         radius: def.radius,
         hp: Math.round(def.hp * floorScale),
         maxHp: Math.round(def.hp * floorScale),
@@ -1316,6 +1352,14 @@
         color: def.color,
         resists: { ...def.resists }
       });
+    }
+
+    function spawnEnemyNear(x, y, type = "goblin") {
+      const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
+      const point = findOpenSpawnPoint(x, y, def.radius, 42, 132);
+      if (point) {
+        spawnEnemy(point.x, point.y, type);
+      }
     }
 
     function spawnAnchor(x, y) {
@@ -1345,7 +1389,6 @@
       state.player.x = SHOP_ZONE.x;
       state.player.y = SHOP_ZONE.y;
       state.player.hp = state.player.maxHp;
-      state.player.mana = state.player.maxMana;
       state.player.attackTimer = 0;
       state.player.skillTimer = 0;
       state.player.windTimer = 0;
@@ -1430,15 +1473,23 @@
       state.effects.push({ x, y, text, color, life: 0.8, maxLife: 0.8 });
     }
 
+    function addTargetEffect(target, key, text, color, cooldown = 0.55) {
+      target.effectTimers ||= {};
+      if ((target.effectTimers[key] || 0) > state.elapsed) {
+        return;
+      }
+      target.effectTimers[key] = state.elapsed + cooldown;
+      addEffect(target.x, target.y - target.radius - 12, text, color);
+    }
+
     function dropLoot(x, y, enemy) {
-      state.pickups.push({ type: "gold", x, y, radius: 8, value: enemy.gold, color: "#f7cc78" });
-      if (Math.random() < 0.34) {
+      const dropBonus = getDerivedStats().dropBonus;
+      state.pickups.push({ type: "gold", x, y, radius: 8, value: Math.round(enemy.gold * (1 + dropBonus * 0.45)), color: "#f7cc78" });
+      if (Math.random() < 0.3 + dropBonus * 0.32) {
         state.pickups.push({ type: "health", x: x + 12, y: y - 6, radius: 7, value: 18, color: "#ff668a" });
       }
-      if (Math.random() < 0.26) {
-        if (!isSage()) {
-          state.pickups.push({ type: "mana", x: x - 10, y: y + 8, radius: 7, value: 16, color: "#63f0c4" });
-        }
+      if (Math.random() < dropBonus * 0.22) {
+        state.pickups.push({ type: "gold", x: x - 10, y: y + 8, radius: 7, value: Math.max(2, Math.round(enemy.gold * 0.35)), color: "#ffe873" });
       }
     }
 
@@ -1502,9 +1553,9 @@
         : "Return to the glowing market circle near the gate to buy supplies and training.";
       const markup = SHOP_ITEMS.map((item) => {
         const affordable = state.gold >= item.cost;
-        const unavailable = isSage() && (item.id === "mana" || item.id === "training");
+        const unavailable = isSage() && item.id === "training";
         const disabled = !state.nearShop || !affordable || unavailable ? " disabled" : "";
-        const detail = unavailable ? "Sage does not use mana or levels." : item.detail;
+        const detail = unavailable ? "Sage does not use levels." : item.detail;
         return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${detail}</small></button>`;
       }).join("");
       if (markup !== lastShopMarkup) {
@@ -1533,7 +1584,7 @@
 
     function buyShopItem(itemId) {
       const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
-      if (!item || !state.nearShop || state.gold < item.cost || (isSage() && (item.id === "mana" || item.id === "training"))) {
+      if (!item || !state.nearShop || state.gold < item.cost || (isSage() && item.id === "training")) {
         return;
       }
       state.gold -= item.cost;
@@ -2391,11 +2442,9 @@
       const player = state.player;
       const classDef = getClassDef();
       const derived = getDerivedStats();
-      const manaCost = state.classKey === "mage" ? 28 : state.classKey === "archer" ? 20 : 18;
-      if (player.skillTimer > 0 || player.mana < manaCost) {
+      if (player.skillTimer > 0) {
         return;
       }
-      player.mana -= manaCost;
       player.skillTimer = state.classKey === "mage" ? 3.7 : state.classKey === "archer" ? 3.4 : 4.2;
       const angle = getAimAngle();
       const range = state.classKey === "archer" ? 270 : state.classKey === "mage" ? 154 : 132;
@@ -2527,7 +2576,6 @@
           delete player.wards[element];
         }
       }
-      player.mana = isSage() ? 0 : Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
       state.nearShop = distanceSquared(player.x, player.y, SHOP_ZONE.x, SHOP_ZONE.y) <= (SHOP_ZONE.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
@@ -2595,7 +2643,7 @@
         if (anchor.spawnTimer <= 0 && state.enemies.length < floorDef.enemyCap) {
           anchor.spawnTimer = floorDef.spawnEvery;
           const type = floorDef.anchorTypes[Math.floor(Math.random() * floorDef.anchorTypes.length)];
-          spawnEnemy(anchor.x + (Math.random() - 0.5) * 80, anchor.y + (Math.random() - 0.5) * 80, type);
+          spawnEnemyNear(anchor.x, anchor.y, type);
         }
 
         for (const projectile of state.projectiles) {
@@ -2629,8 +2677,9 @@
 
         if (distance < player.radius + enemy.radius + 3) {
           const classDef = getClassDef();
+          const derived = getDerivedStats();
           const guarded = classDef.guardElement === enemy.damageElement;
-          let incoming = enemy.damage * (guarded ? 1 - classDef.guard : 1) * dt;
+          let incoming = enemy.damage * (1 - derived.defenseReduction) * (guarded ? 1 - classDef.guard : 1) * dt;
           if (player.wards[enemy.damageElement]) {
             incoming *= 0.45;
           }
@@ -2681,10 +2730,6 @@
             } else {
               player.hp = Math.min(player.maxHp, player.hp + pickup.value);
             }
-          } else if (pickup.type === "mana") {
-            if (!isSage()) {
-              player.mana = Math.min(player.maxMana, player.mana + pickup.value);
-            }
           }
           state.pickups.splice(index, 1);
         }
@@ -2733,6 +2778,7 @@
     }
 
     function update(dt) {
+      state.elapsed += dt;
       updatePlayer(dt);
       updateProjectiles(dt);
       updateAnchors(dt);
@@ -3197,21 +3243,22 @@
       const classDef = getClassDef();
       const derived = getDerivedStats();
       const floorDef = getFloorDef();
+      levelStatCard.hidden = isSage();
+      coreStatCard.hidden = isSage();
+      sheetCard.hidden = isSage();
       hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
-      manaStat.textContent = isSage() ? "None" : `${Math.floor(player.mana)} / ${player.maxMana}`;
-      levelStat.textContent = isSage() ? "None" : `${player.level} (${state.xp}/${state.xpToNext})`;
+      levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
       goldStat.textContent = String(state.gold);
       floorStat.textContent = `${state.floor}: ${floorDef.name}`;
       coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
       damageStat.textContent = String(derived.weaponDamage);
       spellStat.textContent = String(derived.spellDamage);
       speedStat.textContent = String(Math.round(derived.speed * (isSage() && player.hasteTimer > 0 ? 1.35 : 1)));
-      resistStat.textContent = `${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
-      statPointText.textContent = isSage()
-        ? "The Sage does not gain XP, mana, levels, or stat points."
-        : player.statPoints
-          ? `Unspent stat points: ${player.statPoints}`
-          : "Level up, quest, or buy training to earn stat points.";
+      resistStat.textContent = `${Math.round(derived.defenseReduction * 100)}% + ${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
+      dropStat.textContent = `+${Math.round(derived.dropBonus * 100)}%`;
+      statPointText.textContent = player.statPoints
+        ? `Unspent stat points: ${player.statPoints}`
+        : "Level up, quest, or buy training to earn stat points.";
       for (const button of statButtons) {
         button.disabled = isSage() || player.statPoints <= 0;
       }
