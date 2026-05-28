@@ -575,23 +575,23 @@
           <div class="sage-panel" id="sagePanel" hidden>
             <p>Queue up to five elements, then choose how to manifest the spell.</p>
             <div class="sage-elements" id="sageElements">
-              <button class="sage-button" type="button" data-sage-element="fire">Fire<small>1</small></button>
-              <button class="sage-button" type="button" data-sage-element="cold">Cold<small>2</small></button>
-              <button class="sage-button" type="button" data-sage-element="water">Water<small>3</small></button>
-              <button class="sage-button" type="button" data-sage-element="lightning">Lightning<small>4</small></button>
-              <button class="sage-button" type="button" data-sage-element="earth">Earth<small>5</small></button>
-              <button class="sage-button" type="button" data-sage-element="life">Life<small>6 / Light</small></button>
-              <button class="sage-button" type="button" data-sage-element="arcane">Arcane<small>7 / Dark</small></button>
-              <button class="sage-button" type="button" data-sage-element="shield">Shield<small>8</small></button>
+              <button class="sage-button" type="button" data-sage-element="fire">Fire<small>Q</small></button>
+              <button class="sage-button" type="button" data-sage-element="cold">Cold<small>E</small></button>
+              <button class="sage-button" type="button" data-sage-element="water">Water<small>R</small></button>
+              <button class="sage-button" type="button" data-sage-element="lightning">Lightning<small>F</small></button>
+              <button class="sage-button" type="button" data-sage-element="earth">Earth<small>Z</small></button>
+              <button class="sage-button" type="button" data-sage-element="life">Life<small>X / Light</small></button>
+              <button class="sage-button" type="button" data-sage-element="arcane">Arcane<small>C / Dark</small></button>
+              <button class="sage-button" type="button" data-sage-element="shield">Shield<small>V</small></button>
             </div>
             <div class="sage-queue" id="sageQueueText">Queue: empty</div>
             <div class="sage-casts" id="sageCasts">
-              <button class="sage-button" type="button" data-sage-cast="direct">Direct<small>Mouse</small></button>
-              <button class="sage-button" type="button" data-sage-cast="area">Area<small>Q</small></button>
-              <button class="sage-button" type="button" data-sage-cast="self">Self<small>E</small></button>
-              <button class="sage-button" type="button" data-sage-cast="rune">Rune<small>R</small></button>
+              <button class="sage-button" type="button" data-sage-cast="direct">Direct<small>Left</small></button>
+              <button class="sage-button" type="button" data-sage-cast="area">Area<small>Right</small></button>
+              <button class="sage-button" type="button" data-sage-cast="self">Self<small>Middle / G</small></button>
+              <button class="sage-button" type="button" data-sage-cast="rune">Rune<small>T</small></button>
             </div>
-          <small class="sage-message" id="sageMessage">C clears the queue. Opposing elements cancel or split combined elements.</small>
+          <small class="sage-message" id="sageMessage">Backspace clears the queue. Hold beams and sprays. Shift+Left casts Fissure.</small>
           </div>
         </section>
         <section class="side-card">
@@ -642,7 +642,7 @@
             <li><strong>Attack:</strong> Hold left mouse</li>
             <li><strong>Skill:</strong> Q for class skill</li>
             <li><strong>Dash:</strong> Space</li>
-            <li><strong>Sage:</strong> 1-8 queue elements, Q/E/R cast, C clears</li>
+            <li><strong>Sage:</strong> Q/E/R/F/Z/X/C/V elements, Left/Right/Middle cast, Shift+Left fissure, T rune, Backspace clear</li>
           </ul>
         </section>
         <section class="side-card">
@@ -740,6 +740,14 @@
     };
 
     const SAGE_ELEMENT_KEYS = {
+      q: "fire",
+      e: "cold",
+      r: "water",
+      f: "lightning",
+      z: "earth",
+      x: "life",
+      c: "arcane",
+      v: "shield",
       "1": "fire",
       "2": "cold",
       "3": "water",
@@ -998,7 +1006,7 @@
     ];
 
     const keys = new Set();
-    const mouse = { x: 0, y: 0, down: false };
+    const mouse = { x: 0, y: 0, down: false, pressed: false, altDirect: false };
     const blocked = new Set();
     let lastTick = 0;
     let lastShopMarkup = "";
@@ -1023,6 +1031,7 @@
       nearShop: true,
       sageUnlocked: readSageUnlocked(),
       sageQueue: [],
+      sageChannel: null,
       sageMessage: "",
       quests: {
         kills: 0,
@@ -1231,6 +1240,7 @@
         speed: 1,
         attackTimer: 0,
         skillTimer: 0,
+        windTimer: 0,
         dashTimer: 0,
         dashCooldown: 0,
         dashVx: 0,
@@ -1322,6 +1332,7 @@
       state.player.mana = state.player.maxMana;
       state.player.attackTimer = 0;
       state.player.skillTimer = 0;
+      state.player.windTimer = 0;
       state.player.dashTimer = 0;
       state.player.dashCooldown = 0;
       state.player.dashVx = 0;
@@ -1337,6 +1348,7 @@
       state.anchors = [];
       state.hazards = [];
       state.sageQueue = [];
+      state.sageChannel = null;
       state.sageMessage = "";
       state.nearShop = true;
       for (const [col, row] of floorDef.anchors) {
@@ -1433,7 +1445,7 @@
       sageCodeInput.disabled = state.sageUnlocked;
       sageUnlockButton.disabled = state.sageUnlocked;
       sageQueueText.textContent = getSageQueueLabel();
-      sageMessage.textContent = state.sageMessage || "C clears the queue. Opposing elements cancel or split combined elements.";
+      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Beams and sprays channel while held.";
       for (const button of sageElementButtons) {
         button.disabled = !isSage();
       }
@@ -1863,10 +1875,13 @@
         addHazard({ x: target.x, y: target.y, radius: 88, damage: 0, element: "wind", color: ELEMENT_COLORS.wind, kind: "gust", life: 5, tickRate: 0.35, push: 34 });
         addEffect(target.x, target.y - 22, "Gust Rune", ELEMENT_COLORS.wind);
       } else {
-        const x = player.x + Math.cos(angle) * 96;
-        const y = player.y + Math.sin(angle) * 96;
-        pushEnemiesFrom(x, y, method === "area" ? 220 : 130, method === "area" ? 58 : 44);
-        state.effects.push({ kind: "nova", x, y, range: method === "area" ? 220 : 130, life: 0.2, maxLife: 0.2, color: "rgba(216, 247, 255, 0.28)" });
+        if (method === "area") {
+          pushEnemiesFrom(player.x, player.y, 220, 58);
+          state.effects.push({ kind: "nova", x: player.x, y: player.y, range: 220, life: 0.2, maxLife: 0.2, color: "rgba(216, 247, 255, 0.28)" });
+        } else {
+          damageEnemiesInCone(player.x, player.y, angle, 190, 1.05, 0, "wind", 54);
+          state.effects.push({ kind: "cone", x: player.x, y: player.y, angle, range: 190, width: 1.05, life: 0.14, maxLife: 0.14, color: "rgba(216, 247, 255, 0.26)" });
+        }
       }
     }
 
@@ -1969,7 +1984,7 @@
         const target = screenToWorld(mouse.x, mouse.y);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 70), damage: power * 0.9, element, color, kind: "rune", life: 7, tickRate: 0.65, push: queue.includes("earth") ? 34 : 18 });
       } else {
-        if (queue.includes("earth")) {
+        if (method === "fissure" && queue.includes("earth")) {
           const bursts = 5 + Math.min(5, countAny(queue, ["earth", "ice"]));
           for (let index = 1; index <= bursts; index += 1) {
             const x = player.x + Math.cos(angle) * index * 64;
@@ -1980,7 +1995,7 @@
           }
           addEffect(player.x + Math.cos(angle) * 130, player.y + Math.sin(angle) * 130, "Fissure", color);
         } else {
-          createSageProjectile(angle, queue, power * 1.25, 500, queue.includes("ice") ? 10 : 9, { kind: "sageShard", color, pierce: 2, splashRadius: queue.includes("ice") ? 34 : 26, push: 28 });
+          createSageProjectile(angle, queue, power * 1.25, queue.includes("earth") ? 390 : 500, queue.includes("earth") ? 13 : queue.includes("ice") ? 10 : 9, { kind: "sageShard", color, pierce: 2, splashRadius: queue.includes("earth") ? 44 : queue.includes("ice") ? 34 : 26, push: queue.includes("earth") ? 42 : 28 });
         }
       }
     }
@@ -2050,12 +2065,115 @@
       }
     }
 
+    function shouldChannelSageSpell(method, queue) {
+      if (method !== "direct" || !queue.length || !mouse.down) {
+        return false;
+      }
+      const manifestation = getSageManifestation(queue);
+      return manifestation === "beam" || manifestation === "spray";
+    }
+
+    function startSageChannel(queue) {
+      const manifestation = getSageManifestation(queue);
+      state.sageChannel = {
+        queue: [...queue],
+        manifestation,
+        life: 0,
+        effectTimer: 0
+      };
+      clearSageQueue(`${manifestation === "beam" ? "Beam" : "Spray"} channeling.`);
+    }
+
+    function stopSageChannel() {
+      if (state.sageChannel) {
+        state.sageChannel = null;
+        state.sageMessage = "Channel released.";
+      }
+    }
+
+    function updateSageChannel(dt) {
+      const channel = state.sageChannel;
+      if (!channel || !mouse.down || !isSage()) {
+        stopSageChannel();
+        return;
+      }
+      const player = state.player;
+      const queue = channel.queue;
+      const drain = (5 + queue.length * 2.4) * dt;
+      if (player.mana < drain) {
+        stopSageChannel();
+        state.sageMessage = "Channel ended: not enough mana.";
+        return;
+      }
+      player.mana -= drain;
+      channel.life += dt;
+      channel.effectTimer -= dt;
+      const angle = getAimAngle();
+      const power = getSagePower(queue);
+      const element = getSageDamageElement(queue);
+      const color = getSageColor(queue);
+      if (channel.manifestation === "beam") {
+        const range = 520 + queue.length * 58;
+        const width = 18 + queue.length * 3;
+        const hits = damageEnemiesInLine(player.x, player.y, angle, range, width, power * 2.1 * dt, element, 0);
+        if (queue.includes("life") && player.bodyShield <= 0) {
+          player.hp = Math.min(player.maxHp, player.hp + hits * 14 * dt);
+        }
+        if (channel.effectTimer <= 0) {
+          channel.effectTimer = 0.045;
+          state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range, width: Math.max(8, width * 0.42), life: 0.08, maxLife: 0.08, color });
+        }
+      } else {
+        const dominantCount = Math.max(1, countElement(queue, queue[0]));
+        const range = 185 + queue.length * 28 + dominantCount * 42;
+        const width = 0.78 + Math.min(0.85, queue.length * 0.09);
+        const push = queue.includes("water") || queue.includes("steam") ? 20 + dominantCount * 9 : 8;
+        damageEnemiesInCone(player.x, player.y, angle, range, width, power * (1.28 + dominantCount * 0.22) * dt, element, push * dt * 10);
+        if (channel.effectTimer <= 0) {
+          channel.effectTimer = 0.055;
+          state.effects.push({ kind: "cone", x: player.x, y: player.y, angle, range, width, life: 0.09, maxLife: 0.09, color: getSageEffectColor(queue, 0.24) });
+        }
+      }
+    }
+
+    function updateSageMouseCasting(dt) {
+      const player = state.player;
+      if (state.sageChannel) {
+        updateSageChannel(dt);
+        return;
+      }
+      if (!mouse.down) {
+        return;
+      }
+      const method = mouse.altDirect ? "fissure" : "direct";
+      const queue = [...state.sageQueue];
+      if (shouldChannelSageSpell(method, queue)) {
+        startSageChannel(queue);
+        updateSageChannel(dt);
+        return;
+      }
+      if (!mouse.pressed && queue.length) {
+        return;
+      }
+      castSageSpell(method);
+    }
+
     function castSageSpell(method) {
       if (!isSage()) {
         return false;
       }
       const player = state.player;
       const queue = [...state.sageQueue];
+      if (shouldChannelSageSpell(method, queue)) {
+        startSageChannel(queue);
+        return true;
+      }
+      if (!queue.length) {
+        if (player.windTimer > 0) {
+          return true;
+        }
+        player.windTimer = 0.55;
+      }
       const manaCost = queue.length ? 7 + queue.length * 5 + (method === "rune" ? 4 : 0) : 0;
       if (player.mana < manaCost) {
         state.sageMessage = "Not enough mana.";
@@ -2236,11 +2354,14 @@
         const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
         moveWithCollision(player, (mx / length) * player.speed * bodyShieldSlow * dt, (my / length) * player.speed * bodyShieldSlow * dt);
       }
-      if (mouse.down) {
+      if (isSage()) {
+        updateSageMouseCasting(dt);
+      } else if (mouse.down) {
         fireBolt();
       }
       player.attackTimer = Math.max(0, player.attackTimer - dt);
       player.skillTimer = Math.max(0, player.skillTimer - dt);
+      player.windTimer = Math.max(0, player.windTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
       if (player.dashTimer <= 0) {
@@ -2458,6 +2579,7 @@
       updateHazards(dt);
       updateEffects(dt);
       updateHud();
+      mouse.pressed = false;
     }
 
     function drawTiles() {
@@ -2918,11 +3040,21 @@
     canvas.addEventListener("mousedown", (event) => {
       if (event.button === 0) {
         mouse.down = true;
+        mouse.pressed = true;
+        mouse.altDirect = event.shiftKey;
+      } else if (isSage() && event.button === 1) {
+        castSageSpell("self");
+        event.preventDefault();
+      } else if (isSage() && event.button === 2) {
+        castSageSpell("area");
+        event.preventDefault();
       }
     });
 
     window.addEventListener("mouseup", () => {
       mouse.down = false;
+      mouse.altDirect = false;
+      stopSageChannel();
     });
 
     canvas.addEventListener("contextmenu", (event) => event.preventDefault());
@@ -2939,24 +3071,26 @@
       if (isSage() && SAGE_ELEMENT_KEYS[key]) {
         queueSageElement(SAGE_ELEMENT_KEYS[key]);
         event.preventDefault();
+        return;
       }
-      if (isSage() && (key === "c" || key === "Backspace")) {
+      if (isSage() && (key === "Backspace" || key === "Escape")) {
         clearSageQueue();
         event.preventDefault();
+        return;
       }
       if (["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(key)) {
         keys.add(key);
         event.preventDefault();
       }
-      if (key === "q") {
+      if (!isSage() && key === "q") {
         castCleave();
         event.preventDefault();
       }
-      if (isSage() && key === "e") {
+      if (isSage() && key === "g") {
         castSageSpell("self");
         event.preventDefault();
       }
-      if (isSage() && key === "r") {
+      if (isSage() && key === "t") {
         castSageSpell("rune");
         event.preventDefault();
       }
