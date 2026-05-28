@@ -258,6 +258,8 @@
     }
 
     .class-grid,
+    .sage-elements,
+    .sage-casts,
     .shop-list,
     .quest-list,
     .sheet-grid,
@@ -272,6 +274,7 @@
     }
 
     .class-button,
+    .sage-button,
     .shop-button,
     .stat-button,
     .quest-item {
@@ -282,6 +285,7 @@
     }
 
     .class-button,
+    .sage-button,
     .shop-button,
     .stat-button {
       cursor: pointer;
@@ -299,6 +303,7 @@
     }
 
     .class-button small,
+    .sage-button small,
     .shop-button small,
     .quest-item small,
     .sheet-grid small {
@@ -308,6 +313,75 @@
       font-size: 0.72rem;
       font-weight: 600;
       line-height: 1.35;
+    }
+
+    .secret-unlock {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .secret-unlock input {
+      min-width: 0;
+      border: 1px solid rgba(156, 128, 255, 0.18);
+      border-radius: 999px;
+      padding: 10px 12px;
+      color: var(--text);
+      background: rgba(10, 10, 18, 0.5);
+      font: inherit;
+    }
+
+    .secret-unlock input:focus {
+      border-color: var(--border-strong);
+      outline: none;
+    }
+
+    .unlock-note,
+    .sage-message {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .sage-panel[hidden],
+    .class-button[hidden] {
+      display: none;
+    }
+
+    .sage-panel {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(156, 128, 255, 0.16);
+    }
+
+    .sage-elements {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 10px;
+    }
+
+    .sage-casts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 10px;
+    }
+
+    .sage-button {
+      min-height: 42px;
+      padding: 8px 6px;
+      color: var(--text);
+    }
+
+    .sage-queue {
+      min-height: 42px;
+      margin-top: 10px;
+      padding: 9px 10px;
+      border: 1px solid rgba(247, 204, 120, 0.2);
+      border-radius: 12px;
+      background: rgba(10, 10, 18, 0.46);
+      font: 700 0.78rem/1.4 "Fira Code", monospace;
+      color: var(--accent-3);
     }
 
     .shop-list,
@@ -490,8 +564,35 @@
             <button class="class-button" type="button" data-class="warrior">Warrior<small>Strength, armor, cleaves</small></button>
             <button class="class-button" type="button" data-class="mage">Mage<small>Intelligence, mana, elements</small></button>
             <button class="class-button" type="button" data-class="archer">Archer<small>Agility, range, speed</small></button>
+            <button class="class-button" type="button" data-class="sage" data-secret="true" hidden>Sage<small>Queued spellcraft</small></button>
           </div>
           <p id="classSummary">Warriors survive close quarters and hit hard with physical rift steel.</p>
+          <div class="secret-unlock">
+            <input id="sageCodeInput" type="text" autocomplete="off" spellcheck="false" placeholder="Secret code">
+            <button class="button" id="sageUnlockButton" type="button">Unlock</button>
+          </div>
+          <small class="unlock-note" id="sageUnlockText">A forbidden warden path is sealed by a code.</small>
+          <div class="sage-panel" id="sagePanel" hidden>
+            <p>Queue up to five elements, then choose how to manifest the spell.</p>
+            <div class="sage-elements" id="sageElements">
+              <button class="sage-button" type="button" data-sage-element="fire">Fire<small>1</small></button>
+              <button class="sage-button" type="button" data-sage-element="cold">Cold<small>2</small></button>
+              <button class="sage-button" type="button" data-sage-element="water">Water<small>3</small></button>
+              <button class="sage-button" type="button" data-sage-element="lightning">Lightning<small>4</small></button>
+              <button class="sage-button" type="button" data-sage-element="earth">Earth<small>5</small></button>
+              <button class="sage-button" type="button" data-sage-element="life">Life<small>6 / Light</small></button>
+              <button class="sage-button" type="button" data-sage-element="arcane">Arcane<small>7 / Dark</small></button>
+              <button class="sage-button" type="button" data-sage-element="shield">Shield<small>8</small></button>
+            </div>
+            <div class="sage-queue" id="sageQueueText">Queue: empty</div>
+            <div class="sage-casts" id="sageCasts">
+              <button class="sage-button" type="button" data-sage-cast="direct">Direct<small>Mouse</small></button>
+              <button class="sage-button" type="button" data-sage-cast="area">Area<small>Q</small></button>
+              <button class="sage-button" type="button" data-sage-cast="self">Self<small>E</small></button>
+              <button class="sage-button" type="button" data-sage-cast="rune">Rune<small>R</small></button>
+            </div>
+          <small class="sage-message" id="sageMessage">C clears the queue. Opposing elements cancel or split combined elements.</small>
+          </div>
         </section>
         <section class="side-card">
           <h2>Rift Objective</h2>
@@ -541,6 +642,7 @@
             <li><strong>Attack:</strong> Hold left mouse</li>
             <li><strong>Skill:</strong> Q for class skill</li>
             <li><strong>Dash:</strong> Space</li>
+            <li><strong>Sage:</strong> 1-8 queue elements, Q/E/R cast, C clears</li>
           </ul>
         </section>
         <section class="side-card">
@@ -573,6 +675,14 @@
     const objectiveText = document.getElementById("objectiveText");
     const classSummary = document.getElementById("classSummary");
     const classButtons = Array.from(document.querySelectorAll("[data-class]"));
+    const sageCodeInput = document.getElementById("sageCodeInput");
+    const sageUnlockButton = document.getElementById("sageUnlockButton");
+    const sageUnlockText = document.getElementById("sageUnlockText");
+    const sagePanel = document.getElementById("sagePanel");
+    const sageQueueText = document.getElementById("sageQueueText");
+    const sageMessage = document.getElementById("sageMessage");
+    const sageElementButtons = Array.from(document.querySelectorAll("[data-sage-element]"));
+    const sageCastButtons = Array.from(document.querySelectorAll("[data-sage-cast]"));
     const shopText = document.getElementById("shopText");
     const shopList = document.getElementById("shopList");
     const questList = document.getElementById("questList");
@@ -598,10 +708,46 @@
       physical: "#f0ebff",
       fire: "#ff8b4a",
       water: "#4bd9ff",
+      cold: "#9be7ff",
+      ice: "#b7f0ff",
+      steam: "#d7d7d7",
+      poison: "#78d85a",
+      lightning: "#ffe873",
+      earth: "#b88f5a",
+      life: "#f7f0a8",
       holy: "#f7f0a8",
       dark: "#9c80ff",
       nature: "#63f0c4",
-      arcane: "#c482ff"
+      arcane: "#9c80ff",
+      shield: "#f7cc78",
+      wind: "#d8f7ff"
+    };
+
+    const SAGE_UNLOCK_CODE = "Jzael the Sage";
+    const SAGE_UNLOCK_STORAGE_KEY = "riftwarden.sageUnlocked";
+    const SAGE_ELEMENT_DEFS = {
+      fire: { label: "Fire", key: "1" },
+      cold: { label: "Cold", key: "2" },
+      water: { label: "Water", key: "3" },
+      lightning: { label: "Lightning", key: "4" },
+      earth: { label: "Earth", key: "5" },
+      life: { label: "Life/Light", key: "6" },
+      arcane: { label: "Arcane/Dark", key: "7" },
+      shield: { label: "Shield", key: "8" },
+      steam: { label: "Steam", key: "" },
+      ice: { label: "Ice", key: "" },
+      poison: { label: "Poison", key: "" }
+    };
+
+    const SAGE_ELEMENT_KEYS = {
+      "1": "fire",
+      "2": "cold",
+      "3": "water",
+      "4": "lightning",
+      "5": "earth",
+      "6": "life",
+      "7": "arcane",
+      "8": "shield"
     };
 
     const CLASS_DEFS = {
@@ -649,6 +795,22 @@
         mobilityName: "Disengage",
         guardElement: "physical",
         guard: 0.08
+      },
+      sage: {
+        name: "Sage",
+        summary: "Sages are fragile secret casters who survive by building spell queues and choosing the right manifestation under pressure.",
+        stats: { strength: 1, intelligence: 8, agility: 5 },
+        baseHp: 68,
+        baseMana: 150,
+        baseSpeed: 204,
+        attackElement: "arcane",
+        skillElement: "arcane",
+        attackName: "Direct Cast",
+        skillName: "Area Cast",
+        mobilityName: "Focus Blink",
+        guardElement: "dark",
+        guard: 0.04,
+        secret: true
       }
     };
 
@@ -854,10 +1016,14 @@
       pickups: [],
       effects: [],
       anchors: [],
+      hazards: [],
       gold: 0,
       xp: 0,
       xpToNext: 30,
       nearShop: true,
+      sageUnlocked: readSageUnlocked(),
+      sageQueue: [],
+      sageMessage: "",
       quests: {
         kills: 0,
         anchorsCleared: 0,
@@ -865,6 +1031,22 @@
       },
       shopPurchases: 0
     };
+
+    function readSageUnlocked() {
+      try {
+        return window.localStorage?.getItem(SAGE_UNLOCK_STORAGE_KEY) === "true";
+      } catch {
+        return false;
+      }
+    }
+
+    function writeSageUnlocked() {
+      try {
+        window.localStorage?.setItem(SAGE_UNLOCK_STORAGE_KEY, "true");
+      } catch {
+        // Local storage can be unavailable in private or file contexts.
+      }
+    }
 
     function clamp(value, min, max) {
       return Math.max(min, Math.min(max, value));
@@ -1053,25 +1235,34 @@
         dashCooldown: 0,
         dashVx: 0,
         dashVy: 0,
-        dashHits: new Set()
+        dashHits: new Set(),
+        wards: {},
+        shell: 0
       };
       state.player = player;
       recalculatePlayerStats(true);
     }
 
     function getElementMultiplier(target, element) {
-      return target.resists?.[element] ?? 1;
+      return target.resists?.[normalizeDamageElement(element)] ?? 1;
+    }
+
+    function normalizeDamageElement(element) {
+      if (element === "life") return "holy";
+      if (element === "arcane" || element === "poison") return "dark";
+      return element;
     }
 
     function applyDamage(target, amount, element = "physical") {
-      const multiplier = getElementMultiplier(target, element);
+      const damageElement = normalizeDamageElement(element);
+      const multiplier = getElementMultiplier(target, damageElement);
       const finalDamage = amount * multiplier;
       target.hp -= finalDamage;
       if (target.hitTimer !== undefined) {
         target.hitTimer = 0.1;
       }
       if (multiplier >= 1.45) {
-        addEffect(target.x, target.y - target.radius - 12, "Weak", ELEMENT_COLORS[element] || "#f7cc78");
+        addEffect(target.x, target.y - target.radius - 12, "Weak", ELEMENT_COLORS[element] || ELEMENT_COLORS[damageElement] || "#f7cc78");
       } else if (multiplier <= 0.65) {
         addEffect(target.x, target.y - target.radius - 12, "Resist", "#c2b8d8");
       }
@@ -1135,11 +1326,16 @@
       state.player.dashVx = 0;
       state.player.dashVy = 0;
       state.player.dashHits.clear();
+      state.player.wards = {};
+      state.player.shell = 0;
       state.enemies = [];
       state.projectiles = [];
       state.pickups = [];
       state.effects = [];
       state.anchors = [];
+      state.hazards = [];
+      state.sageQueue = [];
+      state.sageMessage = "";
       state.nearShop = true;
       for (const [col, row] of floorDef.anchors) {
         spawnAnchor(TILE * col, TILE * row);
@@ -1202,13 +1398,58 @@
       }
     }
 
+    function isSage() {
+      return state.classKey === "sage";
+    }
+
+    function unlockSage() {
+      if (sageCodeInput.value.trim() !== SAGE_UNLOCK_CODE) {
+        sageUnlockText.textContent = "The seal does not recognize that phrase.";
+        state.sageMessage = "Secret code rejected.";
+        return;
+      }
+      state.sageUnlocked = true;
+      writeSageUnlocked();
+      sageUnlockText.textContent = "Sage unlocked. Select it carefully.";
+      state.sageMessage = "Sage class unlocked.";
+      setClass("sage");
+    }
+
+    function getSageQueueLabel() {
+      if (!state.sageQueue.length) {
+        return "Queue: empty";
+      }
+      return `Queue: ${state.sageQueue.map((element) => SAGE_ELEMENT_DEFS[element]?.label || element).join(" + ")}`;
+    }
+
+    function renderSagePanel() {
+      const showPanel = state.sageUnlocked || isSage();
+      sagePanel.hidden = !showPanel;
+      sageUnlockText.textContent = state.sageUnlocked
+        ? "Sage unlocked. It is fragile, weird, and very strong if you can think fast."
+        : sageUnlockText.textContent;
+      sageCodeInput.disabled = state.sageUnlocked;
+      sageUnlockButton.disabled = state.sageUnlocked;
+      sageQueueText.textContent = getSageQueueLabel();
+      sageMessage.textContent = state.sageMessage || "C clears the queue. Opposing elements cancel or split combined elements.";
+      for (const button of sageElementButtons) {
+        button.disabled = !isSage();
+      }
+      for (const button of sageCastButtons) {
+        button.disabled = !isSage();
+      }
+    }
+
     function renderClassButtons() {
       const classDef = getClassDef();
       classStat.textContent = classDef.name;
       classSummary.textContent = classDef.summary;
       for (const button of classButtons) {
+        const def = CLASS_DEFS[button.dataset.class];
+        button.hidden = Boolean(def?.secret && !state.sageUnlocked);
         button.classList.toggle("is-active", button.dataset.class === state.classKey);
       }
+      renderSagePanel();
     }
 
     function renderShop() {
@@ -1276,11 +1517,162 @@
       addEffect(state.player.x, state.player.y - 28, `+1 ${stat.toUpperCase()}`, "#f7cc78");
     }
 
+    function removeOne(queue, element) {
+      const index = queue.indexOf(element);
+      if (index >= 0) {
+        queue.splice(index, 1);
+      }
+    }
+
+    function elementLabel(element) {
+      return SAGE_ELEMENT_DEFS[element]?.label || element;
+    }
+
+    function replaceOne(queue, from, to) {
+      const index = queue.indexOf(from);
+      if (index >= 0) {
+        queue[index] = to;
+        return true;
+      }
+      return false;
+    }
+
+    function removeAndReport(queue, element, message) {
+      removeOne(queue, element);
+      return { queue, message };
+    }
+
+    function splitCombinedElement(queue, combined, remainder, message) {
+      replaceOne(queue, combined, remainder);
+      return { queue, message };
+    }
+
+    function combineSageElements(queue, element, pair, combined) {
+      if (!queue.includes(pair)) {
+        return null;
+      }
+      replaceOne(queue, pair, combined);
+      return {
+        queue,
+        message: `${elementLabel(pair)} + ${elementLabel(element)} became ${elementLabel(combined)}.`
+      };
+    }
+
+    function transformSageQueue(currentQueue, element) {
+      const queue = [...currentQueue];
+
+      if (element === "shield" && queue.includes("shield")) {
+        return removeAndReport(queue, "shield", "Shield removed.");
+      }
+      if (queue.includes(element)) {
+        return removeAndReport(queue, element, `${elementLabel(element)} removed.`);
+      }
+
+      if (queue.includes("poison")) {
+        if (element === "life") {
+          return splitCombinedElement(queue, "poison", "water", "Life purged Arcane from Poison, leaving Water.");
+        }
+        if (element === "arcane") {
+          return splitCombinedElement(queue, "poison", "water", "Arcane removed from Poison, leaving Water.");
+        }
+        if (element === "water" || element === "lightning") {
+          return splitCombinedElement(queue, "poison", "arcane", `${elementLabel(element)} stripped Water from Poison, leaving Arcane.`);
+        }
+      }
+
+      if (queue.includes("steam")) {
+        if (element === "cold") {
+          return splitCombinedElement(queue, "steam", "water", "Cold cancelled Fire in Steam, leaving Water.");
+        }
+        if (element === "fire") {
+          return splitCombinedElement(queue, "steam", "water", "Fire removed from Steam, leaving Water.");
+        }
+        if (element === "water") {
+          return splitCombinedElement(queue, "steam", "fire", "Water removed from Steam, leaving Fire.");
+        }
+      }
+
+      if (queue.includes("ice")) {
+        if (element === "fire") {
+          return splitCombinedElement(queue, "ice", "water", "Fire cancelled Cold in Ice, leaving Water.");
+        }
+        if (element === "cold") {
+          return splitCombinedElement(queue, "ice", "water", "Cold removed from Ice, leaving Water.");
+        }
+        if (element === "water" || element === "lightning") {
+          return splitCombinedElement(queue, "ice", "cold", `${elementLabel(element)} stripped Water from Ice, leaving Cold.`);
+        }
+      }
+
+      if (element === "cold" && queue.includes("fire")) {
+        return removeAndReport(queue, "fire", "Cold cancelled Fire.");
+      }
+      if (element === "fire" && queue.includes("cold")) {
+        return removeAndReport(queue, "cold", "Fire cancelled Cold.");
+      }
+      if (element === "life" && queue.includes("arcane")) {
+        return removeAndReport(queue, "arcane", "Life cancelled Arcane.");
+      }
+      if (element === "arcane" && queue.includes("life")) {
+        return removeAndReport(queue, "life", "Arcane cancelled Life.");
+      }
+      if (element === "lightning" && queue.includes("earth")) {
+        return removeAndReport(queue, "earth", "Lightning shattered Earth.");
+      }
+      if (element === "earth" && queue.includes("lightning")) {
+        return removeAndReport(queue, "lightning", "Earth grounded Lightning.");
+      }
+      if (element === "lightning" && queue.includes("water")) {
+        return removeAndReport(queue, "water", "Lightning consumed Water.");
+      }
+      if (element === "water" && queue.includes("lightning")) {
+        return removeAndReport(queue, "lightning", "Water grounded Lightning.");
+      }
+
+      const combined =
+        (element === "water" && combineSageElements(queue, element, "fire", "steam")) ||
+        (element === "fire" && combineSageElements(queue, element, "water", "steam")) ||
+        (element === "water" && combineSageElements(queue, element, "cold", "ice")) ||
+        (element === "cold" && combineSageElements(queue, element, "water", "ice")) ||
+        (element === "water" && combineSageElements(queue, element, "arcane", "poison")) ||
+        (element === "arcane" && combineSageElements(queue, element, "water", "poison"));
+      if (combined) {
+        return combined;
+      }
+
+      if (queue.length >= 5) {
+        return { queue, message: "The queue is full." };
+      }
+      queue.push(element);
+      return { queue, message: `${elementLabel(element)} queued.` };
+    }
+
+    function queueSageElement(element) {
+      if (!isSage()) {
+        state.sageMessage = "Only the Sage can queue elements.";
+        return;
+      }
+      const result = transformSageQueue(state.sageQueue, element);
+      state.sageQueue = result.queue;
+      state.sageMessage = result.message;
+    }
+
+    function clearSageQueue(message = "Queue cleared.") {
+      state.sageQueue = [];
+      state.sageMessage = message;
+    }
+
     function setClass(classKey) {
       if (!CLASS_DEFS[classKey] || state.classKey === classKey) {
         return;
       }
+      if (CLASS_DEFS[classKey].secret && !state.sageUnlocked) {
+        state.sageMessage = "That class is still sealed.";
+        return;
+      }
       state.classKey = classKey;
+      state.sageQueue = [];
+      state.sageMessage = "";
       lastShopMarkup = "";
       lastQuestMarkup = "";
       resetGame();
@@ -1307,7 +1699,325 @@
       return { x: bestX, y: bestY };
     }
 
+    function getSageDamageElement(queue) {
+      if (queue.includes("life")) return "holy";
+      if (queue.includes("poison") || queue.includes("arcane")) return "dark";
+      if (queue.includes("lightning")) return "lightning";
+      if (queue.includes("earth")) return "physical";
+      if (queue.includes("ice") || queue.includes("cold") || queue.includes("water")) return "water";
+      if (queue.includes("fire") || queue.includes("steam")) return "fire";
+      return "dark";
+    }
+
+    function getSageColor(queue) {
+      const element = queue[0] || "wind";
+      return ELEMENT_COLORS[element] || ELEMENT_COLORS[getSageDamageElement(queue)] || "#f0ebff";
+    }
+
+    function getSageEffectColor(queue, alpha = 0.22) {
+      if (queue.includes("life")) return `rgba(247, 240, 168, ${alpha})`;
+      if (queue.includes("poison")) return `rgba(120, 216, 90, ${alpha})`;
+      if (queue.includes("arcane")) return `rgba(156, 128, 255, ${alpha})`;
+      if (queue.includes("lightning")) return `rgba(255, 232, 115, ${alpha})`;
+      if (queue.includes("water") || queue.includes("cold") || queue.includes("ice")) return `rgba(75, 217, 255, ${alpha})`;
+      if (queue.includes("fire") || queue.includes("steam")) return `rgba(255, 139, 74, ${alpha})`;
+      return `rgba(216, 247, 255, ${alpha})`;
+    }
+
+    function getSageManifestation(queue) {
+      if (!queue.length) return "wind";
+      if (queue.includes("shield")) return "shield";
+      if (queue.includes("earth") || queue.includes("ice")) return "projectile";
+      if (queue.includes("poison")) return "spray";
+      if (queue.includes("life") || queue.includes("arcane")) return "beam";
+      return "spray";
+    }
+
+    function getSagePower(queue) {
+      const derived = getDerivedStats();
+      return derived.spellDamage * (0.62 + queue.length * 0.24);
+    }
+
+    function getSageRadius(queue, base = 86) {
+      return base + queue.length * 18 + (queue.includes("earth") ? 14 : 0) + (queue.includes("shield") ? 18 : 0);
+    }
+
+    function pushEnemiesFrom(x, y, radius, force) {
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - x;
+        const dy = enemy.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance <= radius + enemy.radius) {
+          moveWithCollision(enemy, (dx / distance) * force, (dy / distance) * force);
+          enemy.hitTimer = 0.08;
+        }
+      }
+    }
+
+    function damageEnemiesInCircle(x, y, radius, damage, element, push = 0) {
+      let hits = 0;
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - x;
+        const dy = enemy.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance <= radius + enemy.radius) {
+          applyDamage(enemy, damage, element);
+          if (push) {
+            moveWithCollision(enemy, (dx / distance) * push, (dy / distance) * push);
+          }
+          hits += 1;
+        }
+      }
+      return hits;
+    }
+
+    function damageEnemiesInLine(x, y, angle, range, width, damage, element, push = 0) {
+      let hits = 0;
+      const ax = Math.cos(angle);
+      const ay = Math.sin(angle);
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - x;
+        const dy = enemy.y - y;
+        const along = dx * ax + dy * ay;
+        if (along < -enemy.radius || along > range + enemy.radius) {
+          continue;
+        }
+        const perpendicular = Math.abs(dx * ay - dy * ax);
+        if (perpendicular <= width + enemy.radius) {
+          applyDamage(enemy, damage, element);
+          if (push) {
+            moveWithCollision(enemy, ax * push, ay * push);
+          }
+          hits += 1;
+        }
+      }
+      return hits;
+    }
+
+    function addHazard(config) {
+      state.hazards.push({
+        x: config.x,
+        y: config.y,
+        radius: config.radius,
+        damage: config.damage || 0,
+        element: config.element || "arcane",
+        color: config.color || ELEMENT_COLORS.arcane,
+        kind: config.kind || "rune",
+        life: config.life || 4,
+        maxLife: config.life || 4,
+        tickRate: config.tickRate || 0.5,
+        tickTimer: config.tickRate || 0.5,
+        push: config.push || 0
+      });
+    }
+
+    function createSageProjectile(angle, queue, damage, speed, radius, options = {}) {
+      const element = getSageDamageElement(queue);
+      state.projectiles.push({
+        x: state.player.x + Math.cos(angle) * 22,
+        y: state.player.y + Math.sin(angle) * 22,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius,
+        damage,
+        element,
+        kind: options.kind || "sageShard",
+        angle,
+        spin: Math.random() * TAU,
+        life: options.life || 1.1,
+        color: options.color || getSageColor(queue),
+        pierce: options.pierce || 0,
+        splashRadius: options.splashRadius || 0,
+        push: options.push || 0,
+        hitTargets: new Set()
+      });
+    }
+
+    function castSageWind(method) {
+      const player = state.player;
+      const angle = getAimAngle();
+      if (method === "self") {
+        player.dashCooldown = 0;
+        pushEnemiesFrom(player.x, player.y, 155, 42);
+        addEffect(player.x, player.y - 28, "Staff Focus", ELEMENT_COLORS.wind);
+      } else if (method === "rune") {
+        const target = screenToWorld(mouse.x, mouse.y);
+        addHazard({ x: target.x, y: target.y, radius: 88, damage: 0, element: "wind", color: ELEMENT_COLORS.wind, kind: "gust", life: 5, tickRate: 0.35, push: 34 });
+        addEffect(target.x, target.y - 22, "Gust Rune", ELEMENT_COLORS.wind);
+      } else {
+        const x = player.x + Math.cos(angle) * 96;
+        const y = player.y + Math.sin(angle) * 96;
+        pushEnemiesFrom(x, y, method === "area" ? 220 : 130, method === "area" ? 58 : 44);
+        state.effects.push({ kind: "nova", x, y, range: method === "area" ? 220 : 130, life: 0.2, maxLife: 0.2, color: "rgba(216, 247, 255, 0.28)" });
+      }
+    }
+
+    function castSageShield(method, queue, power) {
+      const player = state.player;
+      const color = getSageColor(queue);
+      const element = getSageDamageElement(queue);
+      if (method === "self") {
+        if (queue.includes("earth")) {
+          player.shell += Math.round(70 + power * 1.15);
+        }
+        if (queue.includes("arcane") || queue.includes("poison")) player.wards.dark = Math.max(player.wards.dark || 0, 8);
+        if (queue.includes("life")) player.wards.holy = Math.max(player.wards.holy || 0, 8);
+        if (queue.includes("fire") || queue.includes("steam")) player.wards.fire = Math.max(player.wards.fire || 0, 8);
+        if (queue.includes("water") || queue.includes("cold") || queue.includes("ice")) player.wards.water = Math.max(player.wards.water || 0, 8);
+        if (queue.includes("lightning")) player.wards.arcane = Math.max(player.wards.arcane || 0, 8);
+        player.shell += queue.length <= 1 ? Math.round(36 + power * 0.55) : 0;
+        addEffect(player.x, player.y - 34, "Ward", color);
+        return;
+      }
+      const target = method === "area" ? { x: player.x, y: player.y } : screenToWorld(mouse.x, mouse.y);
+      const mines = method === "direct" ? 2 + Math.min(3, queue.length) : 1;
+      for (let index = 0; index < mines; index += 1) {
+        const spread = (index - (mines - 1) * 0.5) * 34;
+        addHazard({
+          x: target.x + Math.cos(index * 2.4) * spread,
+          y: target.y + Math.sin(index * 2.4) * spread,
+          radius: getSageRadius(queue, 58),
+          damage: power * 1.05,
+          element,
+          color,
+          kind: "mine",
+          life: 14,
+          tickRate: 0.2,
+          push: queue.includes("earth") ? 36 : 18
+        });
+      }
+      addEffect(target.x, target.y - 24, "Runic Mine", color);
+    }
+
+    function castSageProjectileSpell(method, queue, power) {
+      const player = state.player;
+      const angle = getAimAngle();
+      const color = getSageColor(queue);
+      const element = getSageDamageElement(queue);
+      if (method === "self") {
+        player.shell += Math.round(44 + power * (queue.includes("earth") ? 0.9 : 0.45));
+        if (queue.includes("ice")) player.wards.water = Math.max(player.wards.water || 0, 6);
+        addEffect(player.x, player.y - 34, queue.includes("earth") ? "Stone Shell" : "Ice Guard", color);
+      } else if (method === "area") {
+        const count = queue.includes("ice") && queue.includes("earth") ? 8 : 6;
+        for (let index = 0; index < count; index += 1) {
+          createSageProjectile(index / count * TAU, queue, power * 0.72, 410, queue.includes("earth") ? 11 : 8, { kind: "sageShard", color, pierce: 1, splashRadius: queue.includes("earth") ? 28 : 14, push: 22 });
+        }
+      } else if (method === "rune") {
+        const target = screenToWorld(mouse.x, mouse.y);
+        addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 70), damage: power * 0.9, element, color, kind: "rune", life: 7, tickRate: 0.65, push: queue.includes("earth") ? 34 : 18 });
+      } else {
+        createSageProjectile(angle, queue, power * 1.25, queue.includes("earth") ? 390 : 500, queue.includes("earth") ? 13 : 9, { kind: "sageShard", color, pierce: 2, splashRadius: queue.includes("earth") ? 44 : 26, push: queue.includes("earth") ? 42 : 24 });
+      }
+    }
+
+    function castSageBeam(method, queue, power) {
+      const player = state.player;
+      const angle = getAimAngle();
+      const color = getSageColor(queue);
+      const element = getSageDamageElement(queue);
+      if (method === "self") {
+        if (queue.includes("life")) {
+          player.hp = Math.min(player.maxHp, player.hp + Math.round(45 + power));
+          addEffect(player.x, player.y - 34, "Mend", ELEMENT_COLORS.life);
+        } else {
+          player.wards.dark = Math.max(player.wards.dark || 0, 8);
+          addEffect(player.x, player.y - 34, "Dark Ward", ELEMENT_COLORS.arcane);
+        }
+        return;
+      }
+      if (method === "area") {
+        const hits = damageEnemiesInCircle(player.x, player.y, getSageRadius(queue, 150), power * 0.85, element, 16);
+        if (queue.includes("life")) player.hp = Math.min(player.maxHp, player.hp + hits * 10);
+        state.effects.push({ kind: "nova", x: player.x, y: player.y, range: getSageRadius(queue, 150), life: 0.22, maxLife: 0.22, color: getSageEffectColor(queue, 0.24) });
+        addEffect(player.x, player.y - 34, `${hits} touched`, color);
+      } else if (method === "rune") {
+        const target = screenToWorld(mouse.x, mouse.y);
+        addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 92), damage: power * 0.55, element, color, kind: queue.includes("life") ? "sanctum" : "rune", life: 6, tickRate: 0.38, push: 6 });
+      } else {
+        const hits = damageEnemiesInLine(player.x, player.y, angle, 520 + queue.length * 55, 20 + queue.length * 3, power, element, queue.includes("arcane") ? 20 : 0);
+        if (queue.includes("life")) player.hp = Math.min(player.maxHp, player.hp + hits * 8);
+        state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range: 520 + queue.length * 55, width: 10 + queue.length * 2, life: 0.14, maxLife: 0.14, color });
+      }
+    }
+
+    function castSageSpray(method, queue, power) {
+      const player = state.player;
+      const angle = getAimAngle();
+      const color = getSageColor(queue);
+      const element = getSageDamageElement(queue);
+      const push = queue.includes("water") || queue.includes("steam") ? 26 : 8;
+      if (method === "self") {
+        player.wards[element] = Math.max(player.wards[element] || 0, 6);
+        if (queue.includes("fire")) player.mana = Math.min(player.maxMana, player.mana + 18);
+        addEffect(player.x, player.y - 34, `${SAGE_ELEMENT_DEFS[queue[0]]?.label || "Element"} Ward`, color);
+      } else if (method === "area") {
+        const hits = damageEnemiesInCircle(player.x, player.y, getSageRadius(queue, 130), power * 0.7, element, push);
+        state.effects.push({ kind: "nova", x: player.x, y: player.y, range: getSageRadius(queue, 130), life: 0.2, maxLife: 0.2, color: getSageEffectColor(queue, 0.22) });
+        addEffect(player.x, player.y - 34, `${hits} sprayed`, color);
+      } else if (method === "rune") {
+        const target = screenToWorld(mouse.x, mouse.y);
+        addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 82), damage: power * 0.42, element, color, kind: "field", life: 5.5, tickRate: 0.32, push });
+      } else if (queue.includes("lightning")) {
+        state.effects.push({ kind: "beam", x: player.x, y: player.y, angle, range: 410, width: 8, life: 0.1, maxLife: 0.1, color: ELEMENT_COLORS.lightning });
+        damageEnemiesInLine(player.x, player.y, angle, 410, 24, power * 0.8, element, 10);
+      } else {
+        const count = 4 + Math.min(4, queue.length);
+        for (let index = 0; index < count; index += 1) {
+          const spread = (index - (count - 1) * 0.5) * 0.12;
+          createSageProjectile(angle + spread, queue, power * 0.45, 470, 6, { kind: "sageSpray", color, life: 0.62, splashRadius: 12, push });
+        }
+      }
+    }
+
+    function castSageSpell(method) {
+      if (!isSage()) {
+        return false;
+      }
+      const player = state.player;
+      const queue = [...state.sageQueue];
+      const direct = method === "direct";
+      const cooldown = direct ? Math.max(0.28, 0.72 - player.stats.agility * 0.018) : Math.max(0.48, 1.12 - player.stats.agility * 0.012);
+      if (direct && player.attackTimer > 0) {
+        return true;
+      }
+      if (!direct && player.skillTimer > 0) {
+        return true;
+      }
+      const manaCost = queue.length ? 7 + queue.length * 5 + (method === "rune" ? 4 : 0) : 0;
+      if (player.mana < manaCost) {
+        state.sageMessage = "Not enough mana.";
+        return true;
+      }
+      player.mana -= manaCost;
+      if (direct) {
+        player.attackTimer = cooldown;
+      } else {
+        player.skillTimer = cooldown;
+      }
+      if (!queue.length) {
+        castSageWind(method);
+      } else {
+        const power = getSagePower(queue);
+        const manifestation = getSageManifestation(queue);
+        if (manifestation === "shield") {
+          castSageShield(method, queue, power);
+        } else if (manifestation === "projectile") {
+          castSageProjectileSpell(method, queue, power);
+        } else if (manifestation === "beam") {
+          castSageBeam(method, queue, power);
+        } else {
+          castSageSpray(method, queue, power);
+        }
+      }
+      clearSageQueue(`${method[0].toUpperCase()}${method.slice(1)} spell cast.`);
+      return true;
+    }
+
     function fireBolt() {
+      if (castSageSpell("direct")) {
+        return;
+      }
       const player = state.player;
       if (player.attackTimer > 0) {
         return;
@@ -1335,6 +2045,9 @@
     }
 
     function castCleave() {
+      if (castSageSpell("area")) {
+        return;
+      }
       const player = state.player;
       const classDef = getClassDef();
       const derived = getDerivedStats();
@@ -1394,6 +2107,18 @@
       const angle = getAimAngle();
       const derived = getDerivedStats();
       player.dashHits.clear();
+      if (state.classKey === "sage") {
+        const fromX = player.x;
+        const fromY = player.y;
+        const destination = findBlinkDestination(angle, 230 + player.stats.intelligence * 4);
+        player.x = destination.x;
+        player.y = destination.y;
+        player.dashTimer = 0.08;
+        player.dashCooldown = Math.max(2.2, derived.dashCooldown + 0.75);
+        addEffect(fromX, fromY - 20, "Focus", ELEMENT_COLORS.arcane);
+        addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
+        return;
+      }
       if (state.classKey === "mage") {
         const fromX = player.x;
         const fromY = player.y;
@@ -1402,8 +2127,8 @@
         player.y = destination.y;
         player.dashTimer = 0.08;
         player.dashCooldown = Math.max(1.7, derived.dashCooldown + 0.25);
-        addEffect(fromX, fromY - 20, "Blink", "#c482ff");
-        addEffect(player.x, player.y - 20, "Blink", "#c482ff");
+        addEffect(fromX, fromY - 20, "Blink", ELEMENT_COLORS.arcane);
+        addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
         return;
       }
       const backward = state.classKey === "archer";
@@ -1452,6 +2177,12 @@
         player.dashVx = 0;
         player.dashVy = 0;
       }
+      for (const element of Object.keys(player.wards)) {
+        player.wards[element] = Math.max(0, player.wards[element] - dt);
+        if (player.wards[element] <= 0) {
+          delete player.wards[element];
+        }
+      }
       player.mana = Math.min(player.maxMana, player.mana + derived.manaRegen * dt);
       state.nearShop = distanceSquared(player.x, player.y, SHOP_ZONE.x, SHOP_ZONE.y) <= (SHOP_ZONE.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
@@ -1473,14 +2204,30 @@
 
         let hit = false;
         for (const enemy of state.enemies) {
+          if (projectile.hitTargets?.has(enemy)) {
+            continue;
+          }
           if (distanceSquared(projectile.x, projectile.y, enemy.x, enemy.y) <= (projectile.radius + enemy.radius) ** 2) {
+            projectile.hitTargets?.add(enemy);
             applyDamage(enemy, projectile.damage, projectile.element);
+            if (projectile.push) {
+              const angle = Math.atan2(enemy.y - projectile.y, enemy.x - projectile.x);
+              moveWithCollision(enemy, Math.cos(angle) * projectile.push, Math.sin(angle) * projectile.push);
+            }
+            if (projectile.splashRadius) {
+              damageEnemiesInCircle(projectile.x, projectile.y, projectile.splashRadius, projectile.damage * 0.42, projectile.element, projectile.push * 0.45);
+              state.effects.push({ kind: "nova", x: projectile.x, y: projectile.y, range: projectile.splashRadius, life: 0.12, maxLife: 0.12, color: "rgba(247, 204, 120, 0.18)" });
+            }
             hit = true;
             break;
           }
         }
         if (hit) {
-          state.projectiles.splice(index, 1);
+          if (projectile.pierce > 0) {
+            projectile.pierce -= 1;
+          } else {
+            state.projectiles.splice(index, 1);
+          }
         }
       }
     }
@@ -1531,7 +2278,16 @@
         if (distance < player.radius + enemy.radius + 3) {
           const classDef = getClassDef();
           const guarded = classDef.guardElement === enemy.damageElement;
-          player.hp -= enemy.damage * (guarded ? 1 - classDef.guard : 1) * dt;
+          let incoming = enemy.damage * (guarded ? 1 - classDef.guard : 1) * dt;
+          if (player.wards[enemy.damageElement]) {
+            incoming *= 0.45;
+          }
+          if (player.shell > 0) {
+            const absorbed = Math.min(player.shell, incoming);
+            player.shell -= absorbed;
+            incoming -= absorbed;
+          }
+          player.hp -= incoming;
           if (player.hp <= 0) {
             player.hp = player.maxHp;
             player.x = TILE * 4.5;
@@ -1574,6 +2330,34 @@
       }
     }
 
+    function updateHazards(dt) {
+      for (let index = state.hazards.length - 1; index >= 0; index -= 1) {
+        const hazard = state.hazards[index];
+        hazard.life -= dt;
+        if (hazard.kind === "mine") {
+          const triggered = state.enemies.some((enemy) => distanceSquared(hazard.x, hazard.y, enemy.x, enemy.y) <= (hazard.radius + enemy.radius) ** 2);
+          if (triggered || hazard.life <= 0) {
+            damageEnemiesInCircle(hazard.x, hazard.y, hazard.radius + 18, hazard.damage, hazard.element, hazard.push + 20);
+            state.effects.push({ kind: "nova", x: hazard.x, y: hazard.y, range: hazard.radius + 18, life: 0.18, maxLife: 0.18, color: "rgba(247, 204, 120, 0.25)" });
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
+        hazard.tickTimer -= dt;
+        if (hazard.tickTimer <= 0) {
+          hazard.tickTimer = hazard.tickRate;
+          if (hazard.damage > 0) {
+            damageEnemiesInCircle(hazard.x, hazard.y, hazard.radius, hazard.damage, hazard.element, hazard.push);
+          } else if (hazard.push) {
+            pushEnemiesFrom(hazard.x, hazard.y, hazard.radius, hazard.push);
+          }
+        }
+        if (hazard.life <= 0) {
+          state.hazards.splice(index, 1);
+        }
+      }
+    }
+
     function updateEffects(dt) {
       for (let index = state.effects.length - 1; index >= 0; index -= 1) {
         const effect = state.effects[index];
@@ -1593,6 +2377,7 @@
       updateAnchors(dt);
       updateEnemies(dt);
       updatePickups(dt);
+      updateHazards(dt);
       updateEffects(dt);
       updateHud();
     }
@@ -1680,6 +2465,31 @@
         ctx.arc(10, 4, 8, -1.6, 0.9);
         ctx.closePath();
         ctx.fill();
+      } else if (projectile.kind === "sageShard") {
+        ctx.rotate(projectile.angle + projectile.spin * 0.35);
+        ctx.fillStyle = projectile.color;
+        ctx.beginPath();
+        ctx.moveTo(18, 0);
+        ctx.lineTo(3, -9);
+        ctx.lineTo(-15, -5);
+        ctx.lineTo(-9, 0);
+        ctx.lineTo(-15, 5);
+        ctx.lineTo(3, 9);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.34)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else if (projectile.kind === "sageSpray") {
+        ctx.fillStyle = projectile.color;
+        ctx.beginPath();
+        ctx.arc(0, 0, projectile.radius + 2, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 0.42;
+        ctx.beginPath();
+        ctx.arc(-4, -3, projectile.radius * 0.75, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 1;
       } else {
         const pulse = 0.72 + Math.sin((projectile.spin || 0) * 1.6) * 0.18;
         ctx.globalAlpha = 0.42;
@@ -1731,7 +2541,7 @@
         ctx.lineTo(-12, 13);
         ctx.closePath();
         ctx.fill();
-        ctx.fillStyle = "#c482ff";
+        ctx.fillStyle = ELEMENT_COLORS.arcane;
         ctx.beginPath();
         ctx.arc(2, 0, 8, 0, TAU);
         ctx.fill();
@@ -1739,6 +2549,26 @@
         ctx.beginPath();
         ctx.arc(17, 0, 4, 0, TAU);
         ctx.fill();
+      } else if (state.classKey === "sage") {
+        ctx.fillStyle = "#211b35";
+        ctx.beginPath();
+        ctx.moveTo(17, 0);
+        ctx.lineTo(-9, -15);
+        ctx.lineTo(-14, 0);
+        ctx.lineTo(-9, 15);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = "#f7cc78";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = ELEMENT_COLORS.arcane;
+        ctx.beginPath();
+        ctx.arc(0, 0, 7, 0, TAU);
+        ctx.fill();
+        ctx.strokeStyle = "#8dff9b";
+        ctx.beginPath();
+        ctx.arc(0, 0, 15, -0.65, 0.65);
+        ctx.stroke();
       } else {
         ctx.fillStyle = "#315c4b";
         ctx.beginPath();
@@ -1836,6 +2666,24 @@
       ctx.restore();
     }
 
+    function drawHazard(hazard) {
+      const point = worldToScreen(hazard.x, hazard.y);
+      const alpha = clamp(hazard.life / hazard.maxLife, 0, 1);
+      ctx.save();
+      ctx.globalAlpha = 0.28 + alpha * 0.2;
+      ctx.fillStyle = hazard.color;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, hazard.radius, 0, TAU);
+      ctx.fill();
+      ctx.globalAlpha = 0.7;
+      ctx.strokeStyle = hazard.color;
+      ctx.lineWidth = hazard.kind === "mine" ? 3 : 2;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, hazard.radius * (hazard.kind === "mine" ? 0.55 + Math.sin(hazard.life * 6) * 0.08 : 1), 0, TAU);
+      ctx.stroke();
+      ctx.restore();
+    }
+
     function drawWorld() {
       drawTiles();
 
@@ -1854,6 +2702,10 @@
 
       for (const pickup of state.pickups) {
         drawCircleEntity(pickup, pickup.color, "rgba(255, 255, 255, 0.18)");
+      }
+
+      for (const hazard of state.hazards) {
+        drawHazard(hazard);
       }
 
       for (const anchor of state.anchors) {
@@ -1893,6 +2745,14 @@
           ctx.beginPath();
           ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.25), 0, TAU);
           ctx.stroke();
+        } else if (effect.kind === "beam") {
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = effect.color;
+          ctx.lineWidth = effect.width || 8;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(point.x + Math.cos(effect.angle) * effect.range, point.y + Math.sin(effect.angle) * effect.range);
+          ctx.stroke();
         } else {
           ctx.globalAlpha = alpha;
           ctx.fillStyle = effect.color;
@@ -1907,6 +2767,16 @@
       const target = screenToWorld(mouse.x, mouse.y);
       const angle = Math.atan2(target.y - player.y, target.x - player.x);
       drawPlayerSprite(player, angle);
+      const playerPoint = worldToScreen(player.x, player.y);
+      if (player.shell > 0 || Object.keys(player.wards).length) {
+        ctx.globalAlpha = player.shell > 0 ? 0.34 : 0.2;
+        ctx.strokeStyle = player.shell > 0 ? ELEMENT_COLORS.earth : ELEMENT_COLORS.arcane;
+        ctx.lineWidth = player.shell > 0 ? 4 : 2;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, player.radius + 9 + Math.sin(performance.now() * 0.006) * 2, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
     }
 
     function updateHud() {
@@ -1971,14 +2841,38 @@
 
     canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
+    function isTypingTarget(target) {
+      return target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
+    }
+
     window.addEventListener("keydown", (event) => {
+      if (isTypingTarget(event.target)) {
+        return;
+      }
       const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (isSage() && SAGE_ELEMENT_KEYS[key]) {
+        queueSageElement(SAGE_ELEMENT_KEYS[key]);
+        event.preventDefault();
+      }
+      if (isSage() && (key === "c" || key === "Backspace")) {
+        clearSageQueue();
+        event.preventDefault();
+      }
       if (["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(key)) {
         keys.add(key);
         event.preventDefault();
       }
       if (key === "q") {
         castCleave();
+        event.preventDefault();
+      }
+      if (isSage() && key === "e") {
+        castSageSpell("self");
+        event.preventDefault();
+      }
+      if (isSage() && key === "r") {
+        castSageSpell("rune");
+        event.preventDefault();
       }
       if (key === " " || key === "Spacebar") {
         dash();
@@ -1994,8 +2888,20 @@
     window.addEventListener("resize", resizeCanvas);
     nextFloorButton.addEventListener("click", nextFloor);
     resetButton.addEventListener("click", resetGame);
+    sageUnlockButton.addEventListener("click", unlockSage);
+    sageCodeInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        unlockSage();
+      }
+    });
     for (const button of classButtons) {
       button.addEventListener("click", () => setClass(button.dataset.class));
+    }
+    for (const button of sageElementButtons) {
+      button.addEventListener("click", () => queueSageElement(button.dataset.sageElement));
+    }
+    for (const button of sageCastButtons) {
+      button.addEventListener("click", () => castSageSpell(button.dataset.sageCast));
     }
     for (const button of statButtons) {
       button.addEventListener("click", () => assignStat(button.dataset.stat));
