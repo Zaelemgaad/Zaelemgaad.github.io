@@ -1096,9 +1096,12 @@
             <div class="debug-toolbar">
               <select class="control-select" id="debugAction">
                 <option value="level-up">Trigger level-up</option>
+                <option value="level-up-100">Trigger 100 level-ups</option>
                 <option value="advance-1">Advance 1 wave</option>
                 <option value="advance-5">Advance 5 waves</option>
+                <option value="advance-100">Advance 100 waves</option>
                 <option value="add-time">Add 10 minutes</option>
+                <option value="add-time-30">Add 30 minutes</option>
                 <option value="spawn-chest">Spawn chest now</option>
                 <option value="spawn-boss">Spawn boss now</option>
               </select>
@@ -1283,6 +1286,8 @@
     const STAR_GRID_ROWS = Math.ceil(WORLD_HEIGHT / STAR_CELL_SIZE);
     const TIMED_EVENT_INTERVAL = 300;
     const ENDGAME_WAVE_EVENT_TIME = 1200;
+    const SINGULARITY_SCORE_THRESHOLD = 30000000;
+    const SINGULARITY_LEVEL_THRESHOLD = 60000;
     const TAU = Math.PI * 2;
     const MUSIC_VOLUME = 0.2;
     const SFX_BASE_PATH = "./audio/sfx/";
@@ -1840,7 +1845,7 @@
         rarity: "fusion",
         offer: false,
         describe(rank) {
-          return `Fusion weapon. Rank ${rank} upgrades poison into a life-stealing field with global shard pull.`;
+          return `Fusion weapon. Rank ${rank} upgrades poison and gravity mines into a life-stealing singularity field with global shard pull.`;
         },
         passive: true
       },
@@ -1917,11 +1922,14 @@
       },
       projectile_count: {
         name: "Mirror Array",
-        maxRank: 1,
+        maxRank: 2,
         describe(rank) {
+          if (rank >= 2) {
+            return "Directional weapons echo behind you and to both sides, while poison fields run at double violence.";
+          }
           return rank
             ? "Directional weapons echo once behind you, and poison fields tick 50% faster for 50% more damage."
-            : "Single-rank passive. Directional weapons fire one mirrored copy behind you and poison fields become more violent.";
+            : "Two-rank passive. First rank mirrors backward, second rank adds side echoes at 90 and 270 degrees.";
         }
       },
       health: {
@@ -2031,9 +2039,9 @@
       {
         result: "siphon_field",
         name: "Siphon Field",
-        components: ["poison_field", "magnet"],
+        components: ["poison_field", "gravity_mines"],
         describe() {
-          return "Fuse Poison Field and Magnet Coil into a life-stealing field that pulls token shards from anywhere in the arena.";
+          return "Fuse Poison Field and Gravity Mines into a life-stealing singularity field that pulls token shards from anywhere in the arena.";
         }
       },
       {
@@ -2050,6 +2058,7 @@
       poison_field: ["poison"],
       orbit_ring: ["orbit"],
       magnet: ["magnet"],
+      gravity_mines: ["magnet"],
       arc_sweep: ["arc"],
       miasma_orbit: ["poison", "orbit"],
       siphon_field: ["poison", "magnet"],
@@ -2100,6 +2109,12 @@
       draftOptions: [],
       lockedWeapons: new Set(),
       lockedPassives: new Set(),
+      singularityCompression: {
+        active: false,
+        radius: 0,
+        damagePerSecond: 0,
+        spin: 0
+      },
       overflowStats: null,
       overflowMessage: "None",
       autoLevel: false,
@@ -2381,6 +2396,14 @@
       if (mods.mirroredShots) {
         callback(state.player.aimAngle + Math.PI, true);
       }
+      if (mods.sideMirroredShots) {
+        callback(state.player.aimAngle + Math.PI / 2, true);
+        callback(state.player.aimAngle - Math.PI / 2, true);
+      }
+    }
+
+    function directionalCastCount(mods = getStatMods()) {
+      return 1 + (mods.mirroredShots ? 1 : 0) + (mods.sideMirroredShots ? 2 : 0);
     }
 
     function getThreatWave() {
@@ -2548,12 +2571,15 @@
       const magnetRank = passiveRank("magnet");
       const globalMagnetWeapon = hasWeapon("siphon_field") || hasWeapon("void_maelstrom");
       const overflow = state.overflowStats || createOverflowStats();
+      const mirrorRank = passiveRank("projectile_count");
       return {
         damage: (1 + passiveRank("damage") * 0.12) * (1 + overflow.damage),
         attackSpeed: (1 + passiveRank("attack_speed") * 0.1) * (1 + overflow.attackSpeed),
         projectileSize: (1 + passiveRank("projectile_size") * 0.08) * (1 + overflow.projectileSize),
         projectileSpeed: 1 + overflow.projectileSpeed,
-        mirroredShots: passiveRank("projectile_count") > 0,
+        mirrorRank,
+        mirroredShots: mirrorRank > 0,
+        sideMirroredShots: mirrorRank > 1,
         xpGain: (1 + passiveRank("xp_gain") * 0.12) * (1 + overflow.xpGain),
         moveSpeed: (1 + passiveRank("move_speed") * 0.06) * (1 + overflow.moveSpeed),
         magnet: globalMagnetWeapon ? Math.max(magnetRank * 16, 16000) : magnetRank * 16 * (1 + overflow.magnet),
@@ -2568,7 +2594,7 @@
     }
 
     function getPoisonFieldStats(mods) {
-      const mirrorPoison = passiveRank("projectile_count") > 0 ? 1.5 : 1;
+      const mirrorPoison = 1 + Math.min(2, passiveRank("projectile_count")) * 0.5;
       if (hasWeapon("void_maelstrom")) {
         const weapon = getWeapon("void_maelstrom");
         return {
@@ -2707,6 +2733,102 @@
             stroke: pulse.stroke || colorWithAlpha("#ffe39e", 0.42)
           };
         });
+    }
+
+    function estimateWeaponDps(weapon, mods) {
+      const rank = weapon.rank;
+      const castCount = directionalCastCount(mods);
+      switch (weapon.key) {
+        case "single_shot":
+          return ((5 + rank * 1.55) * mods.damage * castCount * mods.attackSpeed) / weaponDefs.single_shot.cooldown(rank);
+        case "twin_shot":
+          return ((6 + rank * 1.8) * mods.damage * 2 * castCount * mods.attackSpeed) / weaponDefs.twin_shot.cooldown(rank);
+        case "sidecar_turrets":
+          return ((5.2 + rank * 1.45) * mods.damage * 2 * castCount * mods.attackSpeed) / weaponDefs.sidecar_turrets.cooldown(rank);
+        case "rail_spear":
+          return ((36 + rank * 8.4) * mods.damage * 5.5 * castCount * mods.attackSpeed) / weaponDefs.rail_spear.cooldown(rank);
+        case "gravity_mines":
+          return ((28 + rank * 6.5) * mods.damage * 3.4 * mods.attackSpeed) / weaponDefs.gravity_mines.cooldown(rank);
+        case "arc_sweep":
+          return ((16 + rank * 3.2) * mods.damage * 3 * castCount * mods.attackSpeed) / weaponDefs.arc_sweep.cooldown(rank);
+        case "ricochet_trail":
+          return ((16 + rank * 4.2) * mods.damage * 1.9 * castCount * mods.attackSpeed) / weaponDefs.ricochet_trail.cooldown(rank);
+        case "seeker_trail":
+          return ((18 + rank * 4.6) * mods.damage * 2.25 * castCount * mods.attackSpeed) / weaponDefs.seeker_trail.cooldown(rank);
+        case "starburst_array":
+          return ((7.8 + rank * 1.85) * mods.damage * 5 * castCount * mods.attackSpeed) / weaponDefs.starburst_array.cooldown(rank);
+        case "omni_star_halo":
+          return ((5.5 + rank * 1.7) * mods.damage * (12 + Math.floor((rank - 1) / 2) * 2) * mods.attackSpeed) / weaponDefs.omni_star_halo.cooldown(rank);
+        case "ricochet_halo":
+          return ((12 + rank * 3.2) * mods.damage * (10 + Math.floor((rank - 1) / 2) * 2) * 1.55 * mods.attackSpeed) / weaponDefs.ricochet_halo.cooldown(rank);
+        case "crescent_orbit":
+          return ((17 + rank * 3.1) * mods.damage * 3.5 * mods.attackSpeed) / weaponDefs.crescent_orbit.cooldown(rank);
+        case "void_maelstrom":
+          return ((22 + rank * 4.2) * mods.damage * (4 + Math.floor((rank - 1) / 3)) * 3 * mods.attackSpeed) / weaponDefs.void_maelstrom.cooldown(rank);
+        default:
+          return 0;
+      }
+    }
+
+    function estimateCurrentWeaponDps(mods) {
+      let total = 0;
+      for (const weapon of state.player.weapons) {
+        total += estimateWeaponDps(weapon, mods);
+      }
+
+      const poison = getPoisonFieldStats(mods);
+      if (poison) {
+        total += poison.damagePerSecond * 2.6;
+      }
+
+      const orbit = getOrbitWeaponStats(mods);
+      if (orbit) {
+        total += orbit.damage * orbit.count * 5;
+      }
+
+      return Math.max(total, mods.damage * mods.attackSpeed * 160);
+    }
+
+    function getSingularityRadius(mods) {
+      const poison = getPoisonFieldStats(mods);
+      const maelstromRank = hasWeapon("void_maelstrom") ? getWeapon("void_maelstrom").rank : 10;
+      const maelstromSize = (62 + maelstromRank * 2.8) * mods.projectileSize;
+      return Math.max(120 * mods.projectileSize, poison ? poison.radius : 0, maelstromSize);
+    }
+
+    function shouldActivateSingularityCompression() {
+      return state.running
+        && state.player
+        && !state.singularityCompression.active
+        && (state.score >= SINGULARITY_SCORE_THRESHOLD || state.level >= SINGULARITY_LEVEL_THRESHOLD);
+    }
+
+    function activateSingularityCompression(mods = getStatMods()) {
+      state.singularityCompression = {
+        active: true,
+        radius: getSingularityRadius(mods),
+        damagePerSecond: estimateCurrentWeaponDps(mods),
+        spin: 0
+      };
+      state.bullets = [];
+      state.hazards = [];
+      state.swings = [];
+      state.overflowMessage = "Singularity Compression active";
+      playSfx("fusion");
+      setDebugStatus("Singularity Compression activated: weapons collapsed into one black-hole aura.");
+    }
+
+    function updateSingularityCompression(dt, mods) {
+      if (shouldActivateSingularityCompression()) {
+        activateSingularityCompression(mods);
+      }
+      if (!state.singularityCompression.active) {
+        return null;
+      }
+
+      state.singularityCompression.spin += dt * 2.8;
+      state.singularityCompression.damagePerSecond = Math.max(state.singularityCompression.damagePerSecond, estimateCurrentWeaponDps(mods));
+      return state.singularityCompression;
     }
 
     function clearRunEntities() {
@@ -3004,6 +3126,12 @@
       state.chestUnlocked = false;
       state.lockedWeapons = new Set();
       state.lockedPassives = new Set();
+      state.singularityCompression = {
+        active: false,
+        radius: 0,
+        damagePerSecond: 0,
+        spin: 0
+      };
       state.overflowStats = createOverflowStats();
       state.overflowMessage = "None";
       state.player = createPlayer();
@@ -3578,6 +3706,9 @@
     }
 
     function updateWeapons(dt) {
+      if (state.singularityCompression.active) {
+        return;
+      }
       const mods = getStatMods();
 
       for (const weapon of state.player.weapons) {
@@ -3918,9 +4049,12 @@
     }
 
     function updateEnemies(dt) {
-      const { mods, orbit, poison } = getContinuousWeaponStats();
-      const orbiters = orbit ? getOrbiters(orbit) : [];
-      const orbitPulses = getOrbitPulseColliders(mods);
+      const continuous = getContinuousWeaponStats();
+      const { mods } = continuous;
+      const singularity = updateSingularityCompression(dt, mods);
+      const poison = singularity ? null : continuous.poison;
+      const orbiters = !singularity && continuous.orbit ? getOrbiters(continuous.orbit) : [];
+      const orbitPulses = singularity ? [] : getOrbitPulseColliders(mods);
       let poisonHealing = 0;
 
       rebuildCollisionGrids();
@@ -3950,6 +4084,18 @@
 
         if (enemy.type === "mothership") {
           fireMothershipWeapons(enemy, dt);
+        }
+
+        if (singularity) {
+          const singularityDx = shortestDelta(state.player.x, enemy.x, state.worldWidth);
+          const singularityDy = shortestDelta(state.player.y, enemy.y, state.worldHeight);
+          const singularityDistance = Math.hypot(singularityDx, singularityDy) || 1;
+          if (singularityDistance <= singularity.radius + enemy.radius) {
+            const falloff = Math.max(0.55, 1 - singularityDistance / (singularity.radius + enemy.radius));
+            enemy.hp -= singularity.damagePerSecond * falloff * dt;
+            enemy.x = wrapValue(enemy.x - (singularityDx / singularityDistance) * 120 * dt, state.worldWidth);
+            enemy.y = wrapValue(enemy.y - (singularityDy / singularityDistance) * 120 * dt, state.worldHeight);
+          }
         }
 
         const movedDx = shortestDelta(enemy.x, state.player.x, state.worldWidth);
@@ -4549,7 +4695,7 @@
         ["single_shot", "twin_shot", "sidecar_turrets", "starburst_array"].forEach((key) => removalKeys.add(key));
       }
       if (fusion.result === "void_maelstrom") {
-        const maelstromComponents = ["poison_field", "orbit_ring", "magnet", "arc_sweep", "miasma_orbit", "siphon_field", "crescent_orbit"];
+        const maelstromComponents = ["poison_field", "orbit_ring", "magnet", "gravity_mines", "arc_sweep", "miasma_orbit", "siphon_field", "crescent_orbit"];
         lockFusionComponents(maelstromComponents);
         maelstromComponents.forEach((key) => removalKeys.add(key));
       }
@@ -4836,17 +4982,32 @@
           openLevelDraft();
         }
         setDebugStatus("Triggered a level-up.");
+      } else if (action === "level-up-100") {
+        state.pendingLevels += 100;
+        settlePendingLevels();
+        if (!state.autoLevel && !state.draftMode) {
+          openLevelDraft();
+        }
+        setDebugStatus("Triggered 100 level-ups.");
       } else if (action === "advance-1") {
         advanceWave(1);
         setDebugStatus("Advanced 1 wave.");
       } else if (action === "advance-5") {
         advanceWave(5);
         setDebugStatus("Advanced 5 waves.");
+      } else if (action === "advance-100") {
+        advanceWave(100);
+        setDebugStatus("Advanced 100 waves.");
       } else if (action === "add-time") {
         state.runTime += 600;
         state.chestUnlocked = true;
         state.chestCooldown = 0;
         setDebugStatus("Added 10 minutes to the run.");
+      } else if (action === "add-time-30") {
+        state.runTime += 1800;
+        state.chestUnlocked = true;
+        state.chestCooldown = 0;
+        setDebugStatus("Added 30 minutes to the run.");
       } else if (action === "spawn-chest") {
         spawnChest(state.player.x + 26, state.player.y);
         state.chestUnlocked = true;
@@ -5095,6 +5256,35 @@
 
     function drawContinuousWeapons() {
       const mods = getStatMods();
+      if (state.singularityCompression.active) {
+        const singularity = state.singularityCompression;
+        const playerPoint = worldToScreen(state.player.x, state.player.y);
+        const pulse = 0.92 + Math.sin(state.runTime * 3.8) * 0.08;
+        const radius = singularity.radius * pulse;
+        ctx.fillStyle = "rgba(24, 6, 42, 0.52)";
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, radius, 0, TAU);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(139, 60, 255, 0.62)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, radius, 0, TAU);
+        ctx.stroke();
+        for (let index = 0; index < 4; index += 1) {
+          const angle = singularity.spin + (TAU * index) / 4;
+          ctx.strokeStyle = index % 2 === 0 ? "rgba(126, 243, 206, 0.36)" : "rgba(247, 212, 127, 0.32)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(playerPoint.x, playerPoint.y, radius * (0.34 + index * 0.13), angle, angle + Math.PI * 1.12);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "rgba(6, 0, 16, 0.82)";
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, Math.max(14, radius * 0.16), 0, TAU);
+        ctx.fill();
+        return;
+      }
+
       const poisonWeapon = getPoisonFieldStats(mods);
       const orbitWeapon = getOrbitWeaponStats(mods);
 
