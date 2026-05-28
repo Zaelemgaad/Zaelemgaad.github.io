@@ -1285,6 +1285,127 @@
     const ENDGAME_WAVE_EVENT_TIME = 1200;
     const TAU = Math.PI * 2;
     const MUSIC_VOLUME = 0.2;
+    const SFX_BASE_PATH = "./audio/sfx/";
+    const SFX_VOLUME = 0.42;
+    const SFX_DEFS = {
+      shootLight: {
+        files: ["laserSmall_000.ogg", "laserSmall_001.ogg", "laserSmall_002.ogg"],
+        volume: 0.26,
+        minInterval: 55,
+        rateRange: [0.94, 1.1]
+      },
+      shootBurst: {
+        files: ["laserRetro_000.ogg", "laserRetro_001.ogg"],
+        volume: 0.26,
+        minInterval: 70,
+        rateRange: [0.92, 1.08]
+      },
+      shootHeavy: {
+        files: ["laserLarge_000.ogg", "laserLarge_001.ogg"],
+        volume: 0.34,
+        minInterval: 130,
+        rateRange: [0.9, 1.03]
+      },
+      rail: {
+        files: ["laserLarge_000.ogg", "laserLarge_001.ogg"],
+        volume: 0.5,
+        minInterval: 230,
+        rateRange: [0.72, 0.9]
+      },
+      sweep: {
+        files: ["forceField_002.ogg"],
+        volume: 0.3,
+        minInterval: 150,
+        rateRange: [1.04, 1.22]
+      },
+      mineDeploy: {
+        files: ["forceField_000.ogg"],
+        volume: 0.28,
+        minInterval: 180,
+        rateRange: [0.72, 0.9]
+      },
+      mineExplode: {
+        files: ["lowFrequency_explosion_000.ogg", "explosionCrunch_001.ogg"],
+        volume: 0.44,
+        minInterval: 120,
+        rateRange: [0.9, 1.08]
+      },
+      dash: {
+        files: ["forceField_000.ogg"],
+        volume: 0.48,
+        minInterval: 180,
+        rateRange: [1.1, 1.32]
+      },
+      pickup: {
+        files: ["laserRetro_000.ogg", "laserRetro_001.ogg"],
+        volume: 0.18,
+        minInterval: 34,
+        rateRange: [1.35, 1.78]
+      },
+      chest: {
+        files: ["forceField_004.ogg"],
+        volume: 0.44,
+        minInterval: 220,
+        rateRange: [0.86, 1.02]
+      },
+      levelReady: {
+        files: ["forceField_002.ogg"],
+        volume: 0.36,
+        minInterval: 650,
+        rateRange: [0.9, 1.04]
+      },
+      upgrade: {
+        files: ["impactMetal_003.ogg"],
+        volume: 0.22,
+        minInterval: 90,
+        rateRange: [1.18, 1.45]
+      },
+      enemyHit: {
+        files: ["impactMetal_002.ogg"],
+        volume: 0.12,
+        minInterval: 85,
+        rateRange: [0.96, 1.22]
+      },
+      enemyDeath: {
+        files: ["explosionCrunch_000.ogg", "explosionCrunch_001.ogg"],
+        volume: 0.28,
+        minInterval: 55,
+        rateRange: [0.92, 1.1]
+      },
+      bossDeath: {
+        files: ["lowFrequency_explosion_000.ogg", "explosionCrunch_003.ogg"],
+        volume: 0.52,
+        minInterval: 220,
+        rateRange: [0.78, 0.94]
+      },
+      playerHit: {
+        files: ["impactMetal_003.ogg"],
+        volume: 0.46,
+        minInterval: 340,
+        rateRange: [0.82, 1.0]
+      },
+      fusion: {
+        files: ["forceField_004.ogg", "laserLarge_001.ogg"],
+        volume: 0.52,
+        minInterval: 500,
+        rateRange: [0.84, 0.98]
+      }
+    };
+    const WEAPON_SFX = {
+      single_shot: "shootLight",
+      twin_shot: "shootLight",
+      sidecar_turrets: "shootLight",
+      rail_spear: "rail",
+      gravity_mines: "mineDeploy",
+      starburst_array: "shootBurst",
+      omni_star_halo: "shootBurst",
+      ricochet_trail: "shootHeavy",
+      seeker_trail: "shootHeavy",
+      ricochet_halo: "shootHeavy",
+      arc_sweep: "sweep",
+      crescent_orbit: "sweep",
+      void_maelstrom: "sweep"
+    };
     const TOKEN_TIERS = {
       sapphire: { value: 1, color: "#3fa7ff", glow: "rgba(63, 167, 255, 0.24)", shine: "rgba(228, 246, 255, 0.86)", radius: 4.5 },
       aquamarine: { value: 2, color: "#69f4df", glow: "rgba(105, 244, 223, 0.25)", shine: "rgba(234, 255, 251, 0.9)", radius: 5.1 },
@@ -1302,6 +1423,9 @@
     };
     const worldStars = [];
     const starBuckets = new Map();
+    const sfxPools = new Map();
+    const sfxLastPlayed = new Map();
+    const sfxCursors = new Map();
     const virtualControls = {
       move: { active: false, pointerId: null, x: 0, y: 0 },
       aim: { active: false, pointerId: null, x: 0, y: 0 }
@@ -1403,6 +1527,53 @@
               color: "#ffe7a8"
             });
           });
+        }
+      },
+      rail_spear: {
+        name: "Rail Spear",
+        maxRank: 10,
+        rarity: "weapon",
+        offer: true,
+        describe(rank) {
+          return rank
+            ? `Piercing line shot. Rank ${rank} increases beam length, width, damage, and charge speed.`
+            : "A charged spear of light that pierces everything in a straight line.";
+        },
+        cooldown(rank) {
+          return Math.max(0.74, 1.72 - rank * 0.065);
+        },
+        fire(instance, mods) {
+          const length = (520 + instance.rank * 34) * mods.projectileSize;
+          const width = (14 + instance.rank * 0.9) * mods.projectileSize;
+          const damage = (36 + instance.rank * 8.4) * mods.damage;
+          forEachDirectionalCast(mods, (angle) => {
+            spawnRailSpear(angle, length, width, damage, "#8fdcff");
+          });
+        }
+      },
+      gravity_mines: {
+        name: "Gravity Mines",
+        maxRank: 10,
+        rarity: "weapon",
+        offer: true,
+        describe(rank) {
+          return rank
+            ? `Singularity charges. Rank ${rank} improves pull, blast radius, damage, and deployment speed.`
+            : "Drops gravity mines behind your ship that pull enemies inward before detonating.";
+        },
+        cooldown(rank) {
+          return Math.max(0.78, 1.86 - rank * 0.07);
+        },
+        fire(instance, mods) {
+          const backAngle = state.player.aimAngle + Math.PI;
+          const sideAngle = state.player.aimAngle + Math.PI / 2;
+          const offset = ((instance.rank % 2) * 2 - 1) * 13;
+          spawnGravityMine(
+            state.player.x + Math.cos(backAngle) * 24 + Math.cos(sideAngle) * offset,
+            state.player.y + Math.sin(backAngle) * 24 + Math.sin(sideAngle) * offset,
+            instance.rank,
+            mods
+          );
         }
       },
       orbit_ring: {
@@ -2635,6 +2806,78 @@
       }
     }
 
+    function getSfxPool(name) {
+      if (sfxPools.has(name)) {
+        return sfxPools.get(name);
+      }
+
+      const def = SFX_DEFS[name];
+      const pool = def
+        ? def.files.map((file) => {
+          const audio = new Audio(SFX_BASE_PATH + file);
+          audio.preload = "auto";
+          audio.volume = Math.min(1, SFX_VOLUME * def.volume);
+          return audio;
+        })
+        : [];
+      sfxPools.set(name, pool);
+      return pool;
+    }
+
+    function primeSfx() {
+      Object.keys(SFX_DEFS).forEach((name) => {
+        getSfxPool(name).forEach((audio) => {
+          try {
+            audio.load();
+          } catch {
+            // Some mobile browsers defer audio loading until the first gesture.
+          }
+        });
+      });
+    }
+
+    function playSfx(name, options = {}) {
+      const def = SFX_DEFS[name];
+      if (!def) {
+        return;
+      }
+
+      const now = performance.now();
+      const minInterval = options.minInterval ?? def.minInterval ?? 0;
+      const lastPlayed = sfxLastPlayed.has(name) ? sfxLastPlayed.get(name) : -Infinity;
+      if (now - lastPlayed < minInterval) {
+        return;
+      }
+
+      const pool = getSfxPool(name);
+      if (!pool.length) {
+        return;
+      }
+
+      const cursor = sfxCursors.get(name) || 0;
+      const audio = pool[cursor % pool.length];
+      sfxCursors.set(name, cursor + 1);
+      sfxLastPlayed.set(name, now);
+
+      const [minRate, maxRate] = options.rateRange || def.rateRange || [1, 1];
+      const rate = options.rate || (minRate + Math.random() * (maxRate - minRate));
+      audio.pause();
+      audio.currentTime = 0;
+      audio.volume = Math.min(1, SFX_VOLUME * (options.volume ?? def.volume ?? 1));
+      audio.playbackRate = Math.max(0.5, Math.min(2, rate));
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise.catch(() => {});
+      }
+    }
+
+    function playWeaponFireSfx(key) {
+      const sfxName = WEAPON_SFX[key];
+      if (sfxName) {
+        playSfx(sfxName);
+      }
+    }
+
     function resetBackgroundMusic() {
       if (!backgroundMusic) {
         return;
@@ -2793,6 +3036,7 @@
       state.lastTick = 0;
       overlay.classList.add("hidden");
       startButton.textContent = "Restart Run";
+      primeSfx();
       syncBackgroundMusic();
       requestAnimationFrame(loop);
     }
@@ -3021,6 +3265,27 @@
       });
     }
 
+    function spawnGravityMine(x, y, rank, mods) {
+      const pullRadius = (96 + rank * 8) * mods.projectileSize;
+      const blastRadius = (46 + rank * 4.6) * mods.projectileSize;
+      state.hazards.push({
+        kind: "gravity_mine",
+        x: wrapValue(x, state.worldWidth),
+        y: wrapValue(y, state.worldHeight),
+        radius: pullRadius,
+        pullRadius,
+        triggerRadius: (23 + rank * 1.4) * mods.projectileSize,
+        blastRadius,
+        damage: (28 + rank * 6.5) * mods.damage,
+        pullStrength: 175 + rank * 18,
+        armTime: Math.max(0.12, 0.32 - rank * 0.012),
+        lifetime: 4.2,
+        maxLifetime: 4.2,
+        color: "rgba(105, 244, 223, 0.15)",
+        coreColor: "#69f4df"
+      });
+    }
+
     function spawnEnemyRocket(x, y, angle, speed, damage) {
       state.enemyShots.push({
         kind: "rocket",
@@ -3074,6 +3339,39 @@
         const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
         if (Math.abs(delta) <= width * 0.5) {
           enemy.hp -= damage;
+        }
+      }
+    }
+
+    function spawnRailSpear(angle, length, width, damage, color) {
+      const originX = wrapValue(state.player.x + Math.cos(angle) * 18, state.worldWidth);
+      const originY = wrapValue(state.player.y + Math.sin(angle) * 18, state.worldHeight);
+      state.swings.push({
+        kind: "rail_spear",
+        x: originX,
+        y: originY,
+        angle,
+        length,
+        width,
+        lifetime: 0.16,
+        maxLifetime: 0.16,
+        color
+      });
+
+      const axisX = Math.cos(angle);
+      const axisY = Math.sin(angle);
+      for (const enemy of state.enemies) {
+        const dx = shortestDelta(originX, enemy.x, state.worldWidth);
+        const dy = shortestDelta(originY, enemy.y, state.worldHeight);
+        const projection = dx * axisX + dy * axisY;
+        if (projection < -enemy.radius || projection > length + enemy.radius) {
+          continue;
+        }
+
+        const perpendicular = Math.abs(dx * axisY - dy * axisX);
+        if (perpendicular <= width * 0.5 + enemy.radius) {
+          enemy.hp -= damage;
+          spawnParticle(enemy.x, enemy.y, color, 3.8, 0.18);
         }
       }
     }
@@ -3181,6 +3479,7 @@
       }
       state.player.hp -= scaled;
       state.player.damageTimer = state.player.damageInvulnerability + mods.bonusIframe;
+      playSfx("playerHit");
 
       if (state.player.hp <= 0) {
         state.player.hp = 0;
@@ -3216,6 +3515,7 @@
       }
       state.player.dashTimer = state.player.dashDuration;
       state.player.dashCooldownRemaining = mods.dashNoCooldown ? 0 : state.player.dashCooldown * mods.dashCooldownScale;
+      playSfx("dash");
       emitBurst(state.player.x, state.player.y, "#f7d47f", 16, 4);
     }
 
@@ -3290,6 +3590,7 @@
         if (weapon.timer <= 0) {
           weapon.timer += def.cooldown(weapon.rank);
           def.fire(weapon, mods);
+          playWeaponFireSfx(weapon.key);
         }
       }
     }
@@ -3412,6 +3713,44 @@
       for (let index = state.hazards.length - 1; index >= 0; index -= 1) {
         const hazard = state.hazards[index];
         hazard.lifetime -= dt;
+        if (hazard.kind === "gravity_mine") {
+          hazard.armTime = Math.max(0, hazard.armTime - dt);
+          let detonate = hazard.lifetime <= 0;
+
+          if (hazard.armTime <= 0) {
+            for (const enemy of state.enemies) {
+              const dx = shortestDelta(hazard.x, enemy.x, state.worldWidth);
+              const dy = shortestDelta(hazard.y, enemy.y, state.worldHeight);
+              const distance = Math.hypot(dx, dy) || 1;
+              if (distance <= hazard.pullRadius + enemy.radius) {
+                const pull = hazard.pullStrength * Math.max(0.18, 1 - distance / hazard.pullRadius);
+                enemy.x = wrapValue(enemy.x - (dx / distance) * pull * dt, state.worldWidth);
+                enemy.y = wrapValue(enemy.y - (dy / distance) * pull * dt, state.worldHeight);
+              }
+              if (distance <= hazard.triggerRadius + enemy.radius) {
+                detonate = true;
+              }
+            }
+          }
+
+          if (detonate) {
+            for (const enemy of state.enemies) {
+              const dx = shortestDelta(hazard.x, enemy.x, state.worldWidth);
+              const dy = shortestDelta(hazard.y, enemy.y, state.worldHeight);
+              const distance = Math.hypot(dx, dy);
+              if (distance <= hazard.blastRadius + enemy.radius) {
+                const falloff = Math.max(0.35, 1 - distance / (hazard.blastRadius + enemy.radius));
+                enemy.hp -= hazard.damage * falloff;
+              }
+            }
+            playSfx("mineExplode");
+            emitBurst(hazard.x, hazard.y, hazard.coreColor, 18, 4.4);
+            state.hazards.splice(index, 1);
+            continue;
+          }
+          continue;
+        }
+
         if (hazard.lifetime <= 0) {
           state.hazards.splice(index, 1);
         }
@@ -3555,17 +3894,24 @@
       }
 
       const bossBurst = enemy.type === "boss" || enemy.type === "mothership";
+      playSfx(bossBurst ? "bossDeath" : "enemyDeath");
       emitBurst(enemy.x, enemy.y, enemy.core, bossBurst ? 24 : 10, bossBurst ? 5.6 : 2.8);
     }
 
     function grantLevelXp(rawXp, mods = getStatMods()) {
       state.xp += Math.max(1, Math.round(rawXp * mods.xpGain));
+      let leveled = false;
 
       while (state.xp >= state.xpToNext) {
         state.xp -= state.xpToNext;
         state.level += 1;
         state.pendingLevels += 1;
         state.xpToNext = Math.min(60, Math.round(state.xpToNext * 1.16 + 2));
+        leveled = true;
+      }
+
+      if (leveled) {
+        playSfx("levelReady");
       }
 
       settlePendingLevels();
@@ -3655,6 +4001,9 @@
         }
 
         forEachNearbyEntity(collisionGrids.hazards, enemy.x, enemy.y, enemy.radius, (hazard) => {
+          if (hazard.kind === "gravity_mine") {
+            return;
+          }
           if (circlesOverlap(hazard.x, hazard.y, hazard.radius, enemy.x, enemy.y, enemy.radius)) {
             enemy.hp -= hazard.damagePerSecond * dt;
           }
@@ -3673,6 +4022,7 @@
           if (hitDistanceSq <= hitRadius * hitRadius) {
             enemy.hp -= bullet.damage;
             spawnParticle(enemy.x, enemy.y, enemy.hitSpark, 2.4, 0.16);
+            playSfx("enemyHit");
 
             if (bullet.kind === "ricochet" && bullet.bouncesRemaining > 0) {
               const inverseDistance = 1 / Math.max(0.01, Math.sqrt(hitDistanceSq));
@@ -3711,6 +4061,10 @@
       state.tokensCollected += pickup.value;
       state.score += pickup.value * 18;
       state.repairCharge += pickup.value;
+      playSfx("pickup", {
+        volume: Math.min(0.28, 0.16 + pickup.value * 0.006),
+        rate: Math.min(1.9, 1.35 + pickup.value * 0.012)
+      });
       grantLevelXp(pickup.value, mods);
 
       while (state.player.hp < state.player.maxHp && state.repairCharge >= state.repairPerHull) {
@@ -3739,6 +4093,7 @@
     }
 
     function collectChest() {
+      playSfx("chest");
       const fusions = availableFusions();
       if (!fusions.length) {
         const xpDrop = 60 + Math.floor(Math.random() * 121);
@@ -4031,6 +4386,7 @@
       }
 
       if (spent > 0) {
+        playSfx("upgrade");
         setDebugStatus(spent === 1 ? `Auto leveled ${lastLabel}.` : `Auto spent ${spent} level-ups.`);
       }
       if (state.draftMode === "level") {
@@ -4155,6 +4511,7 @@
 
     function consumeLevelChoice() {
       state.pendingLevels = Math.max(0, state.pendingLevels - 1);
+      playSfx("upgrade");
       resolveOverflowLevels();
       if (state.draftMode === "level") {
         refreshLevelDraft();
@@ -4200,6 +4557,7 @@
       state.player.passives = state.player.passives.filter((passive) => !removalKeys.has(passive.key));
       recalculatePassiveDerivedStats();
       addWeapon(fusion.result, 1);
+      playSfx("fusion");
       renderLoadout();
       resolveOverflowLevels();
     }
@@ -4562,6 +4920,27 @@
         if (!isOnScreen(point, hazard.radius + 20)) {
           continue;
         }
+        if (hazard.kind === "gravity_mine") {
+          const alpha = Math.max(0, hazard.lifetime / hazard.maxLifetime);
+          const armed = hazard.armTime <= 0;
+          ctx.globalAlpha = alpha * 0.7;
+          ctx.strokeStyle = armed ? "rgba(105, 244, 223, 0.32)" : "rgba(247, 212, 127, 0.28)";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, hazard.pullRadius, 0, TAU);
+          ctx.stroke();
+          ctx.globalAlpha = alpha * 0.48;
+          ctx.fillStyle = hazard.color;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, hazard.blastRadius, 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = hazard.coreColor;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, armed ? 6.5 : 4.5, 0, TAU);
+          ctx.fill();
+          continue;
+        }
         ctx.globalAlpha = Math.max(0, hazard.lifetime / hazard.maxLifetime) * 0.85;
         ctx.fillStyle = hazard.color;
         ctx.beginPath();
@@ -4579,6 +4958,26 @@
           continue;
         }
         const point = worldToScreen(swing.x, swing.y);
+        if (swing.kind === "rail_spear") {
+          const endX = point.x + Math.cos(swing.angle) * swing.length;
+          const endY = point.y + Math.sin(swing.angle) * swing.length;
+          ctx.globalAlpha = Math.max(0, swing.lifetime / swing.maxLifetime);
+          ctx.lineCap = "round";
+          ctx.strokeStyle = colorWithAlpha("#ffffff", 0.82);
+          ctx.lineWidth = Math.max(2, swing.width * 0.28);
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+          ctx.strokeStyle = colorWithAlpha(swing.color, 0.42);
+          ctx.lineWidth = swing.width;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+          ctx.lineCap = "butt";
+          continue;
+        }
         if (!isOnScreen(point, swing.range + 20)) {
           continue;
         }

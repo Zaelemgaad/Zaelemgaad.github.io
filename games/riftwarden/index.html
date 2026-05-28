@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Riftwarden Descent</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;700&display=swap");
+
+    :root {
+      color-scheme: dark;
+      --bg: #11121b;
+      --bg-alt: #1c1727;
+      --panel: rgba(26, 24, 39, 0.9);
+      --panel-2: rgba(37, 31, 52, 0.94);
+      --border: rgba(156, 128, 255, 0.24);
+      --border-strong: rgba(247, 204, 120, 0.42);
+      --text: #f0ebff;
+      --muted: #c2b8d8;
+      --accent: #9c80ff;
+      --accent-2: #63f0c4;
+      --accent-3: #f7cc78;
+      --danger: #ff668a;
+      --shadow: rgba(0, 0, 0, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(99, 240, 196, 0.12), transparent 24%),
+        radial-gradient(circle at 82% 6%, rgba(156, 128, 255, 0.18), transparent 25%),
+        linear-gradient(180deg, var(--bg-alt), var(--bg));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+    }
+
+    a {
+      color: var(--accent-3);
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--accent-2);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1500px, calc(100vw - 24px));
+      margin: 0 auto;
+      padding: 34px 18px 64px;
+    }
+
+    .back-link,
+    .eyebrow,
+    .stat-label,
+    .skill-key {
+      font: 700 0.78rem/1 "Fira Code", monospace;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 9px;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: var(--accent-3);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.35rem, 5vw, 4.2rem);
+      line-height: 0.96;
+    }
+
+    .lead {
+      max-width: 850px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .game-panel,
+    .side-card {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: 0 20px 42px var(--shadow);
+    }
+
+    .game-panel {
+      overflow: hidden;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 1px solid rgba(156, 128, 255, 0.16);
+      background: rgba(12, 12, 22, 0.38);
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .stat {
+      min-width: 92px;
+      padding: 10px 12px;
+      border: 1px solid rgba(156, 128, 255, 0.16);
+      border-radius: 14px;
+      background: rgba(10, 10, 18, 0.46);
+    }
+
+    .stat-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 0.64rem;
+    }
+
+    .stat strong {
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .button {
+      border: 1px solid rgba(247, 204, 120, 0.24);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: var(--text);
+      background: rgba(18, 16, 28, 0.76);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      border-color: var(--border-strong);
+      outline: none;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      padding: 12px;
+      background:
+        radial-gradient(circle at center, rgba(99, 240, 196, 0.06), transparent 34%),
+        rgba(3, 5, 10, 0.64);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: min(70vh, 760px);
+      min-height: 460px;
+      border: 1px solid rgba(156, 128, 255, 0.18);
+      border-radius: 18px;
+      background: #090a12;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+      cursor: crosshair;
+    }
+
+    .skillbar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px 14px;
+      border-top: 1px solid rgba(156, 128, 255, 0.13);
+      background: rgba(12, 12, 22, 0.38);
+    }
+
+    .skill {
+      min-width: 86px;
+      padding: 10px;
+      border: 1px solid rgba(156, 128, 255, 0.18);
+      border-radius: 12px;
+      background: rgba(10, 10, 18, 0.48);
+    }
+
+    .skill-key {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent-3);
+      font-size: 0.68rem;
+    }
+
+    .skill strong {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .side-card {
+      padding: 17px;
+    }
+
+    .side-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+    }
+
+    .side-card p,
+    .side-card li {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .side-card p {
+      margin: 0;
+    }
+
+    .side-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: 100vw;
+        padding: 12px 8px 36px;
+      }
+
+      .lead {
+        display: none;
+      }
+
+      .topbar,
+      .skillbar {
+        padding: 8px;
+      }
+
+      .stats {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stat,
+      .skill {
+        min-width: 0;
+        padding: 8px;
+      }
+
+      .canvas-wrap {
+        padding: 0;
+      }
+
+      canvas {
+        height: 66vh;
+        min-height: 380px;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <a class="back-link" href="/games/">← Back to Games</a>
+
+    <section class="hero">
+      <span class="eyebrow">Top-Down Action RPG Prototype</span>
+      <h1>Riftwarden Descent</h1>
+      <p class="lead">A Diablo-style camera foundation with tile collision, WASD movement, mouse attacks, cooldown skills, chasing enemies, loot pickups, leveling, and rift anchors to clear.</p>
+    </section>
+
+    <section class="layout">
+      <article class="game-panel">
+        <div class="topbar">
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-label">Health</span>
+              <strong id="hpStat">0 / 0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Mana</span>
+              <strong id="manaStat">0 / 0</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Level</span>
+              <strong id="levelStat">1</strong>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Gold</span>
+              <strong id="goldStat">0</strong>
+            </div>
+          </div>
+          <button class="button" id="resetButton" type="button">Reset Rift</button>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" width="1100" height="680" aria-label="Riftwarden Descent game canvas"></canvas>
+        </div>
+
+        <div class="skillbar">
+          <div class="skill">
+            <span class="skill-key">Mouse</span>
+            <strong>Arc Bolt</strong>
+          </div>
+          <div class="skill">
+            <span class="skill-key">Q</span>
+            <strong id="skillStat">Ready</strong>
+          </div>
+          <div class="skill">
+            <span class="skill-key">Space</span>
+            <strong id="dashStat">Ready</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="side">
+        <section class="side-card">
+          <h2>Rift Objective</h2>
+          <p id="objectiveText">Clear the rift anchors and survive the patrols. This is a foundation build, so the core camera and combat loops are the focus.</p>
+        </section>
+        <section class="side-card">
+          <h2>Controls</h2>
+          <ul>
+            <li><strong>Move:</strong> WASD or Arrow Keys</li>
+            <li><strong>Aim:</strong> Mouse</li>
+            <li><strong>Attack:</strong> Hold left mouse</li>
+            <li><strong>Skill:</strong> Q for Rift Cleave</li>
+            <li><strong>Dash:</strong> Space</li>
+          </ul>
+        </section>
+        <section class="side-card">
+          <h2>Systems Started</h2>
+          <ul>
+            <li>Follow camera with world coordinates</li>
+            <li>Tile walls and collision</li>
+            <li>Enemy chase and contact damage</li>
+            <li>Projectiles, skill hitboxes, pickups</li>
+            <li>XP, leveling, gold, health and mana</li>
+          </ul>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d", { alpha: false });
+    const hpStat = document.getElementById("hpStat");
+    const manaStat = document.getElementById("manaStat");
+    const levelStat = document.getElementById("levelStat");
+    const goldStat = document.getElementById("goldStat");
+    const skillStat = document.getElementById("skillStat");
+    const dashStat = document.getElementById("dashStat");
+    const objectiveText = document.getElementById("objectiveText");
+    const resetButton = document.getElementById("resetButton");
+
+    const TILE = 64;
+    const MAP_COLS = 44;
+    const MAP_ROWS = 34;
+    const WORLD_W = MAP_COLS * TILE;
+    const WORLD_H = MAP_ROWS * TILE;
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const TAU = Math.PI * 2;
+
+    const keys = new Set();
+    const mouse = { x: 0, y: 0, down: false };
+    const blocked = new Set();
+    let lastTick = 0;
+
+    const state = {
+      running: true,
+      camera: { x: 0, y: 0 },
+      player: null,
+      enemies: [],
+      projectiles: [],
+      pickups: [],
+      effects: [],
+      anchors: [],
+      gold: 0,
+      xp: 0,
+      xpToNext: 30
+    };
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function distanceSquared(x1, y1, x2, y2) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      return dx * dx + dy * dy;
+    }
+
+    function tileKey(col, row) {
+      return `${col},${row}`;
+    }
+
+    function isWall(col, row) {
+      return col < 0 || row < 0 || col >= MAP_COLS || row >= MAP_ROWS || blocked.has(tileKey(col, row));
+    }
+
+    function addWall(col, row) {
+      blocked.add(tileKey(col, row));
+    }
+
+    function buildMap() {
+      blocked.clear();
+      for (let col = 0; col < MAP_COLS; col += 1) {
+        addWall(col, 0);
+        addWall(col, MAP_ROWS - 1);
+      }
+      for (let row = 0; row < MAP_ROWS; row += 1) {
+        addWall(0, row);
+        addWall(MAP_COLS - 1, row);
+      }
+
+      const rooms = [
+        [9, 7, 7, 2],
+        [22, 5, 2, 8],
+        [30, 13, 8, 2],
+        [12, 20, 2, 8],
+        [24, 26, 11, 2],
+        [36, 23, 2, 6]
+      ];
+
+      for (const [startCol, startRow, width, height] of rooms) {
+        for (let col = startCol; col < startCol + width; col += 1) {
+          for (let row = startRow; row < startRow + height; row += 1) {
+            addWall(col, row);
+          }
+        }
+      }
+
+      const doorTiles = [
+        [12, 7], [24, 8], [33, 13], [12, 24], [29, 26], [36, 25]
+      ];
+      doorTiles.forEach(([col, row]) => blocked.delete(tileKey(col, row)));
+    }
+
+    function circleBlocked(x, y, radius) {
+      const minCol = Math.floor((x - radius) / TILE);
+      const maxCol = Math.floor((x + radius) / TILE);
+      const minRow = Math.floor((y - radius) / TILE);
+      const maxRow = Math.floor((y + radius) / TILE);
+
+      for (let col = minCol; col <= maxCol; col += 1) {
+        for (let row = minRow; row <= maxRow; row += 1) {
+          if (!isWall(col, row)) {
+            continue;
+          }
+          const left = col * TILE;
+          const top = row * TILE;
+          const closestX = clamp(x, left, left + TILE);
+          const closestY = clamp(y, top, top + TILE);
+          if (distanceSquared(x, y, closestX, closestY) < radius * radius) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function moveWithCollision(entity, dx, dy) {
+      const nextX = clamp(entity.x + dx, entity.radius, WORLD_W - entity.radius);
+      if (!circleBlocked(nextX, entity.y, entity.radius)) {
+        entity.x = nextX;
+      }
+
+      const nextY = clamp(entity.y + dy, entity.radius, WORLD_H - entity.radius);
+      if (!circleBlocked(entity.x, nextY, entity.radius)) {
+        entity.y = nextY;
+      }
+    }
+
+    function screenToWorld(x, y) {
+      return {
+        x: state.camera.x + x,
+        y: state.camera.y + y
+      };
+    }
+
+    function worldToScreen(x, y) {
+      return {
+        x: x - state.camera.x,
+        y: y - state.camera.y
+      };
+    }
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.round(rect.width * DPR));
+      canvas.height = Math.max(1, Math.round(rect.height * DPR));
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }
+
+    function spawnEnemy(x, y, type = "husk") {
+      const brute = type === "brute";
+      state.enemies.push({
+        type,
+        x,
+        y,
+        radius: brute ? 21 : 15,
+        hp: brute ? 82 : 34,
+        maxHp: brute ? 82 : 34,
+        speed: brute ? 82 : 118,
+        damage: brute ? 14 : 8,
+        hitTimer: 0,
+        xp: brute ? 22 : 9,
+        gold: brute ? 12 : 5,
+        color: brute ? "#ff668a" : "#9c80ff"
+      });
+    }
+
+    function spawnAnchor(x, y) {
+      state.anchors.push({
+        x,
+        y,
+        radius: 28,
+        hp: 130,
+        maxHp: 130,
+        spawnTimer: 1.8
+      });
+    }
+
+    function resetGame() {
+      buildMap();
+      state.player = {
+        x: TILE * 4.5,
+        y: TILE * 4.5,
+        radius: 16,
+        hp: 120,
+        maxHp: 120,
+        mana: 70,
+        maxMana: 70,
+        level: 1,
+        damage: 15,
+        speed: 210,
+        attackTimer: 0,
+        skillTimer: 0,
+        dashTimer: 0,
+        dashCooldown: 0
+      };
+      state.enemies = [];
+      state.projectiles = [];
+      state.pickups = [];
+      state.effects = [];
+      state.anchors = [];
+      state.gold = 0;
+      state.xp = 0;
+      state.xpToNext = 30;
+      spawnAnchor(TILE * 18, TILE * 9);
+      spawnAnchor(TILE * 33, TILE * 18);
+      spawnAnchor(TILE * 21, TILE * 29);
+      spawnEnemy(TILE * 9, TILE * 5);
+      spawnEnemy(TILE * 14, TILE * 13);
+      spawnEnemy(TILE * 28, TILE * 9, "brute");
+      spawnEnemy(TILE * 36, TILE * 27);
+      lastTick = 0;
+    }
+
+    function gainXp(amount) {
+      state.xp += amount;
+      while (state.xp >= state.xpToNext) {
+        state.xp -= state.xpToNext;
+        state.xpToNext = Math.round(state.xpToNext * 1.22 + 12);
+        state.player.level += 1;
+        state.player.maxHp += 14;
+        state.player.maxMana += 8;
+        state.player.damage += 3;
+        state.player.hp = state.player.maxHp;
+        state.player.mana = state.player.maxMana;
+        addEffect(state.player.x, state.player.y - 22, "Level Up", "#f7cc78");
+      }
+    }
+
+    function addEffect(x, y, text, color = "#f0ebff") {
+      state.effects.push({ x, y, text, color, life: 0.8, maxLife: 0.8 });
+    }
+
+    function dropLoot(x, y, enemy) {
+      state.pickups.push({ type: "gold", x, y, radius: 8, value: enemy.gold, color: "#f7cc78" });
+      if (Math.random() < 0.34) {
+        state.pickups.push({ type: "health", x: x + 12, y: y - 6, radius: 7, value: 18, color: "#ff668a" });
+      }
+      if (Math.random() < 0.26) {
+        state.pickups.push({ type: "mana", x: x - 10, y: y + 8, radius: 7, value: 16, color: "#63f0c4" });
+      }
+    }
+
+    function fireBolt() {
+      const player = state.player;
+      if (player.attackTimer > 0) {
+        return;
+      }
+      const target = screenToWorld(mouse.x, mouse.y);
+      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      const speed = 560;
+      state.projectiles.push({
+        x: player.x + Math.cos(angle) * 20,
+        y: player.y + Math.sin(angle) * 20,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        radius: 5,
+        damage: player.damage,
+        life: 0.95,
+        color: "#63f0c4"
+      });
+      player.attackTimer = Math.max(0.18, 0.34 - player.level * 0.006);
+    }
+
+    function castCleave() {
+      const player = state.player;
+      if (player.skillTimer > 0 || player.mana < 18) {
+        return;
+      }
+      player.mana -= 18;
+      player.skillTimer = 4.2;
+      const target = screenToWorld(mouse.x, mouse.y);
+      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      const range = 128;
+      const width = 1.45;
+      let hitCount = 0;
+
+      for (const enemy of state.enemies) {
+        const dx = enemy.x - player.x;
+        const dy = enemy.y - player.y;
+        const distance = Math.hypot(dx, dy);
+        if (distance > range + enemy.radius) {
+          continue;
+        }
+        const enemyAngle = Math.atan2(dy, dx);
+        const delta = Math.atan2(Math.sin(enemyAngle - angle), Math.cos(enemyAngle - angle));
+        if (Math.abs(delta) <= width * 0.5) {
+          enemy.hp -= player.damage * 2.35;
+          hitCount += 1;
+        }
+      }
+
+      state.effects.push({
+        kind: "cleave",
+        x: player.x,
+        y: player.y,
+        angle,
+        range,
+        width,
+        life: 0.18,
+        maxLife: 0.18,
+        color: "rgba(99, 240, 196, 0.34)"
+      });
+      if (hitCount) {
+        addEffect(player.x, player.y - 34, `${hitCount} hit`, "#63f0c4");
+      }
+    }
+
+    function dash() {
+      const player = state.player;
+      if (player.dashCooldown > 0) {
+        return;
+      }
+      player.dashTimer = 0.16;
+      player.dashCooldown = 2.6;
+    }
+
+    function updatePlayer(dt) {
+      const player = state.player;
+      let mx = 0;
+      let my = 0;
+      if (keys.has("w") || keys.has("ArrowUp")) my -= 1;
+      if (keys.has("s") || keys.has("ArrowDown")) my += 1;
+      if (keys.has("a") || keys.has("ArrowLeft")) mx -= 1;
+      if (keys.has("d") || keys.has("ArrowRight")) mx += 1;
+      const length = Math.hypot(mx, my) || 1;
+      const dashBoost = player.dashTimer > 0 ? 2.7 : 1;
+      if (mx || my) {
+        moveWithCollision(player, (mx / length) * player.speed * dashBoost * dt, (my / length) * player.speed * dashBoost * dt);
+      }
+      if (mouse.down) {
+        fireBolt();
+      }
+      player.attackTimer = Math.max(0, player.attackTimer - dt);
+      player.skillTimer = Math.max(0, player.skillTimer - dt);
+      player.dashTimer = Math.max(0, player.dashTimer - dt);
+      player.dashCooldown = Math.max(0, player.dashCooldown - dt);
+      player.mana = Math.min(player.maxMana, player.mana + 6 * dt);
+      state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
+      state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
+    }
+
+    function updateProjectiles(dt) {
+      for (let index = state.projectiles.length - 1; index >= 0; index -= 1) {
+        const projectile = state.projectiles[index];
+        projectile.x += projectile.vx * dt;
+        projectile.y += projectile.vy * dt;
+        projectile.life -= dt;
+
+        if (projectile.life <= 0 || circleBlocked(projectile.x, projectile.y, projectile.radius)) {
+          state.projectiles.splice(index, 1);
+          continue;
+        }
+
+        let hit = false;
+        for (const enemy of state.enemies) {
+          if (distanceSquared(projectile.x, projectile.y, enemy.x, enemy.y) <= (projectile.radius + enemy.radius) ** 2) {
+            enemy.hp -= projectile.damage;
+            enemy.hitTimer = 0.1;
+            hit = true;
+            break;
+          }
+        }
+        if (hit) {
+          state.projectiles.splice(index, 1);
+        }
+      }
+    }
+
+    function updateAnchors(dt) {
+      for (let index = state.anchors.length - 1; index >= 0; index -= 1) {
+        const anchor = state.anchors[index];
+        anchor.spawnTimer -= dt;
+        if (anchor.spawnTimer <= 0 && state.enemies.length < 26) {
+          anchor.spawnTimer = 4.8;
+          spawnEnemy(anchor.x + (Math.random() - 0.5) * 80, anchor.y + (Math.random() - 0.5) * 80, Math.random() < 0.2 ? "brute" : "husk");
+        }
+
+        for (const projectile of state.projectiles) {
+          if (distanceSquared(projectile.x, projectile.y, anchor.x, anchor.y) <= (projectile.radius + anchor.radius) ** 2) {
+            anchor.hp -= projectile.damage;
+            projectile.life = 0;
+          }
+        }
+        if (anchor.hp <= 0) {
+          addEffect(anchor.x, anchor.y - 36, "Anchor Cleared", "#f7cc78");
+          state.pickups.push({ type: "gold", x: anchor.x, y: anchor.y, radius: 10, value: 35, color: "#f7cc78" });
+          state.anchors.splice(index, 1);
+        }
+      }
+    }
+
+    function updateEnemies(dt) {
+      const player = state.player;
+      for (let index = state.enemies.length - 1; index >= 0; index -= 1) {
+        const enemy = state.enemies[index];
+        const dx = player.x - enemy.x;
+        const dy = player.y - enemy.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        const aggro = distance < 620;
+        if (aggro) {
+          moveWithCollision(enemy, (dx / distance) * enemy.speed * dt, (dy / distance) * enemy.speed * dt);
+        }
+        enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
+
+        if (distance < player.radius + enemy.radius + 3) {
+          player.hp -= enemy.damage * dt;
+          if (player.hp <= 0) {
+            player.hp = player.maxHp;
+            player.x = TILE * 4.5;
+            player.y = TILE * 4.5;
+            state.gold = Math.max(0, state.gold - 15);
+            addEffect(player.x, player.y - 28, "Recovered at Rift Gate", "#ff668a");
+          }
+        }
+
+        if (enemy.hp <= 0) {
+          gainXp(enemy.xp);
+          dropLoot(enemy.x, enemy.y, enemy);
+          state.enemies.splice(index, 1);
+        }
+      }
+    }
+
+    function updatePickups(dt) {
+      const player = state.player;
+      for (let index = state.pickups.length - 1; index >= 0; index -= 1) {
+        const pickup = state.pickups[index];
+        const dx = player.x - pickup.x;
+        const dy = player.y - pickup.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance < 150) {
+          pickup.x += (dx / distance) * 220 * dt;
+          pickup.y += (dy / distance) * 220 * dt;
+        }
+        if (distance < player.radius + pickup.radius + 6) {
+          if (pickup.type === "gold") {
+            state.gold += pickup.value;
+          } else if (pickup.type === "health") {
+            player.hp = Math.min(player.maxHp, player.hp + pickup.value);
+          } else if (pickup.type === "mana") {
+            player.mana = Math.min(player.maxMana, player.mana + pickup.value);
+          }
+          state.pickups.splice(index, 1);
+        }
+      }
+    }
+
+    function updateEffects(dt) {
+      for (let index = state.effects.length - 1; index >= 0; index -= 1) {
+        const effect = state.effects[index];
+        effect.life -= dt;
+        if (!effect.kind) {
+          effect.y -= 26 * dt;
+        }
+        if (effect.life <= 0) {
+          state.effects.splice(index, 1);
+        }
+      }
+    }
+
+    function update(dt) {
+      updatePlayer(dt);
+      updateProjectiles(dt);
+      updateAnchors(dt);
+      updateEnemies(dt);
+      updatePickups(dt);
+      updateEffects(dt);
+      updateHud();
+    }
+
+    function drawTiles() {
+      const viewW = canvas.width / DPR;
+      const viewH = canvas.height / DPR;
+      const startCol = Math.floor(state.camera.x / TILE) - 1;
+      const endCol = Math.ceil((state.camera.x + viewW) / TILE) + 1;
+      const startRow = Math.floor(state.camera.y / TILE) - 1;
+      const endRow = Math.ceil((state.camera.y + viewH) / TILE) + 1;
+
+      ctx.fillStyle = "#0a0c15";
+      ctx.fillRect(0, 0, viewW, viewH);
+
+      for (let row = startRow; row <= endRow; row += 1) {
+        for (let col = startCol; col <= endCol; col += 1) {
+          const x = col * TILE - state.camera.x;
+          const y = row * TILE - state.camera.y;
+          const wall = isWall(col, row);
+          ctx.fillStyle = wall ? "#19162a" : (col + row) % 2 ? "#101322" : "#0d101d";
+          ctx.fillRect(x, y, TILE, TILE);
+          ctx.strokeStyle = wall ? "rgba(247, 204, 120, 0.08)" : "rgba(156, 128, 255, 0.055)";
+          ctx.strokeRect(x, y, TILE, TILE);
+        }
+      }
+    }
+
+    function drawCircleEntity(entity, color, stroke = null) {
+      const point = worldToScreen(entity.x, entity.y);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, entity.radius, 0, TAU);
+      ctx.fill();
+      if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
+    function drawHealthBar(entity, width = 42) {
+      const point = worldToScreen(entity.x, entity.y);
+      const pct = clamp(entity.hp / entity.maxHp, 0, 1);
+      ctx.fillStyle = "rgba(0, 0, 0, 0.52)";
+      ctx.fillRect(point.x - width * 0.5, point.y - entity.radius - 12, width, 5);
+      ctx.fillStyle = pct > 0.35 ? "#63f0c4" : "#ff668a";
+      ctx.fillRect(point.x - width * 0.5, point.y - entity.radius - 12, width * pct, 5);
+    }
+
+    function drawWorld() {
+      drawTiles();
+
+      for (const pickup of state.pickups) {
+        drawCircleEntity(pickup, pickup.color, "rgba(255, 255, 255, 0.18)");
+      }
+
+      for (const anchor of state.anchors) {
+        const point = worldToScreen(anchor.x, anchor.y);
+        ctx.fillStyle = "rgba(156, 128, 255, 0.2)";
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, anchor.radius + 12, 0, TAU);
+        ctx.fill();
+        drawCircleEntity(anchor, "#6c42d9", "#f7cc78");
+        drawHealthBar(anchor, 58);
+      }
+
+      for (const projectile of state.projectiles) {
+        drawCircleEntity(projectile, projectile.color);
+      }
+
+      for (const enemy of state.enemies) {
+        drawCircleEntity(enemy, enemy.hitTimer > 0 ? "#f0ebff" : enemy.color, "rgba(0, 0, 0, 0.35)");
+        drawHealthBar(enemy);
+      }
+
+      for (const effect of state.effects) {
+        const point = worldToScreen(effect.x, effect.y);
+        const alpha = clamp(effect.life / effect.maxLife, 0, 1);
+        if (effect.kind === "cleave") {
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = effect.color;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.arc(point.x, point.y, effect.range, effect.angle - effect.width * 0.5, effect.angle + effect.width * 0.5);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = effect.color;
+          ctx.font = "700 14px Inter, sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(effect.text, point.x, point.y);
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      const player = state.player;
+      const playerPoint = worldToScreen(player.x, player.y);
+      const target = screenToWorld(mouse.x, mouse.y);
+      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      ctx.save();
+      ctx.translate(playerPoint.x, playerPoint.y);
+      ctx.rotate(angle);
+      ctx.fillStyle = player.dashTimer > 0 ? "#f7cc78" : "#63f0c4";
+      ctx.beginPath();
+      ctx.moveTo(20, 0);
+      ctx.lineTo(-13, -13);
+      ctx.lineTo(-7, 0);
+      ctx.lineTo(-13, 13);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function updateHud() {
+      const player = state.player;
+      hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
+      manaStat.textContent = `${Math.floor(player.mana)} / ${player.maxMana}`;
+      levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
+      goldStat.textContent = String(state.gold);
+      skillStat.textContent = player.skillTimer <= 0 ? "Rift Cleave" : `${player.skillTimer.toFixed(1)}s`;
+      dashStat.textContent = player.dashCooldown <= 0 ? "Blink Dash" : `${player.dashCooldown.toFixed(1)}s`;
+      objectiveText.textContent = state.anchors.length
+        ? `Clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
+        : "Rift stabilized. The next layer is ready for quests, gear, vendors, and boss rooms.";
+    }
+
+    function loop(timestamp) {
+      if (!lastTick) {
+        lastTick = timestamp;
+      }
+      const dt = Math.min(0.033, (timestamp - lastTick) / 1000);
+      lastTick = timestamp;
+      update(dt);
+      drawWorld();
+      requestAnimationFrame(loop);
+    }
+
+    canvas.addEventListener("mousemove", (event) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
+    });
+
+    canvas.addEventListener("mousedown", (event) => {
+      if (event.button === 0) {
+        mouse.down = true;
+      }
+    });
+
+    window.addEventListener("mouseup", () => {
+      mouse.down = false;
+    });
+
+    canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+
+    window.addEventListener("keydown", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      if (["w", "a", "s", "d", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(key)) {
+        keys.add(key);
+        event.preventDefault();
+      }
+      if (key === "q") {
+        castCleave();
+      }
+      if (key === " " || key === "Spacebar") {
+        dash();
+        event.preventDefault();
+      }
+    });
+
+    window.addEventListener("keyup", (event) => {
+      const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      keys.delete(key);
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+    resetButton.addEventListener("click", resetGame);
+
+    resizeCanvas();
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
