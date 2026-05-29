@@ -1059,6 +1059,8 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="../game-ui.css">
+  <script src="../game-ui.js" defer></script>
 </head>
 <body>
   <main class="shell">
@@ -3169,13 +3171,21 @@
       requestAnimationFrame(loop);
     }
 
-    function handleStartRequest() {
+    async function handleStartRequest() {
       if (!state.player) {
         resetRun();
       }
 
       if (state.running) {
-        if (!window.confirm("Restart the current run and choose a new starter?")) {
+        const confirmed = window.siteConfirm
+          ? await window.siteConfirm("Restart the current run and choose a new starter?", {
+              title: "Restart Run",
+              confirmLabel: "Restart",
+              cancelLabel: "Keep Playing",
+              danger: true
+            })
+          : false;
+        if (!confirmed) {
           return;
         }
         resetRun();
