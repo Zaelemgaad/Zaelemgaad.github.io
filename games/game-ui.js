@@ -6,117 +6,173 @@
     return title ? title.trim() : "Game";
   }
 
-  function collectDrawerTargets(shell, layout) {
-    const targets = [];
+  function menuTitle(node) {
+    const heading = node.matches("details")
+      ? node.querySelector(":scope > summary")
+      : node.querySelector(":scope > h2, :scope > h3, :scope > .panel-head .eyebrow, h2, h3");
+    return heading?.textContent.trim() || "Panel";
+  }
+
+  function addMenuItem(items, node, title) {
+    if (!node || items.some((item) => item.node === node)) return;
+    node.hidden = false;
+    items.push({ node, title: title || menuTitle(node) });
+  }
+
+  function addSourceItems(items, source) {
+    if (source.matches("aside.sidebar, aside.side")) {
+      const children = Array.from(source.children);
+      for (const child of children) {
+        const nestedCards = child.matches(".panel") && !child.querySelector(":scope > .panel-head")
+          ? Array.from(child.querySelectorAll(":scope > .store > .sidebar-card"))
+          : [];
+        if (nestedCards.length > 1) {
+          nestedCards.forEach((card) => addMenuItem(items, card));
+          child.hidden = true;
+        } else {
+          addMenuItem(items, child);
+        }
+      }
+      source.hidden = true;
+      source.classList.add("game-menu-source-empty");
+      return;
+    }
+
+    addMenuItem(items, source, source.matches(".controls-strip") ? "Controls" : undefined);
+  }
+
+  function collectMenuItems(shell, layout) {
+    const items = [];
+    const sources = [];
     const seen = new Set();
-    const addTarget = (node) => {
+    const addSource = (node) => {
       if (node && !seen.has(node)) {
         seen.add(node);
-        targets.push(node);
+        sources.push(node);
       }
     };
 
     if (layout) {
       Array.from(layout.children)
         .filter((node) => node.matches?.("aside.sidebar, aside.side, section.controls-strip"))
-        .forEach(addTarget);
+        .forEach(addSource);
     }
 
     shell
       .querySelectorAll(":scope > section.controls-strip, :scope > .game-shell > .controls-strip")
-      .forEach(addTarget);
+      .forEach(addSource);
 
-    return targets;
+    sources.forEach((source) => addSourceItems(items, source));
+    return items;
   }
 
-  function cardTitle(card) {
-    const summary = card.matches("details") ? card.querySelector(":scope > summary") : null;
-    const heading = summary || card.querySelector(":scope > h2, :scope > h3, :scope > .panel-head .eyebrow, h2, h3");
-    return heading?.textContent.trim() || "Panel";
-  }
-
-  function makeSectionCollapsible(card, open) {
-    if (card.matches("details")) {
-      card.classList.add("game-menu-section");
-      card.open = open;
-      return;
-    }
-
-    const heading = card.querySelector(":scope > h2, :scope > h3");
-    const details = document.createElement("details");
-    details.className = `${card.className} game-menu-section`.trim();
-    details.open = open;
-
-    const summary = document.createElement("summary");
-    summary.textContent = cardTitle(card);
-    details.append(summary);
-
-    if (heading) heading.remove();
-    while (card.firstChild) {
-      details.append(card.firstChild);
-    }
-
-    card.replaceWith(details);
-  }
-
-  function makeDrawerContentCollapsible(content) {
-    const cardSelector = ":scope > .sidebar-card, :scope > .side-card, :scope > .panel, :scope > .controls-strip";
-    const containers = [content, ...content.querySelectorAll(".sidebar, .side")];
-    for (const container of containers) {
-      const cards = Array.from(container.querySelectorAll(cardSelector));
-      cards.forEach((card, index) => makeSectionCollapsible(card, index === 0));
-    }
-  }
-
-  function createDrawer(targets) {
+  function createMenu(items) {
     const toggle = document.createElement("button");
     toggle.className = "game-menu-toggle";
     toggle.type = "button";
     toggle.setAttribute("aria-expanded", "false");
-    toggle.setAttribute("aria-controls", "gameDrawer");
+    toggle.setAttribute("aria-controls", "gameDock");
     toggle.textContent = "Menu";
 
-    const drawer = document.createElement("aside");
-    drawer.className = "game-drawer";
-    drawer.id = "gameDrawer";
-    drawer.setAttribute("aria-label", "Game menu");
+    const dock = document.createElement("section");
+    dock.className = "game-dock";
+    dock.id = "gameDock";
+    dock.setAttribute("aria-label", "Game menu");
 
     const head = document.createElement("div");
-    head.className = "game-drawer-head";
+    head.className = "game-dock-head";
     const title = document.createElement("p");
-    title.className = "game-drawer-title";
-    title.textContent = "Game Menu";
+    title.className = "game-dock-title";
+    title.textContent = "Game Panel";
     const close = document.createElement("button");
-    close.className = "game-drawer-close";
+    close.className = "game-dock-close";
     close.type = "button";
-    close.setAttribute("aria-label", "Close game menu");
+    close.setAttribute("aria-label", "Close game panel");
     close.textContent = "X";
     head.append(title, close);
 
-    const content = document.createElement("div");
-    content.className = "game-drawer-content";
-    for (const target of targets) {
-      content.append(target);
-    }
-    makeDrawerContentCollapsible(content);
+    const tabs = document.createElement("div");
+    tabs.className = "game-dock-tabs";
+    tabs.setAttribute("role", "tablist");
 
-    drawer.append(head, content);
-    document.body.append(toggle, drawer);
+    const content = document.createElement("div");
+    content.className = "game-dock-content";
+
+    const tabButtons = [];
+    const panels = [];
+
+    items.forEach((item, index) => {
+      const tabId = `gameDockTab${index}`;
+      const panelId = `gameDockPanel${index}`;
+
+      const tab = document.createElement("button");
+      tab.className = "game-dock-tab";
+      tab.type = "button";
+      tab.id = tabId;
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-controls", panelId);
+      tab.textContent = item.title;
+
+      const panel = document.createElement("div");
+      panel.className = "game-dock-panel";
+      panel.id = panelId;
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tabId);
+      panel.append(item.node);
+
+      tabs.append(tab);
+      content.append(panel);
+      tabButtons.push(tab);
+      panels.push(panel);
+    });
+
+    function setActive(nextIndex) {
+      tabButtons.forEach((tab, index) => {
+        const active = index === nextIndex;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+        panels[index].hidden = !active;
+      });
+    }
+
+    tabButtons.forEach((tab, index) => {
+      tab.addEventListener("click", () => setActive(index));
+    });
+
+    tabs.addEventListener("keydown", (event) => {
+      const currentIndex = tabButtons.findIndex((tab) => tab.classList.contains("active"));
+      let nextIndex = currentIndex;
+      if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabButtons.length;
+      if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = tabButtons.length - 1;
+      if (nextIndex !== currentIndex) {
+        event.preventDefault();
+        setActive(nextIndex);
+        tabButtons[nextIndex].focus({ preventScroll: true });
+      }
+    });
+
+    setActive(0);
+    dock.append(head, tabs, content);
+    document.body.append(toggle, dock);
 
     function setOpen(open) {
-      document.body.classList.toggle("game-drawer-open", open);
+      document.body.classList.toggle("game-menu-open", open);
       toggle.setAttribute("aria-expanded", String(open));
       if (open) {
-        close.focus({ preventScroll: true });
+        const activeTab = tabButtons.find((tab) => tab.classList.contains("active")) || tabButtons[0];
+        activeTab?.focus({ preventScroll: true });
       } else {
         toggle.focus({ preventScroll: true });
       }
     }
 
-    toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("game-drawer-open")));
+    toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("game-menu-open")));
     close.addEventListener("click", () => setOpen(false));
     window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && document.body.classList.contains("game-drawer-open")) {
+      if (event.key === "Escape" && document.body.classList.contains("game-menu-open")) {
         setOpen(false);
       }
     });
@@ -176,9 +232,17 @@
     document.addEventListener("contextmenu", (event) => {
       if (!document.body.classList.contains("game-shell-active")) return;
       if (event.target.closest("input, textarea, select, [contenteditable='true']")) return;
-      if (event.target.closest(".shell, .game-drawer, .game-site-confirm")) {
+      if (event.target.closest(".shell, .game-dock, .game-site-confirm")) {
         event.preventDefault();
       }
+    });
+  }
+
+  function flushGameLayout() {
+    const notifyResize = () => window.dispatchEvent(new Event("resize"));
+    requestAnimationFrame(() => {
+      notifyResize();
+      requestAnimationFrame(notifyResize);
     });
   }
 
@@ -195,12 +259,13 @@
     pageTitle.textContent = titleFromPage();
     document.body.append(pageTitle);
 
-    const targets = collectDrawerTargets(shell || document.body, layout);
-    if (targets.length) {
-      createDrawer(targets);
+    const items = collectMenuItems(shell || document.body, layout);
+    if (items.length) {
+      createMenu(items);
     }
     installConfirm();
     blockAccidentalContextMenus();
+    flushGameLayout();
   }
 
   if (document.readyState === "loading") {
