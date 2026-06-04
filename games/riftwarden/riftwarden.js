@@ -253,18 +253,18 @@
     };
 
     const REALM_BLUEPRINTS = [
-      { id: "graveyard", name: "Graveyard Realm", title: "Realm of the Restless Dead", detail: "Undead graveyards, crypt paths, lich rites, and bone-packed lanes.", theme: "graveyard", color: "#d9d3c2", floorCount: 5, bossType: "lich", enemyPool: ["zombie", "skeleton", "ghoul"], elitePool: ["cultist", "wraithling"], anchorHp: 145, enemyCap: 42, spawnEvery: 3.5, portal: { x: TILE * 9, y: TILE * 9, radius: 72 } },
-      { id: "mountains", name: "Mountain Realm", title: "Realm of Crags and Monsters", detail: "Rocky climbs with goblins, orcs, trolls, crag beasts, and the dragon's peak.", theme: "mountain", color: "#a68d66", floorCount: 5, bossType: "dragon", enemyPool: ["goblin", "orc", "mountainBeast"], elitePool: ["troll", "fireImp"], anchorHp: 175, enemyCap: 46, spawnEvery: 3.35, portal: { x: TILE * 18, y: TILE * 7, radius: 72 } },
-      { id: "castle", name: "Castle Realm", title: "Realm of Broken Keeps", detail: "Armored halls, gargoyles, dark cultists, and a chimera in the inner keep.", theme: "castle", color: "#9c80ff", floorCount: 5, bossType: "chimera", enemyPool: ["castleKnight", "skeleton", "cultist"], elitePool: ["gargoyle", "orc"], anchorHp: 205, enemyCap: 48, spawnEvery: 3.2, portal: { x: TILE * 28, y: TILE * 7, radius: 72 } },
-      { id: "skyships", name: "Skyship Realm", title: "Realm of Storm Rigging", detail: "Floating decks, sky raiders, storm harpies, and a giant slime monster below the hulls.", theme: "skyship", color: "#77a8ff", floorCount: 5, bossType: "slimeTitan", enemyPool: ["skyRaider", "stormHarpy", "gargoyle"], elitePool: ["fireImp", "cultist"], anchorHp: 230, enemyCap: 50, spawnEvery: 3.05, portal: { x: TILE * 38, y: TILE * 9, radius: 72 } },
-      { id: "forest", name: "Forest Realm", title: "Realm of Tangled Hunts", detail: "Forest trolls, venom spiders, old growth ambushes, and Arachne's nest.", theme: "forest", color: "#63f0c4", floorCount: 5, bossType: "spiderQueen", enemyPool: ["forestSpider", "forestTroll", "goblin"], elitePool: ["troll", "orc"], anchorHp: 255, enemyCap: 52, spawnEvery: 2.95, portal: { x: TILE * 48, y: TILE * 15, radius: 72 } },
-      { id: "desertTemple", name: "Desert Temple Realm", title: "Realm of Sunken Kings", detail: "Temple courts with jackal guards, sand priests, scarabs, and a genie seal.", theme: "desert", color: "#e6cc80", floorCount: 5, bossType: "genie", enemyPool: ["anubisGuard", "sandPriest", "scarab"], elitePool: ["cultist", "gargoyle"], anchorHp: 285, enemyCap: 54, spawnEvery: 2.85, portal: { x: TILE * 43, y: TILE * 29, radius: 72 } },
-      { id: "ice", name: "Ice Realm", title: "Realm of Frozen Teeth", detail: "Ice wolves, frost bears, witches, polar pressure, and the yeti's frozen cave.", theme: "ice", color: "#9be7ff", floorCount: 5, bossType: "yeti", enemyPool: ["iceWolf", "polarBear", "frostWitch"], elitePool: ["skeleton", "wraithling"], anchorHp: 315, enemyCap: 56, spawnEvery: 2.75, portal: { x: TILE * 32, y: TILE * 35, radius: 72 } },
-      { id: "dream", name: "Dream Realm", title: "Realm of Unstable Thought", detail: "Strange colors, nightmares, wraiths, and rules that feel slightly wrong.", theme: "dream", color: "#d58cff", floorCount: 5, bossType: "wraith", enemyPool: ["dreamling", "nightmare", "wraithling"], elitePool: ["cultist", "gargoyle"], anchorHp: 350, enemyCap: 58, spawnEvery: 2.65, portal: { x: TILE * 20, y: TILE * 35, radius: 72 } },
-      { id: "bossShard", name: "Boss Shard Level", title: "Shard of the Eight", detail: "A single guardian level that binds the conquered boss shards.", theme: "shard", color: "#e6cc80", floorCount: 1, bossType: "shardGuardian", enemyPool: ["gargoyle", "castleKnight", "voidPriest"], elitePool: ["demonKnight"], anchorHp: 420, enemyCap: 52, spawnEvery: 2.55, portal: { x: TILE * 8, y: TILE * 23, radius: 68 } },
-      { id: "runestone", name: "Runestone Level", title: "Runestone Trial", detail: "A focused trial around the last runestone seal.", theme: "runestone", color: "#9df7a4", floorCount: 1, bossType: "runestoneSentinel", enemyPool: ["anubisGuard", "frostWitch", "skyRaider"], elitePool: ["voidPriest"], anchorHp: 455, enemyCap: 54, spawnEvery: 2.45, portal: { x: TILE * 18, y: TILE * 23, radius: 68 } },
-      { id: "demonMarch", name: "Demon Gate Realm", title: "Three Roads to the Throne", detail: "Three brutal approach levels before the final boss fight.", theme: "demon", color: "#ff668a", floorCount: 3, enemyPool: ["demonHound", "demonKnight", "voidPriest"], elitePool: ["nightmare", "cultist"], anchorHp: 500, enemyCap: 64, spawnEvery: 2.25, portal: { x: TILE * 30, y: TILE * 23, radius: 68 } },
-      { id: "finalDemon", name: "Demon God King's Realm", title: "Final Boss Fight", detail: "The last throne room and the Demon God King.", theme: "final", color: "#ff335f", floorCount: 1, bossType: "demonGodKing", enemyPool: ["demonHound", "demonKnight", "voidPriest"], elitePool: ["nightmare"], anchorHp: 620, enemyCap: 60, spawnEvery: 2.15, portal: { x: TILE * 42, y: TILE * 23, radius: 72 } }
+      { id: "graveyard", name: "Graveyard Realm", title: "Realm of the Restless Dead", detail: "Undead graveyards, crypt paths, lich rites, and bone-packed lanes.", theme: "graveyard", color: "#d9d3c2", floorCount: 5, bossType: "lich", enemyPool: ["zombie", "skeleton", "ghoul"], elitePool: ["cultist", "wraithling"], anchorHp: 145, enemyCap: 42, spawnEvery: 3.5 },
+      { id: "mountains", name: "Mountain Realm", title: "Realm of Crags and Monsters", detail: "Rocky climbs with goblins, orcs, trolls, crag beasts, and the dragon's peak.", theme: "mountain", color: "#a68d66", floorCount: 5, bossType: "dragon", enemyPool: ["goblin", "orc", "mountainBeast"], elitePool: ["troll", "fireImp"], anchorHp: 175, enemyCap: 46, spawnEvery: 3.35 },
+      { id: "castle", name: "Castle Realm", title: "Realm of Broken Keeps", detail: "Armored halls, gargoyles, dark cultists, and a chimera in the inner keep.", theme: "castle", color: "#9c80ff", floorCount: 5, bossType: "chimera", enemyPool: ["castleKnight", "skeleton", "cultist"], elitePool: ["gargoyle", "orc"], anchorHp: 205, enemyCap: 48, spawnEvery: 3.2 },
+      { id: "skyships", name: "Skyship Realm", title: "Realm of Storm Rigging", detail: "Floating decks, sky raiders, storm harpies, and a giant slime monster below the hulls.", theme: "skyship", color: "#77a8ff", floorCount: 5, bossType: "slimeTitan", enemyPool: ["skyRaider", "stormHarpy", "gargoyle"], elitePool: ["fireImp", "cultist"], anchorHp: 230, enemyCap: 50, spawnEvery: 3.05 },
+      { id: "forest", name: "Forest Realm", title: "Realm of Tangled Hunts", detail: "Forest trolls, venom spiders, old growth ambushes, and Arachne's nest.", theme: "forest", color: "#63f0c4", floorCount: 5, bossType: "spiderQueen", enemyPool: ["forestSpider", "forestTroll", "goblin"], elitePool: ["troll", "orc"], anchorHp: 255, enemyCap: 52, spawnEvery: 2.95 },
+      { id: "desertTemple", name: "Desert Temple Realm", title: "Realm of Sunken Kings", detail: "Temple courts with jackal guards, sand priests, scarabs, and a genie seal.", theme: "desert", color: "#e6cc80", floorCount: 5, bossType: "genie", enemyPool: ["anubisGuard", "sandPriest", "scarab"], elitePool: ["cultist", "gargoyle"], anchorHp: 285, enemyCap: 54, spawnEvery: 2.85 },
+      { id: "ice", name: "Ice Realm", title: "Realm of Frozen Teeth", detail: "Ice wolves, frost bears, witches, polar pressure, and the yeti's frozen cave.", theme: "ice", color: "#9be7ff", floorCount: 5, bossType: "yeti", enemyPool: ["iceWolf", "polarBear", "frostWitch"], elitePool: ["skeleton", "wraithling"], anchorHp: 315, enemyCap: 56, spawnEvery: 2.75 },
+      { id: "dream", name: "Dream Realm", title: "Realm of Unstable Thought", detail: "Strange colors, nightmares, wraiths, and rules that feel slightly wrong.", theme: "dream", color: "#d58cff", floorCount: 5, bossType: "wraith", enemyPool: ["dreamling", "nightmare", "wraithling"], elitePool: ["cultist", "gargoyle"], anchorHp: 350, enemyCap: 58, spawnEvery: 2.65 },
+      { id: "bossShard", name: "Boss Shard Level", title: "Shard of the Eight", detail: "A single guardian level that binds the conquered boss shards.", theme: "shard", color: "#e6cc80", floorCount: 1, bossType: "shardGuardian", enemyPool: ["gargoyle", "castleKnight", "voidPriest"], elitePool: ["demonKnight"], anchorHp: 420, enemyCap: 52, spawnEvery: 2.55 },
+      { id: "runestone", name: "Runestone Level", title: "Runestone Trial", detail: "A focused trial around the last runestone seal.", theme: "runestone", color: "#9df7a4", floorCount: 1, bossType: "runestoneSentinel", enemyPool: ["anubisGuard", "frostWitch", "skyRaider"], elitePool: ["voidPriest"], anchorHp: 455, enemyCap: 54, spawnEvery: 2.45 },
+      { id: "demonMarch", name: "Demon Gate Realm", title: "Three Roads to the Throne", detail: "Three brutal approach levels before the final boss fight.", theme: "demon", color: "#ff668a", floorCount: 3, enemyPool: ["demonHound", "demonKnight", "voidPriest"], elitePool: ["nightmare", "cultist"], anchorHp: 500, enemyCap: 64, spawnEvery: 2.25 },
+      { id: "finalDemon", name: "Demon God King's Realm", title: "Final Boss Fight", detail: "The last throne room and the Demon God King.", theme: "final", color: "#ff335f", floorCount: 1, bossType: "demonGodKing", enemyPool: ["demonHound", "demonKnight", "voidPriest"], elitePool: ["nightmare"], anchorHp: 620, enemyCap: 60, spawnEvery: 2.15 }
     ];
 
     const FLOOR_DEFS = buildRealmFloors(REALM_BLUEPRINTS);
@@ -275,9 +275,68 @@
       name: realm.name,
       title: realm.title,
       detail: realm.detail,
-      color: realm.color,
-      portal: realm.portal
+      color: realm.color
     }));
+    const MAIN_REALM_IDS = REALM_BLUEPRINTS.slice(0, 8).map((realm) => realm.id);
+    const HUB_LEVEL_PORTALS = buildHubLevelPortals(FLOOR_DEFS, REALM_DEFS);
+    const HUB_REALM_LABELS = buildHubRealmLabels(HUB_LEVEL_PORTALS);
+
+    function buildHubLevelPortals(floors, realms) {
+      const clusterPoints = {
+        graveyard: [[8, 9], [11, 8], [14, 8], [17, 9], [20, 10]],
+        mountains: [[23, 6], [26, 6], [29, 6], [32, 6], [35, 7]],
+        castle: [[42, 8], [46, 9], [49, 12], [49, 16], [45, 18]],
+        skyships: [[49, 22], [51, 25], [49, 28], [45, 31], [41, 31]],
+        forest: [[35, 35], [31, 36], [27, 36], [23, 35], [20, 33]],
+        desertTemple: [[13, 35], [10, 32], [8, 28], [9, 24], [13, 22]],
+        ice: [[6, 20], [6, 16], [8, 13], [11, 12], [14, 13]],
+        dream: [[22, 24], [25, 26], [28, 27], [31, 26], [34, 24]],
+        bossShard: [[22, 17]],
+        runestone: [[28, 16]],
+        demonMarch: [[24, 20], [28, 21], [32, 20]],
+        finalDemon: [[28, 12]]
+      };
+      return floors.map((floor) => {
+        const realm = realms.find((entry) => entry.id === floor.realmId);
+        const points = clusterPoints[floor.realmId] || [[28, 20]];
+        const point = points[Math.min(floor.stage - 1, points.length - 1)];
+        return {
+          id: `${floor.realmId}-${floor.stage}`,
+          floorNumber: floor.floorNumber,
+          realmId: floor.realmId,
+          realmName: floor.realmName,
+          stage: floor.stage,
+          stageCount: floor.stageCount,
+          bossStage: floor.bossStage,
+          name: floor.name,
+          color: floor.color || realm?.color || "#f7cc78",
+          x: TILE * point[0],
+          y: TILE * point[1],
+          radius: floor.bossStage ? 34 : 28
+        };
+      });
+    }
+
+    function buildHubRealmLabels(portals) {
+      const groups = new Map();
+      for (const portal of portals) {
+        if (!groups.has(portal.realmId)) {
+          groups.set(portal.realmId, []);
+        }
+        groups.get(portal.realmId).push(portal);
+      }
+      return Array.from(groups.entries()).map(([realmId, group]) => {
+        const x = group.reduce((sum, portal) => sum + portal.x, 0) / group.length;
+        const y = group.reduce((sum, portal) => sum + portal.y, 0) / group.length;
+        return {
+          realmId,
+          text: group[0].realmName.replace(" Realm", "").toUpperCase(),
+          color: group[0].color,
+          x,
+          y: y - TILE * 1.15
+        };
+      });
+    }
 
     function buildRealmFloors(realms) {
       const floors = [];
@@ -544,18 +603,42 @@
       openRealmHub();
     }
 
-    function startRealm(realmId) {
-      const realm = REALM_DEFS.find((entry) => entry.id === realmId);
-      if (!realm) {
+    function areMainRealmsCleared() {
+      return MAIN_REALM_IDS.every((realmId) => state.realmsCleared[realmId]);
+    }
+
+    function isHubLevelPortalUnlocked(portal) {
+      if (portal.realmId === "bossShard") {
+        return areMainRealmsCleared();
+      }
+      if (portal.realmId === "runestone") {
+        return Boolean(state.realmsCleared.bossShard);
+      }
+      if (portal.realmId === "demonMarch") {
+        return Boolean(state.realmsCleared.runestone) && portal.stage <= (state.realmProgress.demonMarch || 1);
+      }
+      if (portal.realmId === "finalDemon") {
+        return Boolean(state.realmsCleared.demonMarch);
+      }
+      return portal.stage <= (state.realmProgress[portal.realmId] || 1);
+    }
+
+    function isHubLevelPortalCleared(portal) {
+      return Boolean(state.realmsCleared[portal.realmId]) || portal.stage < (state.realmProgress[portal.realmId] || 1);
+    }
+
+    function enterHubLevelPortal(portal) {
+      if (!isHubLevelPortalUnlocked(portal)) {
+        addEffect(state.player.x, state.player.y - 28, "Portal Locked", "#c2b8d8");
+        state.hubPortalCooldown = 0.65;
         return;
       }
-      const nextStage = clamp(state.realmProgress[realm.id] || 1, 1, realm.floorCount || 1);
-      state.realmKey = realm.id;
+      state.realmKey = portal.realmId;
       hideScreens();
       state.screen = "play";
       state.running = true;
       state.hubPortalCooldown = 0;
-      startFloor(realm.floor + nextStage - 1);
+      startFloor(portal.floorNumber);
       updateHud();
     }
 
@@ -644,16 +727,41 @@
       }
 
       const walls = [
-        [8, 7, 4, 1], [16, 6, 3, 1], [25, 6, 3, 1], [32, 7, 4, 1],
-        [7, 17, 1, 8], [36, 17, 1, 8], [12, 25, 20, 1],
-        [20, 12, 4, 1], [20, 21, 4, 1],
-        [14, 16, 1, 3], [29, 16, 1, 3]
+        [4, 4, 48, 1], [4, 37, 48, 1], [4, 4, 1, 34], [51, 4, 1, 34],
+        [24, 10, 9, 1], [24, 24, 9, 1], [24, 10, 1, 5], [32, 10, 1, 5],
+        [24, 20, 1, 5], [32, 20, 1, 5], [20, 18, 4, 1], [33, 18, 4, 1],
+        [7, 11, 12, 1], [7, 21, 12, 1], [7, 31, 12, 1],
+        [38, 11, 10, 1], [39, 20, 11, 1], [39, 32, 10, 1],
+        [20, 4, 1, 6], [38, 4, 1, 6], [20, 32, 1, 6], [38, 32, 1, 6],
+        [15, 14, 2, 6], [41, 14, 2, 6], [15, 25, 2, 6], [41, 25, 2, 6]
       ];
       for (const [startCol, startRow, width, height] of walls) {
         for (let col = startCol; col < startCol + width; col += 1) {
           for (let row = startRow; row < startRow + height; row += 1) {
             addWall(col, row);
           }
+        }
+      }
+
+      const doorTiles = [
+        [28, 10], [28, 24], [24, 18], [32, 18], [20, 7], [38, 7],
+        [20, 34], [38, 34], [11, 11], [11, 21], [11, 31],
+        [45, 11], [45, 20], [45, 32], [15, 17], [41, 17], [15, 28], [41, 28]
+      ];
+      doorTiles.forEach(([col, row]) => blocked.delete(tileKey(col, row)));
+      for (const portal of HUB_LEVEL_PORTALS) {
+        clearHubPatch(portal.x, portal.y, 1);
+      }
+      clearHubPatch(HUB_SPAWN.x, HUB_SPAWN.y, 2);
+      clearHubPatch(HUB_MARKET.x, HUB_MARKET.y, 2);
+    }
+
+    function clearHubPatch(worldX, worldY, radiusTiles = 1) {
+      const centerCol = Math.round(worldX / TILE);
+      const centerRow = Math.round(worldY / TILE);
+      for (let col = centerCol - radiusTiles; col <= centerCol + radiusTiles; col += 1) {
+        for (let row = centerRow - radiusTiles; row <= centerRow + radiusTiles; row += 1) {
+          blocked.delete(tileKey(col, row));
         }
       }
     }
@@ -2489,9 +2597,9 @@
       if (state.hubPortalCooldown > 0) {
         return;
       }
-      for (const realm of REALM_DEFS) {
-        if (distanceSquared(player.x, player.y, realm.portal.x, realm.portal.y) <= (realm.portal.radius + player.radius) ** 2) {
-          startRealm(realm.id);
+      for (const portal of HUB_LEVEL_PORTALS) {
+        if (distanceSquared(player.x, player.y, portal.x, portal.y) <= (portal.radius + player.radius) ** 2) {
+          enterHubLevelPortal(portal);
           return;
         }
       }
@@ -3155,46 +3263,61 @@
 
     function drawHubPortals() {
       const time = performance.now() * 0.001;
-      for (const realm of REALM_DEFS) {
-        const point = worldToScreen(realm.portal.x, realm.portal.y);
-        const pulse = Math.sin(time * 2.6 + realm.floor) * 0.5 + 0.5;
-        const cleared = Boolean(state.realmsCleared[realm.id]);
-        const nextStage = clamp(state.realmProgress[realm.id] || 1, 1, realm.floorCount || 1);
-        const glow = ctx.createRadialGradient(point.x, point.y, 4, point.x, point.y, realm.portal.radius * 1.28);
-        glow.addColorStop(0, cleared ? "rgba(99, 240, 196, 0.32)" : "rgba(247, 204, 120, 0.26)");
-        glow.addColorStop(0.42, `${realm.color}33`);
+      ctx.save();
+      ctx.textAlign = "center";
+      for (const label of HUB_REALM_LABELS) {
+        const point = worldToScreen(label.x, label.y);
+        ctx.fillStyle = label.color;
+        ctx.font = "800 12px Fira Code, monospace";
+        ctx.fillText(label.text, point.x, point.y);
+      }
+      ctx.restore();
+
+      for (const portal of HUB_LEVEL_PORTALS) {
+        const point = worldToScreen(portal.x, portal.y);
+        const pulse = Math.sin(time * 3 + portal.floorNumber * 0.37) * 0.5 + 0.5;
+        const unlocked = isHubLevelPortalUnlocked(portal);
+        const cleared = isHubLevelPortalCleared(portal);
+        const playerNear = state.player && distanceSquared(state.player.x, state.player.y, portal.x, portal.y) < (portal.radius + 130) ** 2;
+        const glow = ctx.createRadialGradient(point.x, point.y, 4, point.x, point.y, portal.radius * 2.1);
+        glow.addColorStop(0, unlocked ? cleared ? "rgba(99, 240, 196, 0.28)" : "rgba(247, 204, 120, 0.24)" : "rgba(120, 118, 136, 0.16)");
+        glow.addColorStop(0.55, unlocked ? `${portal.color}33` : "rgba(90, 88, 105, 0.16)");
         glow.addColorStop(1, "rgba(0, 0, 0, 0)");
 
         ctx.save();
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(point.x, point.y, realm.portal.radius * 1.35, 0, TAU);
+        ctx.arc(point.x, point.y, portal.radius * 2.05, 0, TAU);
         ctx.fill();
 
-        ctx.fillStyle = "rgba(12, 10, 22, 0.72)";
+        ctx.globalAlpha = unlocked ? 1 : 0.48;
+        ctx.fillStyle = "rgba(12, 10, 22, 0.82)";
         ctx.beginPath();
-        ctx.arc(point.x, point.y, realm.portal.radius, 0, TAU);
+        ctx.arc(point.x, point.y, portal.radius, 0, TAU);
         ctx.fill();
 
-        ctx.strokeStyle = realm.color;
-        ctx.lineWidth = 3 + pulse * 2;
+        ctx.strokeStyle = cleared ? "#63f0c4" : portal.color;
+        ctx.lineWidth = unlocked ? 2.5 + pulse * 1.6 : 2;
         ctx.beginPath();
-        ctx.arc(point.x, point.y, realm.portal.radius * (0.82 + pulse * 0.08), 0, TAU);
+        ctx.arc(point.x, point.y, portal.radius * (0.78 + pulse * 0.08), 0, TAU);
         ctx.stroke();
 
-        ctx.strokeStyle = cleared ? "rgba(99, 240, 196, 0.78)" : "rgba(247, 204, 120, 0.58)";
+        ctx.strokeStyle = unlocked ? cleared ? "rgba(99, 240, 196, 0.76)" : "rgba(247, 204, 120, 0.5)" : "rgba(194, 184, 216, 0.28)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(point.x, point.y, realm.portal.radius + 10 + pulse * 8, 0, TAU);
+        ctx.arc(point.x, point.y, portal.radius + 5 + pulse * 5, 0, TAU);
         ctx.stroke();
 
-        ctx.fillStyle = "#f0ebff";
-        ctx.font = "800 14px Inter, sans-serif";
+        ctx.fillStyle = unlocked ? "#f0ebff" : "#8d879e";
+        ctx.font = portal.bossStage ? "900 13px Inter, sans-serif" : "900 15px Inter, sans-serif";
         ctx.textAlign = "center";
-        ctx.fillText(realm.name, point.x, point.y - 4);
-        ctx.fillStyle = cleared ? "#63f0c4" : "#c2b8d8";
-        ctx.font = "700 11px Fira Code, monospace";
-        ctx.fillText(cleared ? "STABILIZED" : `STAGE ${nextStage}/${realm.floorCount}`, point.x, point.y + 18);
+        ctx.fillText(portal.bossStage ? "B" : String(portal.stage), point.x, point.y + 5);
+        if (playerNear) {
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = unlocked ? "#f7cc78" : "#c2b8d8";
+          ctx.font = "800 11px Inter, sans-serif";
+          ctx.fillText(unlocked ? portal.name : "Locked", point.x, point.y + portal.radius + 18);
+        }
         ctx.restore();
       }
     }
@@ -3387,7 +3510,7 @@
       if (state.screen === "select") {
         objectiveText.textContent = "Enter a hero name and choose a class to reach the realm hub.";
       } else if (state.screen === "hub") {
-        objectiveText.textContent = "Walk the hub, use the market, then step into a glowing realm gate.";
+        objectiveText.textContent = "Walk the hub, use the market, then step into an unlocked numbered level portal.";
       } else {
         const bossAlive = hasLivingBoss();
         let objective = floorDef.objective;
