@@ -978,7 +978,11 @@
     };
 
     const storeUi = {};
+    const orderUi = {};
+    const milestoneUi = {};
+    const coreStoreUi = {};
     let lastRender = 0;
+    let logSignature = "";
     let visualSignature = "";
 
     function pushLog(text) {
@@ -1434,68 +1438,93 @@
     function renderOrder() {
       const order = currentOrder();
       const complete = order.complete();
-      orderCard.innerHTML = "";
-      const title = document.createElement("h3");
-      title.textContent = order.title;
-      const text = document.createElement("p");
-      text.textContent = order.text;
-      const progress = document.createElement("div");
-      progress.className = "order-row";
-      progress.innerHTML = `<span>${order.progress()}</span><strong>${order.rewardText}</strong>`;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "button";
-      button.textContent = complete ? "Claim Order" : "In Progress";
-      button.disabled = !complete;
-      button.addEventListener("click", claimOrder);
-      orderCard.appendChild(title);
-      orderCard.appendChild(text);
-      orderCard.appendChild(progress);
-      orderCard.appendChild(button);
+      if (orderUi.title !== order.title) {
+        orderCard.innerHTML = "";
+        const title = document.createElement("h3");
+        const text = document.createElement("p");
+        const progress = document.createElement("div");
+        const progressText = document.createElement("span");
+        const rewardText = document.createElement("strong");
+        const button = document.createElement("button");
+        progress.className = "order-row";
+        button.type = "button";
+        button.className = "button";
+        button.addEventListener("click", claimOrder);
+        progress.appendChild(progressText);
+        progress.appendChild(rewardText);
+        orderCard.appendChild(title);
+        orderCard.appendChild(text);
+        orderCard.appendChild(progress);
+        orderCard.appendChild(button);
+        orderUi.titleNode = title;
+        orderUi.textNode = text;
+        orderUi.progressText = progressText;
+        orderUi.rewardText = rewardText;
+        orderUi.button = button;
+        orderUi.title = order.title;
+      }
+      orderUi.titleNode.textContent = order.title;
+      orderUi.textNode.textContent = order.text;
+      orderUi.progressText.textContent = order.progress();
+      orderUi.rewardText.textContent = order.rewardText;
+      orderUi.button.textContent = complete ? "Claim Order" : "In Progress";
+      orderUi.button.disabled = !complete;
     }
 
     function renderMilestones() {
-      milestoneList.innerHTML = "";
       milestoneDefs.forEach((def) => {
-        const row = document.createElement("div");
-        const unlocked = def.unlocked();
-        row.className = "milestone-row" + (unlocked ? " unlocked" : "");
-        row.innerHTML = `<span>${def.name}</span><strong>${unlocked ? "Active" : def.text}</strong>`;
-        if (unlocked) {
-          row.title = def.text;
+        let ui = milestoneUi[def.id];
+        if (!ui) {
+          const row = document.createElement("div");
+          const name = document.createElement("span");
+          const status = document.createElement("strong");
+          row.appendChild(name);
+          row.appendChild(status);
+          milestoneList.appendChild(row);
+          ui = { row, name, status };
+          milestoneUi[def.id] = ui;
         }
-        milestoneList.appendChild(row);
+        const unlocked = def.unlocked();
+        ui.row.className = "milestone-row" + (unlocked ? " unlocked" : "");
+        ui.name.textContent = def.name;
+        ui.status.textContent = unlocked ? "Active" : def.text;
+        if (unlocked) {
+          ui.row.title = def.text;
+        } else {
+          ui.row.removeAttribute("title");
+        }
       });
     }
 
     function renderCoreStore() {
-      coreStoreNode.innerHTML = "";
       coreUpgradeDefs.forEach((def) => {
         const owned = state.coreUpgrades[def.id] || 0;
         const maxed = owned >= def.maxRank;
         const cost = maxed ? 0 : coreUpgradeCost(def);
-        const row = document.createElement("div");
-        row.className = "milestone-row core-upgrade-row" + (owned > 0 ? " unlocked" : "");
-
-        const copy = document.createElement("div");
-        copy.className = "core-upgrade-copy";
-        const title = document.createElement("strong");
-        title.textContent = `${def.name} ${owned}/${def.maxRank}`;
-        const text = document.createElement("span");
-        text.textContent = def.text;
-        copy.appendChild(title);
-        copy.appendChild(text);
-
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "button";
-        button.textContent = maxed ? "Maxed" : `Spend ${formatNumber(cost)}`;
-        button.disabled = maxed || state.cores < cost;
-        button.addEventListener("click", () => buyCoreUpgrade(def.id));
-
-        row.appendChild(copy);
-        row.appendChild(button);
-        coreStoreNode.appendChild(row);
+        let ui = coreStoreUi[def.id];
+        if (!ui) {
+          const row = document.createElement("div");
+          const copy = document.createElement("div");
+          const title = document.createElement("strong");
+          const text = document.createElement("span");
+          const button = document.createElement("button");
+          copy.className = "core-upgrade-copy";
+          button.type = "button";
+          button.className = "button";
+          button.addEventListener("click", () => buyCoreUpgrade(def.id));
+          copy.appendChild(title);
+          copy.appendChild(text);
+          row.appendChild(copy);
+          row.appendChild(button);
+          coreStoreNode.appendChild(row);
+          ui = { row, title, text, button };
+          coreStoreUi[def.id] = ui;
+        }
+        ui.row.className = "milestone-row core-upgrade-row" + (owned > 0 ? " unlocked" : "");
+        ui.title.textContent = `${def.name} ${owned}/${def.maxRank}`;
+        ui.text.textContent = def.text;
+        ui.button.textContent = maxed ? "Maxed" : `Spend ${formatNumber(cost)}`;
+        ui.button.disabled = maxed || state.cores < cost;
       });
     }
 
@@ -1662,6 +1691,11 @@
     }
 
     function renderLog() {
+      const nextSignature = state.log.join("\n");
+      if (nextSignature === logSignature) {
+        return;
+      }
+      logSignature = nextSignature;
       logNode.innerHTML = "";
       state.log.forEach((entry) => {
         const node = document.createElement("div");
