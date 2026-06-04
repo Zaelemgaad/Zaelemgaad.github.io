@@ -112,6 +112,7 @@
     }
 
     .game-panel {
+      position: relative;
       overflow: hidden;
     }
 
@@ -199,6 +200,205 @@
       background: #090a12;
       box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
       cursor: crosshair;
+    }
+
+    .screen-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(247, 204, 120, 0.12), transparent 24%),
+        radial-gradient(circle at 20% 70%, rgba(99, 240, 196, 0.1), transparent 26%),
+        rgba(6, 7, 13, 0.94);
+    }
+
+    .screen-overlay[hidden] {
+      display: none;
+    }
+
+    .select-frame {
+      width: min(980px, 100%);
+      max-height: calc(100vh - 80px);
+      overflow: auto;
+      border: 1px solid rgba(247, 204, 120, 0.38);
+      border-radius: 18px;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(36, 28, 48, 0.96), rgba(13, 13, 24, 0.97)),
+        repeating-linear-gradient(90deg, rgba(247, 204, 120, 0.04) 0 1px, transparent 1px 14px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .select-eyebrow {
+      margin: 0 0 6px;
+      color: var(--accent-3);
+      font: 800 0.78rem/1 "Fira Code", monospace;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .select-frame h2 {
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 3.2rem);
+      line-height: 1;
+    }
+
+    .select-frame > p:not(.select-eyebrow),
+    .name-entry span,
+    .secret-hint {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .name-entry {
+      display: grid;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .name-entry input {
+      width: min(420px, 100%);
+      border: 1px solid rgba(247, 204, 120, 0.28);
+      border-radius: 999px;
+      padding: 12px 15px;
+      color: var(--text);
+      background: rgba(5, 5, 12, 0.7);
+      font: 800 1rem/1 "Inter", sans-serif;
+    }
+
+    .name-entry input:focus {
+      border-color: var(--accent-3);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(247, 204, 120, 0.12);
+    }
+
+    .select-roster,
+    .realm-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .select-class,
+    .realm-card {
+      min-height: 168px;
+      border: 1px solid rgba(156, 128, 255, 0.24);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 28%, rgba(247, 204, 120, 0.11), transparent 30%),
+        rgba(10, 10, 18, 0.74);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .select-class[hidden],
+    .realm-card[hidden] {
+      display: none;
+    }
+
+    .select-class:hover,
+    .select-class:focus-visible,
+    .select-class.is-active,
+    .realm-card:hover,
+    .realm-card:focus-visible {
+      border-color: var(--border-strong);
+      outline: none;
+      box-shadow: 0 0 0 1px rgba(247, 204, 120, 0.2), 0 0 28px rgba(247, 204, 120, 0.1);
+    }
+
+    .class-portrait {
+      position: relative;
+      display: block;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 12px;
+      border: 1px solid rgba(247, 204, 120, 0.2);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.34);
+    }
+
+    .class-portrait::before,
+    .class-portrait::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 50%;
+      background: var(--portrait, var(--accent-2));
+      box-shadow: 0 0 24px color-mix(in srgb, var(--portrait, var(--accent-2)) 46%, transparent);
+    }
+
+    .class-portrait::after {
+      inset: auto auto 14px 42px;
+      width: 17px;
+      height: 11px;
+      border-radius: 50% 50% 50% 0;
+      background: var(--accent-3);
+      box-shadow: none;
+    }
+
+    .select-class strong,
+    .realm-card strong {
+      display: block;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .select-class small,
+    .realm-card small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .secret-hint {
+      min-height: 24px;
+      margin: 12px 0 0;
+      font-size: 0.88rem;
+    }
+
+    .select-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .hero-chip {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      margin-top: 12px;
+      padding: 10px;
+      border: 1px solid rgba(247, 204, 120, 0.18);
+      border-radius: 14px;
+      background: rgba(10, 10, 18, 0.42);
+    }
+
+    .hero-chip span {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--muted);
+      font: 700 0.68rem/1 "Fira Code", monospace;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-chip strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .skillbar {
@@ -486,6 +686,31 @@
         min-height: 380px;
         border-radius: 12px;
       }
+
+      .screen-overlay {
+        padding: 10px;
+      }
+
+      .select-frame {
+        max-height: calc(100vh - 24px);
+        padding: 16px;
+      }
+
+      .select-roster,
+      .realm-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .select-class,
+      .realm-card {
+        min-height: 142px;
+        padding: 10px;
+      }
+
+      .class-portrait {
+        width: 58px;
+        height: 58px;
+      }
     }
   </style>
   <link rel="stylesheet" href="../game-ui.css">
@@ -503,6 +728,61 @@
 
     <section class="layout">
       <article class="game-panel">
+        <section class="screen-overlay character-select" id="characterSelect" aria-label="Character selection">
+          <div class="select-frame">
+            <p class="select-eyebrow">Enter Thy Name</p>
+            <h2>Choose Your Hero</h2>
+            <p>Pick a warden, enter a name, then step into the realm hub. Certain names reveal stranger heroes.</p>
+            <label class="name-entry">
+              <span>Character Name</span>
+              <input id="characterNameInput" type="text" autocomplete="off" spellcheck="false" maxlength="24" placeholder="Warden">
+            </label>
+            <div class="select-roster" id="characterRoster">
+              <button class="select-class is-active" type="button" data-select-class="warrior" style="--portrait: #4f6f92">
+                <span class="class-portrait" aria-hidden="true"></span>
+                <strong>Warrior</strong>
+                <small>Strength, armor, and shield charges.</small>
+              </button>
+              <button class="select-class" type="button" data-select-class="mage" style="--portrait: #9c80ff">
+                <span class="class-portrait" aria-hidden="true"></span>
+                <strong>Mage</strong>
+                <small>Intelligence, fire bolts, and blink.</small>
+              </button>
+              <button class="select-class" type="button" data-select-class="archer" style="--portrait: #63f0c4">
+                <span class="class-portrait" aria-hidden="true"></span>
+                <strong>Archer</strong>
+                <small>Agility, arrows, and disengage.</small>
+              </button>
+              <button class="select-class" type="button" data-select-class="sage" style="--portrait: #f7cc78" hidden>
+                <span class="class-portrait" aria-hidden="true"></span>
+                <strong>Sage</strong>
+                <small>No levels. Five-element spellcraft.</small>
+              </button>
+              <button class="select-class" type="button" data-select-class="pojo" style="--portrait: #ff8b4a" hidden>
+                <span class="class-portrait" aria-hidden="true"></span>
+                <strong>Pojo</strong>
+                <small>Fire breath and pickup-eating healing.</small>
+              </button>
+            </div>
+            <p class="secret-hint" id="secretNameHint">Secret names auto-select hidden heroes.</p>
+            <div class="select-actions">
+              <button class="button" id="startAdventureButton" type="button">Enter Realm Hub</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen-overlay realm-hub" id="realmHub" aria-label="Realm hub" hidden>
+          <div class="select-frame">
+            <p class="select-eyebrow">Realm Hub</p>
+            <h2>Choose a Realm</h2>
+            <p id="hubIntroText">The gate hall is safe for now. Choose which realm to descend into.</p>
+            <div class="realm-grid" id="realmCards"></div>
+            <div class="select-actions">
+              <button class="button" id="changeCharacterFromHub" type="button">Change Hero</button>
+            </div>
+          </div>
+        </section>
+
         <div class="topbar">
           <div class="stats">
             <div class="stat">
@@ -531,7 +811,7 @@
             </div>
           </div>
           <div class="topbar-actions">
-            <button class="button" id="nextFloorButton" type="button" disabled>Next Layer</button>
+            <button class="button" id="nextFloorButton" type="button" disabled>Realm Hub</button>
             <button class="button" id="resetButton" type="button">Reset Rift</button>
           </div>
         </div>
@@ -564,13 +844,16 @@
             <button class="class-button" type="button" data-class="mage">Mage<small>Intelligence, elements</small></button>
             <button class="class-button" type="button" data-class="archer">Archer<small>Agility, range, speed</small></button>
             <button class="class-button" type="button" data-class="sage" data-secret="true" hidden>Sage<small>Queued spellcraft</small></button>
+            <button class="class-button" type="button" data-class="pojo" data-secret="true" hidden>Pojo<small>Fire breath, eats pickups</small></button>
           </div>
           <p id="classSummary">Warriors survive close quarters and hit hard with physical rift steel.</p>
-          <div class="secret-unlock">
-            <input id="sageCodeInput" type="text" autocomplete="off" spellcheck="false" placeholder="Secret code">
-            <button class="button" id="sageUnlockButton" type="button">Unlock</button>
+          <div class="hero-chip">
+            <div>
+              <span>Hero Name</span>
+              <strong id="heroNameValue">Warden</strong>
+            </div>
+            <button class="button" id="changeHeroButton" type="button">Change</button>
           </div>
-          <small class="unlock-note" id="sageUnlockText">A forbidden warden path is sealed by a code.</small>
           <div class="sage-panel" id="sagePanel" hidden>
             <p>Queue up to five elements, then choose how to manifest the spell.</p>
             <div class="sage-elements" id="sageElements">
@@ -590,7 +873,7 @@
               <button class="sage-button" type="button" data-sage-cast="self">Self<small>Middle / G</small></button>
               <button class="sage-button" type="button" data-sage-cast="rune">Rune<small>T</small></button>
             </div>
-          <small class="sage-message" id="sageMessage">Backspace clears the queue. Wet, cold, fire, lightning, life, and poison now react through target status. Alt/Shift+Left casts Fissure.</small>
+          <small class="sage-message" id="sageMessage">Backspace clears the queue. Wet and steam conduct lightning, cold freezes them, fire dries them, and frozen targets shatter under physical projectiles. Alt/Shift+Left casts Fissure.</small>
           </div>
         </section>
         <section class="side-card">
@@ -645,6 +928,7 @@
             <li><strong>Attack:</strong> Hold left mouse</li>
             <li><strong>Skill:</strong> Q for class skill</li>
             <li><strong>Mobility:</strong> Space</li>
+            <li><strong>Pojo:</strong> Hold attack to breathe fire; pickups heal instead of paying out.</li>
             <li><strong>Sage:</strong> Q/E/R/F/Z/X/C/V elements, Left/Right/Middle cast, Alt/Shift+Left fissure, T rune, Backspace clear</li>
           </ul>
         </section>
@@ -655,7 +939,7 @@
             <li>Tile walls and collision</li>
             <li>Enemy chase and contact damage</li>
             <li>Projectiles, skill hitboxes, pickups</li>
-            <li>Classes, stats, shops, quests, floors, elemental defenses, and Sage status reactions</li>
+            <li>Classes, secret-name heroes, stats, shops, quests, realm floors, elemental defenses, and Sage status reactions</li>
           </ul>
         </section>
       </aside>
@@ -676,10 +960,19 @@
     const dashStat = document.getElementById("dashStat");
     const objectiveText = document.getElementById("objectiveText");
     const classSummary = document.getElementById("classSummary");
+    const characterSelect = document.getElementById("characterSelect");
+    const characterNameInput = document.getElementById("characterNameInput");
+    const characterRoster = document.getElementById("characterRoster");
+    const characterClassButtons = Array.from(document.querySelectorAll("[data-select-class]"));
+    const startAdventureButton = document.getElementById("startAdventureButton");
+    const secretNameHint = document.getElementById("secretNameHint");
+    const realmHub = document.getElementById("realmHub");
+    const realmCards = document.getElementById("realmCards");
+    const hubIntroText = document.getElementById("hubIntroText");
+    const changeCharacterFromHub = document.getElementById("changeCharacterFromHub");
     const classButtons = Array.from(document.querySelectorAll("[data-class]"));
-    const sageCodeInput = document.getElementById("sageCodeInput");
-    const sageUnlockButton = document.getElementById("sageUnlockButton");
-    const sageUnlockText = document.getElementById("sageUnlockText");
+    const heroNameValue = document.getElementById("heroNameValue");
+    const changeHeroButton = document.getElementById("changeHeroButton");
     const sagePanel = document.getElementById("sagePanel");
     const sageQueueText = document.getElementById("sageQueueText");
     const sageMessage = document.getElementById("sageMessage");
@@ -709,6 +1002,11 @@
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
     const TAU = Math.PI * 2;
     const SHOP_ZONE = { x: TILE * 4.5, y: TILE * 4.5, radius: 118 };
+    const DEFAULT_HERO_NAME = "Warden";
+    const SECRET_NAME_CLASSES = {
+      jzael: "sage",
+      pojo: "pojo"
+    };
 
     const ELEMENT_COLORS = {
       physical: "#f0ebff",
@@ -730,8 +1028,6 @@
       wind: "#d8f7ff"
     };
 
-    const SAGE_UNLOCK_CODE = "Jzael the Sage";
-    const SAGE_UNLOCK_STORAGE_KEY = "riftwarden.sageUnlocked";
     const SAGE_ELEMENT_DEFS = {
       fire: { label: "Fire", key: "1" },
       cold: { label: "Cold", key: "2" },
@@ -767,13 +1063,13 @@
     };
 
     const STATUS_DEFS = {
-      wet: { label: "Wet", color: ELEMENT_COLORS.water },
+      wet: { label: "Wet", color: ELEMENT_COLORS.water, sticky: true },
       burning: { label: "Burning", color: ELEMENT_COLORS.fire, damageElement: "fire" },
       chilled: { label: "Chilled", color: ELEMENT_COLORS.cold },
       frozen: { label: "Frozen", color: ELEMENT_COLORS.ice },
       poisoned: { label: "Poisoned", color: ELEMENT_COLORS.poison, damageElement: "dark" },
       shocked: { label: "Shocked", color: ELEMENT_COLORS.lightning },
-      steamed: { label: "Steamed", color: ELEMENT_COLORS.steam }
+      steamed: { label: "Steamed", color: ELEMENT_COLORS.steam, sticky: true }
     };
 
     const CLASS_DEFS = {
@@ -832,6 +1128,21 @@
         mobilityName: "Haste",
         guardElement: "dark",
         guard: 0.04,
+        secret: true
+      },
+      pojo: {
+        name: "Pojo",
+        summary: "Pojo is a secret fire-breathing chicken that eats pickups for healing instead of taking their normal rewards.",
+        stats: { strength: 3, intelligence: 6, agility: 9 },
+        baseHp: 104,
+        baseSpeed: 236,
+        attackElement: "fire",
+        skillElement: "fire",
+        attackName: "Fire Breath",
+        skillName: "Wing Inferno",
+        mobilityName: "Flutter Rush",
+        guardElement: "fire",
+        guard: 0.16,
         secret: true
       }
     };
@@ -953,6 +1264,33 @@
       }
     ];
 
+    const REALM_DEFS = [
+      {
+        id: "warrens",
+        floor: 1,
+        name: "Goblin Warrens",
+        title: "Realm of Green Knives",
+        detail: "A starter realm full of goblins, cutters, and the first orc bruisers.",
+        color: "#63f0c4"
+      },
+      {
+        id: "crypt",
+        floor: 2,
+        name: "Bonefield Crypt",
+        title: "Realm of Restless Bone",
+        detail: "Undead halls with zombies, skeletons, and more anchor pressure.",
+        color: "#d9d3c2"
+      },
+      {
+        id: "cinder",
+        floor: 3,
+        name: "Cinder Sanctum",
+        title: "Realm of Burning Seals",
+        detail: "A hotter descent with fire imps, cultists, and the densest anchor layout.",
+        color: "#ff8b4a"
+      }
+    ];
+
     const SHOP_ITEMS = [
       {
         id: "health",
@@ -1018,8 +1356,12 @@
     let lastQuestMarkup = "";
 
     const state = {
-      running: true,
+      running: false,
+      screen: "select",
+      selectedClassKey: "warrior",
+      heroName: DEFAULT_HERO_NAME,
       classKey: "warrior",
+      realmKey: "warrens",
       floor: 1,
       floorClear: false,
       elapsed: 0,
@@ -1035,10 +1377,12 @@
       xp: 0,
       xpToNext: 30,
       nearShop: true,
-      sageUnlocked: readSageUnlocked(),
+      sageUnlocked: false,
+      pojoUnlocked: false,
       sageQueue: [],
       sageChannel: null,
       sageMessage: "",
+      realmsCleared: {},
       quests: {
         kills: 0,
         anchorsCleared: 0,
@@ -1047,20 +1391,130 @@
       shopPurchases: 0
     };
 
-    function readSageUnlocked() {
-      try {
-        return window.localStorage?.getItem(SAGE_UNLOCK_STORAGE_KEY) === "true";
-      } catch {
-        return false;
+    function normalizeHeroName(name) {
+      return name.trim().toLowerCase();
+    }
+
+    function getSecretClassForName(name) {
+      return SECRET_NAME_CLASSES[normalizeHeroName(name)] || null;
+    }
+
+    function unlockSecretClass(classKey) {
+      if (classKey === "sage") {
+        state.sageUnlocked = true;
+      } else if (classKey === "pojo") {
+        state.pojoUnlocked = true;
       }
     }
 
-    function writeSageUnlocked() {
-      try {
-        window.localStorage?.setItem(SAGE_UNLOCK_STORAGE_KEY, "true");
-      } catch {
-        // Local storage can be unavailable in private or file contexts.
+    function isSecretClassAvailable(classKey) {
+      if (classKey === "sage") {
+        return state.sageUnlocked || state.classKey === "sage" || state.selectedClassKey === "sage";
       }
+      if (classKey === "pojo") {
+        return state.pojoUnlocked || state.classKey === "pojo" || state.selectedClassKey === "pojo";
+      }
+      return true;
+    }
+
+    function getCurrentRealmDef() {
+      return REALM_DEFS.find((realm) => realm.id === state.realmKey) || REALM_DEFS[0];
+    }
+
+    function hideScreens() {
+      characterSelect.hidden = true;
+      realmHub.hidden = true;
+    }
+
+    function renderCharacterSelect() {
+      for (const button of characterClassButtons) {
+        const classKey = button.dataset.selectClass;
+        const def = CLASS_DEFS[classKey];
+        button.hidden = Boolean(def?.secret && !isSecretClassAvailable(classKey));
+        button.classList.toggle("is-active", classKey === state.selectedClassKey);
+      }
+    }
+
+    function renderRealmCards() {
+      realmCards.innerHTML = REALM_DEFS.map((realm) => {
+        const cleared = state.realmsCleared[realm.id];
+        return `<button class="realm-card" type="button" data-realm="${realm.id}" style="--portrait: ${realm.color}"><span class="class-portrait" aria-hidden="true"></span><strong>${realm.name}</strong><small>${realm.title}<br>${realm.detail}<br>${cleared ? "Stabilized" : "Uncleared"}</small></button>`;
+      }).join("");
+    }
+
+    function setSelectedClass(classKey, message = "") {
+      if (!CLASS_DEFS[classKey]) {
+        return;
+      }
+      if (CLASS_DEFS[classKey].secret && !isSecretClassAvailable(classKey)) {
+        secretNameHint.textContent = "That hidden hero answers only to the right name.";
+        return;
+      }
+      state.selectedClassKey = classKey;
+      secretNameHint.textContent = message || (CLASS_DEFS[classKey].secret ? `${CLASS_DEFS[classKey].name} is ready.` : "Choose a hero, then enter the realm hub.");
+      renderCharacterSelect();
+    }
+
+    function syncSecretNameSelection() {
+      const secretClass = getSecretClassForName(characterNameInput.value);
+      if (!secretClass) {
+        secretNameHint.textContent = "Secret names auto-select hidden heroes.";
+        renderCharacterSelect();
+        return null;
+      }
+      unlockSecretClass(secretClass);
+      setSelectedClass(secretClass, `${characterNameInput.value.trim()} awakens ${CLASS_DEFS[secretClass].name}.`);
+      return secretClass;
+    }
+
+    function openCharacterSelect() {
+      state.screen = "select";
+      state.running = false;
+      mouse.down = false;
+      stopSageChannel();
+      characterNameInput.value = state.heroName === DEFAULT_HERO_NAME ? "" : state.heroName;
+      characterSelect.hidden = false;
+      realmHub.hidden = true;
+      syncSecretNameSelection();
+      renderClassButtons();
+      setTimeout(() => characterNameInput.focus(), 0);
+    }
+
+    function openRealmHub() {
+      state.screen = "hub";
+      state.running = false;
+      mouse.down = false;
+      stopSageChannel();
+      characterSelect.hidden = true;
+      realmHub.hidden = false;
+      hubIntroText.textContent = `${state.heroName} stands in the gate hall. Choose a realm to enter.`;
+      renderRealmCards();
+      renderClassButtons();
+      updateHud();
+    }
+
+    function beginAdventure() {
+      const secretClass = syncSecretNameSelection();
+      const classKey = secretClass || state.selectedClassKey;
+      unlockSecretClass(classKey);
+      state.classKey = classKey;
+      state.selectedClassKey = classKey;
+      state.heroName = characterNameInput.value.trim() || CLASS_DEFS[classKey].name || DEFAULT_HERO_NAME;
+      resetRunProgress();
+      openRealmHub();
+    }
+
+    function startRealm(realmId) {
+      const realm = REALM_DEFS.find((entry) => entry.id === realmId);
+      if (!realm) {
+        return;
+      }
+      state.realmKey = realm.id;
+      hideScreens();
+      state.screen = "play";
+      state.running = true;
+      startFloor(realm.floor);
+      updateHud();
     }
 
     function clamp(value, min, max) {
@@ -1242,6 +1696,9 @@
       } else if (classKey === "archer") {
         attackDamage = 9 + stats.agility * 2.45 + stats.strength * 0.25 + levelBonus * 1.25;
         techniqueDamage = 12 + stats.agility * 2.95 + stats.strength * 0.2 + levelBonus * 1.45;
+      } else if (classKey === "pojo") {
+        attackDamage = 7 + stats.agility * 1.3 + stats.intelligence * 1.95 + levelBonus * 1.2;
+        techniqueDamage = 12 + stats.intelligence * 2.55 + stats.agility * 1.1 + levelBonus * 1.45;
       } else {
         attackDamage = 8 + stats.intelligence * 1.8 + stats.agility * 0.45;
         techniqueDamage = 13 + stats.intelligence * 2.55 + stats.agility * 0.35;
@@ -1313,12 +1770,39 @@
 
     function normalizeDamageElement(element) {
       if (element === "light") return "holy";
+      if (element === "steam") return "fire";
       if (element === "arcane" || element === "poison") return "dark";
       return element;
     }
 
-    function applyDamage(target, amount, element = "physical") {
+    function shouldFrozenShatter(target, element, spell = null) {
+      if (target.kind !== "enemy" || !hasStatus(target, "frozen")) {
+        return false;
+      }
+      if (normalizeDamageElement(element) === "physical") {
+        return true;
+      }
+      return Boolean(spell?.queue && getSageManifestation(spell.queue) === "projectile");
+    }
+
+    function clearHeatSensitiveStatuses(target, sourceElement) {
+      if (target.kind !== "enemy" || sourceElement !== "fire") {
+        return;
+      }
+      const hadHeatSensitiveStatus = hasStatus(target, "wet") || hasStatus(target, "steamed") || hasStatus(target, "chilled") || hasStatus(target, "frozen");
+      if (!hadHeatSensitiveStatus) {
+        return;
+      }
+      clearStatus(target, "wet");
+      clearStatus(target, "steamed");
+      clearStatus(target, "chilled");
+      clearStatus(target, "frozen");
+      addTargetEffect(target, "sizzled", "Sizzled", ELEMENT_COLORS.fire, 0.8);
+    }
+
+    function applyDamage(target, amount, element = "physical", options = {}) {
       const damageElement = normalizeDamageElement(element);
+      clearHeatSensitiveStatuses(target, element);
       if (damageElement === "life" && target.kind === "enemy" && target.family !== "undead") {
         const healing = Math.min(target.maxHp - target.hp, amount);
         if (healing > 0) {
@@ -1329,10 +1813,14 @@
         return -healing;
       }
       const multiplier = getElementMultiplier(target, damageElement);
-      const finalDamage = amount * multiplier;
+      const shatterMultiplier = options.skipFrozenShatter ? 1 : shouldFrozenShatter(target, element) ? 4 : 1;
+      const finalDamage = amount * multiplier * shatterMultiplier;
       target.hp -= finalDamage;
       if (target.hitTimer !== undefined) {
         target.hitTimer = 0.1;
+      }
+      if (shatterMultiplier > 1) {
+        addTargetEffect(target, "shatter", "Shatter x4", ELEMENT_COLORS.earth, 0.5);
       }
       if (multiplier >= 1.45) {
         addTargetEffect(target, "weak", "Weak", ELEMENT_COLORS[element] || ELEMENT_COLORS[damageElement] || "#f7cc78");
@@ -1435,10 +1923,11 @@
       lastTick = 0;
     }
 
-    function resetGame() {
+    function resetRunProgress() {
       createPlayer();
       state.floor = 1;
       state.floorClear = false;
+      state.elapsed = 0;
       state.gold = 0;
       state.xp = 0;
       state.xpToNext = 30;
@@ -1448,16 +1937,37 @@
         anchorsCleared: 0,
         claimed: {}
       };
+      state.enemies = [];
+      state.projectiles = [];
+      state.pickups = [];
+      state.effects = [];
+      state.anchors = [];
+      state.hazards = [];
+      state.sageQueue = [];
+      state.sageChannel = null;
+      state.sageMessage = "";
+      state.realmsCleared = {};
+      state.nearShop = true;
+      buildMap();
       lastShopMarkup = "";
       lastQuestMarkup = "";
-      startFloor(1);
+      state.camera.x = clamp(state.player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
+      state.camera.y = clamp(state.player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
+    }
+
+    function resetGame(floorNumber = getCurrentRealmDef().floor) {
+      resetRunProgress();
+      hideScreens();
+      state.screen = "play";
+      state.running = true;
+      startFloor(floorNumber);
     }
 
     function nextFloor() {
       if (!state.floorClear) {
         return;
       }
-      startFloor(state.floor + 1);
+      openRealmHub();
     }
 
     function gainXp(amount) {
@@ -1547,27 +2057,33 @@
         applyStatus(target, "wet", 4 + waterCount * 0.7, waterCount);
       }
 
-      if (fireCount || steamCount) {
-        if (hasStatus(target, "wet") || hasStatus(target, "chilled") || hasStatus(target, "frozen")) {
-          damageMultiplier += fireCount ? 0.18 : 0.1;
+      if (fireCount) {
+        if (hasStatus(target, "wet") || hasStatus(target, "steamed") || hasStatus(target, "chilled") || hasStatus(target, "frozen")) {
+          damageMultiplier += 0.18;
           clearStatus(target, "wet");
+          clearStatus(target, "steamed");
           clearStatus(target, "chilled");
           clearStatus(target, "frozen");
         }
-        if (fireCount) {
-          applyStatus(target, "burning", 3.6 + fireCount * 0.55, fireCount);
+        applyStatus(target, "burning", 3.6 + fireCount * 0.55, fireCount);
+      }
+
+      if (steamCount) {
+        if (hasStatus(target, "chilled") || hasStatus(target, "frozen")) {
+          damageMultiplier += 0.1;
+          clearStatus(target, "chilled");
+          clearStatus(target, "frozen");
         }
-        if (steamCount) {
-          applyStatus(target, "steamed", 3.2 + steamCount * 0.5, steamCount);
-        }
+        applyStatus(target, "steamed", 5 + steamCount * 0.8, steamCount);
       }
 
       if (coldCount) {
         if (hasStatus(target, "burning")) {
           clearStatus(target, "burning");
         }
-        if (hasStatus(target, "wet")) {
+        if (hasStatus(target, "wet") || hasStatus(target, "steamed")) {
           clearStatus(target, "wet");
+          clearStatus(target, "steamed");
           applyStatus(target, "frozen", 2.2 + coldCount * 0.45, coldCount);
           damageMultiplier += 0.12;
         } else {
@@ -1576,7 +2092,7 @@
       }
 
       if (lightningCount) {
-        if (hasStatus(target, "wet") || hasStatus(target, "frozen")) {
+        if (hasStatus(target, "wet") || hasStatus(target, "steamed") || hasStatus(target, "frozen")) {
           damageMultiplier += 0.55 + lightningCount * 0.08;
           addTargetEffect(target, "conducted", "Conducted", ELEMENT_COLORS.lightning, 1);
         }
@@ -1593,7 +2109,7 @@
       }
 
       if (physicalCount && hasStatus(target, "frozen")) {
-        damageMultiplier += 0.34;
+        addTargetEffect(target, "shatter-ready", "Brittle", ELEMENT_COLORS.earth, 1);
       }
 
       return damageMultiplier;
@@ -1605,11 +2121,13 @@
       if (queue) {
         finalAmount *= applySageStatusReactions(target, queue);
       }
-      if (target.kind === "enemy" && hasStatus(target, "frozen") && ["physical", "dark", "arcane"].includes(normalizeDamageElement(element))) {
-        finalAmount *= 1.25;
+      const shattersFrozen = shouldFrozenShatter(target, element, spell);
+      if (shattersFrozen) {
+        finalAmount *= 4;
+        addTargetEffect(target, "shatter", "Shatter x4", ELEMENT_COLORS.earth, 0.5);
       }
       if (finalAmount > 0) {
-        return applyDamage(target, finalAmount, element);
+        return applyDamage(target, finalAmount, element, { skipFrozenShatter: true });
       }
       return 0;
     }
@@ -1621,7 +2139,9 @@
       }
       let speedMultiplier = 1;
       for (const [key, status] of Object.entries(statuses)) {
-        status.time -= dt;
+        if (!STATUS_DEFS[key]?.sticky) {
+          status.time -= dt;
+        }
         if (key === "burning") {
           applyDamage(target, (1.5 + status.magnitude * 0.85) * dt, "fire");
         } else if (key === "poisoned") {
@@ -1657,17 +2177,8 @@
       return state.classKey === "sage";
     }
 
-    function unlockSage() {
-      if (sageCodeInput.value.trim() !== SAGE_UNLOCK_CODE) {
-        sageUnlockText.textContent = "The seal does not recognize that phrase.";
-        state.sageMessage = "Secret code rejected.";
-        return;
-      }
-      state.sageUnlocked = true;
-      writeSageUnlocked();
-      sageUnlockText.textContent = "Sage unlocked. Select it carefully.";
-      state.sageMessage = "Sage class unlocked.";
-      setClass("sage");
+    function isPojo() {
+      return state.classKey === "pojo";
     }
 
     function getSageQueueLabel() {
@@ -1680,13 +2191,8 @@
     function renderSagePanel() {
       const showPanel = state.sageUnlocked || isSage();
       sagePanel.hidden = !showPanel;
-      sageUnlockText.textContent = state.sageUnlocked
-        ? "Sage unlocked. It is fragile, weird, and very strong if you can think fast."
-        : sageUnlockText.textContent;
-      sageCodeInput.disabled = state.sageUnlocked;
-      sageUnlockButton.disabled = state.sageUnlocked;
       sageQueueText.textContent = getSageQueueLabel();
-      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Water wets/pushes, cold freezes wet targets, lightning conducts, life cleanses poison.";
+      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Wet and steam conduct lightning, cold freezes them, fire dries them, and frozen targets shatter under physical projectiles.";
       for (const button of sageElementButtons) {
         button.disabled = !isSage();
       }
@@ -1698,12 +2204,14 @@
     function renderClassButtons() {
       const classDef = getClassDef();
       classStat.textContent = classDef.name;
+      heroNameValue.textContent = state.heroName || DEFAULT_HERO_NAME;
       classSummary.textContent = classDef.summary;
       for (const button of classButtons) {
         const def = CLASS_DEFS[button.dataset.class];
-        button.hidden = Boolean(def?.secret && !state.sageUnlocked);
+        button.hidden = Boolean(def?.secret && !isSecretClassAvailable(button.dataset.class));
         button.classList.toggle("is-active", button.dataset.class === state.classKey);
       }
+      renderCharacterSelect();
       renderSagePanel();
     }
 
@@ -1917,16 +2425,27 @@
       if (!CLASS_DEFS[classKey] || state.classKey === classKey) {
         return;
       }
-      if (CLASS_DEFS[classKey].secret && !state.sageUnlocked) {
+      if (CLASS_DEFS[classKey].secret && !isSecretClassAvailable(classKey)) {
         state.sageMessage = "That class is still sealed.";
         return;
       }
+      unlockSecretClass(classKey);
       state.classKey = classKey;
+      state.selectedClassKey = classKey;
       state.sageQueue = [];
       state.sageMessage = "";
       lastShopMarkup = "";
       lastQuestMarkup = "";
-      resetGame();
+      if (state.screen !== "play") {
+        resetRunProgress();
+        if (state.screen === "hub") {
+          openRealmHub();
+        } else {
+          openCharacterSelect();
+        }
+        return;
+      }
+      resetGame(getCurrentRealmDef().floor);
     }
 
     function getAimAngle() {
@@ -1961,7 +2480,8 @@
       if (queue.includes("lightning")) return "lightning";
       if (queue.includes("earth")) return "physical";
       if (queue.includes("ice") || queue.includes("cold")) return "water";
-      if (queue.includes("fire") || queue.includes("steam")) return "fire";
+      if (queue.includes("fire")) return "fire";
+      if (queue.includes("steam")) return "steam";
       if (queue.includes("water")) return "water";
       return "dark";
     }
@@ -2606,6 +3126,28 @@
       const classDef = getClassDef();
       const derived = getDerivedStats();
       const angle = getAimAngle();
+      if (isPojo()) {
+        const range = 164 + player.stats.agility * 3;
+        const width = 0.74;
+        const damage = derived.weaponDamage * 0.48;
+        const hits = damageEnemiesInCone(player.x, player.y, angle, range, width, damage, "fire", 8);
+        state.effects.push({
+          kind: "cone",
+          x: player.x,
+          y: player.y,
+          angle,
+          range,
+          width,
+          life: 0.08,
+          maxLife: 0.08,
+          color: "rgba(255, 139, 74, 0.28)"
+        });
+        if (hits && Math.random() < 0.16) {
+          addEffect(player.x, player.y - 30, `${hits} singed`, ELEMENT_COLORS.fire);
+        }
+        player.attackTimer = Math.max(0.09, derived.attackCooldown * 0.52);
+        return;
+      }
       const speed = state.classKey === "archer" ? 650 : 560;
       const damage = state.classKey === "mage" ? derived.spellDamage * 0.82 : derived.weaponDamage;
       state.projectiles.push({
@@ -2633,6 +3175,29 @@
       const classDef = getClassDef();
       const derived = getDerivedStats();
       if (player.skillTimer > 0) {
+        return;
+      }
+      if (isPojo()) {
+        const angle = getAimAngle();
+        const range = 245 + player.stats.intelligence * 5;
+        const width = 1.18;
+        const damage = derived.spellDamage * 1.9;
+        player.skillTimer = 3.1;
+        const hitCount = damageEnemiesInCone(player.x, player.y, angle, range, width, damage, "fire", 26);
+        state.effects.push({
+          kind: "cone",
+          x: player.x,
+          y: player.y,
+          angle,
+          range,
+          width,
+          life: 0.22,
+          maxLife: 0.22,
+          color: "rgba(255, 93, 61, 0.34)"
+        });
+        if (hitCount) {
+          addEffect(player.x, player.y - 34, `${hitCount} burned`, ELEMENT_COLORS.fire);
+        }
         return;
       }
       player.skillTimer = state.classKey === "mage" ? 3.7 : state.classKey === "archer" ? 3.4 : 4.2;
@@ -2705,6 +3270,14 @@
         player.dashCooldown = Math.max(1.7, derived.dashCooldown + 0.25);
         addEffect(fromX, fromY - 20, "Blink", ELEMENT_COLORS.arcane);
         addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
+        return;
+      }
+      if (isPojo()) {
+        player.dashTimer = 0.18;
+        player.dashVx = Math.cos(angle) * 590;
+        player.dashVy = Math.sin(angle) * 590;
+        player.dashCooldown = Math.max(1.15, derived.dashCooldown - 0.2);
+        addEffect(player.x, player.y - 26, "Flutter", ELEMENT_COLORS.fire);
         return;
       }
       const backward = state.classKey === "archer";
@@ -2848,6 +3421,7 @@
       }
       if (!state.floorClear && state.anchors.length === 0) {
         state.floorClear = true;
+        state.realmsCleared[state.realmKey] = true;
         addEffect(state.player.x, state.player.y - 34, "Layer Cleared", "#63f0c4");
       }
     }
@@ -2909,6 +3483,37 @@
       }
     }
 
+    function healPlayerFromPickup(pickup) {
+      const player = state.player;
+      const baseValue = Number(pickup.value) || 0;
+      if (pickup.type === "gold") {
+        return Math.max(6, Math.round(baseValue * 0.7));
+      }
+      if (pickup.type === "health") {
+        return Math.max(1, Math.round(baseValue));
+      }
+      return Math.max(8, Math.round(baseValue || 12));
+    }
+
+    function collectPickup(pickup) {
+      const player = state.player;
+      if (isPojo()) {
+        const healing = healPlayerFromPickup(pickup);
+        player.hp = Math.min(player.maxHp, player.hp + healing);
+        addEffect(player.x, player.y - 28, `Ate +${healing} HP`, ELEMENT_COLORS.fire);
+        return;
+      }
+      if (pickup.type === "gold") {
+        state.gold += pickup.value;
+      } else if (pickup.type === "health") {
+        if (player.bodyShield > 0) {
+          addEffect(player.x, player.y - 30, "Body Shield Blocks Healing", "#ff668a");
+        } else {
+          player.hp = Math.min(player.maxHp, player.hp + pickup.value);
+        }
+      }
+    }
+
     function updatePickups(dt) {
       const player = state.player;
       for (let index = state.pickups.length - 1; index >= 0; index -= 1) {
@@ -2921,15 +3526,7 @@
           pickup.y += (dy / distance) * 220 * dt;
         }
         if (distance < player.radius + pickup.radius + 6) {
-          if (pickup.type === "gold") {
-            state.gold += pickup.value;
-          } else if (pickup.type === "health") {
-            if (player.bodyShield > 0) {
-              addEffect(player.x, player.y - 30, "Body Shield Blocks Healing", "#ff668a");
-            } else {
-              player.hp = Math.min(player.maxHp, player.hp + pickup.value);
-            }
-          }
+          collectPickup(pickup);
           state.pickups.splice(index, 1);
         }
       }
@@ -2978,6 +3575,12 @@
     }
 
     function update(dt) {
+      if (!state.running || state.screen !== "play") {
+        updateEffects(dt);
+        updateHud();
+        mouse.pressed = false;
+        return;
+      }
       state.elapsed += dt;
       updatePlayer(dt);
       updateProjectiles(dt);
@@ -3192,6 +3795,37 @@
         ctx.beginPath();
         ctx.arc(0, 0, 15, -0.65, 0.65);
         ctx.stroke();
+      } else if (state.classKey === "pojo") {
+        ctx.fillStyle = "#fff1d0";
+        ctx.beginPath();
+        ctx.ellipse(-2, 0, 17, 13, 0, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#ffe873";
+        ctx.beginPath();
+        ctx.arc(12, 0, 10, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#ff8b4a";
+        ctx.beginPath();
+        ctx.moveTo(22, 0);
+        ctx.lineTo(33, -5);
+        ctx.lineTo(33, 5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#ff5d3d";
+        ctx.beginPath();
+        ctx.moveTo(5, -8);
+        ctx.lineTo(12, -20);
+        ctx.lineTo(16, -8);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#f0ebff";
+        ctx.beginPath();
+        ctx.ellipse(-6, -1, 10, 5, -0.18, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#1b1425";
+        ctx.beginPath();
+        ctx.arc(16, -3, 2, 0, TAU);
+        ctx.fill();
       } else {
         ctx.fillStyle = "#315c4b";
         ctx.beginPath();
@@ -3465,7 +4099,7 @@
       hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
       levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
       goldStat.textContent = String(state.gold);
-      floorStat.textContent = `${state.floor}: ${floorDef.name}`;
+      floorStat.textContent = state.screen === "hub" ? "Realm Hub" : `${state.floor}: ${floorDef.name}`;
       coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
       damageStat.textContent = String(derived.weaponDamage);
       spellStat.textContent = String(derived.spellDamage);
@@ -3483,10 +4117,17 @@
       dashStat.textContent = isSage()
         ? player.hasteTimer > 0 ? `Haste ${player.hasteTimer.toFixed(1)}s` : classDef.mobilityName
         : player.dashCooldown <= 0 ? classDef.mobilityName : `${player.dashCooldown.toFixed(1)}s`;
-      nextFloorButton.disabled = !state.floorClear;
-      objectiveText.textContent = state.anchors.length
-        ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
-        : `${floorDef.name} stabilized. Use the market, claim quests, then descend to the next layer.`;
+      nextFloorButton.textContent = "Realm Hub";
+      nextFloorButton.disabled = state.screen !== "play" || !state.floorClear;
+      if (state.screen === "select") {
+        objectiveText.textContent = "Enter a hero name and choose a class to reach the realm hub.";
+      } else if (state.screen === "hub") {
+        objectiveText.textContent = "Choose a realm from the gate hall to begin the next descent.";
+      } else {
+        objectiveText.textContent = state.anchors.length
+          ? `${floorDef.name}: clear ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and thin the patrols.`
+          : `${floorDef.name} stabilized. Use the market, claim quests, then return to the realm hub.`;
+      }
       renderClassButtons();
       renderShop();
       renderQuests();
@@ -3586,11 +4227,26 @@
 
     window.addEventListener("resize", resizeCanvas);
     nextFloorButton.addEventListener("click", nextFloor);
-    resetButton.addEventListener("click", resetGame);
-    sageUnlockButton.addEventListener("click", unlockSage);
-    sageCodeInput.addEventListener("keydown", (event) => {
+    resetButton.addEventListener("click", () => resetGame(getCurrentRealmDef().floor));
+    characterNameInput.addEventListener("input", syncSecretNameSelection);
+    characterNameInput.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
-        unlockSage();
+        beginAdventure();
+      }
+    });
+    startAdventureButton.addEventListener("click", beginAdventure);
+    changeHeroButton.addEventListener("click", openCharacterSelect);
+    changeCharacterFromHub.addEventListener("click", openCharacterSelect);
+    characterRoster.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-select-class]");
+      if (button) {
+        setSelectedClass(button.dataset.selectClass);
+      }
+    });
+    realmCards.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-realm]");
+      if (button) {
+        startRealm(button.dataset.realm);
       }
     });
     for (const button of classButtons) {
@@ -3619,7 +4275,8 @@
     });
 
     resizeCanvas();
-    resetGame();
+    resetRunProgress();
+    openCharacterSelect();
     requestAnimationFrame(loop);
   </script>
 </body>
