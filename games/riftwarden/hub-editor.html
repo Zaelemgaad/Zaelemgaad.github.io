@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Riftwarden Hub Editor</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="stylesheet" href="./hub-editor.css">
+</head>
+<body>
+  <main class="editor-shell">
+    <header class="editor-header">
+      <a class="back-link" href="./">Back to Riftwarden</a>
+      <div>
+        <p class="eyebrow">Riftwarden Tool</p>
+        <h1>Hub Layout Editor</h1>
+        <p class="lead">Paint the hub, drag portals, then export the layout for me to wire into the game.</p>
+      </div>
+    </header>
+
+    <section class="editor-layout">
+      <article class="canvas-panel">
+        <div class="toolbar" role="toolbar" aria-label="Hub editor tools">
+          <button class="tool-button is-active" type="button" data-tool="drag">Drag</button>
+          <button class="tool-button" type="button" data-tool="wall">Wall</button>
+          <button class="tool-button" type="button" data-tool="floor">Floor</button>
+          <button class="tool-button" type="button" id="resetButton">Reset</button>
+          <button class="tool-button" type="button" id="exportButton">Export</button>
+          <button class="tool-button" type="button" id="copyButton">Copy</button>
+          <button class="tool-button" type="button" id="saveButton">Save Draft</button>
+          <button class="tool-button" type="button" id="loadButton">Load Draft</button>
+        </div>
+        <canvas id="hubCanvas" width="1008" height="756" aria-label="Editable Riftwarden hub map"></canvas>
+        <p class="status-line" id="statusLine">Drag portals, market, or spawn. Wall/Floor paints tiles.</p>
+      </article>
+
+      <aside class="side-panel">
+        <section class="panel">
+          <h2>How To Use</h2>
+          <ul>
+            <li>Use <strong>Wall</strong> and <strong>Floor</strong> to paint the grid.</li>
+            <li>Use <strong>Drag</strong> to move portals, spawn, or market.</li>
+            <li>Export when it looks right, then paste the JSON to me.</li>
+            <li>The export preserves every tile, portal, and marker position.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <h2>Selected</h2>
+          <p id="selectedText">Nothing selected.</p>
+        </section>
+
+        <section class="panel">
+          <h2>Import / Export</h2>
+          <textarea id="exportText" spellcheck="false" placeholder="Exported layout appears here. You can also paste a layout here and click Import."></textarea>
+          <div class="import-row">
+            <button class="tool-button" type="button" id="importButton">Import</button>
+            <button class="tool-button" type="button" id="clearTextButton">Clear Text</button>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script src="./hub-editor.js"></script>
+</body>
+</html>
