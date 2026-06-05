@@ -234,7 +234,7 @@
         skillElement: "arcane",
         attackName: "Direct Cast",
         skillName: "Area Cast",
-        mobilityName: "Haste",
+        mobilityName: "Combo Haste",
         guardElement: "dark",
         guard: 0.04,
         secret: true
@@ -504,10 +504,41 @@
 
     const keys = new Set();
     const mouse = { x: 0, y: 0, down: false, pressed: false, altDirect: false };
+    const GAMEPAD_DEADZONE = 0.18;
+    const GAMEPAD_TRIGGER = 0.35;
+    const GAMEPAD_BUTTON = {
+      A: 0,
+      B: 1,
+      X: 2,
+      Y: 3,
+      LB: 4,
+      RB: 5,
+      LT: 6,
+      RT: 7,
+      UP: 12,
+      DOWN: 13,
+      LEFT: 14,
+      RIGHT: 15
+    };
+    const gamepadInput = {
+      index: null,
+      connected: false,
+      buttons: [],
+      prevButtons: [],
+      buttonValues: [],
+      moveX: 0,
+      moveY: 0,
+      aimX: 1,
+      aimY: 0,
+      aimAngle: 0,
+      aimActive: false,
+      prevAimActive: false
+    };
     const blocked = new Set();
     let lastTick = 0;
     let lastShopMarkup = "";
     let lastQuestMarkup = "";
+    let aimSource = "mouse";
 
     const state = {
       running: false,
@@ -697,6 +728,99 @@
       return dx * dx + dy * dy;
     }
 
+    function applyDeadzone(value) {
+      return Math.abs(value) >= GAMEPAD_DEADZONE ? value : 0;
+    }
+
+    function readGamepadStick(gamepad, xIndex, yIndex) {
+      const rawX = gamepad.axes[xIndex] || 0;
+      const rawY = gamepad.axes[yIndex] || 0;
+      const length = Math.hypot(rawX, rawY);
+      if (length < GAMEPAD_DEADZONE) {
+        return { x: 0, y: 0, active: false };
+      }
+      const scale = Math.min(1, (length - GAMEPAD_DEADZONE) / (1 - GAMEPAD_DEADZONE));
+      return {
+        x: (rawX / length) * scale,
+        y: (rawY / length) * scale,
+        active: true
+      };
+    }
+
+    function pollGamepad() {
+      const gamepads = navigator.getGamepads ? Array.from(navigator.getGamepads()) : [];
+      const current = gamepadInput.index == null ? null : gamepads[gamepadInput.index];
+      const gamepad = current?.connected ? current : gamepads.find((pad) => pad?.connected);
+      if (!gamepad) {
+        gamepadInput.connected = false;
+        gamepadInput.index = null;
+        gamepadInput.buttons = [];
+        gamepadInput.buttonValues = [];
+        gamepadInput.moveX = 0;
+        gamepadInput.moveY = 0;
+        gamepadInput.aimActive = false;
+        return;
+      }
+
+      gamepadInput.connected = true;
+      gamepadInput.index = gamepad.index;
+      gamepadInput.buttonValues = gamepad.buttons.map((button) => button.value || 0);
+      gamepadInput.buttons = gamepad.buttons.map((button) => button.pressed || button.value >= GAMEPAD_TRIGGER);
+
+      const move = readGamepadStick(gamepad, 0, 1);
+      const aim = readGamepadStick(gamepad, 2, 3);
+      gamepadInput.moveX = applyDeadzone(move.x);
+      gamepadInput.moveY = applyDeadzone(move.y);
+      if (gamepadButtonDown(GAMEPAD_BUTTON.LEFT)) gamepadInput.moveX -= 1;
+      if (gamepadButtonDown(GAMEPAD_BUTTON.RIGHT)) gamepadInput.moveX += 1;
+      if (gamepadButtonDown(GAMEPAD_BUTTON.UP)) gamepadInput.moveY -= 1;
+      if (gamepadButtonDown(GAMEPAD_BUTTON.DOWN)) gamepadInput.moveY += 1;
+      const moveLength = Math.hypot(gamepadInput.moveX, gamepadInput.moveY);
+      if (moveLength > 1) {
+        gamepadInput.moveX /= moveLength;
+        gamepadInput.moveY /= moveLength;
+      }
+
+      gamepadInput.aimActive = aim.active;
+      if (aim.active) {
+        gamepadInput.aimX = aim.x;
+        gamepadInput.aimY = aim.y;
+        gamepadInput.aimAngle = Math.atan2(aim.y, aim.x);
+        aimSource = "gamepad";
+      }
+    }
+
+    function gamepadButtonDown(buttonIndex) {
+      return Boolean(gamepadInput.connected && gamepadInput.buttons[buttonIndex]);
+    }
+
+    function gamepadButtonPressed(buttonIndex) {
+      return Boolean(gamepadButtonDown(buttonIndex) && !gamepadInput.prevButtons[buttonIndex]);
+    }
+
+    function finishInputFrame() {
+      mouse.pressed = false;
+      gamepadInput.prevButtons = [...gamepadInput.buttons];
+      gamepadInput.prevAimActive = gamepadInput.connected && gamepadInput.aimActive;
+    }
+
+    function getMoveVector() {
+      let mx = 0;
+      let my = 0;
+      if (keys.has("w") || keys.has("ArrowUp")) my -= 1;
+      if (keys.has("s") || keys.has("ArrowDown")) my += 1;
+      if (keys.has("a") || keys.has("ArrowLeft")) mx -= 1;
+      if (keys.has("d") || keys.has("ArrowRight")) mx += 1;
+      mx += gamepadInput.moveX;
+      my += gamepadInput.moveY;
+      const length = Math.hypot(mx, my);
+      if (length > 1) {
+        mx /= length;
+        my /= length;
+      }
+      return { x: mx, y: my, active: Boolean(length) };
+    }
+
     function tileKey(col, row) {
       return `${col},${row}`;
     }
@@ -867,6 +991,30 @@
       return {
         x: x - state.camera.x,
         y: y - state.camera.y
+      };
+    }
+
+    function getAimAngle() {
+      if (gamepadInput.connected && aimSource === "gamepad") {
+        return gamepadInput.aimAngle;
+      }
+      const target = screenToWorld(mouse.x, mouse.y);
+      return Math.atan2(target.y - state.player.y, target.x - state.player.x);
+    }
+
+    function getSageTargetPoint(distance = 156, radius = 10) {
+      const player = state.player;
+      const angle = getAimAngle();
+      for (let step = distance; step >= 36; step -= 16) {
+        const x = clamp(player.x + Math.cos(angle) * step, player.radius, WORLD_W - player.radius);
+        const y = clamp(player.y + Math.sin(angle) * step, player.radius, WORLD_H - player.radius);
+        if (!circleBlocked(x, y, radius)) {
+          return { x, y };
+        }
+      }
+      return {
+        x: clamp(player.x + Math.cos(angle) * 36, player.radius, WORLD_W - player.radius),
+        y: clamp(player.y + Math.sin(angle) * 36, player.radius, WORLD_H - player.radius)
       };
     }
 
@@ -1428,7 +1576,7 @@
       const showPanel = isSage();
       sagePanel.hidden = !showPanel;
       sageQueueText.textContent = getSageQueueLabel();
-      sageMessage.textContent = state.sageMessage || "Backspace clears the queue. Wet and steam conduct lightning, cold freezes them, fire dries them, and frozen targets shatter under physical projectiles.";
+      sageMessage.textContent = state.sageMessage || "Use opposite elements to alter the queue. Wet and steam conduct lightning, cold freezes them, fire dries them, and frozen targets shatter under physical projectiles.";
       for (const button of sageElementButtons) {
         button.disabled = !isSage();
       }
@@ -1688,11 +1836,6 @@
       resetGame(getCurrentRealmDef().floor);
     }
 
-    function getAimAngle() {
-      const target = screenToWorld(mouse.x, mouse.y);
-      return Math.atan2(target.y - state.player.y, target.x - state.player.x);
-    }
-
     function findBlinkDestination(angle, range) {
       const player = state.player;
       let bestX = player.x;
@@ -1724,6 +1867,26 @@
       if (queue.includes("steam")) return "steam";
       if (queue.includes("water")) return "water";
       return "dark";
+    }
+
+    function isSageHasteQueue(queue) {
+      return queue.length === 3
+        && countElement(queue, "lightning") === 1
+        && countElement(queue, "arcane") === 1
+        && countElement(queue, "fire") === 1;
+    }
+
+    function castSageComboSpell(method, queue) {
+      if (method === "direct" && isSageHasteQueue(queue)) {
+        const player = state.player;
+        const wasHasted = player.hasteTimer > 0;
+        player.hasteTimer = 8;
+        player.dashCooldown = 0;
+        addEffect(player.x, player.y - 24, wasHasted ? "Haste Refreshed" : "Haste", ELEMENT_COLORS.lightning);
+        state.effects.push({ kind: "nova", x: player.x, y: player.y, range: 86, life: 0.18, maxLife: 0.18, color: "rgba(255, 232, 115, 0.22)" });
+        return true;
+      }
+      return false;
     }
 
     function getSagePrimaryElement(queue) {
@@ -2015,7 +2178,7 @@
         pushEnemiesFrom(player.x, player.y, 155, 42);
         addEffect(player.x, player.y - 28, "Staff Focus", ELEMENT_COLORS.wind);
       } else if (method === "rune") {
-        const target = screenToWorld(mouse.x, mouse.y);
+        const target = getSageTargetPoint(184, 8);
         addHazard({ x: target.x, y: target.y, radius: 88, damage: 0, element: "wind", color: ELEMENT_COLORS.wind, kind: "gust", life: 5, tickRate: 0.35, push: 34 });
         addEffect(target.x, target.y - 22, "Gust Rune", ELEMENT_COLORS.wind);
       } else {
@@ -2064,7 +2227,7 @@
         return;
       }
       if (method === "rune") {
-        const target = screenToWorld(mouse.x, mouse.y);
+        const target = getSageTargetPoint(172, 12);
         const mines = 2 + Math.min(3, countElement(queue, "shield") + Math.floor(queue.length * 0.4));
         for (let index = 0; index < mines; index += 1) {
           const spread = (index - (mines - 1) * 0.5) * 36;
@@ -2086,7 +2249,7 @@
         return;
       }
       const angle = getAimAngle();
-      const center = screenToWorld(mouse.x, mouse.y);
+      const center = getSageTargetPoint(136, 14);
       const wallCount = 5 + Math.min(4, countElement(queue, "shield"));
       for (let index = 0; index < wallCount; index += 1) {
         const offset = index - (wallCount - 1) * 0.5;
@@ -2129,7 +2292,7 @@
         state.effects.push({ kind: "nova", x: player.x, y: player.y, range: radius, life: 0.26, maxLife: 0.26, color: getSageEffectColor(queue, 0.24) });
         addEffect(player.x, player.y - 34, `${hits} quaked`, color);
       } else if (method === "rune") {
-        const target = screenToWorld(mouse.x, mouse.y);
+        const target = getSageTargetPoint(190, 10);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 70), damage: power * 0.9, element, color, kind: "rune", life: 7, tickRate: 0.65, push: addWaterPush(queue, queue.includes("earth") ? 34 : 18), sageQueue: queue });
       } else {
         const projectileCount = countAny(queue, ["earth", "ice"]);
@@ -2174,7 +2337,7 @@
         state.effects.push({ kind: "nova", x: player.x, y: player.y, range: getSageRadius(queue, 150), life: 0.22, maxLife: 0.22, color: getSageEffectColor(queue, 0.24) });
         addEffect(player.x, player.y - 34, `${hits} touched`, color);
       } else if (method === "rune") {
-        const target = screenToWorld(mouse.x, mouse.y);
+        const target = getSageTargetPoint(190, 10);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 92), damage: power * 0.55, element, color, kind: queue.includes("life") || queue.includes("light") ? "sanctum" : "rune", life: 6, tickRate: 0.38, push: addWaterPush(queue, 6), sageQueue: queue });
       } else {
         damageEnemiesInLine(player.x, player.y, angle, 520 + queue.length * 55, 20 + queue.length * 3, power, element, addWaterPush(queue, queue.includes("arcane") ? 20 : 0), sageSpell(queue));
@@ -2198,7 +2361,7 @@
         state.effects.push({ kind: "nova", x: player.x, y: player.y, range: getSageRadius(queue, 130), life: 0.2, maxLife: 0.2, color: getSageEffectColor(queue, 0.22) });
         addEffect(player.x, player.y - 34, pureWater ? `${hits} pushed` : `${hits} sprayed`, color);
       } else if (method === "rune") {
-        const target = screenToWorld(mouse.x, mouse.y);
+        const target = getSageTargetPoint(176, 10);
         addHazard({ x: target.x, y: target.y, radius: getSageRadius(queue, 82), damage: pureWater ? 0 : power * 0.42, element, color, kind: "field", life: 5.5, tickRate: 0.32, push, sageQueue: queue });
       } else if (isLightningSpellQueue(queue)) {
         const range = 360 + dominantCount * 42;
@@ -2219,7 +2382,10 @@
     }
 
     function shouldChannelSageSpell(method, queue) {
-      if (method !== "direct" || !queue.length || !mouse.down) {
+      if (method !== "direct" || !queue.length || !isSageDirectCastHeld(queue)) {
+        return false;
+      }
+      if (isSageHasteQueue(queue)) {
         return false;
       }
       const manifestation = getSageManifestation(queue);
@@ -2247,7 +2413,7 @@
 
     function updateSageChannel(dt) {
       const channel = state.sageChannel;
-      if (!channel || !mouse.down || !isSage()) {
+      if (!channel || !isSageDirectCastHeld(channel.queue) || !isSage()) {
         stopSageChannel();
         return;
       }
@@ -2299,22 +2465,21 @@
     }
 
     function updateSageMouseCasting(dt) {
-      const player = state.player;
       if (state.sageChannel) {
         updateSageChannel(dt);
         return;
       }
-      if (!mouse.down) {
+      const queue = [...state.sageQueue];
+      if (!isSageDirectCastHeld(queue)) {
         return;
       }
-      const queue = [...state.sageQueue];
-      const method = mouse.altDirect && hasAny(queue, ["earth", "ice"]) ? "fissure" : "direct";
+      const method = mouse.down && mouse.altDirect && hasAny(queue, ["earth", "ice"]) ? "fissure" : "direct";
       if (shouldChannelSageSpell(method, queue)) {
         startSageChannel(queue);
         updateSageChannel(dt);
         return;
       }
-      if (!mouse.pressed && queue.length) {
+      if (!isSageDirectCastPressed(queue)) {
         return;
       }
       castSageSpell(method);
@@ -2343,6 +2508,10 @@
       if (!queue.length) {
         castSageWind(method);
       } else {
+        if (castSageComboSpell(method, queue)) {
+          clearSageQueue("Haste spell cast.");
+          return true;
+        }
         const power = getSagePower(queue);
         const manifestation = getSageManifestation(queue);
         if (manifestation === "shield") {
@@ -2486,12 +2655,7 @@
     function dash() {
       const player = state.player;
       if (state.classKey === "sage") {
-        const wasHasted = player.hasteTimer > 0;
-        player.hasteTimer = 8;
-        player.dashCooldown = 0;
-        if (!wasHasted) {
-          addEffect(player.x, player.y - 24, "Haste", ELEMENT_COLORS.lightning);
-        }
+        state.sageMessage = "Haste is Lightning + Arcane + Fire, then Direct Cast.";
         return;
       }
       if (player.dashCooldown > 0) {
@@ -2529,16 +2693,81 @@
       addEffect(player.x, player.y - 26, backward ? "Disengage" : "Charge", backward ? "#63f0c4" : "#f7cc78");
     }
 
+    function isNormalAttackHeld() {
+      return mouse.down || (!isSage() && (gamepadButtonDown(GAMEPAD_BUTTON.A) || gamepadButtonDown(GAMEPAD_BUTTON.X)));
+    }
+
+    function isSageControllerDirectCastHeld(queue = state.sageQueue) {
+      return isSage()
+        && gamepadInput.connected
+        && gamepadInput.aimActive
+        && (queue.length > 0 || Boolean(state.sageChannel));
+    }
+
+    function isSageControllerDirectCastPressed(queue = state.sageQueue) {
+      return isSageControllerDirectCastHeld(queue) && !gamepadInput.prevAimActive && queue.length > 0;
+    }
+
+    function isSageDirectCastHeld(queue = state.sageQueue) {
+      return mouse.down || isSageControllerDirectCastHeld(queue);
+    }
+
+    function isSageDirectCastPressed(queue = state.sageQueue) {
+      return mouse.pressed || isSageControllerDirectCastPressed(queue);
+    }
+
+    function castSageQueuedComboSpell() {
+      const queue = [...state.sageQueue];
+      if (!queue.length) {
+        return false;
+      }
+      if (!castSageComboSpell("direct", queue)) {
+        state.sageMessage = "RT activates combo spells. Use the right stick for forward casts.";
+        return false;
+      }
+      clearSageQueue("Haste spell cast.");
+      return true;
+    }
+
+    function queueSageGamepadElement(buttonIndex, normalElement, modifiedElement) {
+      if (!gamepadButtonPressed(buttonIndex)) {
+        return;
+      }
+      queueSageElement(gamepadButtonDown(GAMEPAD_BUTTON.LB) ? modifiedElement : normalElement);
+    }
+
+    function handleGamepadActions() {
+      if (!gamepadInput.connected || state.screen !== "play") {
+        return;
+      }
+      if (isSage()) {
+        queueSageGamepadElement(GAMEPAD_BUTTON.A, "fire", "cold");
+        queueSageGamepadElement(GAMEPAD_BUTTON.X, "lightning", "water");
+        queueSageGamepadElement(GAMEPAD_BUTTON.B, "earth", "shield");
+        queueSageGamepadElement(GAMEPAD_BUTTON.Y, "arcane", "life");
+        if (gamepadButtonPressed(GAMEPAD_BUTTON.LT)) {
+          castSageSpell("area");
+        }
+        if (gamepadButtonPressed(GAMEPAD_BUTTON.RB)) {
+          castSageSpell("self");
+        }
+        if (gamepadButtonPressed(GAMEPAD_BUTTON.RT)) {
+          castSageQueuedComboSpell();
+        }
+        return;
+      }
+      if (gamepadButtonPressed(GAMEPAD_BUTTON.RT)) {
+        dash();
+      }
+      if (gamepadButtonPressed(GAMEPAD_BUTTON.RB)) {
+        castCleave();
+      }
+    }
+
     function updatePlayer(dt) {
       const player = state.player;
       const derived = getDerivedStats();
-      let mx = 0;
-      let my = 0;
-      if (keys.has("w") || keys.has("ArrowUp")) my -= 1;
-      if (keys.has("s") || keys.has("ArrowDown")) my += 1;
-      if (keys.has("a") || keys.has("ArrowLeft")) mx -= 1;
-      if (keys.has("d") || keys.has("ArrowRight")) mx += 1;
-      const length = Math.hypot(mx, my) || 1;
+      const move = getMoveVector();
       if (player.dashTimer > 0 && state.classKey !== "mage") {
         moveWithCollision(player, player.dashVx * dt, player.dashVy * dt);
         if (state.classKey === "warrior") {
@@ -2552,14 +2781,14 @@
             }
           }
         }
-      } else if (mx || my) {
+      } else if (move.active) {
         const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
         const hasteBoost = isSage() && player.hasteTimer > 0 ? 1.35 : 1;
-        moveWithCollision(player, (mx / length) * player.speed * bodyShieldSlow * hasteBoost * dt, (my / length) * player.speed * bodyShieldSlow * hasteBoost * dt);
+        moveWithCollision(player, move.x * player.speed * bodyShieldSlow * hasteBoost * dt, move.y * player.speed * bodyShieldSlow * hasteBoost * dt);
       }
       if (isSage()) {
         updateSageMouseCasting(dt);
-      } else if (mouse.down) {
+      } else if (isNormalAttackHeld()) {
         fireBolt();
       }
       player.attackTimer = Math.max(0, player.attackTimer - dt);
@@ -2590,15 +2819,9 @@
 
     function updateHub(dt) {
       const player = state.player;
-      let mx = 0;
-      let my = 0;
-      if (keys.has("w") || keys.has("ArrowUp")) my -= 1;
-      if (keys.has("s") || keys.has("ArrowDown")) my += 1;
-      if (keys.has("a") || keys.has("ArrowLeft")) mx -= 1;
-      if (keys.has("d") || keys.has("ArrowRight")) mx += 1;
-      const length = Math.hypot(mx, my) || 1;
-      if (mx || my) {
-        moveWithCollision(player, (mx / length) * player.speed * dt, (my / length) * player.speed * dt);
+      const move = getMoveVector();
+      if (move.active) {
+        moveWithCollision(player, move.x * player.speed * dt, move.y * player.speed * dt);
       }
 
       player.attackTimer = Math.max(0, player.attackTimer - dt);
@@ -2855,6 +3078,8 @@
     }
 
     function update(dt) {
+      pollGamepad();
+      handleGamepadActions();
       if (!state.running || state.screen !== "play") {
         if (state.running && state.screen === "hub") {
           state.elapsed += dt;
@@ -2862,7 +3087,7 @@
         }
         updateEffects(dt);
         updateHud();
-        mouse.pressed = false;
+        finishInputFrame();
         return;
       }
       state.elapsed += dt;
@@ -2870,7 +3095,7 @@
       if (state.screen !== "play") {
         updateEffects(dt);
         updateHud();
-        mouse.pressed = false;
+        finishInputFrame();
         return;
       }
       updateProjectiles(dt);
@@ -2880,7 +3105,7 @@
       updateHazards(dt);
       updateEffects(dt);
       updateHud();
-      mouse.pressed = false;
+      finishInputFrame();
     }
 
     function drawTiles() {
@@ -3470,8 +3695,7 @@
       ctx.globalAlpha = 1;
 
       const player = state.player;
-      const target = screenToWorld(mouse.x, mouse.y);
-      const angle = Math.atan2(target.y - player.y, target.x - player.x);
+      const angle = getAimAngle();
       drawPlayerSprite(player, angle);
       const playerPoint = worldToScreen(player.x, player.y);
       if (player.shell > 0 || Object.keys(player.wards).length) {
@@ -3563,6 +3787,7 @@
       const rect = canvas.getBoundingClientRect();
       mouse.x = event.clientX - rect.left;
       mouse.y = event.clientY - rect.top;
+      aimSource = "mouse";
     });
 
     canvas.addEventListener("mousedown", (event) => {
@@ -3601,11 +3826,6 @@
       const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
       if (isSage() && SAGE_ELEMENT_KEYS[key]) {
         queueSageElement(SAGE_ELEMENT_KEYS[key]);
-        event.preventDefault();
-        return;
-      }
-      if (isSage() && (key === "Backspace" || key === "Escape")) {
-        clearSageQueue();
         event.preventDefault();
         return;
       }
