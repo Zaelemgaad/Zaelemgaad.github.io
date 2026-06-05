@@ -228,7 +228,7 @@
         name: "Sage",
         summary: "Sages are fragile secret casters with no XP or levels; survival comes from spellcraft, not progression.",
         stats: { strength: 1, intelligence: 8, agility: 5 },
-        baseHp: 68,
+        baseHp: 90,
         baseSpeed: 204,
         attackElement: "arcane",
         skillElement: "arcane",
@@ -566,6 +566,10 @@
       sageQueue: [],
       sageChannel: null,
       sageMessage: "",
+      rainTimer: 0,
+      rainTickTimer: 0,
+      timeWarpTimer: 0,
+      meteorShowers: [],
       hubPortalCooldown: 0,
       realmsCleared: {},
       realmProgress: {},
@@ -661,6 +665,12 @@
       state.anchors = [];
       state.hazards = [];
       state.nearShop = true;
+      state.rainTimer = 0;
+      state.rainTickTimer = 0;
+      state.timeWarpTimer = 0;
+      state.meteorShowers = [];
+      state.player.invisible = false;
+      state.player.performanceTimer = 0;
       addEffect(state.player.x, state.player.y - 28, "Realm Hub", "#f7cc78");
       state.camera.x = clamp(state.player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(state.player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
@@ -1058,11 +1068,12 @@
         attackDamage = 8 + stats.intelligence * 1.8 + stats.agility * 0.45;
         techniqueDamage = 13 + stats.intelligence * 2.55 + stats.agility * 0.35;
       }
+      const performanceBoost = state.player?.performanceTimer > 0 ? 1.55 : 1;
       return {
         maxHp: Math.round(classDef.baseHp + stats.strength * 10 + levelBonus * 8),
         speed: Math.round(classDef.baseSpeed + stats.agility * 5.5 + levelBonus * 1.35),
-        weaponDamage: Math.round(attackDamage),
-        spellDamage: Math.round(techniqueDamage),
+        weaponDamage: Math.round(attackDamage * performanceBoost),
+        spellDamage: Math.round(techniqueDamage * performanceBoost),
         attackCooldown: Math.max(0.14, 0.4 - stats.agility * 0.014 - levelBonus * 0.002),
         defenseReduction: clamp(stats.strength * 0.018 + levelBonus * 0.0025, 0, 0.58),
         dropBonus: clamp(stats.intelligence * 0.025 + levelBonus * 0.002, 0, 0.75),
@@ -1106,6 +1117,8 @@
         skillTimer: 0,
         windTimer: 0,
         hasteTimer: 0,
+        performanceTimer: 0,
+        invisible: false,
         dashTimer: 0,
         dashCooldown: 0,
         dashVx: 0,
@@ -1157,6 +1170,32 @@
 
     function applyDamage(target, amount, element = "physical", options = {}) {
       const damageElement = normalizeDamageElement(element);
+      if (tryActivateElemental(target, element, options.spellQueue || null)) {
+        return 0;
+      }
+      const elementalHealing = getElementalHealing(target, damageElement, options.spellQueue || null);
+      if (elementalHealing > 0) {
+        const healing = Math.min(target.maxHp - target.hp, amount);
+        if (healing > 0) {
+          target.hp += healing;
+          target.hitTimer = 0.12;
+          addTargetEffect(target, "elemental-heal", "Attuned", target.color || ELEMENT_COLORS.arcane);
+        }
+        return -healing;
+      }
+      if (target.elementalElements?.includes(damageElement)) {
+        addTargetEffect(target, "immune", "Immune", target.color || "#c2b8d8");
+        return 0;
+      }
+      if (damageElement === "dark" && target.kind === "enemy" && target.faction === "ally" && target.family === "undead") {
+        const healing = Math.min(target.maxHp - target.hp, amount);
+        if (healing > 0) {
+          target.hp += healing;
+          target.hitTimer = 0.12;
+          addTargetEffect(target, "undead-heal", "Dark Mend", ELEMENT_COLORS.arcane);
+        }
+        return -healing;
+      }
       clearHeatSensitiveStatuses(target, element);
       if (damageElement === "life" && target.kind === "enemy" && target.family !== "undead") {
         const healing = Math.min(target.maxHp - target.hp, amount);
@@ -1185,32 +1224,81 @@
       return finalDamage;
     }
 
-    function spawnEnemy(x, y, type = "goblin") {
+    function isHostileUnit(unit) {
+      return unit.kind === "enemy" && unit.faction !== "ally" && !unit.inactiveElemental;
+    }
+
+    function isAlliedUnit(unit) {
+      return unit.kind === "enemy" && unit.faction === "ally" && !unit.inactiveElemental;
+    }
+
+    function getLivingUnits(options = {}) {
+      return state.enemies.filter((unit) => {
+        if (unit.hp <= 0) {
+          return false;
+        }
+        if (unit.inactiveElemental && !options.includeInactive) {
+          return false;
+        }
+        if (options.faction === "hostile") {
+          return isHostileUnit(unit);
+        }
+        if (options.faction === "ally") {
+          return isAlliedUnit(unit);
+        }
+        return true;
+      });
+    }
+
+    function findNearestUnit(x, y, options = {}) {
+      let best = null;
+      let bestDistance = Infinity;
+      for (const unit of getLivingUnits(options)) {
+        if (options.exclude === unit) {
+          continue;
+        }
+        const distance = distanceSquared(x, y, unit.x, unit.y);
+        if (distance < bestDistance) {
+          best = unit;
+          bestDistance = distance;
+        }
+      }
+      return best;
+    }
+
+    function spawnEnemy(x, y, type = "goblin", options = {}) {
       const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
       const floorScale = 1 + (state.floor - 1) * 0.11;
       const bossScale = def.boss ? 1 + Math.max(0, getFloorDef().stage - 1) * 0.18 : 1;
       const point = findOpenSpawnPoint(x, y, def.radius) || { x, y };
-      state.enemies.push({
+      const scale = options.useFloorScale === false ? 1 : floorScale;
+      const hp = options.maxHp || Math.round(def.hp * scale * bossScale);
+      const enemy = {
         kind: "enemy",
         type,
         name: def.name,
         family: def.family,
         isBoss: Boolean(def.boss),
+        faction: options.faction || "hostile",
+        minion: Boolean(options.minion),
         x: point.x,
         y: point.y,
         radius: def.radius,
-        hp: Math.round(def.hp * floorScale * bossScale),
-        maxHp: Math.round(def.hp * floorScale * bossScale),
-        speed: def.speed + (state.floor - 1) * (def.boss ? 1.5 : 3.2),
-        damage: Math.round(def.damage * (1 + (state.floor - 1) * (def.boss ? 0.06 : 0.075))),
+        hp,
+        maxHp: hp,
+        speed: options.speed || def.speed + (state.floor - 1) * (def.boss ? 1.5 : 3.2),
+        damage: options.damage || Math.round(def.damage * (1 + (state.floor - 1) * (def.boss ? 0.06 : 0.075))),
         damageElement: def.damageElement,
         hitTimer: 0,
-        xp: Math.round(def.xp * floorScale),
-        gold: Math.round(def.gold * floorScale),
-        color: def.color,
-        resists: { ...def.resists },
+        attackTimer: 0,
+        xp: options.minion ? 0 : Math.round(def.xp * scale),
+        gold: options.minion ? 0 : Math.round(def.gold * scale),
+        color: options.color || def.color,
+        resists: { ...def.resists, ...(options.resists || {}) },
         statuses: {}
-      });
+      };
+      state.enemies.push(enemy);
+      return enemy;
     }
 
     function spawnEnemyNear(x, y, type = "goblin") {
@@ -1271,7 +1359,13 @@
       state.sageQueue = [];
       state.sageChannel = null;
       state.sageMessage = "";
+      state.rainTimer = 0;
+      state.rainTickTimer = 0;
+      state.timeWarpTimer = 0;
+      state.meteorShowers = [];
       state.nearShop = true;
+      state.player.invisible = false;
+      state.player.performanceTimer = 0;
       for (const [col, row] of floorDef.anchors) {
         spawnAnchor(TILE * col, TILE * row);
       }
@@ -1306,6 +1400,10 @@
       state.sageQueue = [];
       state.sageChannel = null;
       state.sageMessage = "";
+      state.rainTimer = 0;
+      state.rainTickTimer = 0;
+      state.timeWarpTimer = 0;
+      state.meteorShowers = [];
       state.realmsCleared = {};
       state.realmProgress = {};
       state.hubPortalCooldown = 0;
@@ -1333,7 +1431,7 @@
     }
 
     function hasLivingBoss() {
-      return state.enemies.some((enemy) => enemy.isBoss && enemy.hp > 0);
+      return state.enemies.some((enemy) => enemy.isBoss && enemy.hp > 0 && isHostileUnit(enemy));
     }
 
     function isFloorObjectiveCleared() {
@@ -1501,6 +1599,9 @@
 
     function applySageHit(target, amount, element, spell = null) {
       const queue = spell?.queue || null;
+      if (tryActivateElemental(target, element, queue)) {
+        return 0;
+      }
       let finalAmount = amount;
       if (queue) {
         finalAmount *= applySageStatusReactions(target, queue);
@@ -1511,7 +1612,7 @@
         addTargetEffect(target, "shatter", "Shatter x4", ELEMENT_COLORS.earth, 0.5);
       }
       if (finalAmount > 0) {
-        return applyDamage(target, finalAmount, element, { skipFrozenShatter: true });
+        return applyDamage(target, finalAmount, element, { skipFrozenShatter: true, spellQueue: queue });
       }
       return 0;
     }
@@ -1836,16 +1937,25 @@
       resetGame(getCurrentRealmDef().floor);
     }
 
-    function findBlinkDestination(angle, range) {
+    function findBlinkDestination(angle, range, allowThinWalls = true) {
       const player = state.player;
       let bestX = player.x;
       let bestY = player.y;
+      let blockedDistance = 0;
       for (let step = 24; step <= range; step += 16) {
         const x = clamp(player.x + Math.cos(angle) * step, player.radius, WORLD_W - player.radius);
         const y = clamp(player.y + Math.sin(angle) * step, player.radius, WORLD_H - player.radius);
         if (circleBlocked(x, y, player.radius)) {
-          break;
+          if (!allowThinWalls) {
+            break;
+          }
+          blockedDistance += 16;
+          if (blockedDistance > TILE + 18) {
+            break;
+          }
+          continue;
         }
+        blockedDistance = 0;
         bestX = x;
         bestY = y;
       }
@@ -1869,24 +1979,67 @@
       return "dark";
     }
 
-    function isSageHasteQueue(queue) {
-      return queue.length === 3
-        && countElement(queue, "lightning") === 1
-        && countElement(queue, "arcane") === 1
-        && countElement(queue, "fire") === 1;
+    function getSageComboSpellKey(queue) {
+      if (queueMatches(queue, ["lightning", "arcane", "fire"])) return "haste";
+      if (queueMatches(queue, ["lightning", "lightning", "arcane"])) return "blink";
+      if (queueMatches(queue, ["arcane", "shield", "steam", "arcane"])) return "invisibility";
+      if (queueMatches(queue, ["water", "steam"])) return "rain";
+      if (queueMatches(queue, ["cold", "arcane", "shield"])) return "fear";
+      if (queueMatches(queue, ["life", "shield", "earth"])) return "charm";
+      if (queueMatches(queue, ["fire", "earth", "steam", "earth", "fire"])) return "meteorShower";
+      if (queueMatches(queue, ["cold", "shield"])) return "timeWarp";
+      if (queueMatches(queue, ["ice", "arcane", "ice", "shield", "ice"])) return "vortex";
+      if (queueMatches(queue, ["ice", "earth", "arcane", "cold"])) return "raiseDead";
+      if (queueMatches(queue, ["arcane", "shield", "earth", "steam", "arcane"])) return "summonElemental";
+      if (queueMatches(queue, ["arcane", "cold", "ice", "cold", "arcane"])) return "summonDeath";
+      if (queueMatches(queue, ["life", "light", "lightning", "light", "life"])) return "performance";
+      return null;
     }
 
     function castSageComboSpell(method, queue) {
-      if (method === "direct" && isSageHasteQueue(queue)) {
-        const player = state.player;
+      const key = getSageComboSpellKey(queue);
+      if (!key) {
+        return false;
+      }
+      const player = state.player;
+      if (key === "haste") {
         const wasHasted = player.hasteTimer > 0;
         player.hasteTimer = 8;
         player.dashCooldown = 0;
         addEffect(player.x, player.y - 24, wasHasted ? "Haste Refreshed" : "Haste", ELEMENT_COLORS.lightning);
         state.effects.push({ kind: "nova", x: player.x, y: player.y, range: 86, life: 0.18, maxLife: 0.18, color: "rgba(255, 232, 115, 0.22)" });
-        return true;
+      } else if (key === "blink") {
+        blinkPlayerThroughThinWall(360);
+      } else if (key === "invisibility") {
+        player.invisible = true;
+        addEffect(player.x, player.y - 24, "Invisible", ELEMENT_COLORS.arcane);
+      } else if (key === "rain") {
+        state.rainTimer = Math.max(state.rainTimer, 17.5);
+        state.rainTickTimer = 0;
+        addEffect(player.x, player.y - 26, "Rainfall", ELEMENT_COLORS.water);
+      } else if (key === "fear") {
+        fearHostiles(6.5);
+      } else if (key === "charm") {
+        charmNearestEnemy(35);
+      } else if (key === "meteorShower") {
+        startMeteorShower(17.5);
+      } else if (key === "timeWarp") {
+        state.timeWarpTimer = Math.max(state.timeWarpTimer, 15);
+        addEffect(player.x, player.y - 26, "Time Warp", ELEMENT_COLORS.cold);
+      } else if (key === "vortex") {
+        summonVortex(queue);
+      } else if (key === "raiseDead") {
+        raiseDeadMinions();
+      } else if (key === "summonElemental") {
+        summonInactiveElemental();
+      } else if (key === "summonDeath") {
+        summonDeath();
+      } else if (key === "performance") {
+        player.performanceTimer = Math.max(player.performanceTimer, 17.5);
+        addEffect(player.x, player.y - 26, "Performance", ELEMENT_COLORS.light);
       }
-      return false;
+      state.sageMessage = `${key.replace(/[A-Z]/g, (letter) => ` ${letter}`).replace(/^./, (letter) => letter.toUpperCase())} spell cast.`;
+      return true;
     }
 
     function getSagePrimaryElement(queue) {
@@ -1926,6 +2079,235 @@
 
     function countElement(queue, element) {
       return queue.filter((entry) => entry === element).length;
+    }
+
+    function queueCounts(queue) {
+      const counts = new Map();
+      for (const element of queue) {
+        counts.set(element, (counts.get(element) || 0) + 1);
+      }
+      return counts;
+    }
+
+    function queueMatches(queue, pattern) {
+      if (!queue || queue.length !== pattern.length) {
+        return false;
+      }
+      const a = queueCounts(queue);
+      const b = queueCounts(pattern);
+      if (a.size !== b.size) {
+        return false;
+      }
+      for (const [element, count] of b.entries()) {
+        if (a.get(element) !== count) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function normalizedQueueElements(queue) {
+      return queue.map((element) => normalizeDamageElement(element));
+    }
+
+    function getElementalActivationQueue(element, spellQueue = null) {
+      return spellQueue?.length ? [...spellQueue] : [element];
+    }
+
+    function getElementalHealing(target, damageElement, spellQueue = null) {
+      if (!target.elementalQueue?.length) {
+        return 0;
+      }
+      if (spellQueue?.length) {
+        return queueMatches(spellQueue, target.elementalQueue) ? 1 : 0;
+      }
+      return target.elementalQueue.length === 1 && normalizeDamageElement(target.elementalQueue[0]) === damageElement ? 1 : 0;
+    }
+
+    function tryActivateElemental(target, element, spellQueue = null) {
+      if (!target?.inactiveElemental || target.hp <= 0) {
+        return false;
+      }
+      const queue = getElementalActivationQueue(element, spellQueue);
+      const maxHp = 400 + queue.length * 100;
+      target.inactiveElemental = false;
+      target.faction = "ally";
+      target.minion = true;
+      target.elementalQueue = [...queue];
+      target.elementalElements = [...new Set(normalizedQueueElements(queue))];
+      target.maxHp = maxHp;
+      target.hp = maxHp;
+      target.damage = Math.round(30 + queue.length * 12);
+      target.speed = 118;
+      target.color = getSageColor(queue);
+      target.damageElement = getSageDamageElement(queue);
+      target.name = `${elementLabel(queue[0])} Elemental`;
+      addEffect(target.x, target.y - target.radius - 16, "Elemental Awakened", target.color);
+      return true;
+    }
+
+    function blinkPlayerThroughThinWall(range = 360) {
+      const player = state.player;
+      const fromX = player.x;
+      const fromY = player.y;
+      const destination = findBlinkDestination(getAimAngle(), range, true);
+      player.x = destination.x;
+      player.y = destination.y;
+      player.dashTimer = 0.08;
+      addEffect(fromX, fromY - 20, "Blink", ELEMENT_COLORS.arcane);
+      addEffect(player.x, player.y - 20, "Blink", ELEMENT_COLORS.arcane);
+    }
+
+    function getScreenBounds(padding = 40) {
+      const viewW = canvas.width / DPR;
+      const viewH = canvas.height / DPR;
+      return {
+        left: state.camera.x - padding,
+        right: state.camera.x + viewW + padding,
+        top: state.camera.y - padding,
+        bottom: state.camera.y + viewH + padding
+      };
+    }
+
+    function isInScreenBounds(unit, padding = 40) {
+      const bounds = getScreenBounds(padding);
+      return unit.x >= bounds.left && unit.x <= bounds.right && unit.y >= bounds.top && unit.y <= bounds.bottom;
+    }
+
+    function fearHostiles(duration) {
+      let count = 0;
+      for (const enemy of getLivingUnits({ faction: "hostile" })) {
+        if (!isInScreenBounds(enemy, 90)) {
+          continue;
+        }
+        enemy.fearTimer = Math.max(enemy.fearTimer || 0, duration);
+        addTargetEffect(enemy, "fear", "Fear", ELEMENT_COLORS.cold, 1);
+        count += 1;
+      }
+      addEffect(state.player.x, state.player.y - 30, `${count} feared`, ELEMENT_COLORS.cold);
+    }
+
+    function charmNearestEnemy(duration) {
+      const target = findNearestUnit(state.player.x, state.player.y, { faction: "hostile" });
+      if (!target) {
+        addEffect(state.player.x, state.player.y - 30, "No Target", "#c2b8d8");
+        return;
+      }
+      target.faction = "ally";
+      target.charmed = true;
+      target.minion = true;
+      target.charmTimer = duration;
+      target.baseColor ||= target.color;
+      target.color = "#9df7a4";
+      addTargetEffect(target, "charmed", "Charmed", ELEMENT_COLORS.life, 0.2);
+    }
+
+    function startMeteorShower(duration) {
+      state.meteorShowers.push({
+        life: duration,
+        nextMeteor: 0,
+        damage: getDerivedStats().spellDamage * 42
+      });
+      addEffect(state.player.x, state.player.y - 32, "Meteor Shower", ELEMENT_COLORS.fire);
+    }
+
+    function summonMeteorWarning(damage) {
+      const bounds = getScreenBounds(10);
+      for (let attempt = 0; attempt < 24; attempt += 1) {
+        const x = clamp(bounds.left + Math.random() * (bounds.right - bounds.left), 48, WORLD_W - 48);
+        const y = clamp(bounds.top + Math.random() * (bounds.bottom - bounds.top), 48, WORLD_H - 48);
+        if (!circleBlocked(x, y, 18)) {
+          addHazard({
+            x,
+            y,
+            radius: 76,
+            damage,
+            element: "fire",
+            color: ELEMENT_COLORS.fire,
+            kind: "meteorWarning",
+            life: 0.85,
+            tickRate: 1
+          });
+          return;
+        }
+      }
+    }
+
+    function summonVortex(queue) {
+      const point = getSageTargetPoint(188, 24);
+      addHazard({
+        x: point.x,
+        y: point.y,
+        radius: 104,
+        maxRadius: 260,
+        damage: getDerivedStats().spellDamage * 1.1,
+        element: "dark",
+        color: getSageColor(queue),
+        kind: "vortex",
+        life: 9999,
+        tickRate: 0.12,
+        pull: 270,
+        idleAtFull: 0
+      });
+      addEffect(point.x, point.y - 32, "Vortex", getSageColor(queue));
+    }
+
+    function raiseDeadMinions() {
+      const types = ["zombie", "skeleton", "ghoul", "wraithling"];
+      for (let index = 0; index < 5; index += 1) {
+        const angle = (index / 5) * TAU + Math.random() * 0.4;
+        const point = findOpenSpawnPoint(state.player.x + Math.cos(angle) * 76, state.player.y + Math.sin(angle) * 76, 18, 0, 42);
+        if (point) {
+          const minion = spawnEnemy(point.x, point.y, types[Math.floor(Math.random() * types.length)], { faction: "ally", minion: true, useFloorScale: false });
+          minion.color = "#9df7a4";
+        }
+      }
+      addEffect(state.player.x, state.player.y - 32, "Raise Dead", ELEMENT_COLORS.arcane);
+    }
+
+    function summonInactiveElemental() {
+      const point = getSageTargetPoint(118, 22);
+      const elemental = {
+        kind: "enemy",
+        type: "elemental",
+        name: "Dormant Elemental",
+        family: "elemental",
+        faction: "neutral",
+        inactiveElemental: true,
+        minion: true,
+        isBoss: false,
+        x: point.x,
+        y: point.y,
+        radius: 24,
+        hp: 400,
+        maxHp: 400,
+        speed: 0,
+        damage: 0,
+        damageElement: "arcane",
+        hitTimer: 0,
+        attackTimer: 0,
+        xp: 0,
+        gold: 0,
+        color: "#c2b8d8",
+        resists: {},
+        statuses: {}
+      };
+      state.enemies.push(elemental);
+      addEffect(point.x, point.y - 34, "Dormant Elemental", "#c2b8d8");
+    }
+
+    function summonDeath() {
+      const point = getSageTargetPoint(96, 18);
+      const candidates = getLivingUnits({ includeInactive: false })
+        .filter((unit) => unit.family !== "undead");
+      candidates.sort((a, b) => (a.hp / a.maxHp) - (b.hp / b.maxHp) || distanceSquared(point.x, point.y, a.x, a.y) - distanceSquared(point.x, point.y, b.x, b.y));
+      state.effects.push({ kind: "nova", x: point.x, y: point.y, range: 132, life: 0.3, maxLife: 0.3, color: "rgba(20, 10, 30, 0.72)" });
+      if (candidates[0]) {
+        candidates[0].hp = 0;
+        addEffect(candidates[0].x, candidates[0].y - candidates[0].radius - 18, "Death", "#f0ebff");
+      } else {
+        recoverPlayerAtGate("Death Claimed You");
+      }
     }
 
     function countAny(queue, elements) {
@@ -1968,8 +2350,24 @@
       return base + queue.length * 18 + countAny(queue, ["earth", "ice"]) * 22 + countElement(queue, "shield") * 18;
     }
 
-    function getDamageableTargets() {
-      return [...state.enemies, ...state.anchors];
+    function getDamageableTargets(options = {}) {
+      const normalizedElement = options.element ? normalizeDamageElement(options.element) : null;
+      const units = state.enemies.filter((unit) => {
+        if (unit.hp <= 0) {
+          return false;
+        }
+        if (options.allUnits) {
+          return !unit.inactiveElemental || options.includeInactive;
+        }
+        if (isAlliedUnit(unit)) {
+          if (unit.elementalQueue?.length && getElementalHealing(unit, normalizedElement, options.spell?.queue || null)) {
+            return true;
+          }
+          return Boolean(options.spell?.queue && unit.family === "undead" && (normalizedElement === "dark" || normalizedElement === "life"));
+        }
+        return isHostileUnit(unit) || unit.inactiveElemental;
+      });
+      return options.includeAnchors === false ? units : [...units, ...state.anchors];
     }
 
     function canBePushed(target) {
@@ -1977,7 +2375,7 @@
     }
 
     function pushEnemiesFrom(x, y, radius, force) {
-      for (const enemy of state.enemies) {
+      for (const enemy of getLivingUnits({ faction: "hostile" })) {
         const dx = enemy.x - x;
         const dy = enemy.y - y;
         const distance = Math.hypot(dx, dy) || 1;
@@ -1990,7 +2388,7 @@
 
     function damageEnemiesInCircle(x, y, radius, damage, element, push = 0, spell = null) {
       let hits = 0;
-      for (const target of getDamageableTargets()) {
+      for (const target of getDamageableTargets({ element, spell })) {
         const dx = target.x - x;
         const dy = target.y - y;
         const distance = Math.hypot(dx, dy) || 1;
@@ -2017,7 +2415,7 @@
       let hits = 0;
       const ax = Math.cos(angle);
       const ay = Math.sin(angle);
-      for (const target of getDamageableTargets()) {
+      for (const target of getDamageableTargets({ element, spell })) {
         const dx = target.x - x;
         const dy = target.y - y;
         const along = dx * ax + dy * ay;
@@ -2046,7 +2444,7 @@
 
     function damageEnemiesInCone(x, y, angle, range, width, damage, element, push = 0, spell = null) {
       let hits = 0;
-      for (const target of getDamageableTargets()) {
+      for (const target of getDamageableTargets({ element, spell })) {
         const dx = target.x - x;
         const dy = target.y - y;
         const distance = Math.hypot(dx, dy) || 1;
@@ -2076,7 +2474,7 @@
 
     function damageEnemiesInLightningArc(x, y, angle, range, width, damage, maxTargets, push = 0, spell = null) {
       const candidates = [];
-      for (const enemy of getDamageableTargets()) {
+      for (const enemy of getDamageableTargets({ element: "lightning", spell })) {
         const dx = enemy.x - x;
         const dy = enemy.y - y;
         const distance = Math.hypot(dx, dy) || 1;
@@ -2100,7 +2498,7 @@
         const last = targets[targets.length - 1];
         let next = null;
         let bestDistance = Infinity;
-        for (const enemy of getDamageableTargets()) {
+        for (const enemy of getDamageableTargets({ element: "lightning", spell })) {
           if (selected.has(enemy)) {
             continue;
           }
@@ -2385,7 +2783,7 @@
       if (method !== "direct" || !queue.length || !isSageDirectCastHeld(queue)) {
         return false;
       }
-      if (isSageHasteQueue(queue)) {
+      if (getSageComboSpellKey(queue)) {
         return false;
       }
       const manifestation = getSageManifestation(queue);
@@ -2495,6 +2893,10 @@
       }
       const player = state.player;
       const queue = [...state.sageQueue];
+      const comboKey = getSageComboSpellKey(queue);
+      if (player.invisible && comboKey !== "invisibility") {
+        breakInvisibility("Revealed");
+      }
       if (shouldChannelSageSpell(method, queue)) {
         startSageChannel(queue);
         return true;
@@ -2509,7 +2911,7 @@
         castSageWind(method);
       } else {
         if (castSageComboSpell(method, queue)) {
-          clearSageQueue("Haste spell cast.");
+          clearSageQueue(state.sageMessage);
           return true;
         }
         const power = getSagePower(queue);
@@ -2616,7 +3018,7 @@
       const skillDamage = state.classKey === "warrior" ? derived.weaponDamage * 2.55 : derived.spellDamage * 2.05;
       let hitCount = 0;
 
-      for (const enemy of state.enemies) {
+      for (const enemy of getLivingUnits({ faction: "hostile" })) {
         const dx = enemy.x - player.x;
         const dy = enemy.y - player.y;
         const distance = Math.hypot(dx, dy);
@@ -2725,7 +3127,7 @@
         state.sageMessage = "RT activates combo spells. Use the right stick for forward casts.";
         return false;
       }
-      clearSageQueue("Haste spell cast.");
+      clearSageQueue(state.sageMessage);
       return true;
     }
 
@@ -2771,7 +3173,7 @@
       if (player.dashTimer > 0 && state.classKey !== "mage") {
         moveWithCollision(player, player.dashVx * dt, player.dashVy * dt);
         if (state.classKey === "warrior") {
-          for (const enemy of state.enemies) {
+          for (const enemy of getLivingUnits({ faction: "hostile" })) {
             if (player.dashHits.has(enemy)) {
               continue;
             }
@@ -2783,8 +3185,9 @@
         }
       } else if (move.active) {
         const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
-        const hasteBoost = isSage() && player.hasteTimer > 0 ? 1.35 : 1;
-        moveWithCollision(player, move.x * player.speed * bodyShieldSlow * hasteBoost * dt, move.y * player.speed * bodyShieldSlow * hasteBoost * dt);
+        const hasteBoost = isSage() && player.hasteTimer > 0 ? 1.5 : 1;
+        const performanceBoost = player.performanceTimer > 0 ? 1.77 : 1;
+        moveWithCollision(player, move.x * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * dt, move.y * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * dt);
       }
       if (isSage()) {
         updateSageMouseCasting(dt);
@@ -2795,6 +3198,7 @@
       player.skillTimer = Math.max(0, player.skillTimer - dt);
       player.windTimer = Math.max(0, player.windTimer - dt);
       player.hasteTimer = Math.max(0, player.hasteTimer - dt);
+      player.performanceTimer = Math.max(0, player.performanceTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
       if (player.dashTimer <= 0) {
@@ -2828,6 +3232,7 @@
       player.skillTimer = Math.max(0, player.skillTimer - dt);
       player.windTimer = Math.max(0, player.windTimer - dt);
       player.hasteTimer = Math.max(0, player.hasteTimer - dt);
+      player.performanceTimer = Math.max(0, player.performanceTimer - dt);
       player.dashTimer = 0;
       player.dashCooldown = 0;
       state.hubPortalCooldown = Math.max(0, state.hubPortalCooldown - dt);
@@ -2860,7 +3265,7 @@
         }
 
         let hit = false;
-        for (const enemy of state.enemies) {
+        for (const enemy of getDamageableTargets({ includeAnchors: false, includeInactive: true, element: projectile.element, spell: projectile.sageQueue ? sageSpell(projectile.sageQueue) : null })) {
           if (projectile.hitTargets?.has(enemy)) {
             continue;
           }
@@ -2905,7 +3310,7 @@
         }
         const floorDef = getFloorDef();
         anchor.spawnTimer -= dt;
-        if (anchor.spawnTimer <= 0 && state.enemies.length < floorDef.enemyCap) {
+        if (anchor.spawnTimer <= 0 && getLivingUnits({ faction: "hostile" }).length < floorDef.enemyCap) {
           anchor.spawnTimer = floorDef.spawnEvery;
           const type = floorDef.anchorTypes[Math.floor(Math.random() * floorDef.anchorTypes.length)];
           spawnEnemyNear(anchor.x, anchor.y, type);
@@ -2927,54 +3332,156 @@
     }
 
     function defeatEnemy(index, enemy) {
-      state.quests.kills += 1;
-      gainXp(enemy.xp);
-      dropLoot(enemy.x, enemy.y, enemy);
+      if (!enemy.minion) {
+        state.quests.kills += 1;
+        gainXp(enemy.xp);
+        dropLoot(enemy.x, enemy.y, enemy);
+      }
       state.enemies.splice(index, 1);
+    }
+
+    function breakInvisibility(message = "Revealed") {
+      const player = state.player;
+      if (!player?.invisible) {
+        return;
+      }
+      player.invisible = false;
+      addEffect(player.x, player.y - 28, message, ELEMENT_COLORS.arcane);
+    }
+
+    function recoverPlayerAtGate(message = "Recovered at Rift Gate") {
+      const player = state.player;
+      player.hp = player.maxHp;
+      player.x = TILE * 4.5;
+      player.y = TILE * 4.5;
+      state.gold = Math.max(0, state.gold - 15);
+      player.invisible = false;
+      addEffect(player.x, player.y - 28, message, "#ff668a");
+    }
+
+    function damagePlayer(amount, element = "physical") {
+      const player = state.player;
+      if (amount <= 0) {
+        return 0;
+      }
+      breakInvisibility("Revealed");
+      let incoming = amount;
+      if (player.performanceTimer > 0) {
+        incoming *= 0.45;
+      }
+      if (player.wards[element]) {
+        incoming *= 0.45;
+      }
+      if (player.bodyShield > 0 && element === "physical") {
+        incoming *= 0.55;
+      }
+      if (player.shell > 0 && element === "physical") {
+        const absorbed = Math.min(player.shell, incoming);
+        player.shell -= absorbed;
+        incoming -= absorbed;
+      }
+      player.hp -= incoming;
+      if (player.hp <= 0) {
+        recoverPlayerAtGate();
+      }
+      return incoming;
     }
 
     function updateEnemies(dt) {
       const player = state.player;
       for (let index = state.enemies.length - 1; index >= 0; index -= 1) {
         const enemy = state.enemies[index];
+        if (enemy.charmTimer > 0) {
+          enemy.charmTimer = Math.max(0, enemy.charmTimer - dt);
+          if (enemy.charmTimer <= 0 && enemy.charmed) {
+            enemy.charmed = false;
+            enemy.faction = "hostile";
+            enemy.minion = false;
+            enemy.color = enemy.baseColor || enemy.color;
+            addTargetEffect(enemy, "charm-end", "Charm Ended", "#ff668a", 0.2);
+          }
+        }
+        if (enemy.fearTimer > 0) {
+          enemy.fearTimer = Math.max(0, enemy.fearTimer - dt);
+        }
         const statusSpeed = updateTargetStatuses(enemy, dt);
         if (enemy.hp <= 0) {
           defeatEnemy(index, enemy);
           continue;
         }
-        const dx = player.x - enemy.x;
-        const dy = player.y - enemy.y;
-        const distance = Math.hypot(dx, dy) || 1;
-        const aggro = distance < 620;
+        if (enemy.inactiveElemental) {
+          enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
+          continue;
+        }
+
+        if (isAlliedUnit(enemy)) {
+          const target = findNearestUnit(enemy.x, enemy.y, { faction: "hostile" });
+          if (target) {
+            const dx = target.x - enemy.x;
+            const dy = target.y - enemy.y;
+            const distance = Math.hypot(dx, dy) || 1;
+            if (distance > enemy.radius + target.radius + 3) {
+              moveWithCollision(enemy, (dx / distance) * enemy.speed * statusSpeed * dt, (dy / distance) * enemy.speed * statusSpeed * dt);
+            } else {
+              applyDamage(target, enemy.damage * dt, enemy.damageElement || "physical");
+            }
+          }
+          enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
+          if (enemy.hp <= 0) {
+            defeatEnemy(index, enemy);
+          }
+          continue;
+        }
+
+        const playerDx = player.x - enemy.x;
+        const playerDy = player.y - enemy.y;
+        const playerDistance = Math.hypot(playerDx, playerDy) || 1;
+        if (enemy.fearTimer > 0) {
+          if (playerDistance < 760) {
+            moveWithCollision(enemy, (-playerDx / playerDistance) * enemy.speed * statusSpeed * 1.18 * dt, (-playerDy / playerDistance) * enemy.speed * statusSpeed * 1.18 * dt);
+          }
+          enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
+          continue;
+        }
+
+        const allyTarget = findNearestUnit(enemy.x, enemy.y, { faction: "ally" });
+        let target = null;
+        let targetDistance = Infinity;
+        if (allyTarget) {
+          target = allyTarget;
+          targetDistance = Math.hypot(allyTarget.x - enemy.x, allyTarget.y - enemy.y);
+        }
+        if (!player.invisible && playerDistance < targetDistance) {
+          target = player;
+          targetDistance = playerDistance;
+        }
+        const aggro = target && targetDistance < 620;
         if (aggro) {
-          moveWithCollision(enemy, (dx / distance) * enemy.speed * statusSpeed * dt, (dy / distance) * enemy.speed * statusSpeed * dt);
+          const dx = target.x - enemy.x;
+          const dy = target.y - enemy.y;
+          const distance = Math.hypot(dx, dy) || 1;
+          if (distance > enemy.radius + target.radius + 3) {
+            moveWithCollision(enemy, (dx / distance) * enemy.speed * statusSpeed * dt, (dy / distance) * enemy.speed * statusSpeed * dt);
+          }
         }
         enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
 
-        if (distance < player.radius + enemy.radius + 3) {
-          const classDef = getClassDef();
-          const derived = getDerivedStats();
-          const guarded = classDef.guardElement === enemy.damageElement;
-          let incoming = enemy.damage * (1 - derived.defenseReduction) * (guarded ? 1 - classDef.guard : 1) * dt;
-          if (player.wards[enemy.damageElement]) {
-            incoming *= 0.45;
+        const afterPlayerDx = player.x - enemy.x;
+        const afterPlayerDy = player.y - enemy.y;
+        const afterPlayerDistance = Math.hypot(afterPlayerDx, afterPlayerDy) || 1;
+        if (afterPlayerDistance < player.radius + enemy.radius + 3) {
+          if (player.invisible) {
+            breakInvisibility("Revealed");
+          } else {
+            const classDef = getClassDef();
+            const derived = getDerivedStats();
+            const guarded = classDef.guardElement === enemy.damageElement;
+            damagePlayer(enemy.damage * (1 - derived.defenseReduction) * (guarded ? 1 - classDef.guard : 1) * dt, enemy.damageElement);
           }
-          if (player.bodyShield > 0 && enemy.damageElement === "physical") {
-            incoming *= 0.55;
-          }
-          if (player.shell > 0 && enemy.damageElement === "physical") {
-            const absorbed = Math.min(player.shell, incoming);
-            player.shell -= absorbed;
-            incoming -= absorbed;
-          }
-          player.hp -= incoming;
-          if (player.hp <= 0) {
-            player.hp = player.maxHp;
-            player.x = TILE * 4.5;
-            player.y = TILE * 4.5;
-            state.gold = Math.max(0, state.gold - 15);
-            addEffect(player.x, player.y - 28, "Recovered at Rift Gate", "#ff668a");
-          }
+        }
+
+        if (allyTarget && distanceSquared(enemy.x, enemy.y, allyTarget.x, allyTarget.y) < (enemy.radius + allyTarget.radius + 3) ** 2) {
+          applyDamage(allyTarget, enemy.damage * dt, enemy.damageElement || "physical");
         }
 
         if (enemy.hp <= 0) {
@@ -3035,10 +3542,114 @@
       }
     }
 
+    function getWorldTimeScale() {
+      return state.timeWarpTimer > 0 ? 0.5 : 1;
+    }
+
+    function damageUnitsInCircle(x, y, radius, damage, element, options = {}) {
+      let hits = 0;
+      if (options.includePlayer && state.player) {
+        const player = state.player;
+        const dx = player.x - x;
+        const dy = player.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance <= radius + player.radius) {
+          damagePlayer(damage, element);
+          if (options.pull) {
+            moveWithCollision(player, (-dx / distance) * options.pull, (-dy / distance) * options.pull);
+          }
+          hits += 1;
+        }
+      }
+      for (const unit of getLivingUnits({ includeInactive: options.includeInactive })) {
+        const dx = unit.x - x;
+        const dy = unit.y - y;
+        const distance = Math.hypot(dx, dy) || 1;
+        if (distance > radius + unit.radius) {
+          continue;
+        }
+        applyDamage(unit, damage, element);
+        if (options.pull && canBePushed(unit)) {
+          moveWithCollision(unit, (-dx / distance) * options.pull, (-dy / distance) * options.pull);
+        }
+        hits += 1;
+      }
+      return hits;
+    }
+
+    function updateRain(dt) {
+      if (state.rainTimer <= 0) {
+        return;
+      }
+      state.rainTimer = Math.max(0, state.rainTimer - dt);
+      state.rainTickTimer -= dt;
+      if (state.rainTickTimer > 0) {
+        return;
+      }
+      state.rainTickTimer = 0.45;
+      for (const unit of getLivingUnits({ includeInactive: true })) {
+        if (isInScreenBounds(unit, 64)) {
+          applyStatus(unit, "wet", 17.5, 2);
+        }
+      }
+      if (state.player && isInScreenBounds(state.player, 64)) {
+        state.effects.push({ kind: "nova", x: state.camera.x + canvas.width / DPR * 0.5, y: state.camera.y + canvas.height / DPR * 0.5, range: Math.max(canvas.width / DPR, canvas.height / DPR) * 0.65, life: 0.18, maxLife: 0.18, color: "rgba(75, 217, 255, 0.18)" });
+      }
+    }
+
+    function updateMeteorShowers(dt) {
+      for (let index = state.meteorShowers.length - 1; index >= 0; index -= 1) {
+        const shower = state.meteorShowers[index];
+        shower.life -= dt;
+        shower.nextMeteor -= dt;
+        if (shower.nextMeteor <= 0 && shower.life > 0) {
+          shower.nextMeteor = 0.5 + Math.random();
+          summonMeteorWarning(shower.damage);
+        }
+        if (shower.life <= 0) {
+          state.meteorShowers.splice(index, 1);
+        }
+      }
+    }
+
+    function updateSageWorldSpells(dt) {
+      state.timeWarpTimer = Math.max(0, state.timeWarpTimer - dt);
+      updateRain(dt);
+      updateMeteorShowers(dt);
+    }
+
     function updateHazards(dt) {
       for (let index = state.hazards.length - 1; index >= 0; index -= 1) {
         const hazard = state.hazards[index];
         hazard.life -= dt;
+        if (hazard.kind === "meteorWarning") {
+          if (hazard.life <= 0) {
+            damageUnitsInCircle(hazard.x, hazard.y, hazard.radius, hazard.damage, hazard.element, { includePlayer: true, includeInactive: true });
+            state.effects.push({ kind: "meteor", x: hazard.x, y: hazard.y, range: hazard.radius, life: 0.34, maxLife: 0.34, color: "rgba(255, 139, 74, 0.48)" });
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
+        if (hazard.kind === "vortex") {
+          const affected = damageUnitsInCircle(hazard.x, hazard.y, hazard.radius, hazard.damage * dt, hazard.element, { includePlayer: true, pull: (hazard.pull || 220) * dt });
+          const wasFullSize = hazard.radius >= (hazard.maxRadius || 260) - 2;
+          if (affected > 0) {
+            hazard.radius = Math.min(hazard.maxRadius || 260, hazard.radius + affected * 7);
+            if (hazard.radius >= (hazard.maxRadius || 260) - 2) {
+              hazard.reachedFull = true;
+            }
+            hazard.idleAtFull = 0;
+          } else {
+            if (wasFullSize || hazard.reachedFull) {
+              hazard.idleAtFull = (hazard.idleAtFull || 0) + dt;
+            }
+            hazard.radius = Math.max(42, hazard.radius - 12 * dt);
+          }
+          if (hazard.radius <= 44 || (hazard.idleAtFull || 0) >= 10) {
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
         if (hazard.kind === "mine") {
           const triggered = getDamageableTargets().some((target) => distanceSquared(hazard.x, hazard.y, target.x, target.y) <= (hazard.radius + target.radius) ** 2);
           if (triggered || hazard.life <= 0) {
@@ -3091,19 +3702,21 @@
         return;
       }
       state.elapsed += dt;
-      updatePlayer(dt);
+      updateSageWorldSpells(dt);
+      const worldDt = dt * getWorldTimeScale();
+      updatePlayer(worldDt);
       if (state.screen !== "play") {
-        updateEffects(dt);
+        updateEffects(worldDt);
         updateHud();
         finishInputFrame();
         return;
       }
-      updateProjectiles(dt);
-      updateAnchors(dt);
-      updateEnemies(dt);
-      updatePickups(dt);
-      updateHazards(dt);
-      updateEffects(dt);
+      updateProjectiles(worldDt);
+      updateAnchors(worldDt);
+      updateEnemies(worldDt);
+      updatePickups(worldDt);
+      updateHazards(worldDt);
+      updateEffects(worldDt);
       updateHud();
       finishInputFrame();
     }
@@ -3260,6 +3873,9 @@
       ctx.save();
       ctx.translate(point.x, point.y);
       ctx.rotate(angle);
+      if (player.invisible) {
+        ctx.globalAlpha = 0.42;
+      }
       if (state.classKey === "warrior") {
         ctx.fillStyle = player.dashTimer > 0 ? "#f7cc78" : "#4f6f92";
         ctx.beginPath();
@@ -3428,7 +4044,12 @@
       } else {
         ctx.fillStyle = flash ? "#f0ebff" : enemy.color || "#8e5cff";
         ctx.beginPath();
-        if (enemy.isBoss) {
+        if (enemy.type === "elemental") {
+          ctx.moveTo(0, -enemy.radius - 8);
+          ctx.lineTo(enemy.radius + 8, 0);
+          ctx.lineTo(0, enemy.radius + 8);
+          ctx.lineTo(-enemy.radius - 8, 0);
+        } else if (enemy.isBoss) {
           ctx.arc(0, 0, enemy.radius, 0, TAU);
         } else {
           ctx.moveTo(0, -enemy.radius - 8);
@@ -3452,6 +4073,13 @@
           ctx.fill();
         }
       }
+      if (enemy.faction === "ally" || enemy.inactiveElemental) {
+        ctx.strokeStyle = enemy.inactiveElemental ? "#c2b8d8" : "#9df7a4";
+        ctx.lineWidth = enemy.inactiveElemental ? 2 : 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius + 7, 0, TAU);
+        ctx.stroke();
+      }
       ctx.globalAlpha = 1;
       ctx.restore();
     }
@@ -3460,6 +4088,39 @@
       const point = worldToScreen(hazard.x, hazard.y);
       const alpha = clamp(hazard.life / hazard.maxLife, 0, 1);
       ctx.save();
+      if (hazard.kind === "meteorWarning") {
+        ctx.globalAlpha = 0.36 + (1 - alpha) * 0.32;
+        ctx.strokeStyle = hazard.color;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, hazard.radius * (0.82 + (1 - alpha) * 0.18), 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 0.16;
+        ctx.fillStyle = hazard.color;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, hazard.radius, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+        return;
+      }
+      if (hazard.kind === "vortex") {
+        const spin = performance.now() * 0.004;
+        ctx.globalAlpha = 0.34;
+        ctx.fillStyle = hazard.color;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, hazard.radius, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 0.78;
+        ctx.strokeStyle = hazard.color;
+        ctx.lineWidth = 4;
+        for (let arm = 0; arm < 4; arm += 1) {
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, hazard.radius * (0.28 + arm * 0.17), spin + arm, spin + arm + Math.PI * 1.35);
+          ctx.stroke();
+        }
+        ctx.restore();
+        return;
+      }
       ctx.globalAlpha = 0.28 + alpha * 0.2;
       ctx.fillStyle = hazard.color;
       ctx.beginPath();
@@ -3642,6 +4303,18 @@
           ctx.beginPath();
           ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.25), 0, TAU);
           ctx.stroke();
+        } else if (effect.kind === "meteor") {
+          ctx.globalAlpha = alpha * 0.68;
+          ctx.fillStyle = effect.color;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.28), 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = "#ffd36c";
+          ctx.lineWidth = 10 * alpha;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, effect.range * 0.58, 0, TAU);
+          ctx.stroke();
         } else if (effect.kind === "beam") {
           ctx.globalAlpha = alpha;
           ctx.strokeStyle = effect.color;
@@ -3716,6 +4389,24 @@
         ctx.stroke();
         ctx.globalAlpha = 1;
       }
+      if (player.performanceTimer > 0) {
+        ctx.globalAlpha = 0.32;
+        ctx.strokeStyle = ELEMENT_COLORS.light;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, player.radius + 22 + Math.sin(performance.now() * 0.008) * 4, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+      if (player.invisible) {
+        ctx.globalAlpha = 0.2;
+        ctx.strokeStyle = ELEMENT_COLORS.arcane;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(playerPoint.x, playerPoint.y, player.radius + 18, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
     }
 
     function updateHud() {
@@ -3733,7 +4424,7 @@
       coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
       damageStat.textContent = String(derived.weaponDamage);
       spellStat.textContent = String(derived.spellDamage);
-      speedStat.textContent = String(Math.round(derived.speed * (isSage() && player.hasteTimer > 0 ? 1.35 : 1)));
+      speedStat.textContent = String(Math.round(derived.speed * (isSage() && player.hasteTimer > 0 ? 1.5 : 1) * (player.performanceTimer > 0 ? 1.77 : 1)));
       resistStat.textContent = `${Math.round(derived.defenseReduction * 100)}% + ${Math.round(classDef.guard * 100)}% ${classDef.guardElement}`;
       dropStat.textContent = `+${Math.round(derived.dropBonus * 100)}%`;
       statPointText.textContent = player.statPoints
