@@ -17,41 +17,70 @@ const MAP_ROWS = 42;
 const CELL = 18;
 const STORAGE_KEY = "riftwardenHubEditorDraft";
 
-const wallRects = [
-  [4, 4, 48, 1], [4, 37, 48, 1], [4, 4, 1, 34], [51, 4, 1, 34],
-  [24, 10, 9, 1], [24, 24, 9, 1], [24, 10, 1, 5], [32, 10, 1, 5],
-  [24, 20, 1, 5], [32, 20, 1, 5], [20, 18, 4, 1], [33, 18, 4, 1],
-  [7, 11, 12, 1], [7, 21, 12, 1], [7, 31, 12, 1],
-  [38, 11, 10, 1], [39, 20, 11, 1], [39, 32, 10, 1],
-  [20, 4, 1, 6], [38, 4, 1, 6], [20, 32, 1, 6], [38, 32, 1, 6],
-  [15, 14, 2, 6], [41, 14, 2, 6], [15, 25, 2, 6], [41, 25, 2, 6]
-];
-
-const doorTiles = [
-  [28, 10], [28, 24], [24, 18], [32, 18], [20, 7], [38, 7],
-  [20, 34], [38, 34], [11, 11], [11, 21], [11, 31],
-  [45, 11], [45, 20], [45, 32], [15, 17], [41, 17], [15, 28], [41, 28]
+const defaultWallRows = [
+  "########################################################",
+  "#......................................................#",
+  "#..............######..................................#",
+  "#.............##....##.............######..............#",
+  "#............##......###.........##.....##.............#",
+  "#............#.........#.........#.......#.............#",
+  "#............#.........#........#........#.............#",
+  "#............#.........#........#........##............#",
+  "#............#.........#........##.......##............#",
+  "#............##........#.........#.....###.............#",
+  "#........#....#........###########..####....#######....#",
+  "#........###..#####.....#########...#......##.....##...#",
+  "#...#####..###....##....########...##.....##.......#...#",
+  "#.##..###....###...##.............##......#........##..#",
+  "###.....#......##..###............#.......#.........#..#",
+  "##......##########...##...........#....####.........#..#",
+  "##...............##..#............#...##............#..#",
+  "##................#..#............#..##.............#..#",
+  "##......###.......##.#............#.##....###......##..#",
+  "###....##.#........###............###.....####....##...#",
+  "#.##...#..#.........##............##......#####.###....#",
+  "#..#####..#...............................#######.###..#",
+  "#.#########...............................####......##.#",
+  "###...#...#...............................####.......#.#",
+  "##....##..#...............................####.......#.#",
+  "##.....####..........#............#..................#.#",
+  "##...................#............#..................#.#",
+  "##...................#............#.......####.......#.#",
+  "##......###..........#............#.......####......##.#",
+  "###.....###..........#............#.......####.....##..#",
+  "###########..........#............#.......####....##...#",
+  "###########.....#....#............#.......###########..#",
+  "####..#####..........#............#.......######....####",
+  "###....####..........#............#.......####........##",
+  "##......###..........#............#...................##",
+  "##...................##############...................##",
+  "##........................................###.........##",
+  "##......###.................................#.........##",
+  "###....##.#.................................###......###",
+  "#.##..##..#...................................###..###.#",
+  "#..#################################################...#",
+  "########################################################"
 ];
 
 const defaultPortals = [
-  ["graveyard-1", "Graveyard 1", 8, 9, "#d9d3c2"], ["graveyard-2", "Graveyard 2", 11, 8, "#d9d3c2"], ["graveyard-3", "Graveyard 3", 14, 8, "#d9d3c2"], ["graveyard-4", "Graveyard 4", 17, 9, "#d9d3c2"], ["graveyard-5", "Graveyard Boss", 20, 10, "#d9d3c2", true],
-  ["mountains-1", "Mountain 1", 23, 6, "#a68d66"], ["mountains-2", "Mountain 2", 26, 6, "#a68d66"], ["mountains-3", "Mountain 3", 29, 6, "#a68d66"], ["mountains-4", "Mountain 4", 32, 6, "#a68d66"], ["mountains-5", "Mountain Boss", 35, 7, "#a68d66", true],
-  ["castle-1", "Castle 1", 42, 8, "#9c80ff"], ["castle-2", "Castle 2", 46, 9, "#9c80ff"], ["castle-3", "Castle 3", 49, 12, "#9c80ff"], ["castle-4", "Castle 4", 49, 16, "#9c80ff"], ["castle-5", "Castle Boss", 45, 18, "#9c80ff", true],
-  ["skyships-1", "Skyship 1", 49, 22, "#77a8ff"], ["skyships-2", "Skyship 2", 51, 25, "#77a8ff"], ["skyships-3", "Skyship 3", 49, 28, "#77a8ff"], ["skyships-4", "Skyship 4", 45, 31, "#77a8ff"], ["skyships-5", "Skyship Boss", 41, 31, "#77a8ff", true],
-  ["forest-1", "Forest 1", 35, 35, "#63f0c4"], ["forest-2", "Forest 2", 31, 36, "#63f0c4"], ["forest-3", "Forest 3", 27, 36, "#63f0c4"], ["forest-4", "Forest 4", 23, 35, "#63f0c4"], ["forest-5", "Forest Boss", 20, 33, "#63f0c4", true],
-  ["desertTemple-1", "Desert 1", 13, 35, "#e6cc80"], ["desertTemple-2", "Desert 2", 10, 32, "#e6cc80"], ["desertTemple-3", "Desert 3", 8, 28, "#e6cc80"], ["desertTemple-4", "Desert 4", 9, 24, "#e6cc80"], ["desertTemple-5", "Desert Boss", 13, 22, "#e6cc80", true],
-  ["ice-1", "Ice 1", 6, 20, "#9be7ff"], ["ice-2", "Ice 2", 6, 16, "#9be7ff"], ["ice-3", "Ice 3", 8, 13, "#9be7ff"], ["ice-4", "Ice 4", 11, 12, "#9be7ff"], ["ice-5", "Ice Boss", 14, 13, "#9be7ff", true],
-  ["dream-1", "Dream 1", 22, 24, "#d58cff"], ["dream-2", "Dream 2", 25, 26, "#d58cff"], ["dream-3", "Dream 3", 28, 27, "#d58cff"], ["dream-4", "Dream 4", 31, 26, "#d58cff"], ["dream-5", "Dream Boss", 34, 24, "#d58cff", true],
-  ["bossShard-1", "Boss Shard", 22, 17, "#e6cc80", true], ["runestone-1", "Runestone", 28, 16, "#9df7a4", true],
-  ["demonMarch-1", "Demon Gate 1", 24, 20, "#ff668a"], ["demonMarch-2", "Demon Gate 2", 28, 21, "#ff668a"], ["demonMarch-3", "Demon Gate 3", 32, 20, "#ff668a"],
-  ["finalDemon-1", "Final Boss", 28, 12, "#ff335f", true]
+  ["graveyard-1", "Graveyard 1", 16, 7, "#d9d3c2"], ["graveyard-2", "Graveyard 2", 17, 5.5, "#d9d3c2"], ["graveyard-3", "Graveyard 3", 18.5, 5, "#d9d3c2"], ["graveyard-4", "Graveyard 4", 20, 5.5, "#d9d3c2"], ["graveyard-5", "Graveyard Boss", 21, 7, "#d9d3c2", true],
+  ["mountains-1", "Mountain 1", 34.5, 7, "#a68d66"], ["mountains-2", "Mountain 2", 35.5, 5.5, "#a68d66"], ["mountains-3", "Mountain 3", 37, 5, "#a68d66"], ["mountains-4", "Mountain 4", 38.5, 5.5, "#a68d66"], ["mountains-5", "Mountain Boss", 39.5, 7, "#a68d66", true],
+  ["castle-1", "Castle 1", 4.75, 19, "#9c80ff"], ["castle-2", "Castle 2", 3.75, 18, "#9c80ff"], ["castle-3", "Castle 3", 3.25, 17, "#9c80ff"], ["castle-4", "Castle 4", 3.75, 16, "#9c80ff"], ["castle-5", "Castle Boss", 4.75, 15, "#9c80ff", true],
+  ["skyships-1", "Skyship 1", 4.75, 29, "#77a8ff"], ["skyships-2", "Skyship 2", 4, 28, "#77a8ff"], ["skyships-3", "Skyship 3", 3.5, 27, "#77a8ff"], ["skyships-4", "Skyship 4", 4, 26, "#77a8ff"], ["skyships-5", "Skyship Boss", 4.75, 25, "#77a8ff", true],
+  ["forest-1", "Forest 1", 5.5, 38, "#63f0c4"], ["forest-2", "Forest 2", 4.5, 37, "#63f0c4"], ["forest-3", "Forest 3", 4, 36, "#63f0c4"], ["forest-4", "Forest 4", 4.5, 35, "#63f0c4"], ["forest-5", "Forest Boss", 5.5, 34, "#63f0c4", true],
+  ["desertTemple-1", "Desert 1", 46.75, 13, "#e6cc80"], ["desertTemple-2", "Desert 2", 47.75, 13.5, "#e6cc80"], ["desertTemple-3", "Desert 3", 48.25, 14.5, "#e6cc80"], ["desertTemple-4", "Desert 4", 47.75, 15.5, "#e6cc80"], ["desertTemple-5", "Desert Boss", 46.75, 16.5, "#e6cc80", true],
+  ["ice-1", "Ice 1", 49.5, 24, "#9be7ff"], ["ice-2", "Ice 2", 50.25, 25, "#9be7ff"], ["ice-3", "Ice 3", 50.75, 26, "#9be7ff"], ["ice-4", "Ice 4", 50.25, 27, "#9be7ff"], ["ice-5", "Ice Boss", 49.5, 28, "#9be7ff", true],
+  ["dream-1", "Dream 1", 50.25, 34, "#d58cff"], ["dream-2", "Dream 2", 50.75, 35, "#d58cff"], ["dream-3", "Dream 3", 50.75, 36, "#d58cff"], ["dream-4", "Dream 4", 50, 37, "#d58cff"], ["dream-5", "Dream Boss", 48.75, 37.5, "#d58cff", true],
+  ["bossShard-1", "Boss Shard", 28, 13.5, "#e6cc80", true], ["runestone-1", "Runestone", 28, 23.5, "#9df7a4", true],
+  ["demonMarch-1", "Demon Gate 1", 25.5, 32, "#ff668a"], ["demonMarch-2", "Demon Gate 2", 28, 33, "#ff668a"], ["demonMarch-3", "Demon Gate 3", 30.5, 32, "#ff668a"],
+  ["finalDemon-1", "Final Boss", 28, 30, "#ff335f", true]
 ].map(([id, label, x, y, color, boss = false]) => ({ id, label, x, y, color, boss }));
 
 let activeTool = "drag";
 let walls = new Set();
 let portals = [];
-let spawn = { id: "spawn", label: "Spawn", x: 28, y: 22, color: "#f0ebff" };
-let market = { id: "market", label: "Market", x: 28, y: 19.5, radius: 1.45, color: "#f7cc78" };
+let spawn = { id: "spawn", label: "Spawn", x: 28, y: 18.5, color: "#f0ebff" };
+let market = { id: "market", label: "Market", x: 28, y: 18.5, radius: 1.45, color: "#f7cc78" };
 let isPainting = false;
 let dragging = null;
 let selected = null;
@@ -63,26 +92,16 @@ function key(col, row) {
 function buildDefaultLayout() {
   walls = new Set();
   portals = defaultPortals.map((portal) => ({ ...portal }));
-  spawn = { id: "spawn", label: "Spawn", x: 28, y: 22, color: "#f0ebff" };
-  market = { id: "market", label: "Market", x: 28, y: 19.5, radius: 1.45, color: "#f7cc78" };
+  spawn = { id: "spawn", label: "Spawn", x: 28, y: 18.5, color: "#f0ebff" };
+  market = { id: "market", label: "Market", x: 28, y: 18.5, radius: 1.45, color: "#f7cc78" };
 
-  for (let col = 0; col < MAP_COLS; col += 1) {
-    walls.add(key(col, 0));
-    walls.add(key(col, MAP_ROWS - 1));
-  }
   for (let row = 0; row < MAP_ROWS; row += 1) {
-    walls.add(key(0, row));
-    walls.add(key(MAP_COLS - 1, row));
-  }
-  for (const [startCol, startRow, width, height] of wallRects) {
-    for (let col = startCol; col < startCol + width; col += 1) {
-      for (let row = startRow; row < startRow + height; row += 1) {
+    const rowText = defaultWallRows[row] || "";
+    for (let col = 0; col < MAP_COLS; col += 1) {
+      if (rowText[col] === "#") {
         walls.add(key(col, row));
       }
     }
-  }
-  for (const [col, row] of doorTiles) {
-    walls.delete(key(col, row));
   }
   for (const portal of portals) {
     clearPatch(portal.x, portal.y, 1);
