@@ -325,6 +325,87 @@
     const MAIN_REALM_IDS = REALM_BLUEPRINTS.slice(0, 8).map((realm) => realm.id);
     const HUB_LEVEL_PORTALS = buildHubLevelPortals(FLOOR_DEFS, REALM_DEFS);
     const HUB_REALM_LABELS = buildHubRealmLabels(HUB_LEVEL_PORTALS);
+    const USABLE_AUDIO_ROOT = "/Unused as of now/Rift_Warden_Sounds/USABLES";
+    const MUSIC_VOLUME = 0.22;
+    const SFX_VOLUME = 0.38;
+    const MUSIC_TRACKS = {
+      epic: [
+        "music/epic/castle-1.mp3",
+        "music/epic/castle-3.mp3",
+        "music/epic/castle-boss-chimeras-keep.mp3",
+        "music/epic/gauntlet-legends-2001.mp3",
+        "music/epic/gauntlet-legends.mp3",
+        "music/epic/mausoleum.mp3",
+        "music/epic/mountain-level.mp3"
+      ],
+      spooky: [
+        "music/spooky/ghost-town.mp3",
+        "music/spooky/graveyard-3.mp3",
+        "music/spooky/graveyard-boss.mp3",
+        "music/spooky/haunted-cemetery.mp3",
+        "music/spooky/poison-fields.mp3",
+        "music/spooky/skorne-battle.mp3"
+      ],
+      neither: [
+        "music/neither epic nor spooky/abandoned-beacon-n64.mp3",
+        "music/neither epic nor spooky/ravaged-acres.mp3",
+        "music/neither epic nor spooky/venomous-spire-1.mp3"
+      ],
+      dream: [
+        "music/to be used in dream only/dream-hub.mp3",
+        "music/to be used in dream only/dream-shop-x4.mp3",
+        "music/to be used in dream only/organ-2.wav"
+      ],
+      special: [
+        "music/special/16bit_ghost-piano.wav",
+        "music/special/ghost-town-piano-x4.mp3",
+        "music/special/n64-main-screen.mp3",
+        "music/special/secret-crop-circles.mp3"
+      ],
+      hub: ["music/sumners-tower-acoustic_hub_.mp3"],
+      finalBoss: ["music/final-boss.mp3"],
+      levelLoadRare: ["music/play at level load ocasionally.mp3"],
+      bossClearOnce: ["music/only play this when beating realm 2-7 boss ONCE.mp3"],
+      demonApproachRare: ["music/use in the 3 levels leading up to boss only but VERY sparingly/underworld-shop.mp3"]
+    };
+    const REALM_MUSIC_STYLES = {
+      graveyard: ["spooky"],
+      mountains: ["epic"],
+      castle: ["epic"],
+      skyships: ["neither"],
+      forest: ["neither"],
+      desertTemple: ["epic", "neither"],
+      ice: ["epic", "neither"],
+      dream: ["spooky", "dream"],
+      bossShard: ["epic", "spooky"],
+      runestone: ["epic", "neither"],
+      demonMarch: ["epic", "spooky"],
+      finalDemon: ["finalBoss"]
+    };
+    const BOSS_CLEAR_STINGER_REALMS = new Set(["mountains", "castle", "skyships", "forest", "desertTemple", "ice"]);
+    const SFX_TRACKS = {
+      pickup: "SFX/pickup-2.wav",
+      portal: "SFX/teleporter.wav",
+      quest: "SFX/key_or_quest.wav",
+      death: "SFX/death_dying.wav",
+      halo: "SFX/halo(secret sound).wav",
+      lich: "SFX/lichtnt_boss1_ability_and_voiceline.wav",
+      laserLoop: "SFX/laser_ray_sfx (must be looped).wav",
+      wraith: [
+        "SFX/shadow-wraith-realm8-boss-sounds/wraat11b.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraat8b.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk02.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk03.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk04.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk05.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk09.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk10.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraatk7b.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wradth2.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wraent.wav",
+        "SFX/shadow-wraith-realm8-boss-sounds/wrapn5.wav"
+      ]
+    };
 
     function buildHubLevelPortals(floors, realms) {
       const clusterPoints = {
@@ -400,6 +481,7 @@
             stage,
             stageCount: realm.floorCount,
             bossStage,
+            bossType: bossStage ? realm.bossType : "",
             theme: realm.theme,
             color: realm.color,
             name: bossStage ? `${realm.name}: ${bossName}` : `${realm.name} ${stage}`,
@@ -573,12 +655,22 @@
       hubPortalCooldown: 0,
       realmsCleared: {},
       realmProgress: {},
+      audioOnce: {},
       quests: {
         kills: 0,
         anchorsCleared: 0,
         claimed: {}
       },
       shopPurchases: 0
+    };
+    const audioState = {
+      unlocked: false,
+      currentMusic: null,
+      currentMusicKey: "",
+      pendingContext: null,
+      lastTrackByContext: new Map(),
+      recentSfx: new Map(),
+      activeLoops: new Map()
     };
 
     function normalizeHeroName(name) {
@@ -591,6 +683,221 @@
 
     function getCurrentRealmDef() {
       return REALM_DEFS.find((realm) => realm.id === state.realmKey) || REALM_DEFS[0];
+    }
+
+    function usableAudioUrl(relativePath) {
+      return `${USABLE_AUDIO_ROOT}/${relativePath.split("/").map((segment) => encodeURIComponent(segment)).join("/")}`;
+    }
+
+    function pickRandom(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function pickAvoidingImmediateRepeat(list, contextKey) {
+      if (!list.length) {
+        return "";
+      }
+      if (list.length === 1) {
+        audioState.lastTrackByContext.set(contextKey, list[0]);
+        return list[0];
+      }
+      const lastTrack = audioState.lastTrackByContext.get(contextKey);
+      const candidates = list.filter((track) => track !== lastTrack);
+      const track = pickRandom(candidates.length ? candidates : list);
+      audioState.lastTrackByContext.set(contextKey, track);
+      return track;
+    }
+
+    function createAudio(relativePath, volume = MUSIC_VOLUME, loop = false) {
+      const audio = new Audio(usableAudioUrl(relativePath));
+      audio.preload = "auto";
+      audio.volume = volume;
+      audio.loop = loop;
+      return audio;
+    }
+
+    function playAudioElement(audio) {
+      const playPromise = audio.play();
+      if (playPromise?.catch) {
+        playPromise.catch(() => {});
+      }
+    }
+
+    function unlockAudio() {
+      if (audioState.unlocked) {
+        return;
+      }
+      audioState.unlocked = true;
+      if (audioState.pendingContext) {
+        playContextMusic(audioState.pendingContext);
+      }
+    }
+
+    function stopMusic() {
+      if (audioState.currentMusic) {
+        audioState.currentMusic.pause();
+        audioState.currentMusic.src = "";
+      }
+      audioState.currentMusic = null;
+      audioState.currentMusicKey = "";
+    }
+
+    function playMusic(relativePath, options = {}) {
+      if (!relativePath) {
+        return;
+      }
+      if (!audioState.unlocked) {
+        return;
+      }
+      const key = options.key || relativePath;
+      if (audioState.currentMusicKey === key && audioState.currentMusic && !audioState.currentMusic.paused) {
+        return;
+      }
+      stopMusic();
+      const audio = createAudio(relativePath, options.volume ?? MUSIC_VOLUME, options.loop ?? true);
+      audioState.currentMusic = audio;
+      audioState.currentMusicKey = key;
+      if (options.resumeContextOnEnd) {
+        audio.addEventListener("ended", () => {
+          if (audioState.currentMusic === audio && audioState.pendingContext) {
+            playContextMusic(audioState.pendingContext);
+          }
+        }, { once: true });
+      }
+      playAudioElement(audio);
+    }
+
+    function playStinger(relativePath, options = {}) {
+      if (!audioState.unlocked || !relativePath) {
+        return;
+      }
+      const audio = createAudio(relativePath, options.volume ?? 0.18, false);
+      playAudioElement(audio);
+    }
+
+    function collectMusicTracks(styleKeys) {
+      const tracks = [];
+      for (const styleKey of styleKeys) {
+        tracks.push(...(MUSIC_TRACKS[styleKey] || []));
+      }
+      return tracks;
+    }
+
+    function getFloorMusicTrack(floorDef) {
+      if (floorDef.realmId === "finalDemon") {
+        return pickAvoidingImmediateRepeat(MUSIC_TRACKS.finalBoss, "final-boss");
+      }
+      if (floorDef.realmId === "demonMarch" && !floorDef.bossStage && Math.random() < 0.08) {
+        return MUSIC_TRACKS.demonApproachRare[0];
+      }
+      if (!floorDef.bossStage && Math.random() < 0.012) {
+        const availableSpecials = MUSIC_TRACKS.special.filter((track) => !state.audioOnce[`special:${track}`]);
+        const special = pickRandom(availableSpecials);
+        if (special) {
+          state.audioOnce[`special:${special}`] = true;
+          return special;
+        }
+      }
+      const styleKeys = REALM_MUSIC_STYLES[floorDef.realmId] || ["epic"];
+      const tracks = collectMusicTracks(styleKeys);
+      return pickAvoidingImmediateRepeat(tracks, floorDef.realmId);
+    }
+
+    function playContextMusic(context) {
+      audioState.pendingContext = context;
+      if (!audioState.unlocked) {
+        return;
+      }
+      if (context.screen === "select") {
+        stopMusic();
+        return;
+      }
+      if (context.screen === "hub") {
+        playMusic(MUSIC_TRACKS.hub[0], { key: "hub", loop: true });
+        return;
+      }
+      if (context.floorDef) {
+        playMusic(getFloorMusicTrack(context.floorDef), { key: `floor:${context.floorDef.floorNumber}`, loop: true });
+      }
+    }
+
+    function playLevelLoadStinger(floorDef) {
+      if (!floorDef.bossStage && Math.random() < 0.12) {
+        playStinger(MUSIC_TRACKS.levelLoadRare[0], { volume: 0.13 });
+      }
+    }
+
+    function playBossClearStinger(floorDef) {
+      if (!floorDef.bossStage || !BOSS_CLEAR_STINGER_REALMS.has(floorDef.realmId)) {
+        return;
+      }
+      const key = `boss-clear:${floorDef.realmId}`;
+      if (state.audioOnce[key]) {
+        return;
+      }
+      state.audioOnce[key] = true;
+      playStinger(MUSIC_TRACKS.bossClearOnce[0], { volume: 0.2 });
+    }
+
+    function playBossIntroSfx(floorDef) {
+      if (!floorDef.bossStage) {
+        return;
+      }
+      if (floorDef.bossType === "lich") {
+        playSfx("lich", { volume: 0.34, throttle: 8 });
+      } else if (floorDef.bossType === "wraith") {
+        playSfx("wraith", { volume: 0.34, throttle: 8 });
+      } else if (floorDef.realmId === "finalDemon") {
+        playSfx("death", { volume: 0.32, throttle: 8 });
+      }
+    }
+
+    function playSecretHeroStinger(classKey) {
+      if (classKey === "sage") {
+        playStinger("music/special/secret-crop-circles.mp3", { volume: 0.18 });
+        playSfx("halo", { volume: 0.28, throttle: 2 });
+      } else if (classKey === "pojo") {
+        playSfx("halo", { volume: 0.24, throttle: 2 });
+      }
+    }
+
+    function playSfx(key, options = {}) {
+      if (!audioState.unlocked) {
+        return;
+      }
+      const now = performance.now() / 1000;
+      const throttle = options.throttle ?? 0.06;
+      const recent = audioState.recentSfx.get(key) || 0;
+      if (now - recent < throttle) {
+        return;
+      }
+      const entry = SFX_TRACKS[key];
+      const relativePath = Array.isArray(entry) ? pickRandom(entry) : entry;
+      if (!relativePath) {
+        return;
+      }
+      audioState.recentSfx.set(key, now);
+      const audio = createAudio(relativePath, options.volume ?? SFX_VOLUME, false);
+      playAudioElement(audio);
+    }
+
+    function startSfxLoop(key, relativePath, volume = 0.16) {
+      if (!audioState.unlocked || audioState.activeLoops.has(key)) {
+        return;
+      }
+      const audio = createAudio(relativePath, volume, true);
+      audioState.activeLoops.set(key, audio);
+      playAudioElement(audio);
+    }
+
+    function stopSfxLoop(key) {
+      const audio = audioState.activeLoops.get(key);
+      if (!audio) {
+        return;
+      }
+      audio.pause();
+      audio.src = "";
+      audioState.activeLoops.delete(key);
     }
 
     function hideScreens() {
@@ -634,6 +941,7 @@
       state.running = false;
       mouse.down = false;
       stopSageChannel();
+      playContextMusic({ screen: "select" });
       characterNameInput.value = state.heroName === DEFAULT_HERO_NAME ? "" : state.heroName;
       characterSelect.hidden = false;
       syncSecretNameSelection();
@@ -674,12 +982,14 @@
       addEffect(state.player.x, state.player.y - 28, "Realm Hub", "#f7cc78");
       state.camera.x = clamp(state.player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(state.player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
+      playContextMusic({ screen: "hub" });
       lastTick = 0;
       renderClassButtons();
       updateHud();
     }
 
     function beginAdventure() {
+      unlockAudio();
       const secretClass = syncSecretNameSelection();
       const classKey = secretClass || state.selectedClassKey;
       state.nameOverrideClass = secretClass;
@@ -687,6 +997,9 @@
       state.heroName = characterNameInput.value.trim() || CLASS_DEFS[classKey].name || DEFAULT_HERO_NAME;
       resetRunProgress();
       openRealmHub();
+      if (secretClass) {
+        playSecretHeroStinger(secretClass);
+      }
     }
 
     function areMainRealmsCleared() {
@@ -724,6 +1037,7 @@
       state.screen = "play";
       state.running = true;
       state.hubPortalCooldown = 0;
+      playSfx("portal", { volume: 0.34, throttle: 0.6 });
       startFloor(portal.floorNumber);
       updateHud();
     }
@@ -1373,6 +1687,9 @@
         spawnEnemy(TILE * col, TILE * row, type);
       }
       addEffect(state.player.x, state.player.y - 30, floorDef.name, floorDef.color || "#f7cc78");
+      playContextMusic({ screen: "play", floorDef });
+      playLevelLoadStinger(floorDef);
+      playBossIntroSfx(floorDef);
       lastTick = 0;
     }
 
@@ -1406,6 +1723,7 @@
       state.meteorShowers = [];
       state.realmsCleared = {};
       state.realmProgress = {};
+      state.audioOnce = {};
       state.hubPortalCooldown = 0;
       state.nearShop = true;
       buildMap();
@@ -1427,6 +1745,7 @@
       if (!state.floorClear) {
         return;
       }
+      playSfx("portal", { volume: 0.34, throttle: 0.6 });
       openRealmHub();
     }
 
@@ -1450,6 +1769,8 @@
         state.realmsCleared[floorDef.realmId] = true;
       }
       addEffect(state.player.x, state.player.y - 34, "Exit Portal Open", "#63f0c4");
+      playSfx("quest", { volume: 0.32, throttle: 0.5 });
+      playBossClearStinger(floorDef);
     }
 
     function gainXp(amount) {
@@ -1746,6 +2067,7 @@
       state.gold -= item.cost;
       state.shopPurchases += 1;
       item.buy();
+      playSfx("quest", { volume: 0.28, throttle: 0.12 });
       lastShopMarkup = "";
     }
 
@@ -1757,6 +2079,7 @@
       state.quests.claimed[quest.id] = true;
       quest.claim();
       addEffect(state.player.x, state.player.y - 36, "Quest Complete", "#63f0c4");
+      playSfx("quest", { volume: 0.34, throttle: 0.12 });
       lastQuestMarkup = "";
       lastShopMarkup = "";
     }
@@ -1773,6 +2096,7 @@
       state.player.stats[stat] += 1;
       recalculatePlayerStats(false);
       addEffect(state.player.x, state.player.y - 28, `+1 ${stat.toUpperCase()}`, "#f7cc78");
+      playSfx("quest", { volume: 0.24, throttle: 0.12 });
     }
 
     function removeOne(queue, element) {
@@ -2799,6 +3123,9 @@
         tickTimer: 0,
         effectTimer: 0
       };
+      if (manifestation === "beam" || manifestation === "lightning") {
+        startSfxLoop("sage-channel", SFX_TRACKS.laserLoop, 0.12);
+      }
       clearSageQueue(`${manifestation === "lightning" ? "Lightning" : manifestation === "beam" ? "Beam" : "Spray"} channeling.`);
     }
 
@@ -2807,6 +3134,7 @@
         state.sageChannel = null;
         state.sageMessage = "Channel released.";
       }
+      stopSfxLoop("sage-channel");
     }
 
     function updateSageChannel(dt) {
@@ -3217,6 +3545,7 @@
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
       const floorDef = getFloorDef();
       if (state.floorClear && floorDef.exitPortal && distanceSquared(player.x, player.y, floorDef.exitPortal.x, floorDef.exitPortal.y) <= (floorDef.exitPortal.radius + player.radius) ** 2) {
+        playSfx("portal", { volume: 0.34, throttle: 0.6 });
         openRealmHub();
       }
     }
@@ -3296,6 +3625,7 @@
 
     function clearAnchor(index, anchor) {
       addEffect(anchor.x, anchor.y - 36, "Anchor Cleared", "#f7cc78");
+      playSfx("quest", { volume: 0.34, throttle: 0.25 });
       state.pickups.push({ type: "gold", x: anchor.x, y: anchor.y, radius: 10, value: 35, color: "#f7cc78" });
       state.anchors.splice(index, 1);
       state.quests.anchorsCleared += 1;
@@ -3332,6 +3662,13 @@
     }
 
     function defeatEnemy(index, enemy) {
+      if (enemy.isBoss) {
+        if (enemy.type === "wraith") {
+          playSfx("wraith", { volume: 0.36, throttle: 0.5 });
+        } else if (enemy.type === "lich" || enemy.type === "demonGodKing") {
+          playSfx("death", { volume: 0.33, throttle: 0.5 });
+        }
+      }
       if (!enemy.minion) {
         state.quests.kills += 1;
         gainXp(enemy.xp);
@@ -3507,6 +3844,7 @@
 
     function collectPickup(pickup) {
       const player = state.player;
+      playSfx("pickup", { volume: pickup.type === "health" ? 0.34 : 0.28, throttle: 0.035 });
       if (isPojo()) {
         const healing = healPlayerFromPickup(pickup);
         player.hp = Math.min(player.maxHp, player.hp + healing);
@@ -4474,6 +4812,8 @@
       requestAnimationFrame(loop);
     }
 
+    document.addEventListener("pointerdown", unlockAudio, { passive: true });
+
     canvas.addEventListener("mousemove", (event) => {
       const rect = canvas.getBoundingClientRect();
       mouse.x = event.clientX - rect.left;
@@ -4511,6 +4851,7 @@
     }
 
     window.addEventListener("keydown", (event) => {
+      unlockAudio();
       if (isTypingTarget(event.target)) {
         return;
       }
