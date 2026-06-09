@@ -2100,7 +2100,7 @@
     }
 
     function removeOne(queue, element) {
-      const index = queue.indexOf(element);
+      const index = queue.lastIndexOf(element);
       if (index >= 0) {
         queue.splice(index, 1);
       }
@@ -2111,7 +2111,7 @@
     }
 
     function replaceOne(queue, from, to) {
-      const index = queue.indexOf(from);
+      const index = queue.lastIndexOf(from);
       if (index >= 0) {
         queue[index] = to;
         return true;
