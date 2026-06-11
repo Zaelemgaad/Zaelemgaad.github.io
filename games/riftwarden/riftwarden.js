@@ -325,7 +325,7 @@
     const MAIN_REALM_IDS = REALM_BLUEPRINTS.slice(0, 8).map((realm) => realm.id);
     const HUB_LEVEL_PORTALS = buildHubLevelPortals(FLOOR_DEFS, REALM_DEFS);
     const HUB_REALM_LABELS = buildHubRealmLabels(HUB_LEVEL_PORTALS);
-    const USABLE_AUDIO_ROOT = "/Unused as of now/Rift_Warden_Sounds/USABLES";
+    const USABLE_AUDIO_ROOT = "/assets/audio/riftwarden";
     const MUSIC_VOLUME = 0.22;
     const SFX_VOLUME = 0.38;
     const MUSIC_TRACKS = {
@@ -347,26 +347,26 @@
         "music/spooky/skorne-battle.mp3"
       ],
       neither: [
-        "music/neither epic nor spooky/abandoned-beacon-n64.mp3",
-        "music/neither epic nor spooky/ravaged-acres.mp3",
-        "music/neither epic nor spooky/venomous-spire-1.mp3"
+        "music/neutral/abandoned-beacon-n64.mp3",
+        "music/neutral/ravaged-acres.mp3",
+        "music/neutral/venomous-spire-1.mp3"
       ],
       dream: [
-        "music/to be used in dream only/dream-hub.mp3",
-        "music/to be used in dream only/dream-shop-x4.mp3",
-        "music/to be used in dream only/organ-2.wav"
+        "music/dream/dream-hub.mp3",
+        "music/dream/dream-shop-x4.mp3",
+        "music/dream/organ-2.wav"
       ],
       special: [
-        "music/special/16bit_ghost-piano.wav",
+        "music/special/ghost-piano-16bit.wav",
         "music/special/ghost-town-piano-x4.mp3",
         "music/special/n64-main-screen.mp3",
         "music/special/secret-crop-circles.mp3"
       ],
-      hub: ["music/sumners-tower-acoustic_hub_.mp3"],
-      finalBoss: ["music/final-boss.mp3"],
-      levelLoadRare: ["music/play at level load ocasionally.mp3"],
-      bossClearOnce: ["music/only play this when beating realm 2-7 boss ONCE.mp3"],
-      demonApproachRare: ["music/use in the 3 levels leading up to boss only but VERY sparingly/underworld-shop.mp3"]
+      hub: ["music/hub/sumners-tower-acoustic.mp3"],
+      finalBoss: ["music/boss/final-boss.mp3"],
+      levelLoadRare: ["music/stingers/level-load-rare.mp3"],
+      bossClearOnce: ["music/stingers/realm-boss-clear-once.mp3"],
+      demonApproachRare: ["music/stingers/demon-approach-rare.mp3"]
     };
     const REALM_MUSIC_STYLES = {
       graveyard: ["spooky"],
@@ -384,26 +384,26 @@
     };
     const BOSS_CLEAR_STINGER_REALMS = new Set(["mountains", "castle", "skyships", "forest", "desertTemple", "ice"]);
     const SFX_TRACKS = {
-      pickup: "SFX/pickup-2.wav",
-      portal: "SFX/teleporter.wav",
-      quest: "SFX/key_or_quest.wav",
-      death: "SFX/death_dying.wav",
-      halo: "SFX/halo(secret sound).wav",
-      lich: "SFX/lichtnt_boss1_ability_and_voiceline.wav",
-      laserLoop: "SFX/laser_ray_sfx (must be looped).wav",
+      pickup: "sfx/ui/pickup.wav",
+      portal: "sfx/ui/teleporter.wav",
+      quest: "sfx/ui/key-or-quest.wav",
+      death: "sfx/boss/death-dying.wav",
+      halo: "sfx/ui/halo-secret.wav",
+      lich: "sfx/boss/lich-ability-voice.wav",
+      laserLoop: "sfx/spells/laser-ray-loop.wav",
       wraith: [
-        "SFX/shadow-wraith-realm8-boss-sounds/wraat11b.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraat8b.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk02.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk03.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk04.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk05.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk09.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk10.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraatk7b.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wradth2.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wraent.wav",
-        "SFX/shadow-wraith-realm8-boss-sounds/wrapn5.wav"
+        "sfx/boss/shadow-wraith/wraat11b.wav",
+        "sfx/boss/shadow-wraith/wraat8b.wav",
+        "sfx/boss/shadow-wraith/wraatk02.wav",
+        "sfx/boss/shadow-wraith/wraatk03.wav",
+        "sfx/boss/shadow-wraith/wraatk04.wav",
+        "sfx/boss/shadow-wraith/wraatk05.wav",
+        "sfx/boss/shadow-wraith/wraatk09.wav",
+        "sfx/boss/shadow-wraith/wraatk10.wav",
+        "sfx/boss/shadow-wraith/wraatk7b.wav",
+        "sfx/boss/shadow-wraith/wradth2.wav",
+        "sfx/boss/shadow-wraith/wraent.wav",
+        "sfx/boss/shadow-wraith/wrapn5.wav"
       ]
     };
 
