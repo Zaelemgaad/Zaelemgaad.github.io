@@ -51,10 +51,21 @@
     const SHOP_ZONE = { x: TILE * 4.5, y: TILE * 4.5, radius: 118 };
     const HUB_SPAWN = { x: TILE * 28, y: TILE * 18.5 };
     const HUB_MARKET = { x: TILE * 28, y: TILE * 18.5, radius: 92 };
+    const HUB_DEBUG_ZONE = { x: TILE * 28, y: TILE * 38, radius: 78 };
     const DEFAULT_HERO_NAME = "Warden";
     const SECRET_NAME_CLASSES = {
       jzael: "sage",
       pojo: "pojo"
+    };
+    const REALM_NUMBER_BY_ID = {
+      graveyard: 1,
+      mountains: 2,
+      castle: 3,
+      skyships: 4,
+      forest: 5,
+      desertTemple: 6,
+      ice: 7,
+      dream: 8
     };
 
     const ELEMENT_COLORS = {
@@ -226,9 +237,9 @@
       },
       sage: {
         name: "Sage",
-        summary: "Sages are fragile secret casters with no XP or levels; survival comes from spellcraft, not progression.",
+        summary: "Sages are fragile secret casters who scale through stats and spellcraft; survival comes from mastering hidden spell recipes.",
         stats: { strength: 1, intelligence: 8, agility: 5 },
-        baseHp: 90,
+        baseHp: 100,
         baseSpeed: 204,
         attackElement: "arcane",
         skillElement: "arcane",
@@ -333,18 +344,15 @@
         "music/epic/castle-1.mp3",
         "music/epic/castle-3.mp3",
         "music/epic/castle-boss-chimeras-keep.mp3",
-        "music/epic/gauntlet-legends-2001.mp3",
         "music/epic/gauntlet-legends.mp3",
-        "music/epic/mausoleum.mp3",
-        "music/epic/mountain-level.mp3"
+        "music/epic/gauntlet-legends-2001.mp3"
       ],
       spooky: [
         "music/spooky/ghost-town.mp3",
         "music/spooky/graveyard-3.mp3",
         "music/spooky/graveyard-boss.mp3",
         "music/spooky/haunted-cemetery.mp3",
-        "music/spooky/poison-fields.mp3",
-        "music/spooky/skorne-battle.mp3"
+        "music/spooky/mausoleum.mp3"
       ],
       neither: [
         "music/neutral/abandoned-beacon-n64.mp3",
@@ -368,6 +376,26 @@
       bossClearOnce: ["music/stingers/realm-boss-clear-once.mp3"],
       demonApproachRare: ["music/stingers/demon-approach-rare.mp3"]
     };
+    const FLOOR_MUSIC_OVERRIDES = {
+      "mountains-1": "music/epic/mountain-level.mp3",
+      "bossShard-1": "music/spooky/skorne-battle.mp3",
+      "runestone-1": "music/spooky/skorne-battle.mp3"
+    };
+    const GRAVEYARD_SECONDARY_TRACK = "music/spooky/poison-fields.mp3";
+    const AUDIO_GAINS = {
+      "music/neutral/abandoned-beacon-n64.mp3": 1.5,
+      "music/epic/gauntlet-legends-2001.mp3": 1.65,
+      "music/epic/mountain-level.mp3": 1.05,
+      "music/spooky/ghost-town.mp3": 1.3
+    };
+    const AUDIO_GAIN_CURVES = {
+      "music/epic/castle-1.mp3": [
+        { until: 14, gain: 1.25 },
+        { until: 65, gain: 1.15 },
+        { until: 115, gain: 1.2 },
+        { until: Infinity, gain: 1.15 }
+      ]
+    };
     const REALM_MUSIC_STYLES = {
       graveyard: ["spooky"],
       mountains: ["epic"],
@@ -382,6 +410,27 @@
       demonMarch: ["epic", "spooky"],
       finalDemon: ["finalBoss"]
     };
+    const DEBUG_TRACKS = [
+      ...MUSIC_TRACKS.hub,
+      ...MUSIC_TRACKS.epic,
+      "music/epic/mountain-level.mp3",
+      ...MUSIC_TRACKS.spooky,
+      "music/spooky/poison-fields.mp3",
+      "music/spooky/skorne-battle.mp3",
+      ...MUSIC_TRACKS.neither,
+      ...MUSIC_TRACKS.dream,
+      ...MUSIC_TRACKS.special,
+      ...MUSIC_TRACKS.finalBoss,
+      ...MUSIC_TRACKS.levelLoadRare,
+      ...MUSIC_TRACKS.bossClearOnce,
+      ...MUSIC_TRACKS.demonApproachRare
+    ];
+    const HUB_DEBUG_PADS = [
+      { id: "unlock", label: "Unlock All", x: TILE * 23, y: TILE * 38, radius: 34 },
+      { id: "song", label: "Next Song", x: TILE * 26.25, y: TILE * 38, radius: 34 },
+      { id: "stopSong", label: "Stop Music", x: TILE * 29.75, y: TILE * 38, radius: 34 },
+      { id: "gold", label: "+9999 Gold", x: TILE * 33, y: TILE * 38, radius: 34 }
+    ];
     const BOSS_CLEAR_STINGER_REALMS = new Set(["mountains", "castle", "skyships", "forest", "desertTemple", "ice"]);
     const SFX_TRACKS = {
       pickup: "sfx/ui/pickup.wav",
@@ -474,25 +523,30 @@
           const floorIndex = nextFloor - 1;
           const activePool = stage >= 3 ? [...realm.enemyPool, ...(realm.elitePool || [])] : [...realm.enemyPool];
           const bossName = bossStage ? ENEMY_DEFS[realm.bossType]?.name || "Boss" : "";
+          const zoneName = realm.name.replace(" Realm", "").replace(" Level", "");
           floors.push({
             floorNumber: nextFloor,
             realmId: realm.id,
             realmName: realm.name,
+            realmNumber: REALM_NUMBER_BY_ID[realm.id] || null,
+            zoneName,
             stage,
             stageCount: realm.floorCount,
             bossStage,
             bossType: bossStage ? realm.bossType : "",
             theme: realm.theme,
             color: realm.color,
-            name: bossStage ? `${realm.name}: ${bossName}` : `${realm.name} ${stage}`,
-            objective: bossStage ? `Defeat ${bossName} and break the seals.` : "Break the rift anchors, then find the exit portal.",
+            name: bossStage ? `${zoneName} Boss: ${bossName}` : `${zoneName} Level ${stage}`,
+            objective: bossStage ? `Defeat ${bossName}, then take the exit portal.` : "Reach the exit portal at the end of the level. Spawners and enemies are optional risks.",
             anchorHp: Math.round(realm.anchorHp * (1 + floorIndex * 0.055 + stage * 0.12)),
             enemyCap: realm.enemyCap + stage * 5 + Math.floor(floorIndex * 0.25),
             spawnEvery: Math.max(1.35, realm.spawnEvery - stage * 0.16 - floorIndex * 0.01),
             anchorTypes: [...activePool],
             startEnemies: makeStageStartEnemies(activePool, stage, realm.bossType, bossStage),
-            anchors: makeStageAnchors(bossStage ? 2 + Math.min(2, Math.floor(stage / 2)) : 4 + Math.min(3, Math.floor(stage / 2))),
-            exitPortal: { x: TILE * 51.5, y: TILE * 36, radius: 58 }
+            anchors: bossStage ? [] : makeStageAnchors(4 + Math.min(3, Math.floor(stage / 2))),
+            exitPortal: bossStage
+              ? { x: TILE * 28, y: TILE * 37, radius: 58 }
+              : { x: TILE * 51.5, y: TILE * 36, radius: 58 }
           });
           nextFloor += 1;
         }
@@ -501,20 +555,28 @@
     }
 
     function makeStageStartEnemies(types, stage, bossType, bossStage) {
+      if (bossStage && bossType) {
+        const addsByBoss = {
+          lich: [["skeleton", 18, 19], ["skeleton", 38, 19]],
+          slimeTitan: [["scarab", 18, 20], ["scarab", 38, 20]],
+          spiderQueen: [["forestSpider", 18, 20], ["forestSpider", 38, 20]],
+          genie: [["scarab", 18, 20], ["sandPriest", 38, 20]],
+          shardGuardian: [["gargoyle", 18, 20], ["voidPriest", 38, 20]],
+          runestoneSentinel: [["anubisGuard", 18, 20], ["frostWitch", 38, 20]]
+        };
+        return [[bossType, 28, 18], ...(addsByBoss[bossType] || [])];
+      }
       const points = [
         [10, 7], [16, 10], [24, 8], [33, 10], [43, 8], [49, 15],
         [12, 20], [22, 19], [34, 20], [46, 23], [10, 31], [19, 34],
         [31, 32], [42, 34], [49, 31], [28, 27], [39, 15], [18, 25]
       ];
-      const count = bossStage ? 10 + stage * 2 : 13 + stage * 5;
+      const count = 13 + stage * 5;
       const enemies = [];
       for (let index = 0; index < count; index += 1) {
         const point = points[index % points.length];
         const type = types[index % types.length];
         enemies.push([type, point[0] + (index % 3) - 1, point[1] + Math.floor(index / points.length)]);
-      }
-      if (bossStage && bossType) {
-        enemies.push([bossType, 45, 31]);
       }
       return enemies;
     }
@@ -541,7 +603,7 @@
       {
         id: "training",
         label: "Training Manual",
-        cost: 48,
+        cost: 999,
         detail: "Gain 1 spendable stat point.",
         buy() {
           if (grantStatPoint()) {
@@ -653,6 +715,8 @@
       timeWarpTimer: 0,
       meteorShowers: [],
       hubPortalCooldown: 0,
+      debugCooldown: 0,
+      debugMusicIndex: -1,
       realmsCleared: {},
       realmProgress: {},
       audioOnce: {},
@@ -667,8 +731,10 @@
       unlocked: false,
       currentMusic: null,
       currentMusicKey: "",
+      currentMusicPath: "",
       pendingContext: null,
       lastTrackByContext: new Map(),
+      floorTrackCounts: new Map(),
       recentSfx: new Map(),
       activeLoops: new Map()
     };
@@ -711,9 +777,22 @@
     function createAudio(relativePath, volume = MUSIC_VOLUME, loop = false) {
       const audio = new Audio(usableAudioUrl(relativePath));
       audio.preload = "auto";
-      audio.volume = volume;
+      audio.dataset.baseVolume = String(volume);
+      audio.dataset.relativePath = relativePath;
+      audio.volume = getAudioVolume(relativePath, volume, 0);
       audio.loop = loop;
+      if (AUDIO_GAIN_CURVES[relativePath]) {
+        audio.addEventListener("timeupdate", () => {
+          audio.volume = getAudioVolume(relativePath, volume, audio.currentTime || 0);
+        });
+      }
       return audio;
+    }
+
+    function getAudioVolume(relativePath, baseVolume, currentTime = 0) {
+      const curve = AUDIO_GAIN_CURVES[relativePath];
+      const curveGain = curve?.find((entry) => currentTime <= entry.until)?.gain ?? 1;
+      return clamp(baseVolume * (AUDIO_GAINS[relativePath] || 1) * curveGain, 0, 1);
     }
 
     function playAudioElement(audio) {
@@ -740,6 +819,7 @@
       }
       audioState.currentMusic = null;
       audioState.currentMusicKey = "";
+      audioState.currentMusicPath = "";
     }
 
     function playMusic(relativePath, options = {}) {
@@ -757,6 +837,7 @@
       const audio = createAudio(relativePath, options.volume ?? MUSIC_VOLUME, options.loop ?? true);
       audioState.currentMusic = audio;
       audioState.currentMusicKey = key;
+      audioState.currentMusicPath = relativePath;
       if (options.resumeContextOnEnd) {
         audio.addEventListener("ended", () => {
           if (audioState.currentMusic === audio && audioState.pendingContext) {
@@ -783,7 +864,14 @@
       return tracks;
     }
 
-    function getFloorMusicTrack(floorDef) {
+    function getFloorMusicTrack(floorDef, sequenceIndex = 0) {
+      const floorKey = `${floorDef.realmId}-${floorDef.stage}`;
+      if (FLOOR_MUSIC_OVERRIDES[floorKey]) {
+        return FLOOR_MUSIC_OVERRIDES[floorKey];
+      }
+      if (floorDef.realmId === "graveyard" && sequenceIndex % 2 === 1) {
+        return GRAVEYARD_SECONDARY_TRACK;
+      }
       if (floorDef.realmId === "finalDemon") {
         return pickAvoidingImmediateRepeat(MUSIC_TRACKS.finalBoss, "final-boss");
       }
@@ -817,7 +905,11 @@
         return;
       }
       if (context.floorDef) {
-        playMusic(getFloorMusicTrack(context.floorDef), { key: `floor:${context.floorDef.floorNumber}`, loop: true });
+        const floorKey = `floor:${context.floorDef.floorNumber}`;
+        const sequenceIndex = audioState.floorTrackCounts.get(floorKey) || 0;
+        const track = getFloorMusicTrack(context.floorDef, sequenceIndex);
+        audioState.floorTrackCounts.set(floorKey, sequenceIndex + 1);
+        playMusic(track, { key: `${floorKey}:${sequenceIndex}:${track}`, loop: false, resumeContextOnEnd: true });
       }
     }
 
@@ -967,6 +1059,7 @@
       state.player.dashTimer = 0;
       state.player.dashCooldown = 0;
       state.hubPortalCooldown = 0.55;
+      state.debugCooldown = 0.55;
       state.enemies = [];
       state.projectiles = [];
       state.pickups = [];
@@ -979,6 +1072,7 @@
       state.meteorShowers = [];
       state.player.invisible = false;
       state.player.performanceTimer = 0;
+      state.player.snareTimer = 0;
       addEffect(state.player.x, state.player.y - 28, "Realm Hub", "#f7cc78");
       state.camera.x = clamp(state.player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(state.player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
@@ -1037,9 +1131,34 @@
       state.screen = "play";
       state.running = true;
       state.hubPortalCooldown = 0;
+      state.debugCooldown = 0;
       playSfx("portal", { volume: 0.34, throttle: 0.6 });
       startFloor(portal.floorNumber);
       updateHud();
+    }
+
+    function activateDebugPad(pad) {
+      state.debugCooldown = 0.8;
+      if (pad.id === "unlock") {
+        for (const realm of REALM_DEFS) {
+          state.realmProgress[realm.id] = realm.floorCount;
+          state.realmsCleared[realm.id] = true;
+        }
+        addEffect(pad.x, pad.y - 32, "All Levels Unlocked", "#63f0c4");
+        playSfx("quest", { volume: 0.34, throttle: 0.2 });
+      } else if (pad.id === "song") {
+        state.debugMusicIndex = (state.debugMusicIndex + 1) % DEBUG_TRACKS.length;
+        const track = DEBUG_TRACKS[state.debugMusicIndex];
+        playMusic(track, { key: `debug:${track}:${state.debugMusicIndex}`, loop: false });
+        addEffect(pad.x, pad.y - 32, track.split("/").pop(), "#f7cc78");
+      } else if (pad.id === "stopSong") {
+        stopMusic();
+        addEffect(pad.x, pad.y - 32, "Music Stopped", "#c2b8d8");
+      } else if (pad.id === "gold") {
+        state.gold += 9999;
+        addEffect(pad.x, pad.y - 32, "+9999 Gold", "#f7cc78");
+        playSfx("pickup", { volume: 0.32, throttle: 0.2 });
+      }
     }
 
     function clamp(value, min, max) {
@@ -1157,6 +1276,68 @@
       blocked.add(tileKey(col, row));
     }
 
+    function buildLinearLevelMap(floorDef) {
+      const gates = [
+        { col: 12, gap: floorDef.stage % 2 ? 28 : 8 },
+        { col: 22, gap: floorDef.stage % 2 ? 8 : 28 },
+        { col: 32, gap: floorDef.stage % 2 ? 29 : 9 },
+        { col: 42, gap: floorDef.stage % 2 ? 10 : 27 }
+      ];
+      for (const gate of gates) {
+        for (let row = 3; row < MAP_ROWS - 3; row += 1) {
+          if (row >= gate.gap && row <= gate.gap + 6) {
+            continue;
+          }
+          addWall(gate.col, row);
+          if (floorDef.stage >= 3 && row % 5 !== 0) {
+            addWall(gate.col + 1, row);
+          }
+        }
+      }
+      const sideRooms = [
+        [6, 12, 5, 2], [14, 33, 6, 2], [25, 6, 6, 2],
+        [34, 34, 6, 2], [45, 13, 5, 2], [48, 27, 2, 5]
+      ];
+      if (floorDef.stage >= 4) {
+        sideRooms.push([18, 18, 2, 7], [37, 18, 2, 7]);
+      }
+      for (const [startCol, startRow, width, height] of sideRooms) {
+        for (let col = startCol; col < startCol + width; col += 1) {
+          for (let row = startRow; row < startRow + height; row += 1) {
+            addWall(col, row);
+          }
+        }
+      }
+    }
+
+    function buildBossArenaMap(floorDef) {
+      for (let col = 8; col <= 47; col += 1) {
+        addWall(col, 7);
+        addWall(col, 34);
+      }
+      for (let row = 7; row <= 34; row += 1) {
+        addWall(8, row);
+        addWall(47, row);
+      }
+      for (let col = 25; col <= 31; col += 1) {
+        blocked.delete(tileKey(col, 34));
+      }
+      const pillarsByBoss = {
+        dragon: [[18, 16], [38, 16], [18, 27], [38, 27]],
+        chimera: [[18, 14], [38, 14], [18, 29], [38, 29]],
+        yeti: [[20, 18], [36, 18], [20, 27], [36, 27]],
+        demonGodKing: [[17, 15], [39, 15], [17, 29], [39, 29]]
+      };
+      const pillars = pillarsByBoss[floorDef.bossType] || [[18, 21], [38, 21]];
+      for (const [centerCol, centerRow] of pillars) {
+        for (let col = centerCol - 1; col <= centerCol + 1; col += 1) {
+          for (let row = centerRow - 1; row <= centerRow + 1; row += 1) {
+            addWall(col, row);
+          }
+        }
+      }
+    }
+
     function buildMap() {
       const floorDef = getFloorDef();
       blocked.clear();
@@ -1169,43 +1350,12 @@
         addWall(MAP_COLS - 1, row);
       }
 
-      const rooms = [
-        [8, 6, 10, 2], [23, 5, 2, 10], [35, 7, 12, 2],
-        [10, 17, 2, 12], [19, 16, 11, 2], [36, 18, 2, 11],
-        [45, 18, 8, 2], [7, 31, 12, 2], [25, 30, 14, 2],
-        [47, 29, 2, 8], [15, 24, 2, 7], [31, 24, 9, 2]
-      ];
-      if (floorDef.stage >= 2) {
-        rooms.push([5, 11, 2, 9], [49, 8, 2, 8], [20, 35, 18, 2]);
-      }
-      if (floorDef.stage >= 4 || floorDef.bossStage) {
-        rooms.push([13, 12, 13, 2], [40, 13, 10, 2], [9, 25, 10, 2], [42, 34, 8, 2]);
-      }
-      if (["castle", "desert", "runestone", "final"].includes(floorDef.theme)) {
-        rooms.push([27, 9, 2, 9], [27, 24, 2, 9], [17, 21, 18, 2]);
-      }
-      if (["forest", "graveyard", "dream"].includes(floorDef.theme)) {
-        rooms.push([5, 36, 8, 2], [52, 20, 2, 11], [33, 12, 2, 7]);
-      }
-      if (["skyship", "ice", "mountain"].includes(floorDef.theme)) {
-        rooms.push([14, 5, 2, 9], [40, 5, 2, 9], [22, 27, 2, 8], [43, 24, 2, 8]);
+      if (floorDef.bossStage) {
+        buildBossArenaMap(floorDef);
+        return;
       }
 
-      for (const [startCol, startRow, width, height] of rooms) {
-        for (let col = startCol; col < startCol + width; col += 1) {
-          for (let row = startRow; row < startRow + height; row += 1) {
-            addWall(col, row);
-          }
-        }
-      }
-
-      const doorTiles = [
-        [12, 6], [24, 8], [40, 7], [10, 23], [24, 16], [36, 23],
-        [48, 18], [12, 31], [31, 30], [47, 33], [16, 27], [34, 24],
-        [6, 15], [49, 12], [29, 21], [22, 35], [45, 34], [14, 8],
-        [40, 8], [22, 30], [43, 28], [52, 25]
-      ];
-      doorTiles.forEach(([col, row]) => blocked.delete(tileKey(col, row)));
+      buildLinearLevelMap(floorDef);
     }
 
     function buildHubMap() {
@@ -1223,6 +1373,7 @@
       }
       clearHubPatch(HUB_SPAWN.x, HUB_SPAWN.y, 2);
       clearHubPatch(HUB_MARKET.x, HUB_MARKET.y, 2);
+      clearHubPatch(HUB_DEBUG_ZONE.x, HUB_DEBUG_ZONE.y, 3);
     }
 
     function clearHubPatch(worldX, worldY, radiusTiles = 1) {
@@ -1253,6 +1404,18 @@
           if (distanceSquared(x, y, closestX, closestY) < radius * radius) {
             return true;
           }
+        }
+      }
+      return false;
+    }
+
+    function lineBlocked(x1, y1, x2, y2, radius = 8) {
+      const distance = Math.hypot(x2 - x1, y2 - y1) || 1;
+      const steps = Math.ceil(distance / 22);
+      for (let step = 1; step < steps; step += 1) {
+        const t = step / steps;
+        if (circleBlocked(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t, radius)) {
+          return true;
         }
       }
       return false;
@@ -1361,8 +1524,7 @@
       const classDef = getClassDef();
       const stats = state.player?.stats || classDef.stats;
       const level = state.player?.level || 1;
-      const sage = state.classKey === "sage";
-      const levelBonus = sage ? 0 : level;
+      const levelBonus = level;
       const classKey = state.classKey;
       let attackDamage;
       let techniqueDamage;
@@ -1379,8 +1541,8 @@
         attackDamage = 7 + stats.agility * 1.3 + stats.intelligence * 1.95 + levelBonus * 1.2;
         techniqueDamage = 12 + stats.intelligence * 2.55 + stats.agility * 1.1 + levelBonus * 1.45;
       } else {
-        attackDamage = 8 + stats.intelligence * 1.8 + stats.agility * 0.45;
-        techniqueDamage = 13 + stats.intelligence * 2.55 + stats.agility * 0.35;
+        attackDamage = 8 + stats.intelligence * 1.8 + stats.agility * 0.45 + levelBonus * 1.15;
+        techniqueDamage = 13 + stats.intelligence * 2.55 + stats.agility * 0.35 + levelBonus * 1.7;
       }
       const performanceBoost = state.player?.performanceTimer > 0 ? 1.55 : 1;
       return {
@@ -1432,6 +1594,7 @@
         windTimer: 0,
         hasteTimer: 0,
         performanceTimer: 0,
+        snareTimer: 0,
         invisible: false,
         dashTimer: 0,
         dashCooldown: 0,
@@ -1483,6 +1646,9 @@
     }
 
     function applyDamage(target, amount, element = "physical", options = {}) {
+      if (target.deathAvatar) {
+        return 0;
+      }
       const damageElement = normalizeDamageElement(element);
       if (tryActivateElemental(target, element, options.spellQueue || null)) {
         return 0;
@@ -1539,11 +1705,11 @@
     }
 
     function isHostileUnit(unit) {
-      return unit.kind === "enemy" && unit.faction !== "ally" && !unit.inactiveElemental;
+      return unit.kind === "enemy" && unit.faction !== "ally" && !unit.inactiveElemental && !unit.deathAvatar;
     }
 
     function isAlliedUnit(unit) {
-      return unit.kind === "enemy" && unit.faction === "ally" && !unit.inactiveElemental;
+      return unit.kind === "enemy" && unit.faction === "ally" && !unit.inactiveElemental && !unit.deathAvatar;
     }
 
     function getLivingUnits(options = {}) {
@@ -1584,9 +1750,11 @@
       const def = ENEMY_DEFS[type] || ENEMY_DEFS.goblin;
       const floorScale = 1 + (state.floor - 1) * 0.11;
       const bossScale = def.boss ? 1 + Math.max(0, getFloorDef().stage - 1) * 0.18 : 1;
-      const point = findOpenSpawnPoint(x, y, def.radius) || { x, y };
+      const bossRadiusScale = def.boss ? ({ dragon: 2.25, chimera: 2.05, wraith: 2.15, demonGodKing: 2.35 }[type] || 1.85) : 1;
+      const radius = Math.round(def.radius * bossRadiusScale);
+      const point = findOpenSpawnPoint(x, y, radius) || { x, y };
       const scale = options.useFloorScale === false ? 1 : floorScale;
-      const hp = options.maxHp || Math.round(def.hp * scale * bossScale);
+      const hp = options.maxHp || Math.round(def.hp * scale * bossScale * (def.boss ? 4.25 : 1));
       const enemy = {
         kind: "enemy",
         type,
@@ -1597,11 +1765,11 @@
         minion: Boolean(options.minion),
         x: point.x,
         y: point.y,
-        radius: def.radius,
+        radius,
         hp,
         maxHp: hp,
-        speed: options.speed || def.speed + (state.floor - 1) * (def.boss ? 1.5 : 3.2),
-        damage: options.damage || Math.round(def.damage * (1 + (state.floor - 1) * (def.boss ? 0.06 : 0.075))),
+        speed: options.speed || Math.round((def.speed + (state.floor - 1) * (def.boss ? 1.5 : 3.2)) * (def.boss ? 0.85 : 1)),
+        damage: options.damage || Math.round(def.damage * (1 + (state.floor - 1) * (def.boss ? 0.06 : 0.075)) * (def.boss ? 1.35 : 1)),
         damageElement: def.damageElement,
         hitTimer: 0,
         attackTimer: 0,
@@ -1611,6 +1779,10 @@
         resists: { ...def.resists, ...(options.resists || {}) },
         statuses: {}
       };
+      if (def.boss) {
+        enemy.specialTimer = 1.5;
+        enemy.phaseTimer = 0;
+      }
       state.enemies.push(enemy);
       return enemy;
     }
@@ -1645,12 +1817,13 @@
       state.floorClear = false;
       buildMap();
       const floorDef = getFloorDef();
+      audioState.floorTrackCounts.set(`floor:${floorDef.floorNumber}`, 0);
       state.realmKey = floorDef.realmId || state.realmKey;
       if (!state.player) {
         createPlayer();
       }
-      state.player.x = SHOP_ZONE.x;
-      state.player.y = SHOP_ZONE.y;
+      state.player.x = floorDef.bossStage ? TILE * 28 : SHOP_ZONE.x;
+      state.player.y = floorDef.bossStage ? TILE * 31 : SHOP_ZONE.y;
       state.player.hp = state.player.maxHp;
       state.player.attackTimer = 0;
       state.player.skillTimer = 0;
@@ -1680,6 +1853,7 @@
       state.nearShop = true;
       state.player.invisible = false;
       state.player.performanceTimer = 0;
+      state.player.snareTimer = 0;
       for (const [col, row] of floorDef.anchors) {
         spawnAnchor(TILE * col, TILE * row);
       }
@@ -1724,6 +1898,7 @@
       state.realmsCleared = {};
       state.realmProgress = {};
       state.audioOnce = {};
+      audioState.floorTrackCounts.clear();
       state.hubPortalCooldown = 0;
       state.nearShop = true;
       buildMap();
@@ -1754,7 +1929,14 @@
     }
 
     function isFloorObjectiveCleared() {
+      if (!getFloorDef().bossStage) {
+        return false;
+      }
       return state.anchors.length === 0 && !hasLivingBoss();
+    }
+
+    function isExitPortalActive(floorDef = getFloorDef()) {
+      return Boolean(floorDef.exitPortal && (!floorDef.bossStage || state.floorClear));
     }
 
     function completeFloor() {
@@ -1774,9 +1956,6 @@
     }
 
     function gainXp(amount) {
-      if (isSage()) {
-        return;
-      }
       state.xp += amount;
       while (state.xp >= state.xpToNext) {
         state.xp -= state.xpToNext;
@@ -1789,9 +1968,6 @@
     }
 
     function grantStatPoint() {
-      if (isSage()) {
-        return false;
-      }
       state.player.statPoints += 1;
       return true;
     }
@@ -1806,7 +1982,6 @@
         return;
       }
       target.effectTimers[key] = state.elapsed + cooldown;
-      addEffect(target.x, target.y - target.radius - 12, text, color);
     }
 
     function getStatuses(target) {
@@ -2030,10 +2205,8 @@
           : "Return to the glowing market circle near the gate to buy supplies and training.";
       const markup = SHOP_ITEMS.map((item) => {
         const affordable = state.gold >= item.cost;
-        const unavailable = isSage() && item.id === "training";
-        const disabled = !state.nearShop || !affordable || unavailable ? " disabled" : "";
-        const detail = unavailable ? "Sage does not use levels." : item.detail;
-        return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${detail}</small></button>`;
+        const disabled = !state.nearShop || !affordable ? " disabled" : "";
+        return `<button class="shop-button" type="button" data-shop="${item.id}"${disabled}>${item.label}<small>${item.cost}g - ${item.detail}</small></button>`;
       }).join("");
       if (markup !== lastShopMarkup) {
         shopList.innerHTML = markup;
@@ -2050,8 +2223,7 @@
           ? `<button class="quest-claim" type="button" data-quest="${quest.id}">Claim</button>`
           : "";
         const status = claimed ? "Complete" : `${progress} / ${quest.target}`;
-        const reward = isSage() ? quest.reward.replace(/,? ?\d+ XP/g, "").replace(/,? ?\+1 stat point/g, "") : quest.reward;
-        return `<div class="quest-item${complete ? " is-complete" : ""}"><strong>${quest.name}</strong><small>${quest.detail}<br>Progress: ${status}<br>Reward: ${reward}</small>${claimButton}</div>`;
+        return `<div class="quest-item${complete ? " is-complete" : ""}"><strong>${quest.name}</strong><small>${quest.detail}<br>Progress: ${status}<br>Reward: ${quest.reward}</small>${claimButton}</div>`;
       }).join("");
       if (markup !== lastQuestMarkup) {
         questList.innerHTML = markup;
@@ -2061,7 +2233,7 @@
 
     function buyShopItem(itemId) {
       const item = SHOP_ITEMS.find((entry) => entry.id === itemId);
-      if (!item || !state.nearShop || state.gold < item.cost || (isSage() && item.id === "training")) {
+      if (!item || !state.nearShop || state.gold < item.cost) {
         return;
       }
       state.gold -= item.cost;
@@ -2085,10 +2257,6 @@
     }
 
     function assignStat(stat) {
-      if (isSage()) {
-        state.sageMessage = "The Sage does not level or allocate stat points.";
-        return;
-      }
       if (!["strength", "intelligence", "agility"].includes(stat) || state.player.statPoints <= 0) {
         return;
       }
@@ -2398,7 +2566,7 @@
 
     function getSagePower(queue) {
       const derived = getDerivedStats();
-      return derived.spellDamage * (0.62 + queue.length * 0.24);
+      return derived.spellDamage * (1.05 + queue.length * 0.38);
     }
 
     function countElement(queue, element) {
@@ -2453,7 +2621,7 @@
         return false;
       }
       const queue = getElementalActivationQueue(element, spellQueue);
-      const maxHp = 400 + queue.length * 100;
+      const maxHp = 900 + queue.length * 250 + state.floor * 35;
       target.inactiveElemental = false;
       target.faction = "ally";
       target.minion = true;
@@ -2461,8 +2629,8 @@
       target.elementalElements = [...new Set(normalizedQueueElements(queue))];
       target.maxHp = maxHp;
       target.hp = maxHp;
-      target.damage = Math.round(30 + queue.length * 12);
-      target.speed = 118;
+      target.damage = Math.round(100 + queue.length * 45 + state.floor * 4);
+      target.speed = 156;
       target.color = getSageColor(queue);
       target.damageElement = getSageDamageElement(queue);
       target.name = `${elementLabel(queue[0])} Elemental`;
@@ -2530,7 +2698,7 @@
       state.meteorShowers.push({
         life: duration,
         nextMeteor: 0,
-        damage: getDerivedStats().spellDamage * 42
+        damage: getDerivedStats().spellDamage * 90
       });
       addEffect(state.player.x, state.player.y - 32, "Meteor Shower", ELEMENT_COLORS.fire);
     }
@@ -2544,12 +2712,12 @@
           addHazard({
             x,
             y,
-            radius: 76,
+            radius: 132,
             damage,
             element: "fire",
             color: ELEMENT_COLORS.fire,
             kind: "meteorWarning",
-            life: 0.85,
+            life: 0.68,
             tickRate: 1
           });
           return;
@@ -2562,15 +2730,15 @@
       addHazard({
         x: point.x,
         y: point.y,
-        radius: 104,
-        maxRadius: 260,
-        damage: getDerivedStats().spellDamage * 1.1,
+        radius: 148,
+        maxRadius: 360,
+        damage: getDerivedStats().spellDamage * 6.5,
         element: "dark",
         color: getSageColor(queue),
         kind: "vortex",
         life: 9999,
-        tickRate: 0.12,
-        pull: 270,
+        tickRate: 0.08,
+        pull: 430,
         idleAtFull: 0
       });
       addEffect(point.x, point.y - 32, "Vortex", getSageColor(queue));
@@ -2603,8 +2771,8 @@
         x: point.x,
         y: point.y,
         radius: 24,
-        hp: 400,
-        maxHp: 400,
+        hp: 700,
+        maxHp: 700,
         speed: 0,
         damage: 0,
         damageElement: "arcane",
@@ -2620,18 +2788,48 @@
       addEffect(point.x, point.y - 34, "Dormant Elemental", "#c2b8d8");
     }
 
-    function summonDeath() {
-      const point = getSageTargetPoint(96, 18);
+    function findDeathClaimTarget(x, y) {
       const candidates = getLivingUnits({ includeInactive: false })
-        .filter((unit) => unit.family !== "undead");
-      candidates.sort((a, b) => (a.hp / a.maxHp) - (b.hp / b.maxHp) || distanceSquared(point.x, point.y, a.x, a.y) - distanceSquared(point.x, point.y, b.x, b.y));
-      state.effects.push({ kind: "nova", x: point.x, y: point.y, range: 132, life: 0.3, maxLife: 0.3, color: "rgba(20, 10, 30, 0.72)" });
-      if (candidates[0]) {
-        candidates[0].hp = 0;
-        addEffect(candidates[0].x, candidates[0].y - candidates[0].radius - 18, "Death", "#f0ebff");
-      } else {
-        recoverPlayerAtGate("Death Claimed You");
-      }
+        .filter((unit) => unit.family !== "undead" && unit.family !== "death" && !unit.deathAvatar);
+      candidates.sort((a, b) => (a.hp / a.maxHp) - (b.hp / b.maxHp) || distanceSquared(x, y, a.x, a.y) - distanceSquared(x, y, b.x, b.y));
+      return candidates[0] || null;
+    }
+
+    function summonDeath() {
+      const point = getSageTargetPoint(86, 22);
+      const target = findDeathClaimTarget(point.x, point.y);
+      const death = {
+        kind: "enemy",
+        type: "deathAvatar",
+        name: "Death",
+        family: "death",
+        faction: "ally",
+        minion: true,
+        deathAvatar: true,
+        deathTarget: target,
+        deathTargetPlayer: !target,
+        isBoss: false,
+        x: point.x,
+        y: point.y,
+        radius: 30,
+        hp: 999999,
+        maxHp: 999999,
+        speed: 720,
+        damage: 999999,
+        damageElement: "dark",
+        hitTimer: 0,
+        attackTimer: 0,
+        xp: 0,
+        gold: 0,
+        color: "#08060d",
+        resists: {},
+        statuses: {},
+        life: 8
+      };
+      state.enemies.push(death);
+      state.effects.push({ kind: "deathMark", x: point.x, y: point.y, range: 132, life: 0.46, maxLife: 0.46, color: "rgba(20, 10, 30, 0.82)" });
+      addEffect(point.x, point.y - 42, target ? "Death Summoned" : "Death seeks the caster", target ? "#f0ebff" : "#ff668a");
+      playSfx("death", { volume: 0.38, throttle: 0.2 });
     }
 
     function countAny(queue, elements) {
@@ -2677,6 +2875,9 @@
     function getDamageableTargets(options = {}) {
       const normalizedElement = options.element ? normalizeDamageElement(options.element) : null;
       const units = state.enemies.filter((unit) => {
+        if (unit.deathAvatar) {
+          return false;
+        }
         if (unit.hp <= 0) {
           return false;
         }
@@ -2862,9 +3063,17 @@
         kind: config.kind || "rune",
         life: config.life || 4,
         maxLife: config.life || 4,
+        angle: config.angle || 0,
+        range: config.range || 0,
+        width: config.width || 0,
+        maxRadius: config.maxRadius || config.radius,
+        snare: config.snare || 0,
         tickRate: config.tickRate || 0.5,
         tickTimer: config.tickRate || 0.5,
         push: config.push || 0,
+        pull: config.pull || 0,
+        idleAtFull: config.idleAtFull || 0,
+        reachedFull: Boolean(config.reachedFull),
         sageQueue: config.sageQueue ? [...config.sageQueue] : null
       });
     }
@@ -3515,7 +3724,8 @@
         const bodyShieldSlow = player.bodyShield > 0 ? 0.58 : 1;
         const hasteBoost = isSage() && player.hasteTimer > 0 ? 1.5 : 1;
         const performanceBoost = player.performanceTimer > 0 ? 1.77 : 1;
-        moveWithCollision(player, move.x * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * dt, move.y * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * dt);
+        const snareSlow = player.snareTimer > 0 ? 0.38 : 1;
+        moveWithCollision(player, move.x * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * snareSlow * dt, move.y * player.speed * bodyShieldSlow * hasteBoost * performanceBoost * snareSlow * dt);
       }
       if (isSage()) {
         updateSageMouseCasting(dt);
@@ -3527,6 +3737,7 @@
       player.windTimer = Math.max(0, player.windTimer - dt);
       player.hasteTimer = Math.max(0, player.hasteTimer - dt);
       player.performanceTimer = Math.max(0, player.performanceTimer - dt);
+      player.snareTimer = Math.max(0, player.snareTimer - dt);
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.dashCooldown = Math.max(0, player.dashCooldown - dt);
       if (player.dashTimer <= 0) {
@@ -3544,7 +3755,10 @@
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
       const floorDef = getFloorDef();
-      if (state.floorClear && floorDef.exitPortal && distanceSquared(player.x, player.y, floorDef.exitPortal.x, floorDef.exitPortal.y) <= (floorDef.exitPortal.radius + player.radius) ** 2) {
+      if (isExitPortalActive(floorDef) && distanceSquared(player.x, player.y, floorDef.exitPortal.x, floorDef.exitPortal.y) <= (floorDef.exitPortal.radius + player.radius) ** 2) {
+        if (!state.floorClear) {
+          completeFloor();
+        }
         playSfx("portal", { volume: 0.34, throttle: 0.6 });
         openRealmHub();
       }
@@ -3565,9 +3779,19 @@
       player.dashTimer = 0;
       player.dashCooldown = 0;
       state.hubPortalCooldown = Math.max(0, state.hubPortalCooldown - dt);
+      state.debugCooldown = Math.max(0, state.debugCooldown - dt);
       state.nearShop = distanceSquared(player.x, player.y, HUB_MARKET.x, HUB_MARKET.y) <= (HUB_MARKET.radius + player.radius) ** 2;
       state.camera.x = clamp(player.x - canvas.width / DPR * 0.5, 0, WORLD_W - canvas.width / DPR);
       state.camera.y = clamp(player.y - canvas.height / DPR * 0.5, 0, WORLD_H - canvas.height / DPR);
+
+      if (state.debugCooldown <= 0) {
+        for (const pad of HUB_DEBUG_PADS) {
+          if (distanceSquared(player.x, player.y, pad.x, pad.y) <= (pad.radius + player.radius) ** 2) {
+            activateDebugPad(pad);
+            return;
+          }
+        }
+      }
 
       if (state.hubPortalCooldown > 0) {
         return;
@@ -3688,9 +3912,10 @@
 
     function recoverPlayerAtGate(message = "Recovered at Rift Gate") {
       const player = state.player;
+      const floorDef = getFloorDef();
       player.hp = player.maxHp;
-      player.x = TILE * 4.5;
-      player.y = TILE * 4.5;
+      player.x = floorDef.bossStage ? TILE * 28 : TILE * 4.5;
+      player.y = floorDef.bossStage ? TILE * 31 : TILE * 4.5;
       state.gold = Math.max(0, state.gold - 15);
       player.invisible = false;
       addEffect(player.x, player.y - 28, message, "#ff668a");
@@ -3724,6 +3949,123 @@
       return incoming;
     }
 
+    function triggerBossAbility(enemy) {
+      const player = state.player;
+      if (!player || enemy.hp <= 0) {
+        return;
+      }
+      const angle = Math.atan2(player.y - enemy.y, player.x - enemy.x);
+      if (enemy.type === "dragon") {
+        addHazard({ x: enemy.x, y: enemy.y, angle, range: 940, width: 0.72, damage: enemy.damage * 3.4, element: "fire", color: ELEMENT_COLORS.fire, kind: "bossCone", life: 1.05, tickRate: 1 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Inferno Breath", ELEMENT_COLORS.fire);
+      } else if (enemy.type === "chimera") {
+        const heads = [
+          { element: "lightning", label: "Storm Head", color: ELEMENT_COLORS.lightning, snare: 0.8 },
+          { element: "poison", label: "Venom Head", color: ELEMENT_COLORS.poison },
+          { element: "fire", label: "Flame Head", color: ELEMENT_COLORS.fire }
+        ];
+        const head = heads[enemy.phaseTimer % heads.length];
+        enemy.phaseTimer = (enemy.phaseTimer || 0) + 1;
+        addHazard({ x: player.x, y: player.y, radius: 92, damage: enemy.damage * 1.8, element: head.element, color: head.color, kind: "bossBlastWarning", life: 0.85, tickRate: 1, snare: head.snare || 0 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, head.label, head.color);
+      } else if (enemy.type === "wraith") {
+        addHazard({ x: player.x, y: player.y, radius: 116, damage: enemy.damage * 0.42, element: "dark", color: ELEMENT_COLORS.dark, kind: "snareTrap", life: 5.5, tickRate: 0.22, snare: 0.45 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Umbral Snare", ELEMENT_COLORS.dark);
+      } else if (enemy.type === "lich") {
+        addHazard({ x: player.x, y: player.y, radius: 86, damage: enemy.damage * 1.45, element: "dark", color: ELEMENT_COLORS.dark, kind: "graveHand", life: 0.95, tickRate: 1, snare: 1.2 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Grave Hand", ELEMENT_COLORS.dark);
+      } else if (enemy.type === "spiderQueen") {
+        for (let index = 0; index < 3; index += 1) {
+          const point = findOpenSpawnPoint(enemy.x, enemy.y, 16, enemy.radius + 28, enemy.radius + 120);
+          if (point) {
+            spawnEnemy(point.x, point.y, "forestSpider", { useFloorScale: false, maxHp: 60, damage: 8 });
+          }
+        }
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Brood Call", ELEMENT_COLORS.poison);
+      } else if (enemy.type === "slimeTitan") {
+        const offset = Math.random() * TAU;
+        const x = clamp(player.x + Math.cos(offset) * (80 + Math.random() * 160), 80, WORLD_W - 80);
+        const y = clamp(player.y + Math.sin(offset) * (80 + Math.random() * 160), 80, WORLD_H - 80);
+        addHazard({ x, y, radius: 108, damage: enemy.damage * 1.35, element: "poison", color: ELEMENT_COLORS.poison, kind: "sludgeDrain", life: 1.1, tickRate: 1, snare: 0.35 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Sludge Vent", ELEMENT_COLORS.poison);
+      } else if (enemy.type === "yeti") {
+        addHazard({ x: enemy.x, y: enemy.y, radius: 210, damage: enemy.damage * 1.25, element: "cold", color: ELEMENT_COLORS.cold, kind: "bossBlastWarning", life: 0.75, tickRate: 1, snare: 0.55 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Frost Quake", ELEMENT_COLORS.cold);
+      } else if (enemy.type === "demonGodKing") {
+        addHazard({ x: player.x, y: player.y, radius: 132, damage: enemy.damage * 2.2, element: "dark", color: ELEMENT_COLORS.dark, kind: "bossBlastWarning", life: 0.72, tickRate: 1, snare: 0.75 });
+        addEffect(enemy.x, enemy.y - enemy.radius - 24, "Doom Mark", ELEMENT_COLORS.dark);
+      } else {
+        addHazard({ x: player.x, y: player.y, radius: 96, damage: enemy.damage * 1.25, element: enemy.damageElement || "physical", color: enemy.color || "#f7cc78", kind: "bossBlastWarning", life: 0.85, tickRate: 1 });
+      }
+    }
+
+    function updateBossAbility(enemy, dt) {
+      if (!enemy.isBoss || !isHostileUnit(enemy)) {
+        return;
+      }
+      enemy.specialTimer = Math.max(0, (enemy.specialTimer || 1.5) - dt);
+      if (enemy.specialTimer > 0) {
+        return;
+      }
+      triggerBossAbility(enemy);
+      const cadence = {
+        dragon: 4.4,
+        chimera: 2.4,
+        wraith: 2.8,
+        lich: 2.7,
+        spiderQueen: 4.2,
+        slimeTitan: 3.2,
+        yeti: 3.6,
+        demonGodKing: 2.2
+      };
+      enemy.specialTimer = cadence[enemy.type] || 3;
+    }
+
+    function claimDeathTarget(death, target) {
+      state.effects.push({ kind: "deathLine", x: death.x, y: death.y, targetX: target.x, targetY: target.y, life: 0.42, maxLife: 0.42, color: "rgba(240, 235, 255, 0.9)" });
+      state.effects.push({ kind: "deathMark", x: target.x, y: target.y, range: Math.max(104, target.radius * 3.5), life: 0.62, maxLife: 0.62, color: "rgba(20, 10, 30, 0.88)" });
+      target.hp = 0;
+      playSfx("death", { volume: 0.34, throttle: 0.2 });
+      if (!state.floorClear && isFloorObjectiveCleared()) {
+        completeFloor();
+      }
+      return true;
+    }
+
+    function updateDeathAvatar(death, dt) {
+      death.life -= dt;
+      let target = death.deathTarget;
+      if (!target || target.hp <= 0 || target.family === "undead" || target.family === "death") {
+        target = findDeathClaimTarget(death.x, death.y);
+        death.deathTarget = target;
+        death.deathTargetPlayer = !target;
+      }
+      const targetPoint = target || state.player;
+      const dx = targetPoint.x - death.x;
+      const dy = targetPoint.y - death.y;
+      const distance = Math.hypot(dx, dy) || 1;
+      death.x = clamp(death.x + (dx / distance) * death.speed * dt, death.radius, WORLD_W - death.radius);
+      death.y = clamp(death.y + (dy / distance) * death.speed * dt, death.radius, WORLD_H - death.radius);
+      death.hitTimer = Math.max(0, death.hitTimer - dt);
+      if (Math.random() < dt * 18) {
+        state.effects.push({ kind: "deathMark", x: death.x, y: death.y, range: 56 + Math.random() * 20, life: 0.18, maxLife: 0.18, color: "rgba(20, 10, 30, 0.38)" });
+      }
+      if (target && distance <= death.radius + target.radius + 28) {
+        return claimDeathTarget(death, target);
+      }
+      if (!target && distance <= death.radius + state.player.radius + 28) {
+        state.effects.push({ kind: "deathMark", x: state.player.x, y: state.player.y, range: 150, life: 0.62, maxLife: 0.62, color: "rgba(255, 51, 95, 0.45)" });
+        addEffect(state.player.x, state.player.y - 34, "Death claimed the caster", "#ff668a");
+        recoverPlayerAtGate("Death Claimed You");
+        return true;
+      }
+      if (death.life <= 0) {
+        state.effects.push({ kind: "deathMark", x: death.x, y: death.y, range: 118, life: 0.36, maxLife: 0.36, color: "rgba(20, 10, 30, 0.62)" });
+        return true;
+      }
+      return false;
+    }
+
     function updateEnemies(dt) {
       const player = state.player;
       for (let index = state.enemies.length - 1; index >= 0; index -= 1) {
@@ -3746,10 +4088,17 @@
           defeatEnemy(index, enemy);
           continue;
         }
+        if (enemy.deathAvatar) {
+          if (updateDeathAvatar(enemy, dt)) {
+            state.enemies.splice(index, 1);
+          }
+          continue;
+        }
         if (enemy.inactiveElemental) {
           enemy.hitTimer = Math.max(0, enemy.hitTimer - dt);
           continue;
         }
+        updateBossAbility(enemy, dt);
 
         if (isAlliedUnit(enemy)) {
           const target = findNearestUnit(enemy.x, enemy.y, { faction: "hostile" });
@@ -3941,7 +4290,7 @@
         shower.life -= dt;
         shower.nextMeteor -= dt;
         if (shower.nextMeteor <= 0 && shower.life > 0) {
-          shower.nextMeteor = 0.5 + Math.random();
+          shower.nextMeteor = 0.18 + Math.random() * 0.42;
           summonMeteorWarning(shower.damage);
         }
         if (shower.life <= 0) {
@@ -3964,6 +4313,53 @@
           if (hazard.life <= 0) {
             damageUnitsInCircle(hazard.x, hazard.y, hazard.radius, hazard.damage, hazard.element, { includePlayer: true, includeInactive: true });
             state.effects.push({ kind: "meteor", x: hazard.x, y: hazard.y, range: hazard.radius, life: 0.34, maxLife: 0.34, color: "rgba(255, 139, 74, 0.48)" });
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
+        if (hazard.kind === "bossCone") {
+          if (hazard.life <= 0) {
+            const player = state.player;
+            const dx = player.x - hazard.x;
+            const dy = player.y - hazard.y;
+            const distance = Math.hypot(dx, dy) || 1;
+            const playerAngle = Math.atan2(dy, dx);
+            const delta = Math.atan2(Math.sin(playerAngle - hazard.angle), Math.cos(playerAngle - hazard.angle));
+            if (distance <= hazard.range + player.radius && Math.abs(delta) <= hazard.width * 0.5 && !lineBlocked(hazard.x, hazard.y, player.x, player.y, 8)) {
+              damagePlayer(hazard.damage, hazard.element);
+            }
+            state.effects.push({ kind: "cone", x: hazard.x, y: hazard.y, angle: hazard.angle, range: hazard.range, width: hazard.width, life: 0.28, maxLife: 0.28, color: "rgba(255, 139, 74, 0.32)" });
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
+        if (hazard.kind === "bossBlastWarning" || hazard.kind === "graveHand" || hazard.kind === "sludgeDrain") {
+          if (hazard.life <= 0) {
+            if (distanceSquared(state.player.x, state.player.y, hazard.x, hazard.y) <= (state.player.radius + hazard.radius) ** 2) {
+              damagePlayer(hazard.damage, hazard.element);
+              if (hazard.snare) {
+                state.player.snareTimer = Math.max(state.player.snareTimer || 0, hazard.snare);
+              }
+              if (hazard.element === "fire") {
+                addEffect(state.player.x, state.player.y - 30, "Burning", ELEMENT_COLORS.fire);
+              } else if (hazard.element === "poison") {
+                addEffect(state.player.x, state.player.y - 30, "Poisoned", ELEMENT_COLORS.poison);
+              } else if (hazard.element === "lightning") {
+                addEffect(state.player.x, state.player.y - 30, "Stunned", ELEMENT_COLORS.lightning);
+              }
+            }
+            state.effects.push({ kind: "nova", x: hazard.x, y: hazard.y, range: hazard.radius, life: 0.24, maxLife: 0.24, color: hazard.color });
+            state.hazards.splice(index, 1);
+          }
+          continue;
+        }
+        if (hazard.kind === "snareTrap") {
+          const player = state.player;
+          if (distanceSquared(player.x, player.y, hazard.x, hazard.y) <= (player.radius + hazard.radius) ** 2) {
+            player.snareTimer = Math.max(player.snareTimer || 0, hazard.snare || 0.35);
+            damagePlayer(hazard.damage * dt, hazard.element);
+          }
+          if (hazard.life <= 0) {
             state.hazards.splice(index, 1);
           }
           continue;
@@ -4325,6 +4721,46 @@
       if (flash) {
         ctx.globalAlpha = 0.9;
       }
+      if (enemy.deathAvatar) {
+        const sway = Math.sin(performance.now() * 0.006) * 3;
+        ctx.globalAlpha = 0.94;
+        ctx.fillStyle = "#05040a";
+        ctx.beginPath();
+        ctx.moveTo(0, -enemy.radius - 14);
+        ctx.quadraticCurveTo(enemy.radius + 8, -enemy.radius * 0.55, enemy.radius * 0.72, enemy.radius + 16);
+        ctx.lineTo(-enemy.radius * 0.72, enemy.radius + 16);
+        ctx.quadraticCurveTo(-enemy.radius - 8, -enemy.radius * 0.55, 0, -enemy.radius - 14);
+        ctx.fill();
+        ctx.fillStyle = "#101018";
+        ctx.beginPath();
+        ctx.arc(0, -enemy.radius * 0.42, enemy.radius * 0.72, 0, TAU);
+        ctx.fill();
+        ctx.fillStyle = "#f0ebff";
+        ctx.beginPath();
+        ctx.arc(-6, -enemy.radius * 0.45, 3, 0, TAU);
+        ctx.arc(6, -enemy.radius * 0.45, 3, 0, TAU);
+        ctx.fill();
+        ctx.strokeStyle = "#d9d3c2";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(14 + sway, -enemy.radius - 18);
+        ctx.lineTo(26 + sway, enemy.radius + 22);
+        ctx.stroke();
+        ctx.strokeStyle = "#f0ebff";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(14 + sway, -enemy.radius - 20, 22, -0.3, 1.85);
+        ctx.stroke();
+        ctx.globalAlpha = 0.28;
+        ctx.strokeStyle = "rgba(240, 235, 255, 0.9)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius + 10 + Math.sin(performance.now() * 0.009) * 3, 0, TAU);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        ctx.restore();
+        return;
+      }
       if (enemy.type === "goblin") {
         ctx.fillStyle = flash ? "#f0ebff" : "#63f0c4";
         ctx.beginPath();
@@ -4426,6 +4862,21 @@
       const point = worldToScreen(hazard.x, hazard.y);
       const alpha = clamp(hazard.life / hazard.maxLife, 0, 1);
       ctx.save();
+      if (hazard.kind === "bossCone") {
+        ctx.globalAlpha = 0.18 + (1 - alpha) * 0.22;
+        ctx.fillStyle = hazard.color;
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y);
+        ctx.arc(point.x, point.y, hazard.range, hazard.angle - hazard.width * 0.5, hazard.angle + hazard.width * 0.5);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 0.7;
+        ctx.strokeStyle = hazard.color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.restore();
+        return;
+      }
       if (hazard.kind === "meteorWarning") {
         ctx.globalAlpha = 0.36 + (1 - alpha) * 0.32;
         ctx.strokeStyle = hazard.color;
@@ -4438,6 +4889,22 @@
         ctx.beginPath();
         ctx.arc(point.x, point.y, hazard.radius, 0, TAU);
         ctx.fill();
+        ctx.restore();
+        return;
+      }
+      if (hazard.kind === "bossBlastWarning" || hazard.kind === "graveHand" || hazard.kind === "sludgeDrain" || hazard.kind === "snareTrap") {
+        const pulse = 0.86 + Math.sin(performance.now() * 0.014) * 0.08;
+        ctx.globalAlpha = hazard.kind === "snareTrap" ? 0.24 : 0.18 + (1 - alpha) * 0.22;
+        ctx.fillStyle = hazard.color;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, hazard.radius * pulse, 0, TAU);
+        ctx.fill();
+        ctx.globalAlpha = 0.75;
+        ctx.strokeStyle = hazard.color;
+        ctx.lineWidth = hazard.kind === "graveHand" ? 5 : 3;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, hazard.radius * (0.74 + (1 - alpha) * 0.22), 0, TAU);
+        ctx.stroke();
         ctx.restore();
         return;
       }
@@ -4475,7 +4942,7 @@
 
     function drawExitPortal() {
       const floorDef = getFloorDef();
-      if (state.screen !== "play" || !state.floorClear || !floorDef.exitPortal) {
+      if (state.screen !== "play" || !isExitPortalActive(floorDef)) {
         return;
       }
       const point = worldToScreen(floorDef.exitPortal.x, floorDef.exitPortal.y);
@@ -4564,11 +5031,54 @@
       }
     }
 
+    function drawHubDebugPads() {
+      if (state.screen !== "hub") {
+        return;
+      }
+      const time = performance.now() * 0.001;
+      const zone = worldToScreen(HUB_DEBUG_ZONE.x, HUB_DEBUG_ZONE.y);
+      ctx.save();
+      ctx.fillStyle = "rgba(163, 53, 238, 0.08)";
+      ctx.strokeStyle = "rgba(247, 204, 120, 0.22)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(zone.x, zone.y, HUB_DEBUG_ZONE.radius + 24, 0, TAU);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = "#f7cc78";
+      ctx.font = "900 12px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("DEBUG DAIS", zone.x, zone.y - HUB_DEBUG_ZONE.radius - 26);
+      if (audioState.currentMusicPath) {
+        ctx.fillStyle = "#c2b8d8";
+        ctx.font = "700 10px Fira Code, monospace";
+        ctx.fillText(`Now: ${audioState.currentMusicPath.split("/").pop()}`, zone.x, zone.y + HUB_DEBUG_ZONE.radius + 40);
+      }
+      for (const pad of HUB_DEBUG_PADS) {
+        const point = worldToScreen(pad.x, pad.y);
+        const pulse = Math.sin(time * 4 + pad.x * 0.01) * 0.5 + 0.5;
+        ctx.fillStyle = "rgba(12, 10, 22, 0.84)";
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, pad.radius, 0, TAU);
+        ctx.fill();
+        ctx.strokeStyle = pad.id === "unlock" ? "#63f0c4" : pad.id === "gold" ? "#f7cc78" : "#9c80ff";
+        ctx.lineWidth = 2 + pulse;
+        ctx.beginPath();
+        ctx.arc(point.x, point.y, pad.radius * 0.78, 0, TAU);
+        ctx.stroke();
+        ctx.fillStyle = "#f0ebff";
+        ctx.font = "800 10px Inter, sans-serif";
+        ctx.fillText(pad.label, point.x, point.y + pad.radius + 15);
+      }
+      ctx.restore();
+    }
+
     function drawWorld() {
       drawTiles();
 
       if (state.screen === "hub") {
         drawHubPortals();
+        drawHubDebugPads();
       }
 
       drawExitPortal();
@@ -4611,8 +5121,10 @@
 
       for (const enemy of state.enemies) {
         drawEnemySprite(enemy);
-        drawHealthBar(enemy, enemy.isBoss ? 92 : 42);
-        drawStatusPips(enemy);
+        if (!enemy.deathAvatar) {
+          drawHealthBar(enemy, enemy.isBoss ? 92 : 42);
+          drawStatusPips(enemy);
+        }
       }
 
       for (const effect of state.effects) {
@@ -4640,6 +5152,34 @@
           ctx.lineWidth = 18 * alpha;
           ctx.beginPath();
           ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.25), 0, TAU);
+          ctx.stroke();
+        } else if (effect.kind === "deathMark") {
+          ctx.globalAlpha = alpha * 0.78;
+          ctx.fillStyle = effect.color;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, effect.range * (1.05 - alpha * 0.3), 0, TAU);
+          ctx.fill();
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = "rgba(240, 235, 255, 0.72)";
+          ctx.lineWidth = 5 * alpha;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, effect.range * 0.54, 0, TAU);
+          ctx.stroke();
+        } else if (effect.kind === "deathLine") {
+          const target = worldToScreen(effect.targetX, effect.targetY);
+          ctx.globalAlpha = alpha * 0.72;
+          ctx.strokeStyle = "rgba(20, 10, 30, 0.82)";
+          ctx.lineWidth = 16 * alpha;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(target.x, target.y);
+          ctx.stroke();
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = effect.color;
+          ctx.lineWidth = 7 * alpha;
+          ctx.beginPath();
+          ctx.moveTo(point.x, point.y);
+          ctx.lineTo(target.x, target.y);
           ctx.stroke();
         } else if (effect.kind === "meteor") {
           ctx.globalAlpha = alpha * 0.68;
@@ -4752,13 +5292,15 @@
       const classDef = getClassDef();
       const derived = getDerivedStats();
       const floorDef = getFloorDef();
-      levelStatCard.hidden = isSage();
-      coreStatCard.hidden = isSage();
-      sheetCard.hidden = isSage();
+      levelStatCard.hidden = false;
+      coreStatCard.hidden = false;
+      sheetCard.hidden = false;
       hpStat.textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
       levelStat.textContent = `${player.level} (${state.xp}/${state.xpToNext})`;
       goldStat.textContent = String(state.gold);
-      floorStat.textContent = state.screen === "hub" ? "Realm Hub" : `${floorDef.realmName} ${floorDef.stage}/${floorDef.stageCount}`;
+      floorStat.textContent = state.screen === "hub"
+        ? "Realm Hub"
+        : `${floorDef.realmNumber ? `Realm ${floorDef.realmNumber}: ` : ""}${floorDef.zoneName} ${floorDef.stage}/${floorDef.stageCount}`;
       coreStat.textContent = `${player.stats.strength} / ${player.stats.intelligence} / ${player.stats.agility}`;
       damageStat.textContent = String(derived.weaponDamage);
       spellStat.textContent = String(derived.spellDamage);
@@ -4769,7 +5311,7 @@
         ? `Unspent stat points: ${player.statPoints}`
         : "Level up, quest, or buy training to earn stat points.";
       for (const button of statButtons) {
-        button.disabled = isSage() || player.statPoints <= 0;
+        button.disabled = player.statPoints <= 0;
       }
       attackStat.textContent = classDef.attackName;
       skillStat.textContent = player.skillTimer <= 0 ? classDef.skillName : `${player.skillTimer.toFixed(1)}s`;
@@ -4781,11 +5323,13 @@
       if (state.screen === "select") {
         objectiveText.textContent = "Enter a hero name and choose a class to reach the realm hub.";
       } else if (state.screen === "hub") {
-        objectiveText.textContent = "Walk the hub, use the market, then step into an unlocked numbered level portal.";
+        objectiveText.textContent = "Walk the hub, use the market, step into an unlocked level portal, or visit the debug dais in the far south.";
       } else {
         const bossAlive = hasLivingBoss();
         let objective = floorDef.objective;
-        if (state.anchors.length && bossAlive) {
+        if (!floorDef.bossStage) {
+          objective = "Reach the exit portal. Enemy spawners are optional pressure, not a completion gate.";
+        } else if (state.anchors.length && bossAlive) {
           objective = `Break ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"} and defeat the boss.`;
         } else if (state.anchors.length) {
           objective = `Break ${state.anchors.length} rift anchor${state.anchors.length === 1 ? "" : "s"}, then find the exit portal.`;
