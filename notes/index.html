@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astral Tempest | Notes</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23e6cc80' d='M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap">
+  <link rel="stylesheet" href="/assets/hub.css">
+  <style>
+    .gate {
+      max-width: 460px;
+    }
+
+    .gate h2,
+    .compose h2 {
+      margin: 0 0 6px;
+      font: 700 1.5rem/1.1 var(--display);
+    }
+
+    .compose h2 {
+      margin-bottom: 18px;
+    }
+
+    .gate p {
+      margin: 0 0 22px;
+      color: var(--muted);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+      gap: clamp(24px, 4vw, 48px);
+      align-items: start;
+    }
+
+    .compose {
+      position: sticky;
+      top: 20px;
+    }
+
+    .compose .row {
+      justify-content: space-between;
+    }
+
+    .board-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .board-head .label {
+      flex: 1;
+      margin: 0;
+    }
+
+    .notes {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .note {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .note header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 12px;
+      margin-bottom: 8px;
+      font: 0.78rem/1.3 var(--mono);
+      color: var(--muted);
+    }
+
+    .note .who {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .note .del {
+      margin-left: auto;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--muted);
+      font: 0.72rem/1 var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .note .del:hover {
+      color: #ff9db0;
+    }
+
+    .note p {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .empty {
+      padding: 28px 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 800px) {
+      .board {
+        grid-template-columns: 1fr;
+      }
+
+      .compose {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Astral Tempest home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg>
+      <span>astraltempest.com</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/games/">Games</a>
+      <a href="/useful-links/">Links</a>
+      <a href="/notes/" aria-current="page">Notes</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="page-head">
+      <h1 class="rise">Notes</h1>
+      <p class="rise" style="--i:1">A sealed message board. Enter the password to read what's been left here or to add your own.</p>
+    </section>
+
+    <form class="panel gate rise" id="gate" style="--i:2" autocomplete="off">
+      <h2>Sealed</h2>
+      <p>Notes are stored on the server and are only returned for the correct password.</p>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="pass" required autocomplete="current-password">
+      </label>
+      <div class="row">
+        <button class="btn" type="submit" id="unlock">Unlock</button>
+        <p class="msg" id="gate-msg" role="status"></p>
+      </div>
+    </form>
+
+    <section class="board" id="board" hidden>
+      <form class="panel compose" id="compose">
+        <h2>Leave a note</h2>
+        <label class="field">
+          <span>Name</span>
+          <input type="text" id="author" maxlength="40" placeholder="anonymous">
+        </label>
+        <label class="field">
+          <span>Message</span>
+          <textarea id="body" maxlength="4000" required></textarea>
+        </label>
+        <div class="row">
+          <button class="btn" type="submit" id="post">Post</button>
+          <span class="msg" id="chars">0 / 4000</span>
+        </div>
+        <p class="msg" id="compose-msg" role="status"></p>
+      </form>
+
+      <div>
+        <div class="board-head">
+          <h2 class="label">Board <span id="note-count"></span></h2>
+          <button class="btn btn--ghost" type="button" id="lock">Lock</button>
+        </div>
+        <ul class="notes" id="notes"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a href="/">&larr; Astral Tempest</a>
+    <span>Be kind. Notes can be removed.</span>
+  </footer>
+
+  <script src="/assets/starfield.js"></script>
+  <script src="/notes/config.js"></script>
+  <script src="/notes/notes.js"></script>
+</body>
+</html>

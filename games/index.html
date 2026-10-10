@@ -4,166 +4,106 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Astral Tempest | Games</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #20202b;
-      --bg-alt: #231c37;
-      --panel: rgba(35, 28, 55, 0.84);
-      --panel-2: rgba(44, 44, 68, 0.88);
-      --border: rgba(119, 168, 255, 0.24);
-      --text: #e5e0ff;
-      --muted: #bfb6df;
-      --accent: #77a8ff;
-      --accent-3: #e6cc80;
-      --selection-bg: #002a50;
-      --selection-fg: #e6cc80;
-      --shadow: rgba(0, 0, 0, 0.34);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top right, rgba(128, 0, 255, 0.16), transparent 28%),
-        radial-gradient(circle at top left, rgba(0, 112, 221, 0.12), transparent 24%),
-        linear-gradient(180deg, var(--bg-alt), var(--bg));
-      color: var(--text);
-      font-family: "Inter", sans-serif;
-    }
-
-    ::selection {
-      background: var(--selection-bg);
-      color: var(--selection-fg);
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: var(--accent-3);
-    }
-
-    .shell {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 56px 18px 84px;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-bottom: 18px;
-      color: var(--accent-3);
-      font: 700 0.92rem/1 "Fira Code", monospace;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2.3rem, 5.2vw, 4rem);
-      line-height: 0.98;
-      color: var(--text);
-    }
-
-    .lead {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 1.03rem;
-      line-height: 1.65;
-      margin-bottom: 28px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      display: block;
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(35, 28, 55, 0.96), rgba(44, 44, 68, 0.98));
-      box-shadow: 0 16px 34px var(--shadow);
-      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(119, 168, 255, 0.42);
-      background: linear-gradient(180deg, rgba(35, 28, 55, 0.92), rgba(44, 44, 68, 0.98));
-    }
-
-    .card-title {
-      margin: 0 0 8px;
-      color: var(--text);
-      font-size: 1.22rem;
-      font-weight: 800;
-    }
-
-    .card-copy {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-  </style>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23e6cc80' d='M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap">
+  <link rel="stylesheet" href="/assets/hub.css">
 </head>
 <body>
-  <main class="shell">
-    <a class="back-link" href="/">← Back Home</a>
-    <h1>Games</h1>
-    <p class="lead">A small browser-game shelf for arcade experiments, action prototypes, and older projects worth keeping playable.</p>
+  <canvas id="sky" aria-hidden="true"></canvas>
 
-    <section class="grid">
-      <a class="card" href="/games/starfallsurvivor/">
-        <h2 class="card-title">Starfall Survivor</h2>
-        <p class="card-copy">A survival-shooter and bullet-heaven hybrid built around auto-fire pressure, stacking wave boons, dash timing, and high-score chasing inside a crowded arena.</p>
-      </a>
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Astral Tempest home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg>
+      <span>astraltempest.com</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/games/" aria-current="page">Games</a>
+      <a href="/useful-links/">Links</a>
+      <a href="/notes/">Notes</a>
+    </nav>
+  </header>
 
-      <a class="card" href="/games/riftwarden/">
-        <h2 class="card-title">Riftwarden Descent</h2>
-        <p class="card-copy">A top-down action RPG foundation with a Diablo-style follow camera, tile collision, mouse attacks, cooldown skills, enemies, loot, and rift anchors.</p>
-      </a>
-
-      <a class="card" href="/games/riftrunner/">
-        <h2 class="card-title">Rift Runner</h2>
-        <p class="card-copy">A side-scrolling platformer with three starter levels, stompable enemies, fireballs, glide jumps, coins, hazards, and goal flags.</p>
-      </a>
-
-      <a class="card" href="/games/roguelike/">
-        <h2 class="card-title">Gloam Delve</h2>
-        <p class="card-copy">A compact roguelike crawl with turn-based movement, bite-sized dungeon floors, scavenged upgrades, and just enough danger to make every step matter.</p>
-      </a>
-
-      <a class="card" href="/games/idle/">
-        <h2 class="card-title">Solar Genesis Idle</h2>
-        <p class="card-copy">A solar-system idle game about growing planets, moonlets, orbital machinery, and rebirthing whole systems into spendable stellar cores.</p>
-      </a>
-
-      <a class="card" href="/games/deckbuilder/">
-        <h2 class="card-title">Shardhand</h2>
-        <p class="card-copy">A combat-first deckbuilder prototype with energy, card rewards, enemy intents, and enough deck shaping to start experimenting with build identity.</p>
-      </a>
-
-      <a class="card" href="/games/textadventure/">
-        <h2 class="card-title">Lantern Road</h2>
-        <p class="card-copy">A text-based RPG adventure prototype built around stat checks, resource choices, branching routes, and multiple story endings.</p>
-      </a>
-
-      <a class="card" href="/games/cosmicjourney/">
-        <h2 class="card-title">Cosmic Journey</h2>
-        <p class="card-copy">A classic arcade-style space shooter with multiple stages, varied enemy sets, and an older-school action feel.</p>
-      </a>
+  <main class="wrap">
+    <section class="page-head">
+      <h1 class="rise">Games<span class="count">08</span></h1>
+      <p class="rise" style="--i:1">Arcade experiments, action prototypes, and older projects worth keeping playable. Everything runs in the browser.</p>
     </section>
+
+    <ul class="dir dir--games">
+      <li class="rise" style="--i:2">
+        <a href="/games/riftwarden/">
+          <span class="num">01</span>
+          <span class="name">Riftwarden Descent</span>
+          <span class="desc">A top-down action RPG with a Diablo-style follow camera, tile collision, mouse attacks, cooldown skills, enemies, loot, and rift anchors.</span>
+          <span class="tag tag--hot">Action RPG &middot; Active</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:3">
+        <a href="/games/starfallsurvivor/">
+          <span class="num">02</span>
+          <span class="name">Starfall Survivor</span>
+          <span class="desc">A survival-shooter and bullet-heaven hybrid built around auto-fire pressure, stacking wave boons, dash timing, and high-score chasing inside a crowded arena.</span>
+          <span class="tag">Survival shooter</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:4">
+        <a href="/games/riftrunner/">
+          <span class="num">03</span>
+          <span class="name">Rift Runner</span>
+          <span class="desc">A side-scrolling platformer with three starter levels, stompable enemies, fireballs, glide jumps, coins, hazards, and goal flags.</span>
+          <span class="tag">Platformer</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:5">
+        <a href="/games/roguelike/">
+          <span class="num">04</span>
+          <span class="name">Gloam Delve</span>
+          <span class="desc">A compact roguelike crawl with turn-based movement, bite-sized dungeon floors, scavenged upgrades, and just enough danger to make every step matter.</span>
+          <span class="tag">Roguelike</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:6">
+        <a href="/games/idle/">
+          <span class="num">05</span>
+          <span class="name">Solar Genesis Idle</span>
+          <span class="desc">A solar-system idle game about growing planets, moonlets, orbital machinery, and rebirthing whole systems into spendable stellar cores.</span>
+          <span class="tag">Idle</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:7">
+        <a href="/games/deckbuilder/">
+          <span class="num">06</span>
+          <span class="name">Shardhand</span>
+          <span class="desc">A combat-first deckbuilder with energy, card rewards, enemy intents, and enough deck shaping to start experimenting with build identity.</span>
+          <span class="tag">Deckbuilder</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:8">
+        <a href="/games/textadventure/">
+          <span class="num">07</span>
+          <span class="name">Lantern Road</span>
+          <span class="desc">A text-based RPG adventure built around stat checks, resource choices, branching routes, and multiple story endings.</span>
+          <span class="tag">Text RPG</span>
+        </a>
+      </li>
+      <li class="rise" style="--i:9">
+        <a href="/games/cosmicjourney/">
+          <span class="num">08</span>
+          <span class="name">Cosmic Journey</span>
+          <span class="desc">A classic arcade-style space shooter with multiple stages, varied enemy sets, and an older-school action feel.</span>
+          <span class="tag">Arcade shooter</span>
+        </a>
+      </li>
+    </ul>
   </main>
+
+  <footer class="foot">
+    <a href="/">&larr; Astral Tempest</a>
+    <span>More on the way.</span>
+  </footer>
+
+  <script src="/assets/starfield.js"></script>
 </body>
 </html>

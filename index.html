@@ -4,169 +4,98 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Astral Tempest</title>
-  <link rel="stylesheet" href="/assets/site.css">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #20202b;
-      --bg-alt: #231c37;
-      --panel: rgba(35, 28, 55, 0.84);
-      --panel-2: rgba(44, 44, 68, 0.88);
-      --border: rgba(119, 168, 255, 0.24);
-      --text: #e5e0ff;
-      --muted: #bfb6df;
-      --accent: #77a8ff;
-      --accent-2: #a335ee;
-      --accent-3: #e6cc80;
-      --selection-bg: #002a50;
-      --selection-fg: #e6cc80;
-      --shadow: rgba(0, 0, 0, 0.34);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top right, rgba(128, 0, 255, 0.16), transparent 28%),
-        radial-gradient(circle at top left, rgba(0, 112, 221, 0.12), transparent 24%),
-        linear-gradient(180deg, var(--bg-alt), var(--bg));
-      color: var(--text);
-      font-family: "Inter", sans-serif;
-    }
-
-    ::selection {
-      background: var(--selection-bg);
-      color: var(--selection-fg);
-    }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: var(--accent-3);
-    }
-
-    .shell {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 56px 18px 84px;
-    }
-
-    .hero {
-      margin-bottom: 22px;
-    }
-
-    .eyebrow {
-      color: var(--accent-3);
-      font: 700 0.9rem/1 "Fira Code", monospace;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 10px 0 8px;
-      font-size: clamp(2.5rem, 6vw, 4.25rem);
-      line-height: 0.95;
-      color: var(--text);
-    }
-
-    .lead {
-      max-width: 760px;
-      color: var(--muted);
-      font-size: 1.04rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 26px;
-    }
-
-    .card {
-      display: block;
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(35, 28, 55, 0.96), rgba(44, 44, 68, 0.98));
-      box-shadow: 0 16px 34px var(--shadow);
-      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(119, 168, 255, 0.42);
-      background: linear-gradient(180deg, rgba(35, 28, 55, 0.92), rgba(44, 44, 68, 0.98));
-    }
-
-    .card-title {
-      margin: 0 0 8px;
-      color: var(--text);
-      font-size: 1.22rem;
-      font-weight: 800;
-    }
-
-    .card-copy {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .footer-note {
-      margin-top: 30px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    @media (max-width: 720px) {
-      .shell {
-        padding-top: 42px;
-      }
-    }
-  </style>
+  <meta name="description" content="Browser games, bookmarks, and other projects by Astral Tempest.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23e6cc80' d='M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap">
+  <link rel="stylesheet" href="/assets/hub.css">
 </head>
 <body>
-  <main class="shell">
+  <canvas id="sky" aria-hidden="true"></canvas>
+
+  <header class="topbar">
+    <a class="mark" href="/" aria-label="Astral Tempest home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 0C13 8 16 11 24 12C16 13 13 16 12 24C11 16 8 13 0 12C8 11 11 8 12 0Z"/></svg>
+      <span>astraltempest.com</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/games/">Games</a>
+      <a href="/useful-links/">Links</a>
+      <a href="/notes/">Notes</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">Astral Tempest</div>
-      <h1>Site Hub</h1>
-      <p class="lead">A central home for browser games, generator tools, curated links, and other projects collected under Astral Tempest.</p>
+      <h1 class="wordmark">
+        <span class="rise">Astral</span>
+        <span class="rise glow" style="--i:1">Tempest</span>
+      </h1>
+      <div class="hero-copy rise" style="--i:3">
+        <p class="tagline">Games I'm building, links I keep coming back to, and a sealed place to leave notes.</p>
+        <a class="status" href="/games/riftwarden/">In the forge: <b>Riftwarden Descent</b></a>
+      </div>
     </section>
 
-    <section class="grid">
-      <a class="card" href="/generators/">
-        <h2 class="card-title">Generators</h2>
-        <p class="card-copy">Browse a collection of Perchance generators, supporting tools, and related creative experiments.</p>
-      </a>
-
-      <a class="card" href="/useful-links/">
-        <h2 class="card-title">Useful Links</h2>
-        <p class="card-copy">Explore a small set of bookmarked sites worth keeping close at hand.</p>
-      </a>
-
-      <a class="card" href="https://github.com/Zaelemgaad" target="_blank" rel="noopener noreferrer">
-        <h2 class="card-title">GitHub</h2>
-        <p class="card-copy">Open my GitHub profile in a new tab.</p>
-      </a>
-
-      <a class="card" href="https://steamcommunity.com/id/Zaelemgaad/" target="_blank" rel="noopener noreferrer">
-        <h2 class="card-title">Steam</h2>
-        <p class="card-copy">Open my Steam profile in a new tab.</p>
-      </a>
-
-      <a class="card" href="/games/">
-        <h2 class="card-title">Games</h2>
-        <p class="card-copy">Jump into playable browser games, arcade prototypes, and interactive experiments.</p>
-      </a>
+    <section class="block" aria-labelledby="dir-label">
+      <h2 class="label rise" id="dir-label" style="--i:4">Directory</h2>
+      <ul class="dir">
+        <li class="rise" style="--i:5">
+          <a href="/games/">
+            <span class="num">01</span>
+            <span class="name">Games</span>
+            <span class="desc">Eight playable builds: shooters, an action RPG, a platformer, a roguelike, an idle sim, a deckbuilder and a text adventure.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+        <li class="rise" style="--i:6">
+          <a href="/useful-links/">
+            <span class="num">02</span>
+            <span class="name">Useful Links</span>
+            <span class="desc">A short list of sites worth keeping close.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+        <li class="rise" style="--i:7">
+          <a href="/notes/">
+            <span class="num">03</span>
+            <span class="name">Notes<span class="lock">Sealed</span></span>
+            <span class="desc">Leave a message or read the board. Password required.</span>
+            <span class="go" aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
     </section>
 
-    <p class="footer-note">More projects, tools, and experiments will be added over time.</p>
+    <section class="block" aria-labelledby="shelf-label">
+      <h2 class="label" id="shelf-label">Jump straight in</h2>
+      <ul class="shelf">
+        <li><a href="/games/riftwarden/">Riftwarden Descent <small>Action RPG</small></a></li>
+        <li><a href="/games/starfallsurvivor/">Starfall Survivor <small>Survival</small></a></li>
+        <li><a href="/games/riftrunner/">Rift Runner <small>Platformer</small></a></li>
+        <li><a href="/games/roguelike/">Gloam Delve <small>Roguelike</small></a></li>
+        <li><a href="/games/idle/">Solar Genesis Idle <small>Idle</small></a></li>
+        <li><a href="/games/deckbuilder/">Shardhand <small>Deckbuilder</small></a></li>
+        <li><a href="/games/textadventure/">Lantern Road <small>Text RPG</small></a></li>
+        <li><a href="/games/cosmicjourney/">Cosmic Journey <small>Arcade</small></a></li>
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="else-label">
+      <h2 class="label" id="else-label">Elsewhere</h2>
+      <div class="elsewhere">
+        <a href="https://github.com/Zaelemgaad" target="_blank" rel="noopener noreferrer">GitHub &nearr;</a>
+        <a href="https://steamcommunity.com/id/Zaelemgaad/" target="_blank" rel="noopener noreferrer">Steam &nearr;</a>
+      </div>
+    </section>
   </main>
+
+  <footer class="foot">
+    <span>Astral Tempest</span>
+    <span>More projects land here as they're built.</span>
+  </footer>
+
+  <script src="/assets/starfield.js"></script>
 </body>
 </html>
